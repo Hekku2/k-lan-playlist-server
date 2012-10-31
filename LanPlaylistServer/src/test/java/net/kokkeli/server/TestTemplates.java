@@ -14,6 +14,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import freemarker.template.TemplateModelException;
+
 public class TestTemplates {
     private static final String CORRECT_TEMPLATE_LOCATION = "target\\classes\\net\\kokkeli\\resources\\views";
     private static final String CORRECT_TEMPLATE = "index.ftl";
@@ -35,7 +37,7 @@ public class TestTemplates {
     }
 
     @Test
-    public void testProcessingThrowsExceptionWithWrongParameters() throws IOException {
+    public void testProcessingThrowsExceptionWithWrongParameters() throws IOException, TemplateModelException {
         Templates.initialize(CORRECT_TEMPLATE_LOCATION);
         
         try {
@@ -54,7 +56,7 @@ public class TestTemplates {
     }
 
     @Test
-    public void testProcessingModelThrowsExceptionWithWrongParameters() throws IOException {
+    public void testProcessingModelThrowsExceptionWithWrongParameters() throws IOException, TemplateModelException {
         Templates.initialize(CORRECT_TEMPLATE_LOCATION);
         
         try {
@@ -80,7 +82,7 @@ public class TestTemplates {
     }
     
     @Test
-    public void testInitializingThrowsExceptionWithWrongParameters(){
+    public void testInitializingThrowsExceptionWithWrongParameters() throws TemplateModelException{
         try {
             Templates.initialize("");
         } catch (IOException e) {
@@ -95,15 +97,15 @@ public class TestTemplates {
     }
     
     @Test
-    public void testProcessingWithCorrectValuesDoesntThrowException() throws IOException, RenderException{
+    public void testProcessingWithCorrectValuesDoesntThrowException() throws IOException, RenderException, TemplateModelException{
         Templates.initialize(CORRECT_TEMPLATE_LOCATION);
         
         String result = Templates.process(CORRECT_TEMPLATE);
-        Assert.assertNotNull(result);
+        Assert.assertNotNull("Result should have value.",result);
         Assert.assertTrue("Result should have been longer.", result.length() > 1);
         
         result = Templates.process(CORRECT_TEMPLATE, new ModelPlaylist());
-        Assert.assertNotNull(result);
+        Assert.assertNotNull("Result should have value.", result);
         Assert.assertTrue("Result should have been longer.", result.length() > 1);
     }
 }

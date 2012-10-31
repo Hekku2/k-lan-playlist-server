@@ -16,6 +16,7 @@ import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import freemarker.template.TemplateModelException;
 
 /**
  * Class for template rendering
@@ -32,11 +33,13 @@ public class Templates {
      * Initializes new configurations and loads template directory
      * @param location Location of templates.
      * @throws IOException Thrown if location can't be found.
+     * @throws TemplateModelException Thrown if there is problem with setting base variables.
      */
     public static void initialize(String location) throws IOException{
         cfg = new Configuration();
         cfg.setDirectoryForTemplateLoading(new File(location));
         cfg.setObjectWrapper(new DefaultObjectWrapper());
+ 
     }
 
     /**
@@ -112,7 +115,9 @@ public class Templates {
         for (Method method : methods) {
             if (method.isAnnotationPresent(Field.class)){
                 try {
-                    map.put(method.getName(), method.invoke(null).toString());
+                    map.put(method.getName(), method.invoke(model).toString());
+                }catch (NullPointerException e){
+                    throw new RenderException("Method " + method.getName() + " can't be invoked with no arguments.");
                 } catch (IllegalAccessException e) {
                     throw new RenderException("Provided viewmodel contained Field-annotations with wrong access modifiers.");
                 } catch (IllegalArgumentException e) {

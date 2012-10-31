@@ -1,8 +1,11 @@
+<#assign header = "Main page">
+
 <html>
-	<head>
-	  <title>Welcome!</title>
-	</head>
+	<#include "common/_header.ftl">
 	<body>
-	  <h1>Welcome</h1>
+		<#include "common/_topsection.ftl">
+		<h1>${header}</h1>
+		
+		<div class="content"></div>
 	</body>
 </html> 
