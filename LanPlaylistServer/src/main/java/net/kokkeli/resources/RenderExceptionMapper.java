@@ -1,0 +1,22 @@
+package net.kokkeli.resources;
+
+import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.ExceptionMapper;
+import javax.ws.rs.ext.Provider;
+
+import net.kokkeli.server.RenderException;
+
+@Provider
+public class RenderExceptionMapper implements ExceptionMapper<RenderException> { 
+
+    /**
+     * Creates response fro render Exception
+     * @param ex Exception
+     */
+    public Response toResponse(RenderException ex) {
+        return Response.status(500).
+            entity(ex.getMessage()).
+            type("text/plain").
+            build();
+    }
+}

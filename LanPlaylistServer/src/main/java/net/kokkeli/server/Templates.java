@@ -6,10 +6,18 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import com.sun.jersey.api.uri.UriComponent.Type;
+
+import net.kokkeli.resources.ModelCollection;
 import net.kokkeli.resources.Field;
+import net.kokkeli.resources.Model;
 import net.kokkeli.resources.models.ViewModel;
 
 import freemarker.template.Configuration;
@@ -39,7 +47,6 @@ public class Templates {
         cfg = new Configuration();
         cfg.setDirectoryForTemplateLoading(new File(location));
         cfg.setObjectWrapper(new DefaultObjectWrapper());
- 
     }
 
     /**
@@ -63,7 +70,7 @@ public class Templates {
             throw new RenderException("Template name cant be null.");
         }
         
-        Map<String,String> map = createMap(model);
+        Map<String,Object> map = createMap(model);
         Writer out = new StringWriter();
         try {
             temp.process(map, out);
@@ -91,7 +98,6 @@ public class Templates {
         }
         Map<String,String> map = new HashMap<String, String>();
         
-        // TODO Sessiosta tavarat
         Writer out = new StringWriter();
         try {
             temp.process(map, out);
@@ -107,27 +113,42 @@ public class Templates {
      * @return Map created from model.
      * @throws RenderException Thrown if there is problem with model.
      */
-    private static final Map<String,String> createMap(ViewModel model) throws RenderException{
-        Map<String, String> map = new HashMap<String,String>();
+    private static final Map<String,Object> createMap(ViewModel model) throws RenderException{
+        Map<String, Object> map = new HashMap<String, Object>();
         
         Class<?> clss = model.getClass();
         Method[] methods = clss.getMethods();
         for (Method method : methods) {
-            if (method.isAnnotationPresent(Field.class)){
-                try {
-                    map.put(method.getName(), method.invoke(model).toString());
-                }catch (NullPointerException e){
-                    throw new RenderException("Method " + method.getName() + " can't be invoked with no arguments.");
-                } catch (IllegalAccessException e) {
-                    throw new RenderException("Provided viewmodel contained Field-annotations with wrong access modifiers.");
-                } catch (IllegalArgumentException e) {
-                    throw new RenderException("Provided viewmodel contained Field-annotations with arguments.");
-                } catch (InvocationTargetException e) {
-                    throw new RenderException("Something went wrong while getting values from model.");
+            try {
+                if (method.isAnnotationPresent(Field.class)){
+                    map.put(method.getName(), method.invoke(model));
                 }
+                
+                if (method.isAnnotationPresent(ModelCollection.class)){
+                    try {
+                        @SuppressWarnings("unchecked")
+                        List<ViewModel> items = (List<ViewModel>)method.invoke(model);
+                        
+                        List<Map<String, Object>> transformed = new ArrayList<Map<String, Object>>();
+                        for (ViewModel item : items) {
+                            transformed.add(createMap(item));
+                        }
+                        
+                        map.put(method.getName(), transformed);
+                    } catch (ClassCastException e) {
+                        throw new RenderException("Provided viewmodel contained ModelCollection-annotations with wrong access modifiers.");
+                    }
+                }
+            } catch (NullPointerException e){
+                throw new RenderException("Method " + method.getName() + " can't be invoked with no arguments.");
+            } catch (IllegalAccessException e) {
+                throw new RenderException("Provided viewmodel contained Field-annotations with wrong access modifiers.");
+            } catch (IllegalArgumentException e) {
+                throw new RenderException("Provided viewmodel contained Field-annotations with arguments.");
+            } catch (InvocationTargetException e) {
+                throw new RenderException("Something went wrong while getting values from model.");
             }
         }
-        
         return map;
     }
     

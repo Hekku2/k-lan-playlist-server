@@ -56,8 +56,6 @@ public class CssResource {
                 } catch (FileNotFoundException e) {
                     throw new NotFoundException("Resource: " + file + " was not found.");
                 }
-                
-  
             }
         };
         

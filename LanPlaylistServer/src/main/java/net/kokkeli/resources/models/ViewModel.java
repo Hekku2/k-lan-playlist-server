@@ -6,5 +6,4 @@ package net.kokkeli.resources.models;
  *
  */
 public abstract class ViewModel {
-
 }

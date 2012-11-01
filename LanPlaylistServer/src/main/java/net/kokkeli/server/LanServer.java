@@ -21,7 +21,7 @@ public class LanServer {
     private static final int PORT = 9998;
     private static final String ROUTING_RESOURCES_LOCATION = "net.kokkeli.resources";
     private static final URI BASE_URI = getBaseURI();
-    private static final String TEMPLATE_LOCATION = "target\\classes\\net\\kokkeli\\resources";
+    private static final String TEMPLATE_LOCATION = "target\\classes\\net\\kokkeli\\resources\\views";
     
     private HttpServer server;
     private ResourceConfig resourceConfig = new PackagesResourceConfig(ROUTING_RESOURCES_LOCATION);
