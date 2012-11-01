@@ -7,17 +7,12 @@ import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.sun.jersey.api.uri.UriComponent.Type;
-
 import net.kokkeli.resources.ModelCollection;
 import net.kokkeli.resources.Field;
-import net.kokkeli.resources.Model;
 import net.kokkeli.resources.models.ViewModel;
 
 import freemarker.template.Configuration;
@@ -116,28 +111,14 @@ public class Templates {
     private static final Map<String,Object> createMap(ViewModel model) throws RenderException{
         Map<String, Object> map = new HashMap<String, Object>();
         
-        Class<?> clss = model.getClass();
-        Method[] methods = clss.getMethods();
+        //Checks if methed contain annotation used for building map.
+        Method[] methods = model.getClass().getMethods();
         for (Method method : methods) {
             try {
                 if (method.isAnnotationPresent(Field.class)){
                     map.put(method.getName(), method.invoke(model));
-                }
-                
-                if (method.isAnnotationPresent(ModelCollection.class)){
-                    try {
-                        @SuppressWarnings("unchecked")
-                        List<ViewModel> items = (List<ViewModel>)method.invoke(model);
-                        
-                        List<Map<String, Object>> transformed = new ArrayList<Map<String, Object>>();
-                        for (ViewModel item : items) {
-                            transformed.add(createMap(item));
-                        }
-                        
-                        map.put(method.getName(), transformed);
-                    } catch (ClassCastException e) {
-                        throw new RenderException("Provided viewmodel contained ModelCollection-annotations with wrong access modifiers.");
-                    }
+                } else if (method.isAnnotationPresent(ModelCollection.class)){
+                    map.put(method.getName(), createMapFromModelCollection(model, method));
                 }
             } catch (NullPointerException e){
                 throw new RenderException("Method " + method.getName() + " can't be invoked with no arguments.");
@@ -150,6 +131,31 @@ public class Templates {
             }
         }
         return map;
+    }
+    
+    /**
+     * Creates List of maps from method that is ModelCollection.
+     * 
+     * Method must not have arguments, and method must return object castable to List<ViewModel>.
+     * @param method
+     * @return List of maps
+     * @throws RenderException Thrown if return value of method can't be casted to List<ViewModel>
+     * @throws InvocationTargetException Thrown if called method throws exception
+     * @throws IllegalArgumentException Thrown if method can't be called with zero arguments
+     * @throws IllegalAccessException Thrown if method can't be called.
+     */
+    private static final List<Map<String,Object>> createMapFromModelCollection(ViewModel model, Method method) throws RenderException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+        try {
+            @SuppressWarnings("unchecked")
+            List<ViewModel> items = (List<ViewModel>)method.invoke(model);
+            List<Map<String, Object>> transformed = new ArrayList<Map<String, Object>>();
+            for (ViewModel item : items) {
+                transformed.add(createMap(item));
+            }
+            return transformed;
+        } catch (ClassCastException e) {
+            throw new RenderException("Provided viewmodel contained ModelCollection-annotations with wrong access modifiers.");
+        }
     }
     
     private Templates(){

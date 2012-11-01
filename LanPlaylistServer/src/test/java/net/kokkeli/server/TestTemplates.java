@@ -6,7 +6,9 @@ import java.io.IOException;
 
 import junit.framework.Assert;
 
+import net.kokkeli.resources.Field;
 import net.kokkeli.resources.models.ModelPlaylist;
+import net.kokkeli.resources.models.ViewModel;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -30,6 +32,7 @@ public class TestTemplates {
 
     @Before
     public void setUp() throws Exception {
+        Templates.initialize(CORRECT_TEMPLATE_LOCATION);
     }
 
     @After
@@ -38,8 +41,6 @@ public class TestTemplates {
 
     @Test
     public void testProcessingThrowsExceptionWithWrongParameters() throws IOException, TemplateModelException {
-        Templates.initialize(CORRECT_TEMPLATE_LOCATION);
-        
         try {
             Templates.process("");
             fail("Processing should have thrown a rendering exception.");
@@ -57,8 +58,6 @@ public class TestTemplates {
 
     @Test
     public void testProcessingModelThrowsExceptionWithWrongParameters() throws IOException, TemplateModelException {
-        Templates.initialize(CORRECT_TEMPLATE_LOCATION);
-        
         try {
             Templates.process("", new ModelPlaylist());
             fail("Processing should have thrown a rendering exception.");
@@ -98,14 +97,31 @@ public class TestTemplates {
     
     @Test
     public void testProcessingWithCorrectValuesDoesntThrowException() throws IOException, RenderException, TemplateModelException{
-        Templates.initialize(CORRECT_TEMPLATE_LOCATION);
-        
+        /*
         String result = Templates.process(CORRECT_TEMPLATE);
         Assert.assertNotNull("Result should have value.",result);
         Assert.assertTrue("Result should have been longer.", result.length() > 1);
-        
-        result = Templates.process(CORRECT_TEMPLATE, new ModelPlaylist());
+        */
+        String result = Templates.process(CORRECT_TEMPLATE, new ModelPlaylist());
         Assert.assertNotNull("Result should have value.", result);
         Assert.assertTrue("Result should have been longer.", result.length() > 1);
     }
+    
+     @Test
+     public void testProcessingThrowCorrectExceptionIfModelHasInvalidFields(){
+         ViewModel invalidField = new ViewModel(){
+             @Field
+             public void getMake(String pekka){
+                 return;
+             }
+         };
+         
+         try {
+            Templates.process(CORRECT_TEMPLATE, invalidField);
+            Assert.fail("Processing template with invalid model should throw exception.");
+        } catch (Exception e) {
+            Assert.assertEquals("Provided viewmodel contained Field-annotations with arguments.", e.getMessage());
+        }
+         
+     }
 }
