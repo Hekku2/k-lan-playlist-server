@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
+import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Logging;
 import net.kokkeli.data.Role;
 import net.kokkeli.resources.Access;
@@ -19,34 +20,44 @@ import org.aopalliance.intercept.MethodInvocation;
 /**
  * Authentication checker class
  * @author Hekku2
- *
  */
 public class AuthenticationInceptor implements MethodInterceptor{
+    private final ILogger logger;
+    
+    /**
+     * Creates authencation inceptor for catching Access-annotations
+     * @param iLogger Logger
+     */
+    public AuthenticationInceptor(ILogger iLogger){
+        this.logger = iLogger;
+    }
     
     /**
      * This is invoked before method with Access-annotation is invoked.
      */
     public Object invoke(MethodInvocation invocation) throws Throwable {
         try {
-            Logging.Log("Checking if all can access...", 0);
+            ILogger logger = new Logging();
+            
+            logger.log("Checking if all can access...", 0);
             Access access = extractAnnotation(invocation.getMethod().getAnnotations());
             
             //If no role is needed, continue proceeded without checking authentication
             if (access.value() == Role.NONE){
+
                 return invocation.proceed();
             }
-            
-            Logging.Log("Checking authentication...", 0);
+
+            logger.log("Checking authentication...", 0);
             HttpServletRequest request = extractRole(invocation.getArguments());
             Cookie authCookie = extractLoginCookie(request.getCookies());
             
             //TODO Proper checking for auth validity...
             
-            
-            Logging.Log("User authenticated: " + authCookie.getValue() + ", " + access.value(), 1);
+            logger.log("User authenticated: " + authCookie.getValue() + ", " + access.value(), 1);
             return invocation.proceed();
         } catch (AuthenticationException e) {
-            Logging.Log("User was not authenticated. " + e.getMessage(), 0);
+            logger.log("User was not authenticated. " + e.getMessage(), 0);
             return Response.seeOther(UriBuilder.fromUri(LanServer.getBaseURI()).path("/authentication").build()).build();
         }
 
@@ -86,7 +97,6 @@ public class AuthenticationInceptor implements MethodInterceptor{
                 
             }
         }
-        Logging.Log("No HttpServletRequest found.", 1);
         throw new AuthenticationException("HttpServletRequest not found from parameters.");
     }
     

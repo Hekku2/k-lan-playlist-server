@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * @author Hekku2
  *
  */
-public class Logging {
+public class Logging implements ILogger {
     private static Logging logger = new Logging();
     
     private ArrayList<String> logLines = new ArrayList<String>();
@@ -15,7 +15,7 @@ public class Logging {
     /**
      * Creates new instance of logging.
      */
-    private Logging(){
+    public Logging(){
         
     }
     
@@ -24,7 +24,7 @@ public class Logging {
      * @param message Message to write
      * @param severity Severity of message
      */
-    public static void Log(String message, int severity){
+    public void log(String message, int severity){
         logger.logLines.add(severity + ": " + message);
         System.out.println(severity + ": " + message);
     }

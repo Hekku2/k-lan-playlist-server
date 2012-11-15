@@ -8,9 +8,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
+
+import com.google.inject.Inject;
+
 import net.kokkeli.data.Logging;
 import net.kokkeli.data.Role;
 import net.kokkeli.resources.Access;
+import net.kokkeli.resources.BaseResource;
 import net.kokkeli.server.LanServer;
 import net.kokkeli.server.RenderException;
 import net.kokkeli.server.Templates;
@@ -21,7 +25,13 @@ import net.kokkeli.server.Templates;
  *
  */
 @Path("/authentication")
-public class AuthenticationResource {
+public class AuthenticationResource extends BaseResource {
+    
+    @Inject
+    protected AuthenticationResource(Logging logger) {
+        super(logger);
+    }
+
     private static final String AUTHENTICATE_TEMPLATE = "authenticate.ftl";
     
     @GET
@@ -36,7 +46,7 @@ public class AuthenticationResource {
     @Produces("text/html")
     @Access(Role.NONE)
     public Response authenticate(@FormParam("user") String username, @FormParam("pwd") String password) throws RenderException{
-        Logging.Log("User " + username + " trying to authenticate.", 1);
+        log("User " + username + " trying to authenticate.", 1);
         
         //TODO Add authentication here
         

@@ -9,8 +9,8 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 
-import net.kokkeli.data.Logging;
-import net.kokkeli.resources.authentication.AuthenticationModule;
+import net.kokkeli.data.ILogger;
+import net.kokkeli.data.LoggingModule;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -26,6 +26,7 @@ public class LanServer {
     private static final int PORT = 9998;
     private static final URI BASE_URI = getBaseURI();
     private static final String TEMPLATE_LOCATION = "target\\classes\\net\\kokkeli\\resources\\views";
+    private ILogger logger;
     
     private Server server;
     
@@ -35,8 +36,8 @@ public class LanServer {
      */
     public LanServer() throws ServerException{
         try {
-            Injector injector = Guice.createInjector(new AuthenticationModule());
-            injector.injectMembers(this);
+            Injector injector = Guice.createInjector(new LoggingModule());
+            logger = injector.getInstance(ILogger.class);
             
             Templates.initialize(TEMPLATE_LOCATION);
         } catch (IOException e) {
@@ -57,7 +58,7 @@ public class LanServer {
         try {
             server.start();
             
-            Logging.Log("Server started at " + BASE_URI, 1);
+            logger.log("Server started at " + BASE_URI, 1);
         } catch (InterruptedException e) {
             throw new ServerException("Unable to start server: " + e.getMessage());
         } catch (Exception e) {
@@ -71,11 +72,11 @@ public class LanServer {
      * @throws ServerException Thrown if service was not started.
      */
     public void stop() throws Exception {
-        Logging.Log("Shutting down server.", 1);
+        logger.log("Shutting down server.", 1);
         if (server != null){
             server.stop();
         }
-        Logging.Log("Server shut down.", 1);
+        logger.log("Server shut down.", 1);
     }
     
     /**

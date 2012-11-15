@@ -10,10 +10,7 @@ import net.kokkeli.resources.Field;
 import net.kokkeli.resources.models.ModelPlaylist;
 import net.kokkeli.resources.models.ViewModel;
 
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import freemarker.template.TemplateModelException;
@@ -21,22 +18,10 @@ import freemarker.template.TemplateModelException;
 public class TestTemplates {
     private static final String CORRECT_TEMPLATE_LOCATION = "target\\classes\\net\\kokkeli\\resources\\views";
     private static final String CORRECT_TEMPLATE = "index.ftl";
-    
-    @BeforeClass
-    public static void setUpBeforeClass() throws Exception {
-    }
-
-    @AfterClass
-    public static void tearDownAfterClass() throws Exception {
-    }
 
     @Before
     public void setUp() throws Exception {
         Templates.initialize(CORRECT_TEMPLATE_LOCATION);
-    }
-
-    @After
-    public void tearDown() throws Exception {
     }
 
     @Test
