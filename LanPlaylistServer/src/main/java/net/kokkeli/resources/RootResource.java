@@ -1,9 +1,13 @@
 package net.kokkeli.resources;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
 
+import net.kokkeli.data.Role;
 import net.kokkeli.resources.models.ModelPlaylist;
 import net.kokkeli.server.RenderException;
 import net.kokkeli.server.Templates;
@@ -26,10 +30,11 @@ public class RootResource {
      */
     @GET
     @Produces("text/html")
-    public String redirect() throws RenderException {
+    @Access(Role.USER)
+    public Response redirect(@Context HttpServletRequest req) throws RenderException {
         ModelPlaylist mockList = new ModelPlaylist();
-        
-        return Templates.process(INDEX_TEMPLATE, mockList);
+
+        return Response.ok(Templates.process(INDEX_TEMPLATE, mockList)).build();
     }
    
 }

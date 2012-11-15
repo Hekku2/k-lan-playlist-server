@@ -5,14 +5,12 @@
 	<body>
 		<#include "common/_topsection.ftl">
 		<h1>${header}</h1>
-		<p>${getName}</p>
-		
 		<div class="content">
-			<ul>
-				<#list getItems as item>
-				  <li>${item.getName}
-				</#list>
-			</ul>  	
+			<#if playlist??>
+				<#include "_playlist.ftl">
+			<#else>
+				<p> No playlist loaded </p>
+			</#if>
 		</div>
 	</body>
 </html> 

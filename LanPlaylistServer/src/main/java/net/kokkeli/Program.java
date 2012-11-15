@@ -1,6 +1,5 @@
 package net.kokkeli;
 
-import java.io.IOException;
 import net.kokkeli.server.LanServer;
 import net.kokkeli.server.ServerException;
 
@@ -9,11 +8,12 @@ public class Program {
 	/**
 	 * Starting point of program.
 	 * @param args Not used.
-	 * @throws IOException Throws if something went wrong
+	 * @throws Exception 
 	 */
-	public static void main(String[] args) throws IOException {    
+	public static void main(String[] args) throws Exception {    
 	    LanServer server = null;
 		try {
+		    System.out.println("Starting server.");
 		    server = new LanServer();
             server.start();
             System.in.read();
