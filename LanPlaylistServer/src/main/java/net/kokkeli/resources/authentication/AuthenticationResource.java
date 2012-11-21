@@ -30,13 +30,12 @@ import net.kokkeli.server.Templates;
  */
 @Path("/authentication")
 public class AuthenticationResource extends BaseResource {
+    private static final String AUTHENTICATE_TEMPLATE = "authenticate.ftl";
 
     @Inject
     protected AuthenticationResource(Logging logger) {
         super(logger);
     }
-
-    private static final String AUTHENTICATE_TEMPLATE = "authenticate.ftl";
 
     @GET
     @Produces("text/html")

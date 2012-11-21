@@ -5,6 +5,7 @@ import net.kokkeli.data.LoggingModule;
 import net.kokkeli.resources.Access;
 import net.kokkeli.resources.CssResource;
 import net.kokkeli.resources.RootResource;
+import net.kokkeli.resources.UsersResource;
 import net.kokkeli.resources.authentication.AuthenticationInceptor;
 import net.kokkeli.resources.authentication.AuthenticationResource;
 
@@ -29,7 +30,9 @@ public class LanServletConfig extends GuiceServletContextListener {
             Injector injector = Guice.createInjector(new LoggingModule());
             bind(CssResource.class);
             bind(RootResource.class);
+            bind(UsersResource.class);
             bind(AuthenticationResource.class);
+            
             
             bindInterceptor(Matchers.any(), 
                     Matchers.annotatedWith(Access.class), new AuthenticationInceptor(injector.getInstance(ILogger.class)));

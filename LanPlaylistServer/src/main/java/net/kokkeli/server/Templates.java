@@ -111,7 +111,7 @@ public class Templates {
     private static final Map<String,Object> createMap(ViewModel model) throws RenderException{
         Map<String, Object> map = new HashMap<String, Object>();
         
-        //Checks if methed contain annotation used for building map.
+        //Checks if method contain annotation used for building map.
         Method[] methods = model.getClass().getMethods();
         for (Method method : methods) {
             try {
