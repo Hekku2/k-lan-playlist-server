@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
@@ -28,6 +29,7 @@ import net.kokkeli.server.Templates;
 @Path("/users")
 public class UsersResource extends BaseResource {
     private static final String USERS_TEMPLATE = "users.ftl";
+    private static final String USER_DETAILS_TEMPLATE = "user.ftl";
     
     /**
      * Creates users resource.
@@ -50,7 +52,7 @@ public class UsersResource extends BaseResource {
         ArrayList<ModelUser> mockUsers = new ArrayList<ModelUser>();
         
         for (int i = 0; i < 17; i++) {
-            mockUsers.add(new ModelUser("RandomName" + i,Role.ADMIN));
+            mockUsers.add(new ModelUser(i, "RandomName" + i,Role.ADMIN));
         }
         
         ModelUsers modelUsers = new ModelUsers();
@@ -58,5 +60,16 @@ public class UsersResource extends BaseResource {
         
 
         return Response.ok(Templates.process(USERS_TEMPLATE, modelUsers)).build();
+    }
+    
+    @GET
+    @Produces("text/html")
+    @Access(Role.ADMIN)
+    @Path("{id: [0-9]*}")
+    public Response userDetails(@Context HttpServletRequest req, @PathParam("id") int id) throws RenderException{
+        ModelUser user = new ModelUser(id, "TestUser" + id, Role.ADMIN);
+        
+        //TODO User details get
+        return Response.ok(Templates.process(USER_DETAILS_TEMPLATE, user)).build();
     }
 }

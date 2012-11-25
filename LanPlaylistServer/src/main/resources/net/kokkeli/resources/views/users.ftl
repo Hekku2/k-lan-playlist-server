@@ -1,4 +1,4 @@
-<#assign header = "Users">
+<#assign header = "User details">
 
 <html>
 	<#include "common/_header.ftl">
@@ -17,7 +17,7 @@
 						<tr>
 							<td>${item.getUsername}</td>
 							<td>${item.getRole}</td>
-							<td>Del./Mod.</td>
+							<td><a href="/users/${item.getId}">Details</a></td>
 						</tr>
 					</#list>
 				</table>

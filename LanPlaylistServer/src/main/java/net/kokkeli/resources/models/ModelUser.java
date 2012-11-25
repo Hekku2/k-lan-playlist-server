@@ -11,13 +11,15 @@ import net.kokkeli.resources.Field;
 public final class ModelUser extends ViewModel {
     private final String username;
     private final Role role;
+    private final int id;
     
     /**
      * Creates user model
      */
-    public ModelUser(String username, Role role){
+    public ModelUser(int id, String username, Role role){
         this.username = username;
         this.role = role;
+        this.id = id;
     }
     
     /**
@@ -36,5 +38,14 @@ public final class ModelUser extends ViewModel {
     @Field
     public String getRole(){
         return role.toString();
+    }
+    
+    /**
+     * Getter for int 
+     * @return Id of user
+     */
+    @Field
+    public int getId(){
+        return id;
     }
 }

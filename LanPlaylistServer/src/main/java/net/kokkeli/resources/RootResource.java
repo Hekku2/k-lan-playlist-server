@@ -7,6 +7,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
+import com.google.inject.Inject;
+
+import net.kokkeli.data.Logging;
 import net.kokkeli.data.Role;
 import net.kokkeli.resources.models.ModelPlaylist;
 import net.kokkeli.server.RenderException;
@@ -20,7 +23,17 @@ import net.kokkeli.server.Templates;
  *
  */
 @Path("/")
-public class RootResource {
+public class RootResource extends BaseResource {
+    
+    /**
+     * Creates resource
+     * @param logger
+     */
+    @Inject
+    protected RootResource(Logging logger) {
+        super(logger);
+    }
+
     private static final String INDEX_TEMPLATE = "index.ftl";
    
     /**
