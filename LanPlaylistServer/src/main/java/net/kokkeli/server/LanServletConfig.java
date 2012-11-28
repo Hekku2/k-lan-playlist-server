@@ -1,7 +1,10 @@
 package net.kokkeli.server;
 
 import net.kokkeli.data.ILogger;
+import net.kokkeli.data.IUserService;
+import net.kokkeli.data.Logging;
 import net.kokkeli.data.LoggingModule;
+import net.kokkeli.data.UserService;
 import net.kokkeli.resources.Access;
 import net.kokkeli.resources.CssResource;
 import net.kokkeli.resources.RootResource;
@@ -28,6 +31,8 @@ public class LanServletConfig extends GuiceServletContextListener {
          @Override
          protected void configureServlets() {
             Injector injector = Guice.createInjector(new LoggingModule());
+            bind(ILogger.class).to(Logging.class);
+            bind(IUserService.class).to(UserService.class);
             bind(CssResource.class);
             bind(RootResource.class);
             bind(UsersResource.class);

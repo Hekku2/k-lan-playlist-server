@@ -1,6 +1,6 @@
 package net.kokkeli.resources;
 
-import net.kokkeli.data.Logging;
+import net.kokkeli.data.ILogger;
 
 /**
  * Abstract class for basic resource
@@ -8,13 +8,13 @@ import net.kokkeli.data.Logging;
  * 
  */
 public abstract class BaseResource {
-    private final Logging logger;
+    private final ILogger logger;
     
     /**
      * Initializes class.
      * @param logger
      */
-    protected BaseResource(final Logging logger){
+    protected BaseResource(final ILogger logger){
         this.logger = logger;
     }
     

@@ -11,9 +11,12 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
 import com.google.inject.Inject;
+import com.sun.jersey.api.NotFoundException;
 
-import net.kokkeli.data.Logging;
+import net.kokkeli.data.ILogger;
+import net.kokkeli.data.IUserService;
 import net.kokkeli.data.Role;
+import net.kokkeli.data.User;
 import net.kokkeli.resources.models.ModelUser;
 import net.kokkeli.resources.models.ModelUsers;
 import net.kokkeli.server.RenderException;
@@ -31,13 +34,16 @@ public class UsersResource extends BaseResource {
     private static final String USERS_TEMPLATE = "users.ftl";
     private static final String USER_DETAILS_TEMPLATE = "user.ftl";
     
+    private IUserService userService;
+    
     /**
      * Creates users resource.
      * @param logger
      */
     @Inject
-    protected UsersResource(Logging logger) {
+    protected UsersResource(ILogger logger, IUserService userservice) {
         super(logger);
+        this.userService = userservice;
     }
     
     /**
@@ -66,10 +72,13 @@ public class UsersResource extends BaseResource {
     @Produces("text/html")
     @Access(Role.ADMIN)
     @Path("{id: [0-9]*}")
-    public Response userDetails(@Context HttpServletRequest req, @PathParam("id") int id) throws RenderException{
-        ModelUser user = new ModelUser(id, "TestUser" + id, Role.ADMIN);
+    public Response userDetails(@Context HttpServletRequest req, @PathParam("id") int id) throws RenderException, NotFoundException{
+        
+        User user = userService.get(id);
+        
+        ModelUser model = new ModelUser(user.getId(), user.getUserName(), Role.ADMIN);
         
         //TODO User details get
-        return Response.ok(Templates.process(USER_DETAILS_TEMPLATE, user)).build();
+        return Response.ok(Templates.process(USER_DETAILS_TEMPLATE, model)).build();
     }
 }
