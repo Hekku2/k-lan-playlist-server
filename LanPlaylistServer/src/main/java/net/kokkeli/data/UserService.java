@@ -1,9 +1,16 @@
 package net.kokkeli.data;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import com.sun.jersey.api.NotFoundException;
 
+/**
+ * Mock implementation for user service
+ * TODO Implement database.
+ * @author Hekku2
+ *
+ */
 public class UserService implements IUserService {
     private ArrayList<User> users = new ArrayList<User>();
     
@@ -21,6 +28,11 @@ public class UserService implements IUserService {
         }
         
         throw new NotFoundException("No user exists with id: " + id);
+    }
+
+    @Override
+    public Collection<User> get() {
+        return users;
     }
 
 }

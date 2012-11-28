@@ -1,5 +1,7 @@
 package net.kokkeli.data;
 
+import java.util.Collection;
+
 import com.sun.jersey.api.NotFoundException;
 
 /**
@@ -16,4 +18,9 @@ public interface IUserService {
      */
     User get(int id) throws NotFoundException;
     
+    /**
+     * Collection of users
+     * @return Collection fo users
+     */
+    Collection<User> get();
 }

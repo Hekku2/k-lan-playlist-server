@@ -31,4 +31,12 @@ public class ModelUsers extends ViewModel {
     public void add(Collection<ModelUser> users){
         this.users.addAll(users);
     }
+    
+    /**
+     * Adds user to model
+     * @param user User
+     */
+    public void add(ModelUser user){
+        this.users.add(user);
+    }
 }
