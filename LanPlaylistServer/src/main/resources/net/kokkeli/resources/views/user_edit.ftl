@@ -1,4 +1,4 @@
-<#assign header = "Authentication">
+<#assign header = "Users">
 
 <html>
 	<#include "common/_header.ftl">
@@ -7,24 +7,24 @@
 			<#include "common/_topsection.ftl">
 			<h1>${header}</h1>
 			<div class="content">
-				<form name="input" action="authentication" method="post">
+				<form class="edit-form">
 					<div class="field">
 						<div class="description">
 							Username: 
 						</div>
 						<div class=value>
-							<input type="text" name="user">
+							<input type="text" name="username" value="${getUsername}">
 						</div>
 					</div>
 					<div class="field">
 						<div class="description">
-							Password:
+							Role:
 						</div>
-						<div class=value>
-							<input type="password" name="pwd">
+						<div class="value">
+							User <input type="radio" name="role" value="user"  <#if getRole == "USER">checked</#if>>
+							Admin <input type="radio" name="role" value="admin" <#if getRole == "ADMIN">checked</#if>>
 						</div>
 					</div>
-					<input type="submit" value="Submit" class="submit-button">
 				</form>
 			</div>
 		</div>

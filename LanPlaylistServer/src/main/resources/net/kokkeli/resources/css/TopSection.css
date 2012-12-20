@@ -1,9 +1,22 @@
 @CHARSET "ISO-8859-1";
 
 .top-section{
-	
+	width: 800px;
+	height: 25px;
 }
 
 .menu-item{
 	float: left;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+}
+
+.logout-item{
+	float: right;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 4px;
+	padding-bottom: 4px;
 }

@@ -34,6 +34,7 @@ import net.kokkeli.server.Templates;
 public class UsersResource extends BaseResource {
     private static final String USERS_TEMPLATE = "users.ftl";
     private static final String USER_DETAILS_TEMPLATE = "user.ftl";
+    private static final String USER_EDIT_TEMPLATE = "user_edit.ftl";
     
     private IUserService userService;
     
@@ -75,5 +76,16 @@ public class UsersResource extends BaseResource {
         ModelUser model = new ModelUser(user.getId(), user.getUserName(), Role.ADMIN);
         
         return Response.ok(Templates.process(USER_DETAILS_TEMPLATE, model)).build();
+    }
+    
+    @GET
+    @Produces("text/html")
+    @Access(Role.ADMIN)
+    @Path("/edit/{id: [0-9]*}")
+    public Response userEdit(@Context HttpServletRequest req, @PathParam("id") int id) throws NotFoundException, ServiceException, RenderException{
+        User user = userService.get(id);
+        ModelUser model = new ModelUser(user.getId(), user.getUserName(), user.getRole());
+        
+        return Response.ok(Templates.process(USER_EDIT_TEMPLATE, model)).build();
     }
 }

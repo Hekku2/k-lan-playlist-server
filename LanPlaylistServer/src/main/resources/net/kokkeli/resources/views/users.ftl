@@ -3,27 +3,29 @@
 <html>
 	<#include "common/_header.ftl">
 	<body>
-		<#include "common/_topsection.ftl">
-		<h1>${header}</h1>
-		<div class="content">
-			<#if getUsers??>
-				<table>
-					<tr>
-						<th>Username</th>
-						<th>Role</th>
-						<th>Man.<th>
-					</tr>
-					<#list getUsers as item>
+		<div class="inner-body">
+			<#include "common/_topsection.ftl">
+			<h1>${header}</h1>
+			<div class="content">
+				<#if getUsers??>
+					<table>
 						<tr>
-							<td>${item.getUsername}</td>
-							<td>${item.getRole}</td>
-							<td><a href="/users/${item.getId}">Details</a></td>
+							<th>Username</th>
+							<th>Role</th>
+							<th>Man.<th>
 						</tr>
-					</#list>
-				</table>
-			<#else>
-				<p> No users. </p>
-			</#if>
+						<#list getUsers as item>
+							<tr>
+								<td>${item.getUsername}</td>
+								<td>${item.getRole}</td>
+								<td><a href="/users/${item.getId}">Details</a></td>
+							</tr>
+						</#list>
+					</table>
+				<#else>
+					<p> No users. </p>
+				</#if>
+			</div>
 		</div>
 	</body>
 </html> 
