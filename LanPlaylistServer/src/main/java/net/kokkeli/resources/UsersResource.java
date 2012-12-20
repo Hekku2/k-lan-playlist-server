@@ -1,6 +1,5 @@
 package net.kokkeli.resources;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,9 +14,10 @@ import com.google.inject.Inject;
 import com.sun.jersey.api.NotFoundException;
 
 import net.kokkeli.data.ILogger;
-import net.kokkeli.data.IUserService;
 import net.kokkeli.data.Role;
 import net.kokkeli.data.User;
+import net.kokkeli.data.services.IUserService;
+import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.resources.models.ModelUser;
 import net.kokkeli.resources.models.ModelUsers;
 import net.kokkeli.server.RenderException;
@@ -70,13 +70,10 @@ public class UsersResource extends BaseResource {
     @Produces("text/html")
     @Access(Role.ADMIN)
     @Path("{id: [0-9]*}")
-    public Response userDetails(@Context HttpServletRequest req, @PathParam("id") int id) throws RenderException, NotFoundException{
-        
+    public Response userDetails(@Context HttpServletRequest req, @PathParam("id") int id) throws RenderException, NotFoundException, ServiceException{
         User user = userService.get(id);
-        
         ModelUser model = new ModelUser(user.getId(), user.getUserName(), Role.ADMIN);
         
-        //TODO User details get
         return Response.ok(Templates.process(USER_DETAILS_TEMPLATE, model)).build();
     }
 }

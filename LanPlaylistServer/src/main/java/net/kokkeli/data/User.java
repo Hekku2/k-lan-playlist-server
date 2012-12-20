@@ -8,14 +8,14 @@ package net.kokkeli.data;
 public class User {
     
     private String userName;
-    private int id;
+    private long id;
     private Role role;
     
     /**
      * Creates user with given username
      * @param userName Username
      */
-    public User(int id, String userName, Role role){
+    public User(long id, String userName, Role role){
         this.userName = userName;
         this.id = id;
         this.role = role;
@@ -33,7 +33,7 @@ public class User {
      * Getter for id of user
      * @return Id of user
      */
-    public int getId(){
+    public long getId(){
         return id;
     }
     

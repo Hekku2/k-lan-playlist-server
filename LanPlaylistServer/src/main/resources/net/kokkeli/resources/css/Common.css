@@ -4,3 +4,10 @@ body{
 	background-color:#989898;
 	width:100%;
 }
+
+.inner-body{
+	background-color:#FFFFFF;
+	width: 800px;
+	margin-left: auto;
+    margin-right: auto;
+}

@@ -1,6 +1,8 @@
-package net.kokkeli.data;
+package net.kokkeli.data.services;
 
 import java.util.Collection;
+
+import net.kokkeli.data.User;
 
 import com.sun.jersey.api.NotFoundException;
 
@@ -10,16 +12,16 @@ import com.sun.jersey.api.NotFoundException;
  *
  */
 public interface IUserService {
-
+    
     /**
      * Returns user with given id
      * @param id Id of user
      * @return User with given id.
      */
-    User get(int id) throws NotFoundException;
+    User get(long id) throws NotFoundException, ServiceException;
     
     /**
-     * Collection of users
+     * Collection of users.
      * @return Collection fo users
      */
     Collection<User> get();
