@@ -58,7 +58,15 @@ public class UserDatabase extends Database implements IUserDatabase {
                 while (st.step()) {
                     long userId = st.columnLong(0);
                     String userName = st.columnString(1);
-                    Role role = Role.ADMIN;
+                    int roleId = st.columnInt(2);
+                    
+                    Role role;
+                    
+                    try {
+                        role = getRole(roleId);
+                    } catch (IndexOutOfBoundsException e) {
+                        throw new DatabaseException(String.format("Value in Role column was invalid. It was %s", roleId));
+                    }
 
                     user = new User(userId, userName, role);
                 }
@@ -78,7 +86,7 @@ public class UserDatabase extends Database implements IUserDatabase {
     @Override
     public void update(User user) throws DatabaseException {
         String update = String.format("UPDATE %s", TABLENAME);
-        String set = String.format("SET %s, %s", format(COLUMN_USERNAME, user.getUserName()), format(COLUMN_ROLE, "2"));
+        String set = String.format("SET %s, %s", format(COLUMN_USERNAME, user.getUserName()), format(COLUMN_ROLE, user.getRole().getId()+""));
         String where = String.format("WHERE %s", format(COLUMN_ID, user.getId()+""));
         
         String query = String.format("%s %s %s", update,set,where);
@@ -110,7 +118,15 @@ public class UserDatabase extends Database implements IUserDatabase {
                 while (st.step()) {
                     long id = st.columnLong(0);
                     String userName = st.columnString(1);
-                    Role role = Role.ADMIN;
+                    int roleId = st.columnInt(2);
+                    
+                    Role role;
+                    
+                    try {
+                        role = getRole(roleId);
+                    } catch (IndexOutOfBoundsException e) {
+                        throw new DatabaseException(String.format("Value in Role column was invalid. It was %s", roleId));
+                    }
 
                     users.add(new User(id, userName, role));
                 }
@@ -125,7 +141,28 @@ public class UserDatabase extends Database implements IUserDatabase {
         return users;
     }
     
-    private String format(String columnName, String value){
+    /**
+     * Returns Role with given id.
+     * @param id Id of role
+     * @return Role with given id.
+     */
+    private static Role getRole(int id){
+        
+        for (Role r : Role.values()) {
+            if (r.getId() == id){
+                return r;
+            }
+        }
+        throw new IndexOutOfBoundsException("There was no role with given Id.");
+    }
+    
+    /**
+     * Return String.format("%s = '%s'", columnName,value);
+     * @param columnName Name of column
+     * @param value Value of cell
+     * @return Formated string.
+     */
+    private static String format(String columnName, String value){
         return String.format("%s = '%s'", columnName,value);
     }
 }

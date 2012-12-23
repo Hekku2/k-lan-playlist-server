@@ -27,6 +27,7 @@
 						</div>
 					</div>
 					<input type="submit" value="Edit">
+					<a href="/users/${getId}">Cancel</a>
 				</form>
 			</div>
 		</div>

@@ -79,7 +79,7 @@ public class UsersResource extends BaseResource {
     @Path("{id: [0-9]*}")
     public Response userDetails(@Context HttpServletRequest req, @PathParam("id") long id) throws RenderException, NotFoundException, ServiceException{
         User user = userService.get(id);
-        ModelUser model = new ModelUser(user.getId(), user.getUserName(), Role.ADMIN);
+        ModelUser model = new ModelUser(user.getId(), user.getUserName(), user.getRole());
         
         return Response.ok(Templates.process(USER_DETAILS_TEMPLATE, model)).build();
     }
