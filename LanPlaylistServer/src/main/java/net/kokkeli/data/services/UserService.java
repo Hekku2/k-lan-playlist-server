@@ -55,4 +55,25 @@ public class UserService implements IUserService {
             return null;
         }
     }
+
+    @Override
+    public void update(User user) throws NotFoundException, ServiceException {
+        try {
+            User oldUser = userDatabase.get(user.getId());
+            //TODO SQL Injection protection...
+            
+            //No point updating if user is same.
+            if (user.equals(oldUser))
+                return;
+            
+            userDatabase.update(user);
+            logger.log(String.format("User (ID: %s) updated", user.getId()), 1);
+            
+        } catch (NotFoundException e) {
+            logger.log("No user exists with id: " + user.getId(), 1);
+            throw new NotFoundException(String.format("User with id %s not found.", user.getId()));
+        } catch (DatabaseException e) {
+            throw new ServiceException("There was problem with database.", e);
+        }
+    }
 }

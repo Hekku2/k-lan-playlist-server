@@ -18,6 +18,10 @@ public class UserDatabase extends Database implements IUserDatabase {
     private static final String TABLENAME = "users";
     private static final String ALLUSERS = "SELECT * FROM " + TABLENAME;
     
+    private static final String COLUMN_ID = "Id";
+    private static final String COLUMN_USERNAME = "Username";
+    private static final String COLUMN_ROLE = "Role";
+    
     /**
      * Creates query selecting single user.
      * @param id Id of wanted user
@@ -72,8 +76,26 @@ public class UserDatabase extends Database implements IUserDatabase {
     }
 
     @Override
-    public void update(User user) {
-        //TODO Implement
+    public void update(User user) throws DatabaseException {
+        String update = String.format("UPDATE %s", TABLENAME);
+        String set = String.format("SET %s, %s", format(COLUMN_USERNAME, user.getUserName()), format(COLUMN_ROLE, "2"));
+        String where = String.format("WHERE %s", format(COLUMN_ID, user.getId()+""));
+        
+        String query = String.format("%s %s %s", update,set,where);
+        SQLiteConnection db = new SQLiteConnection(new File(getDatabaseLocation()));
+        try {
+            db.open(false);
+            SQLiteStatement st = db.prepare(query);
+            try {
+                while (st.step());
+            } finally {
+                st.dispose();
+            }
+        } catch (SQLiteException e) {
+            throw new DatabaseException("There was problem with database.", e);
+        }
+        
+
     }
 
     @Override
@@ -101,5 +123,9 @@ public class UserDatabase extends Database implements IUserDatabase {
         }
 
         return users;
+    }
+    
+    private String format(String columnName, String value){
+        return String.format("%s = '%s'", columnName,value);
     }
 }

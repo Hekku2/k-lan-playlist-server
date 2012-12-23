@@ -86,4 +86,13 @@ public class LanServer {
     public static URI getBaseURI() {
         return UriBuilder.fromUri(URL).port(PORT).build();
     }
+    
+    /**
+     * Builds uri with base uri and end part.
+     * @param endPart End part
+     * @return Uri
+     */
+    public static URI getURI(String endPart){
+        return UriBuilder.fromUri(URL + endPart).port(PORT).build();
+    }
 }

@@ -3,7 +3,6 @@ package net.kokkeli.data.services;
 import java.util.Collection;
 
 import net.kokkeli.data.User;
-
 import com.sun.jersey.api.NotFoundException;
 
 /**
@@ -23,6 +22,16 @@ public interface IUserService {
     /**
      * Collection of users.
      * @return Collection fo users
+     * @throws ServiceException Thrown if there is problem with service
+     * @throws NotFoundException Thrown if there is no user with given id.
      */
     Collection<User> get();
+
+    /**
+     * Updates given user.
+     * @param user Updated user.
+     * @throws ServiceException Thrown if there is problem with service
+     * @throws NotFoundException Thrown if there is no old user with given id.
+     */
+    void update(User user) throws ServiceException, NotFoundException;
 }

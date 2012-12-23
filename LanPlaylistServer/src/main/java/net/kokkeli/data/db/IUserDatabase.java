@@ -8,5 +8,5 @@ import net.kokkeli.data.User;
  *
  */
 public interface IUserDatabase extends IDatabase<User>{
-    void update(User user);
+    void update(User user) throws DatabaseException;
 }
