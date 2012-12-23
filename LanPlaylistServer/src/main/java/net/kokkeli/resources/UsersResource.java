@@ -73,6 +73,15 @@ public class UsersResource extends BaseResource {
         return Response.ok(Templates.process(USERS_TEMPLATE, modelUsers)).build();
     }
     
+    /**
+     * Get for User details
+     * @param req Request
+     * @param id Requested Id
+     * @return Response
+     * @throws RenderException Thrown if there is problem with templates
+     * @throws NotFoundException Thrown if id was not found.
+     * @throws ServiceException Thrown if there was problem with services.
+     */
     @GET
     @Produces("text/html")
     @Access(Role.ADMIN)
@@ -84,6 +93,15 @@ public class UsersResource extends BaseResource {
         return Response.ok(Templates.process(USER_DETAILS_TEMPLATE, model)).build();
     }
     
+    /**
+     * Get for User edit
+     * @param req Request
+     * @param id Requested Id.
+     * @return Response
+     * @throws NotFoundException Thrown if id was not found.
+     * @throws ServiceException Thrown if there was problem with services.
+     * @throws RenderException Thrown if there is problem with templates.
+     */
     @GET
     @Produces("text/html")
     @Access(Role.ADMIN)
@@ -95,6 +113,16 @@ public class UsersResource extends BaseResource {
         return Response.ok(Templates.process(USER_EDIT_TEMPLATE, model)).build();
     }
     
+    /**
+     * Post for User edit.
+     * @param req Request
+     * @param formParams Form parameters
+     * @return Response
+     * @throws NotFoundException Thrown if id was not found.
+     * @throws ServiceException Thrown if there was problem with services.
+     * @throws RenderException Thrown if there was problem with templates
+     * @throws BadRequestException Thrown if request is bad.
+     */
     @POST
     @Produces("text/html")
     @Access(Role.ADMIN)
@@ -144,14 +172,13 @@ public class UsersResource extends BaseResource {
         }
         
         String username = formParams.getFirst(FORM_USERNAME).trim();
-        Role role;
         
+        Role role;
         try {
             role = Role.valueOf(formParams.getFirst(FORM_ROLE).toUpperCase());
         } catch (IllegalArgumentException e) {
             throw new BadRequestException("There was no such role.", e);
         }
-        
         
         return new User(id, username, role);
     }
