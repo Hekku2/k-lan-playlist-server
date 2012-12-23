@@ -7,7 +7,8 @@
 			<#include "common/_topsection.ftl">
 			<h1>${header}</h1>
 			<div class="content">
-				<form class="edit-form">
+				<form method="POST" class="edit-form">
+					<input type="hidden" name="id" value="${getId}">
 					<div class="field">
 						<div class="description">
 							Username: 
@@ -25,6 +26,7 @@
 							Admin <input type="radio" name="role" value="admin" <#if getRole == "ADMIN">checked</#if>>
 						</div>
 					</div>
+					<input type="submit" value="Edit">
 				</form>
 			</div>
 		</div>
