@@ -44,4 +44,20 @@ public class User {
     public Role getRole(){
         return role;
     }
+    
+    /**
+     * Checks if user is same as this.
+     * @param user Compared user
+     * @return True, if users are same
+     */
+    public boolean equals(User user){
+        if (this.id != user.getId())
+            return false;
+        if (!this.userName.equals(user.getUserName()))
+            return false;
+        if (this.role != user.getRole())
+            return false;
+        
+        return true;
+    }
 }
