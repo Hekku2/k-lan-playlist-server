@@ -9,11 +9,11 @@ import javax.ws.rs.core.Response;
 
 import com.google.inject.Inject;
 
-import net.kokkeli.data.Logging;
+import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Role;
 import net.kokkeli.resources.models.ModelPlaylist;
+import net.kokkeli.server.ITemplateService;
 import net.kokkeli.server.RenderException;
-import net.kokkeli.server.Templates;
 
 /**
  * Class for root resources.
@@ -30,8 +30,8 @@ public class RootResource extends BaseResource {
      * @param logger
      */
     @Inject
-    protected RootResource(Logging logger) {
-        super(logger);
+    protected RootResource(ILogger logger, ITemplateService templateService) {
+        super(logger, templateService);
     }
 
     private static final String INDEX_TEMPLATE = "index.ftl";
@@ -47,7 +47,7 @@ public class RootResource extends BaseResource {
     public Response redirect(@Context HttpServletRequest req) throws RenderException {
         ModelPlaylist mockList = new ModelPlaylist();
 
-        return Response.ok(Templates.process(INDEX_TEMPLATE, mockList)).build();
+        return Response.ok(templates.process(INDEX_TEMPLATE, mockList)).build();
     }
    
 }

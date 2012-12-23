@@ -14,13 +14,13 @@ import javax.ws.rs.core.Response;
 
 import com.google.inject.Inject;
 
-import net.kokkeli.data.Logging;
+import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Role;
 import net.kokkeli.resources.Access;
 import net.kokkeli.resources.BaseResource;
+import net.kokkeli.server.ITemplateService;
 import net.kokkeli.server.LanServer;
 import net.kokkeli.server.RenderException;
-import net.kokkeli.server.Templates;
 
 /**
  * Authentication resource. This class doesn't need access control.
@@ -33,15 +33,15 @@ public class AuthenticationResource extends BaseResource {
     private static final String AUTHENTICATE_TEMPLATE = "authenticate.ftl";
 
     @Inject
-    protected AuthenticationResource(Logging logger) {
-        super(logger);
+    protected AuthenticationResource(ILogger logger, ITemplateService templateService) {
+        super(logger, templateService);
     }
 
     @GET
     @Produces("text/html")
     @Access(Role.NONE)
     public String authenticate() throws RenderException {
-        return Templates.process(AUTHENTICATE_TEMPLATE);
+        return templates.process(AUTHENTICATE_TEMPLATE);
     }
 
     @POST

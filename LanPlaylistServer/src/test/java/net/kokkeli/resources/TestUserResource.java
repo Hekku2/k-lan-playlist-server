@@ -24,7 +24,7 @@ public class TestUserResource {
         mockUserService = mock(IUserService.class);
         when(mockUserService.get(unexistingId)).thenThrow(new NotFoundException("User not found"));
         
-        UsersResource res = new UsersResource(mockLogger, mockUserService);
+        UsersResource res = new UsersResource(mockLogger, null, mockUserService);
         
         try {
             res.userDetails(null, unexistingId);

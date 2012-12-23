@@ -51,6 +51,7 @@ public class LanServletConfig extends GuiceServletContextListener {
                 
                 //Services
                 bind(IUserService.class).to(UserService.class);
+                bind(ITemplateService.class).to(Templates.class);
                 
                 //Resources
                 bind(CssResource.class);

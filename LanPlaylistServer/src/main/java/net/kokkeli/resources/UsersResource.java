@@ -21,9 +21,9 @@ import net.kokkeli.data.services.IUserService;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.resources.models.ModelUser;
 import net.kokkeli.resources.models.ModelUsers;
+import net.kokkeli.server.ITemplateService;
 import net.kokkeli.server.LanServer;
 import net.kokkeli.server.RenderException;
-import net.kokkeli.server.Templates;
 
 /**
  * Users-resource
@@ -49,8 +49,8 @@ public class UsersResource extends BaseResource {
      * @param logger
      */
     @Inject
-    protected UsersResource(ILogger logger, IUserService userservice) {
-        super(logger);
+    protected UsersResource(ILogger logger, ITemplateService templateService, IUserService userservice) {
+        super(logger, templateService);
         this.userService = userservice;
     }
     
@@ -70,7 +70,7 @@ public class UsersResource extends BaseResource {
             modelUsers.add(new ModelUser(user.getId(), user.getUserName(), user.getRole()));
         }      
 
-        return Response.ok(Templates.process(USERS_TEMPLATE, modelUsers)).build();
+        return Response.ok(templates.process(USERS_TEMPLATE, modelUsers)).build();
     }
     
     /**
@@ -90,7 +90,7 @@ public class UsersResource extends BaseResource {
         User user = userService.get(id);
         ModelUser model = new ModelUser(user.getId(), user.getUserName(), user.getRole());
         
-        return Response.ok(Templates.process(USER_DETAILS_TEMPLATE, model)).build();
+        return Response.ok(templates.process(USER_DETAILS_TEMPLATE, model)).build();
     }
     
     /**
@@ -110,7 +110,7 @@ public class UsersResource extends BaseResource {
         User user = userService.get(id);
         ModelUser model = new ModelUser(user.getId(), user.getUserName(), user.getRole());
         
-        return Response.ok(Templates.process(USER_EDIT_TEMPLATE, model)).build();
+        return Response.ok(templates.process(USER_EDIT_TEMPLATE, model)).build();
     }
     
     /**

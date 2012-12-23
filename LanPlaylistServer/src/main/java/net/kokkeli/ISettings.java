@@ -12,4 +12,10 @@ public interface ISettings {
      * @return Location of library
      */
     String getLibLocation();
+    
+    /**
+     * Returns location of templates
+     * @return Location of templates
+     */
+    String getTemplatesLocation();
 }

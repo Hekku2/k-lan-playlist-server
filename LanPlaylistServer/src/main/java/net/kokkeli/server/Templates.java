@@ -11,6 +11,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.inject.Inject;
+
+import net.kokkeli.ISettings;
 import net.kokkeli.resources.ModelCollection;
 import net.kokkeli.resources.Field;
 import net.kokkeli.resources.models.ViewModel;
@@ -19,7 +22,6 @@ import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
-import freemarker.template.TemplateModelException;
 
 /**
  * Class for template rendering
@@ -29,18 +31,18 @@ import freemarker.template.TemplateModelException;
  * @author Hekku2
  *
  */
-public class Templates {
+public class Templates implements ITemplateService {
     private static Configuration cfg;
     
     /**
-     * Initializes new configurations and loads template directory
-     * @param location Location of templates.
-     * @throws IOException Thrown if location can't be found.
-     * @throws TemplateModelException Thrown if there is problem with setting base variables.
+     * Creates template service
+     * @param location
+     * @throws IOException
      */
-    public static void initialize(String location) throws IOException{
+    @Inject
+    public Templates(ISettings settings) throws IOException{
         cfg = new Configuration();
-        cfg.setDirectoryForTemplateLoading(new File(location));
+        cfg.setDirectoryForTemplateLoading(new File(settings.getTemplatesLocation()));
         cfg.setObjectWrapper(new DefaultObjectWrapper());
     }
 
@@ -51,7 +53,7 @@ public class Templates {
      * @return Template processed with model.
      * @throws RenderException Thrown if there is exception with rendering.
      */
-    public static final String process(String template, ViewModel model) throws RenderException {
+    public final String process(String template, ViewModel model) throws RenderException {
         if (model == null){
             throw new RenderException("Model can't be null.");
         }
@@ -81,7 +83,7 @@ public class Templates {
      * @return Processed template.
      * @throws RenderException Thrown if there is exception with rendering.
      */
-    public static final String process(String template) throws RenderException{
+    public final String process(String template) throws RenderException{
         
         Template temp;
         try {
@@ -108,7 +110,7 @@ public class Templates {
      * @return Map created from model.
      * @throws RenderException Thrown if there is problem with model.
      */
-    private static final Map<String,Object> createMap(ViewModel model) throws RenderException{
+    private final Map<String,Object> createMap(ViewModel model) throws RenderException{
         Map<String, Object> map = new HashMap<String, Object>();
         
         //Checks if method contain annotation used for building map.
@@ -144,7 +146,7 @@ public class Templates {
      * @throws IllegalArgumentException Thrown if method can't be called with zero arguments
      * @throws IllegalAccessException Thrown if method can't be called.
      */
-    private static final List<Map<String,Object>> createMapFromModelCollection(ViewModel model, Method method) throws RenderException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+    private final List<Map<String,Object>> createMapFromModelCollection(ViewModel model, Method method) throws RenderException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
         try {
             @SuppressWarnings("unchecked")
             List<ViewModel> items = (List<ViewModel>)method.invoke(model);
@@ -156,9 +158,5 @@ public class Templates {
         } catch (ClassCastException e) {
             throw new RenderException("Provided viewmodel contained ModelCollection-annotations with wrong access modifiers.");
         }
-    }
-    
-    private Templates(){
-        //
     }
 }

@@ -1,6 +1,5 @@
 package net.kokkeli.server;
 
-import java.io.IOException;
 import java.net.URI;
 
 import javax.ws.rs.core.UriBuilder;
@@ -25,7 +24,6 @@ public class LanServer {
     private static final String URL = "http://localhost/";
     private static final int PORT = 9998;
     private static final URI BASE_URI = getBaseURI();
-    private static final String TEMPLATE_LOCATION = "target\\classes\\net\\kokkeli\\resources\\views";
     private ILogger logger;
     
     private Server server;
@@ -35,14 +33,8 @@ public class LanServer {
      * @throws ServerException thrown if there is problem width server.
      */
     public LanServer() throws ServerException{
-        try {
-            Injector injector = Guice.createInjector(new LoggingModule());
-            logger = injector.getInstance(ILogger.class);
-            
-            Templates.initialize(TEMPLATE_LOCATION);
-        } catch (IOException e) {
-            throw new ServerException("Templates could not be found: " + e.getMessage());
-        }
+        Injector injector = Guice.createInjector(new LoggingModule());
+        logger = injector.getInstance(ILogger.class);
     }
     
     /**
