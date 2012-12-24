@@ -51,6 +51,8 @@ public class User {
      * @return True, if users are same
      */
     public boolean equals(User user){
+        if (user == null) return false;
+        
         if (this.id != user.getId())
             return false;
         if (!this.userName.equals(user.getUserName()))
@@ -59,5 +61,17 @@ public class User {
             return false;
         
         return true;
+    }
+    
+    /**
+     * Checks if object is same as this.
+     * @param object Compared object
+     * @return True, if objects are same
+     */
+    public boolean equals(Object object){
+        if (object == null || object.getClass() != this.getClass())
+            return false;
+
+        return equals((User)object);
     }
 }
