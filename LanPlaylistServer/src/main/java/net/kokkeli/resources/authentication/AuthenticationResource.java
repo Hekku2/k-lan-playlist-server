@@ -16,6 +16,7 @@ import com.google.inject.Inject;
 
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Role;
+import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.resources.Access;
 import net.kokkeli.resources.BaseResource;
 import net.kokkeli.server.ITemplateService;
@@ -40,8 +41,12 @@ public class AuthenticationResource extends BaseResource {
     @GET
     @Produces("text/html")
     @Access(Role.NONE)
-    public String authenticate() throws RenderException {
-        return templates.process(AUTHENTICATE_TEMPLATE);
+    public String authenticate() throws ServiceException {
+        try {
+            return templates.process(AUTHENTICATE_TEMPLATE);
+        } catch (RenderException e) {
+            throw new ServiceException("There was problem with rendering.");
+        }
     }
 
     @POST
@@ -50,7 +55,7 @@ public class AuthenticationResource extends BaseResource {
     @Access(Role.NONE)
     public Response authenticate(@Context HttpServletRequest req,
             @FormParam("user") String username,
-            @FormParam("pwd") String password) throws RenderException {
+            @FormParam("pwd") String password) {
         log("User " + username + " trying to authenticate.", 1);
 
         // TODO Add authentication here

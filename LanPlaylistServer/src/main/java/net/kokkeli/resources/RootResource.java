@@ -11,6 +11,7 @@ import com.google.inject.Inject;
 
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Role;
+import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.resources.models.ModelPlaylist;
 import net.kokkeli.server.ITemplateService;
 import net.kokkeli.server.RenderException;
@@ -24,6 +25,7 @@ import net.kokkeli.server.RenderException;
  */
 @Path("/")
 public class RootResource extends BaseResource {
+    private static final String INDEX_TEMPLATE = "index.ftl";
     
     /**
      * Creates resource
@@ -33,21 +35,22 @@ public class RootResource extends BaseResource {
     protected RootResource(ILogger logger, ITemplateService templateService) {
         super(logger, templateService);
     }
-
-    private static final String INDEX_TEMPLATE = "index.ftl";
    
     /**
      * Redirects user to correct page
      * @return HTML-page, either login or main page
-     * @throws RenderException Thrown if there is problem with rendering template
+     * @throws ServiceException Thrown when there is problem with rendering.
      */
     @GET
     @Produces("text/html")
     @Access(Role.USER)
-    public Response redirect(@Context HttpServletRequest req) throws RenderException {
+    public Response redirect(@Context HttpServletRequest req) throws ServiceException {
         ModelPlaylist mockList = new ModelPlaylist();
 
-        return Response.ok(templates.process(INDEX_TEMPLATE, mockList)).build();
+        try {
+            return Response.ok(templates.process(INDEX_TEMPLATE, mockList)).build();
+        } catch (RenderException e) {
+            throw new ServiceException("There was problem with rendering.", e);
+        }
     }
-   
 }

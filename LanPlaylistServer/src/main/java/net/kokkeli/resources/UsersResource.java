@@ -78,7 +78,6 @@ public class UsersResource extends BaseResource {
      * @param req Request
      * @param id Requested Id
      * @return Response
-     * @throws RenderException Thrown if there is problem with templates
      * @throws NotFoundException Thrown if id was not found.
      * @throws ServiceException Thrown if there was problem with services.
      */
@@ -86,11 +85,15 @@ public class UsersResource extends BaseResource {
     @Produces("text/html")
     @Access(Role.ADMIN)
     @Path("{id: [0-9]*}")
-    public Response userDetails(@Context HttpServletRequest req, @PathParam("id") long id) throws RenderException, NotFoundException, ServiceException{
+    public Response userDetails(@Context HttpServletRequest req, @PathParam("id") long id) throws NotFoundException, ServiceException{
         User user = userService.get(id);
         ModelUser model = new ModelUser(user.getId(), user.getUserName(), user.getRole());
         
-        return Response.ok(templates.process(USER_DETAILS_TEMPLATE, model)).build();
+        try {
+            return Response.ok(templates.process(USER_DETAILS_TEMPLATE, model)).build();
+        } catch (RenderException e) {
+            throw new ServiceException("There was problem with rendering the template.", e);
+        }
     }
     
     /**
@@ -100,17 +103,20 @@ public class UsersResource extends BaseResource {
      * @return Response
      * @throws NotFoundException Thrown if id was not found.
      * @throws ServiceException Thrown if there was problem with services.
-     * @throws RenderException Thrown if there is problem with templates.
      */
     @GET
     @Produces("text/html")
     @Access(Role.ADMIN)
     @Path("/edit/{id: [0-9]*}")
-    public Response userEdit(@Context HttpServletRequest req, @PathParam("id") long id) throws NotFoundException, ServiceException, RenderException{
+    public Response userEdit(@Context HttpServletRequest req, @PathParam("id") long id) throws NotFoundException, ServiceException{
         User user = userService.get(id);
         ModelUser model = new ModelUser(user.getId(), user.getUserName(), user.getRole());
         
-        return Response.ok(templates.process(USER_EDIT_TEMPLATE, model)).build();
+        try {
+            return Response.ok(templates.process(USER_EDIT_TEMPLATE, model)).build();
+        } catch (RenderException e) {
+            throw new ServiceException("There was problem with rendering the template.", e);
+        }
     }
     
     /**
@@ -120,14 +126,13 @@ public class UsersResource extends BaseResource {
      * @return Response
      * @throws NotFoundException Thrown if id was not found.
      * @throws ServiceException Thrown if there was problem with services.
-     * @throws RenderException Thrown if there was problem with templates
      * @throws BadRequestException Thrown if request is bad.
      */
     @POST
     @Produces("text/html")
     @Access(Role.ADMIN)
     @Path("/edit/{id: [0-9]*}")
-    public Response userEdit(@Context HttpServletRequest req, MultivaluedMap<String, String> formParams) throws NotFoundException, ServiceException, RenderException, BadRequestException{
+    public Response userEdit(@Context HttpServletRequest req, MultivaluedMap<String, String> formParams) throws NotFoundException, ServiceException, BadRequestException{
         containsNeededFields(formParams);
         User editedUser = createUser(formParams);
         
