@@ -37,6 +37,7 @@ public class UsersResource extends BaseResource {
     private static final String USERS_TEMPLATE = "users.ftl";
     private static final String USER_DETAILS_TEMPLATE = "user.ftl";
     private static final String USER_EDIT_TEMPLATE = "user_edit.ftl";
+    private static final String USER_CREATE_TEMPLATE = "user_create.ftl";
     
     private static final String FORM_USERNAME = "username";
     private static final String FORM_ID = "id";
@@ -148,6 +149,25 @@ public class UsersResource extends BaseResource {
         userService.update(new User(editedUser.getId(), editedUser.getUserName(), editedUser.getRole()));
         
         return Response.seeOther(LanServer.getURI(String.format("users/%s", user.getId()))).build();
+    }
+
+    /**
+     * User create get.
+     * @param req Request
+     * @return Response
+     * @throws ServiceException Thrown if rendering fails.
+     */
+    @GET
+    @Produces("text/html")
+    @Access(Role.ADMIN)
+    @Path("/create/")
+    public Response userCreate(@Context HttpServletRequest req) throws ServiceException{
+        try {
+            return Response.ok(templates.process(USER_CREATE_TEMPLATE)).build();
+        } catch (RenderException e) {
+            throw new ServiceException("Template processing failed.", e);
+        }
+        
     }
     
     /**
