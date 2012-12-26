@@ -7,10 +7,26 @@
 			<#include "common/_topsection.ftl">
 			<h1>${header}</h1>
 			<div class="content">
-				<a href="/users">Back</a>
-				<td>${getUsername}</td>
-				<td>${getRole}</td>
-				<td><a href="/users/edit/${getId}">Edit</a></td>
+				<div class="field">
+					<div class="description">
+						Username: 
+					</div>
+					<div class=value>
+						${getUsername}
+					</div>
+				</div>
+				<div class="field">
+					<div class="description">
+						Role:
+					</div>
+					<div class="value">
+						${getRole}
+					</div>
+				</div>
+				<div class="navi">
+					<a href="/users/edit/${getId}">Edit</a>
+					<a href="/users">Back</a>
+				</div>
 			</div>
 		</div>
 	</body>
