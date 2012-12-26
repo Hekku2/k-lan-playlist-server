@@ -14,11 +14,12 @@ public class TestUser {
         final long differentId = 55;
         
         Assert.assertEquals(true, new User(id, username, role).equals(new User(id, username, role)));
-        
         Assert.assertEquals(false, new User(id, username, role).equals(new User(id, differentUsername, role)));
         Assert.assertEquals(false, new User(id, username, role).equals(new User(differentId, username, role)));
         Assert.assertEquals(false, new User(id, username, role).equals(new User(id, username, Role.ADMIN)));
-        
+        Assert.assertEquals(false, new User(id, username, Role.ADMIN).equals(new User(id, username, role)));
+        Assert.assertEquals(false, new User(id, differentUsername, role).equals(new User(id, username, role)));
+        Assert.assertEquals(false, new User(differentId, username, role).equals(new User(id, username, role)));
         Assert.assertEquals(false, new User(id, username, role).equals(null));
     }
 }
