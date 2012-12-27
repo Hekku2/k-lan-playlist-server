@@ -12,8 +12,20 @@ public class User {
     private Role role;
     
     /**
-     * Creates user with given username
+     * Creates user with given username and role
      * @param userName Username
+     * @param role Role
+     */
+    public User(String userName, Role role){
+        this.userName = userName;
+        this.role = role;
+    }
+    
+    /**
+     * Creates user with given username
+     * @param id Id
+     * @param userName Username
+     * @param role Role
      */
     public User(long id, String userName, Role role){
         this.userName = userName;
@@ -35,6 +47,14 @@ public class User {
      */
     public long getId(){
         return id;
+    }
+    
+    /**
+     * Sets id for user
+     * @param id Id of user
+     */
+    public void setId(long id){
+        this.id = id;
     }
     
     /**

@@ -1,2 +1,2 @@
-INSERT INTO users (Id, UserName, Role) VALUES (1, 'admin',2);
-INSERT INTO users (Id, UserName, Role) VALUES (2, 'user',1);
+INSERT INTO users (UserName, Role) VALUES ('admin',2);
+INSERT INTO users (UserName, Role) VALUES ('user',1);

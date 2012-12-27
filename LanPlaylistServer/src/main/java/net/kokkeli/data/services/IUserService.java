@@ -34,4 +34,11 @@ public interface IUserService {
      * @throws NotFoundException Thrown if there is no old user with given id.
      */
     void update(User user) throws ServiceException, NotFoundException;
+
+    /**
+     * Adds given user. If user doesn't have Id, enw is created.
+     * @param user New user.
+     * @throws ServiceException Thrown if there is problem with service
+     */
+    void add(User user) throws ServiceException;
 }

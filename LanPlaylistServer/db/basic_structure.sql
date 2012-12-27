@@ -1,5 +1,5 @@
 CREATE TABLE users(
-    Id BIGINT NOT NULL PRIMARY KEY,
-    UserName varchar(255),
+    Id INTEGER NOT NULL PRIMARY KEY,
+    UserName varchar(255) UNIQUE,
     Role int 
 );

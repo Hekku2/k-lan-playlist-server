@@ -16,4 +16,6 @@ public interface IDatabase<T> {
     T get(long id) throws DatabaseException, NotFoundException;
     
     Collection<T> get() throws DatabaseException;
+    
+    void add(T item) throws DatabaseException;
 }

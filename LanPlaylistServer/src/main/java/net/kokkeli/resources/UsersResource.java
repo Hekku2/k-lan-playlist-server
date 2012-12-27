@@ -134,18 +134,18 @@ public class UsersResource extends BaseResource {
     @Access(Role.ADMIN)
     @Path("/edit/{id: [0-9]*}")
     public Response userEdit(@Context HttpServletRequest req, MultivaluedMap<String, String> formParams) throws NotFoundException, ServiceException, BadRequestException{
-        containsNeededFields(formParams);
-        User editedUser = createUser(formParams);
+        containsNeededFieldsForEdit(formParams);
+        User editedUser = createEditUser(formParams);
         
         // Checks that user exists
         User user = userService.get(editedUser.getId());
         
-        if (user.getUserName().isEmpty())
-            throw new BadRequestException("Username was empty, or contained only whitespace.");
+        if (!isUsernameValid(user.getUserName()))
+            throw new BadRequestException("Username was invalid.");
+
         
-        if (user.getUserName().length() > 255)
-            throw new BadRequestException("Username was too long.");
         
+        //TODO Field validation
         userService.update(new User(editedUser.getId(), editedUser.getUserName(), editedUser.getRole()));
         
         return Response.seeOther(LanServer.getURI(String.format("users/%s", user.getId()))).build();
@@ -167,27 +167,64 @@ public class UsersResource extends BaseResource {
         } catch (RenderException e) {
             throw new ServiceException("Template processing failed.", e);
         }
-        
     }
     
     /**
-     * Checks that 
+     * User create post.
+     * @param req Request
+     * @param formParams Form parameters
+     * @return Response
+     * @throws ServiceException Thrown if rendering fails.
+     * @throws BadRequestException Thrown if request contained invalid values.
+     */
+    @POST
+    @Produces("text/html")
+    @Access(Role.ADMIN)
+    @Path("/create/")
+    public Response userCreate(@Context HttpServletRequest req, MultivaluedMap<String, String> formParams) throws BadRequestException, ServiceException{
+        containsNeededFieldsForCreate(formParams);
+        User user = createUser(formParams);
+        
+        //TODO Validation for user values.
+        if (!isUsernameValid(user.getUserName()))
+            throw new BadRequestException("Username was invalid.");
+        
+        userService.add(user);
+        
+        return Response.seeOther(LanServer.getURI("users")).build();
+    }
+    
+    /**
+     * Checks that form contains needed fields for edit. (Username, role and id)
      * @param formParams
      * @throws BadRequestException
      */
-    private void containsNeededFields(MultivaluedMap<String, String> formParams) throws BadRequestException{
-        if (!formParams.containsKey(FORM_ID) || !formParams.containsKey(FORM_USERNAME) || !formParams.containsKey(FORM_ROLE)){
+    private void containsNeededFieldsForEdit(MultivaluedMap<String, String> formParams) throws BadRequestException{
+        if (!formParams.containsKey(FORM_ID)){
+            throw new BadRequestException("User edit post did not contain needed fields.");
+        }
+        
+        containsNeededFieldsForCreate(formParams);
+    }
+    
+    /**
+     * Checks that form contains needed field for create. (Username and role)
+     * @param formParams
+     * @throws BadRequestException
+     */
+    private void containsNeededFieldsForCreate(MultivaluedMap<String, String> formParams) throws BadRequestException{
+        if (!formParams.containsKey(FORM_USERNAME) || !formParams.containsKey(FORM_ROLE)){
             throw new BadRequestException("User edit post did not contain needed fields.");
         }
     }
     
     /**
-     * Creates new ModelUser from formParams.
+     * Creates new user for edit from formParams. If values are missing, exception is thrown.
      * @param formParams Parameters. Contains all needed field for ModelUser
      * @return Created ModelUser
      * @throws BadRequestException Thrown formParams contain illegal input.
      */
-    private User createUser(MultivaluedMap<String, String> formParams) throws BadRequestException{
+    private User createEditUser(MultivaluedMap<String, String> formParams) throws BadRequestException{
         long id;
         
         try {
@@ -206,5 +243,34 @@ public class UsersResource extends BaseResource {
         }
         
         return new User(id, username, role);
+    }
+    
+    /**
+     * Creates user from formParams. If username or role is missing, exception is thrown.
+     * @param formParams
+     * @return
+     * @throws BadRequestException
+     */
+    private User createUser(MultivaluedMap<String, String> formParams) throws BadRequestException{
+        String username = formParams.getFirst(FORM_USERNAME).trim();
+        
+        Role role;
+        try {
+            role = Role.valueOf(formParams.getFirst(FORM_ROLE).toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new BadRequestException("There was no such role.", e);
+        }
+        
+        return new User(username,role);
+    }
+    
+    /**
+     * Checks for username validity
+     * @param username Username
+     * @return True, if username is valid
+     */
+    private static boolean isUsernameValid(String username){
+        //TODO Check for invalid charachters
+        return username != null && !username.isEmpty() || username.length() <= 255;
     }
 }

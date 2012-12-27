@@ -28,7 +28,16 @@ public class UserDatabase extends Database implements IUserDatabase {
      * @return Query for selecting single user.
      */
     private static String getSingleUserQuery(long id){
-        return ALLUSERS + " WHERE Id = " + id;
+        return ALLUSERS + " WHERE "+ COLUMN_ID+" = " + id;
+    }
+    
+    /**
+     * Creates query selecting users with given username.
+     * @param username Username of user
+     * @return Query for selecting users with given username.
+     */
+    private static String getUserWithUsername(String username){
+        return ALLUSERS + " WHERE "+ COLUMN_USERNAME + " = " + username;
     }
     
     /**
@@ -102,8 +111,6 @@ public class UserDatabase extends Database implements IUserDatabase {
         } catch (SQLiteException e) {
             throw new DatabaseException("There was problem with database.", e);
         }
-        
-
     }
 
     @Override
@@ -154,6 +161,57 @@ public class UserDatabase extends Database implements IUserDatabase {
             }
         }
         throw new IndexOutOfBoundsException("There was no role with given Id.");
+    }
+
+    @Override
+    public void add(User item) throws DatabaseException {
+        if (equals(item.getUserName()))
+            throw new DatabaseException("Username already exists.");
+        
+        SQLiteConnection db = new SQLiteConnection(new File(getDatabaseLocation()));
+        
+        try {
+            db.open(false);
+            SQLiteStatement st = db.prepare(createInsertString(item));
+            try {
+                st.stepThrough();
+            } finally {
+                st.dispose();
+            }
+            db.dispose();
+        } catch (SQLiteException e) {
+            throw new DatabaseException("There was problem with database", e);
+        }
+    }
+
+    @Override
+    public boolean exists(String username) throws DatabaseException {
+        SQLiteConnection db = new SQLiteConnection(new File(getDatabaseLocation()));
+        
+        try {
+            db.open(false);
+            SQLiteStatement st = db.prepare(getUserWithUsername(username));
+            try {
+                while (st.step()) {
+                    return true;
+                }
+            } finally {
+                st.dispose();
+            }
+            db.dispose();
+        } catch (SQLiteException e) {
+            throw new DatabaseException("Problem with database.", e);
+        }
+        return false;
+    }
+    
+    /**
+     * Creates insert statement for User.
+     * @param user User
+     * @return Insert statement
+     */
+    private static String createInsertString(User user){
+        return String.format("INSERT INTO %s (%s, %s) VALUES ('%s', %s)",TABLENAME, COLUMN_USERNAME, COLUMN_ROLE, user.getUserName(), user.getRole().getId());
     }
     
     /**

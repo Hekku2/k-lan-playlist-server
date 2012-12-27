@@ -76,4 +76,17 @@ public class UserService implements IUserService {
             throw new ServiceException("There was problem with database.", e);
         }
     }
+
+    @Override
+    public void add(User user) throws ServiceException {
+        //TODO SQL Injection protection
+        
+        try {
+            userDatabase.add(user);
+        } catch (DatabaseException e) {
+            throw new ServiceException("There was problem with database.", e);
+        }
+        
+        
+    }
 }
