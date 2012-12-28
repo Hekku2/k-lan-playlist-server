@@ -271,6 +271,6 @@ public class UsersResource extends BaseResource {
      */
     private static boolean isUsernameValid(String username){
         //TODO Check for invalid charachters
-        return username != null && !username.isEmpty() || username.length() <= 255;
+        return username != null && !username.isEmpty() && username.length() <= 255;
     }
 }
