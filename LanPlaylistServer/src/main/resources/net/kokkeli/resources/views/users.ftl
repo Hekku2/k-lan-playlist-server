@@ -8,14 +8,14 @@
 			<h1>${header}</h1>
 			<div class="content">
 				<a href="users/create">Create</a>
-				<#if getUsers??>
+				<#if getModel.getUsers??>
 					<table>
 						<tr>
 							<th>Username</th>
 							<th>Role</th>
 							<th>Man.<th>
 						</tr>
-						<#list getUsers as item>
+						<#list getModel.getUsers as item>
 							<tr>
 								<td>${item.getUsername}</td>
 								<td>${item.getRole}</td>

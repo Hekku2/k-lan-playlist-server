@@ -12,7 +12,7 @@
 						Username: 
 					</div>
 					<div class=value>
-						${getUsername}
+						${getModel.getUsername}
 					</div>
 				</div>
 				<div class="field">
@@ -20,11 +20,11 @@
 						Role:
 					</div>
 					<div class="value">
-						${getRole}
+						${getModel.getRole}
 					</div>
 				</div>
 				<div class="navi">
-					<a href="/users/edit/${getId}">Edit</a>
+					<a href="/users/edit/${getModel.getId}">Edit</a>
 					<a href="/users">Back</a>
 				</div>
 			</div>

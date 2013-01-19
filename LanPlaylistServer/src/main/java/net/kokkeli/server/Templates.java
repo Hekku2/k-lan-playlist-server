@@ -17,6 +17,7 @@ import net.kokkeli.ISettings;
 import net.kokkeli.resources.Model;
 import net.kokkeli.resources.ModelCollection;
 import net.kokkeli.resources.Field;
+import net.kokkeli.resources.models.BaseModel;
 import net.kokkeli.resources.models.ViewModel;
 
 import freemarker.template.Configuration;
@@ -54,7 +55,7 @@ public class Templates implements ITemplateService {
      * @return Template processed with model.
      * @throws RenderException Thrown if there is exception with rendering.
      */
-    public final String process(String template, ViewModel model) throws RenderException {
+    public final String process(String template, BaseModel model) throws RenderException {
         if (model == null){
             throw new RenderException("Model can't be null.");
         }

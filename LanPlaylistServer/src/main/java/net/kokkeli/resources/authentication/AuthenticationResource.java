@@ -17,8 +17,10 @@ import com.google.inject.Inject;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Role;
 import net.kokkeli.data.services.ServiceException;
+import net.kokkeli.player.IPlayer;
 import net.kokkeli.resources.Access;
 import net.kokkeli.resources.BaseResource;
+import net.kokkeli.resources.models.BaseModel;
 import net.kokkeli.server.ITemplateService;
 import net.kokkeli.server.LanServer;
 import net.kokkeli.server.RenderException;
@@ -34,16 +36,19 @@ public class AuthenticationResource extends BaseResource {
     private static final String AUTHENTICATE_TEMPLATE = "authenticate.ftl";
 
     @Inject
-    protected AuthenticationResource(ILogger logger, ITemplateService templateService) {
-        super(logger, templateService);
+    protected AuthenticationResource(ILogger logger, ITemplateService templateService, IPlayer player) {
+        super(logger, templateService, player);
     }
 
     @GET
     @Produces("text/html")
     @Access(Role.NONE)
     public String authenticate() throws ServiceException {
+        BaseModel model = buildBaseModel();
+        model.setUsername("");
+        
         try {
-            return templates.process(AUTHENTICATE_TEMPLATE);
+            return templates.process(AUTHENTICATE_TEMPLATE, model);
         } catch (RenderException e) {
             throw new ServiceException("There was problem with rendering.");
         }

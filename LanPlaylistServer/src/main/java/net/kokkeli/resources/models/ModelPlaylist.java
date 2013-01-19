@@ -18,7 +18,8 @@ public class ModelPlaylist extends ViewModel{
     public ModelPlaylist(){
         for (int i = 0; i < 12; i++) {
             ModelPlaylistItem item = new ModelPlaylistItem();
-            item.setName("Song " + i);
+            item.setTrackName("Song " + i);
+            item.setArtist("Jarmo kostaaa" + i);
             
             items.add(item);
         }

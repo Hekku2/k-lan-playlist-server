@@ -8,13 +8,13 @@
 			<h1>${header}</h1>
 			<div class="content">
 				<form method="POST" class="edit-form">
-					<input type="hidden" name="id" value="${getId}">
+					<input type="hidden" name="id" value="${getModel.getId}">
 					<div class="field">
 						<div class="description">
 							Username: 
 						</div>
 						<div class=value>
-							<input type="text" name="username" value="${getUsername}">
+							<input type="text" name="username" value="${getModel.getUsername}">
 						</div>
 					</div>
 					<div class="field">
@@ -22,12 +22,12 @@
 							Role:
 						</div>
 						<div class="value">
-							User <input type="radio" name="role" value="user"  <#if getRole == "USER">checked</#if>>
-							Admin <input type="radio" name="role" value="admin" <#if getRole == "ADMIN">checked</#if>>
+							User <input type="radio" name="role" value="user"  <#if getModel.getRole == "USER">checked</#if>>
+							Admin <input type="radio" name="role" value="admin" <#if getModel.getRole == "ADMIN">checked</#if>>
 						</div>
 					</div>
 					<input type="submit" value="Edit">
-					<a href="/users/${getId}">Cancel</a>
+					<a href="/users/${getModel.getId}">Cancel</a>
 				</form>
 			</div>
 		</div>

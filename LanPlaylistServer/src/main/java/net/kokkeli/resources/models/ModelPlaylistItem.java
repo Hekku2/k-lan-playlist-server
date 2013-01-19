@@ -8,14 +8,15 @@ import net.kokkeli.resources.Field;
  *
  */
 public final class ModelPlaylistItem extends ViewModel{
-    private String name;
+    private String trackName;
+    private String artist;
     
     /**
      * Sets name of item
      * @param name
      */
-    public void setName(String name){
-        this.name = name;
+    public void setTrackName(String name){
+        this.trackName = name;
     }
     
     /**
@@ -23,7 +24,24 @@ public final class ModelPlaylistItem extends ViewModel{
      * @return Name of item
      */
     @Field
-    public String getName(){
-        return name;
+    public String getTrackName(){
+        return trackName;
+    }
+    
+    /**
+     * Sets name for artist
+     * @param artist
+     */
+    public void setArtist(String artist){
+        this.artist = artist;
+    }
+    
+    /**
+     * Getter for artist name
+     * @return
+     */
+    @Field
+    public String getArtist(){
+        return artist;
     }
 }

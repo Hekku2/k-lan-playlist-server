@@ -5,12 +5,13 @@
 	<body>
 		<div class="inner-body">
 			<#include "common/_topsection.ftl">
+			<#include "common/_playing.ftl">
 			<h1>${header}</h1>
 			<div class="content">
-				<#if playlist??>
+				<#if getModel?? && getModel.getItems??>
 					<#include "_playlist.ftl">
 				<#else>
-					<p> No playlist loaded </p>
+					No playlist loaded.
 				</#if>
 			</div>
 		</div>

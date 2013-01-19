@@ -8,8 +8,8 @@ import net.kokkeli.data.Role;
 import net.kokkeli.data.User;
 import net.kokkeli.data.services.IUserService;
 import net.kokkeli.data.services.ServiceException;
-import net.kokkeli.resources.models.ModelUser;
-import net.kokkeli.resources.models.ViewModel;
+import net.kokkeli.player.IPlayer;
+import net.kokkeli.resources.models.BaseModel;
 import net.kokkeli.server.ITemplateService;
 import net.kokkeli.server.RenderException;
 
@@ -28,6 +28,8 @@ public class TestUserResource {
     private ILogger mockLogger;
     private IUserService mockUserService;
     private ITemplateService mockTemplateService;
+    private IPlayer mockPlayer;
+    
     private User existing;
     
     private UsersResource userResource;
@@ -37,13 +39,14 @@ public class TestUserResource {
         mockLogger = mock(ILogger.class);
         mockUserService = mock(IUserService.class);
         mockTemplateService = mock(ITemplateService.class);
+        mockPlayer = mock(IPlayer.class);
         
         existing = new User(EXISTING_USER_ID, "user", Role.NONE);
         
         when(mockUserService.get(EXISTING_USER_ID)).thenReturn(existing);
         when(mockUserService.get(NONEXISTING_ID)).thenThrow(new NotFoundException("User not found"));
         
-        userResource = new UsersResource(mockLogger, mockTemplateService, mockUserService);
+        userResource = new UsersResource(mockLogger, mockTemplateService, mockUserService, mockPlayer);
         
     }
     
@@ -59,7 +62,7 @@ public class TestUserResource {
     
     @Test
     public void testGetDetailsServiceExceptionIsThrownWhenTemplateCantBeProcessed() throws RenderException{
-        when(mockTemplateService.process(any(String.class), any(ViewModel.class))).thenThrow(new RenderException("Rendering failed"));
+        when(mockTemplateService.process(any(String.class), any(BaseModel.class))).thenThrow(new RenderException("Rendering failed"));
         try {
             userResource.userDetails(null, EXISTING_USER_ID);
             Assert.fail("Service exception should have been thrown.");
@@ -72,12 +75,12 @@ public class TestUserResource {
     public void testGetDetailsPutsTemplateAndOkInResponse() throws NotFoundException, ServiceException, RenderException {
         final String processedTemplate = "Jeeah";
         
-        when(mockTemplateService.process(any(String.class), any(ViewModel.class))).thenReturn(processedTemplate);
+        when(mockTemplateService.process(any(String.class), any(BaseModel.class))).thenReturn(processedTemplate);
         
         Response r = userResource.userDetails(null, EXISTING_USER_ID);
         Assert.assertEquals(processedTemplate, r.getEntity().toString());
         Assert.assertEquals(RESPONSE_OK, r.getStatus());
-        verify(mockTemplateService).process(anyString(), isA(ModelUser.class));
+        verify(mockTemplateService).process(anyString(), isA(BaseModel.class));
     }
     
     @Test
@@ -91,7 +94,7 @@ public class TestUserResource {
     
     @Test
     public void testGetEditThrowsServiceExceptionWhenTemplateServiceFails() throws RenderException{
-        when(mockTemplateService.process(any(String.class), any(ViewModel.class))).thenThrow(new RenderException("Rendering failed"));
+        when(mockTemplateService.process(any(String.class), any(BaseModel.class))).thenThrow(new RenderException("Rendering failed"));
         try {
             userResource.userEdit(null, EXISTING_USER_ID);
             Assert.fail("Service exception should have been thrown.");
@@ -103,11 +106,11 @@ public class TestUserResource {
     @Test
     public void testGetEditPutsTemplateAndOkInResponso() throws RenderException, NotFoundException, ServiceException{
         final String processedTemplate = "Jeeah";
-        when(mockTemplateService.process(any(String.class), any(ViewModel.class))).thenReturn(processedTemplate);
+        when(mockTemplateService.process(any(String.class), any(BaseModel.class))).thenReturn(processedTemplate);
         
         Response r = userResource.userEdit(null, EXISTING_USER_ID);
         Assert.assertEquals(processedTemplate, r.getEntity().toString());
         Assert.assertEquals(RESPONSE_OK, r.getStatus());
-        verify(mockTemplateService).process(anyString(), isA(ModelUser.class));
+        verify(mockTemplateService).process(anyString(), isA(BaseModel.class));
     }
 }

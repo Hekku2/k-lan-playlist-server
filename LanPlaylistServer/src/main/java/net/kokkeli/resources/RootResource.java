@@ -12,6 +12,9 @@ import com.google.inject.Inject;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Role;
 import net.kokkeli.data.services.ServiceException;
+import net.kokkeli.player.IPlayer;
+import net.kokkeli.resources.authentication.AuthenticationUtils;
+import net.kokkeli.resources.models.BaseModel;
 import net.kokkeli.resources.models.ModelPlaylist;
 import net.kokkeli.server.ITemplateService;
 import net.kokkeli.server.RenderException;
@@ -32,8 +35,8 @@ public class RootResource extends BaseResource {
      * @param logger
      */
     @Inject
-    protected RootResource(ILogger logger, ITemplateService templateService) {
-        super(logger, templateService);
+    protected RootResource(ILogger logger, ITemplateService templateService, IPlayer player) {
+        super(logger, templateService, player);
     }
    
     /**
@@ -46,9 +49,13 @@ public class RootResource extends BaseResource {
     @Access(Role.USER)
     public Response redirect(@Context HttpServletRequest req) throws ServiceException {
         ModelPlaylist mockList = new ModelPlaylist();
-
+        
+        BaseModel base = buildBaseModel();
+        base.setUsername(AuthenticationUtils.extractUsername(req));
+        
+        base.setModel(mockList);
         try {
-            return Response.ok(templates.process(INDEX_TEMPLATE, mockList)).build();
+            return Response.ok(templates.process(INDEX_TEMPLATE, base)).build();
         } catch (RenderException e) {
             throw new ServiceException("There was problem with rendering.", e);
         }

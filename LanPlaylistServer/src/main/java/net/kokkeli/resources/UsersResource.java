@@ -19,6 +19,9 @@ import net.kokkeli.data.Role;
 import net.kokkeli.data.User;
 import net.kokkeli.data.services.IUserService;
 import net.kokkeli.data.services.ServiceException;
+import net.kokkeli.player.IPlayer;
+import net.kokkeli.resources.authentication.AuthenticationUtils;
+import net.kokkeli.resources.models.BaseModel;
 import net.kokkeli.resources.models.ModelUser;
 import net.kokkeli.resources.models.ModelUsers;
 import net.kokkeli.server.ITemplateService;
@@ -50,8 +53,8 @@ public class UsersResource extends BaseResource {
      * @param logger
      */
     @Inject
-    protected UsersResource(ILogger logger, ITemplateService templateService, IUserService userservice) {
-        super(logger, templateService);
+    protected UsersResource(ILogger logger, ITemplateService templateService, IUserService userservice, IPlayer player) {
+        super(logger, templateService, player);
         this.userService = userservice;
     }
     
@@ -64,6 +67,9 @@ public class UsersResource extends BaseResource {
     @Produces("text/html")
     @Access(Role.ADMIN)
     public Response userList(@Context HttpServletRequest req) throws RenderException {
+        BaseModel model = buildBaseModel();
+        model.setUsername(AuthenticationUtils.extractUsername(req));
+        
         ModelUsers modelUsers = new ModelUsers();
         
         Collection<User> users = userService.get();
@@ -71,7 +77,9 @@ public class UsersResource extends BaseResource {
             modelUsers.add(new ModelUser(user.getId(), user.getUserName(), user.getRole()));
         }      
 
-        return Response.ok(templates.process(USERS_TEMPLATE, modelUsers)).build();
+        model.setModel(modelUsers);
+        
+        return Response.ok(templates.process(USERS_TEMPLATE, model)).build();
     }
     
     /**
@@ -87,9 +95,13 @@ public class UsersResource extends BaseResource {
     @Access(Role.ADMIN)
     @Path("{id: [0-9]*}")
     public Response userDetails(@Context HttpServletRequest req, @PathParam("id") long id) throws NotFoundException, ServiceException{
-        User user = userService.get(id);
-        ModelUser model = new ModelUser(user.getId(), user.getUserName(), user.getRole());
+        BaseModel model = buildBaseModel();
+        model.setUsername(AuthenticationUtils.extractUsername(req));
         
+        User user = userService.get(id);
+        ModelUser userModel = new ModelUser(user.getId(), user.getUserName(), user.getRole());
+        
+        model.setModel(userModel);
         try {
             return Response.ok(templates.process(USER_DETAILS_TEMPLATE, model)).build();
         } catch (RenderException e) {
@@ -110,9 +122,13 @@ public class UsersResource extends BaseResource {
     @Access(Role.ADMIN)
     @Path("/edit/{id: [0-9]*}")
     public Response userEdit(@Context HttpServletRequest req, @PathParam("id") long id) throws NotFoundException, ServiceException{
-        User user = userService.get(id);
-        ModelUser model = new ModelUser(user.getId(), user.getUserName(), user.getRole());
+        BaseModel model = buildBaseModel();
+        model.setUsername(AuthenticationUtils.extractUsername(req));
         
+        User user = userService.get(id);
+        ModelUser modelUser = new ModelUser(user.getId(), user.getUserName(), user.getRole());
+        
+        model.setModel(modelUser);
         try {
             return Response.ok(templates.process(USER_EDIT_TEMPLATE, model)).build();
         } catch (RenderException e) {
@@ -162,8 +178,11 @@ public class UsersResource extends BaseResource {
     @Access(Role.ADMIN)
     @Path("/create/")
     public Response userCreate(@Context HttpServletRequest req) throws ServiceException{
+        BaseModel model = super.buildBaseModel();
+        model.setUsername(AuthenticationUtils.extractUsername(req));
+        
         try {
-            return Response.ok(templates.process(USER_CREATE_TEMPLATE)).build();
+            return Response.ok(templates.process(USER_CREATE_TEMPLATE, model)).build();
         } catch (RenderException e) {
             throw new ServiceException("Template processing failed.", e);
         }

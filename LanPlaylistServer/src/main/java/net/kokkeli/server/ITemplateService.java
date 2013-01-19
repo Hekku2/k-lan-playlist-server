@@ -1,6 +1,6 @@
 package net.kokkeli.server;
 
-import net.kokkeli.resources.models.ViewModel;
+import net.kokkeli.resources.models.BaseModel;
 
 /**
  * Interface for templateservice.
@@ -15,13 +15,5 @@ public interface ITemplateService {
      * @return Template processed with model.
      * @throws RenderException Thrown if there is exception with rendering.
      */
-    String process(String template, ViewModel model) throws RenderException;
-    
-    /**
-     * Processes template with no model.
-     * @param template Name of the template
-     * @return Processed template.
-     * @throws RenderException Thrown if there is exception with rendering.
-     */
-    String process(String template) throws RenderException;
+    String process(String template, BaseModel model) throws RenderException;
 }
