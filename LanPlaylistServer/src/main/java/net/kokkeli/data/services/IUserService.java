@@ -3,6 +3,8 @@ package net.kokkeli.data.services;
 import java.util.Collection;
 
 import net.kokkeli.data.User;
+import net.kokkeli.data.db.NotFoundInDatabase;
+
 import com.sun.jersey.api.NotFoundException;
 
 /**
@@ -17,7 +19,7 @@ public interface IUserService {
      * @param id Id of user
      * @return User with given id.
      */
-    User get(long id) throws NotFoundException, ServiceException;
+    User get(long id) throws NotFoundInDatabase, ServiceException;
     
     /**
      * Collection of users.
@@ -33,7 +35,7 @@ public interface IUserService {
      * @throws ServiceException Thrown if there is problem with service
      * @throws NotFoundException Thrown if there is no old user with given id.
      */
-    void update(User user) throws ServiceException, NotFoundException;
+    void update(User user) throws ServiceException, NotFoundInDatabase;
 
     /**
      * Adds given user. If user doesn't have Id, enw is created.

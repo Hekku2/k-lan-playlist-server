@@ -5,6 +5,7 @@ import net.kokkeli.data.Role;
 import net.kokkeli.data.User;
 import net.kokkeli.data.db.DatabaseException;
 import net.kokkeli.data.db.IUserDatabase;
+import net.kokkeli.data.db.NotFoundInDatabase;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -26,7 +27,7 @@ public class TestUserService {
     private UserService userService;
     
     @Before
-    public void setup() throws NotFoundException, DatabaseException{
+    public void setup() throws NotFoundInDatabase, DatabaseException{
         mockDatabase = mock(IUserDatabase.class);
         mockLogger = mock(ILogger.class);
         when(mockDatabase.get(USER_ID)).thenReturn(new User(USER_ID, USERNAME, USERROLE));
@@ -35,7 +36,7 @@ public class TestUserService {
     }
     
     @Test
-    public void testUserServiceGetThrowsNotFoundExceptionWhenThereIsNoUser() throws NotFoundException, DatabaseException, ServiceException{
+    public void testUserServiceGetThrowsNotFoundExceptionWhenThereIsNoUser() throws NotFoundInDatabase, DatabaseException, ServiceException{
         when(mockDatabase.get(NON_EXISTING_USER_ID)).thenThrow(new NotFoundException("User not found."));
         
         try {
@@ -47,7 +48,7 @@ public class TestUserService {
     }
     
     @Test
-    public void testUserServiceGetReturnsCorrectUser() throws NotFoundException, ServiceException{
+    public void testUserServiceGetReturnsCorrectUser() throws NotFoundInDatabase, ServiceException{
         User user = userService.get(USER_ID);
         
         Assert.assertNotNull(user);

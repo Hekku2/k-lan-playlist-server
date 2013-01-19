@@ -70,7 +70,7 @@ public class IndexResource extends BaseResource {
             long currentPlaylist;
             try {
                 currentPlaylist = player.getCurrentPlaylistId();
-                Collection<PlayListItem> playlist = playlistService.getPlaylist(currentPlaylist);
+                Collection<PlayListItem> playlist = playlistService.getPlaylist(currentPlaylist).getItems();
                 
                 ModelPlaylist modelPlayList = new ModelPlaylist();
                 
@@ -93,6 +93,5 @@ public class IndexResource extends BaseResource {
         } catch (NotFoundInDatabase e) {
             throw new ServiceException("Playing playlist Id did not exist in database.");
         }
-        
     }
 }

@@ -6,9 +6,9 @@ import net.kokkeli.data.ILogger;
 import net.kokkeli.data.User;
 import net.kokkeli.data.db.DatabaseException;
 import net.kokkeli.data.db.IUserDatabase;
+import net.kokkeli.data.db.NotFoundInDatabase;
 
 import com.google.inject.Inject;
-import com.sun.jersey.api.NotFoundException;
 
 /**
  * User service implementation
@@ -31,12 +31,12 @@ public class UserService implements IUserService {
     }
     
     @Override
-    public User get(long id) throws NotFoundException, ServiceException {
+    public User get(long id) throws ServiceException, NotFoundInDatabase {
         try {
             User user = userDatabase.get(id);
             logger.log("User gotten with id: " + id, 1);
             return user;
-        } catch (NotFoundException e) {
+        } catch (NotFoundInDatabase e) {
             logger.log("No user exists with id: " + id, 1);
             throw e;
         } catch (DatabaseException e) {
@@ -57,7 +57,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void update(User user) throws NotFoundException, ServiceException {
+    public void update(User user) throws NotFoundInDatabase, ServiceException {
         try {
             User oldUser = userDatabase.get(user.getId());
             //TODO SQL Injection protection...
@@ -69,9 +69,9 @@ public class UserService implements IUserService {
             userDatabase.update(user);
             logger.log(String.format("User (ID: %s) updated", user.getId()), 1);
             
-        } catch (NotFoundException e) {
+        } catch (NotFoundInDatabase e) {
             logger.log("No user exists with id: " + user.getId(), 1);
-            throw new NotFoundException(String.format("User with id %s not found.", user.getId()));
+            throw new NotFoundInDatabase(String.format("User with id %s not found.", user.getId()));
         } catch (DatabaseException e) {
             throw new ServiceException("There was problem with database.", e);
         }

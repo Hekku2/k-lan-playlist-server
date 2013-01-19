@@ -5,7 +5,9 @@ import net.kokkeli.Settings;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Logging;
 import net.kokkeli.data.LoggingModule;
+import net.kokkeli.data.db.IPlaylistDatabase;
 import net.kokkeli.data.db.IUserDatabase;
+import net.kokkeli.data.db.PlaylistDatabase;
 import net.kokkeli.data.db.UserDatabase;
 import net.kokkeli.data.services.IPlaylistService;
 import net.kokkeli.data.services.IUserService;
@@ -53,6 +55,7 @@ public class LanServletConfig extends GuiceServletContextListener {
                 
                 //Database
                 bind(IUserDatabase.class).to(UserDatabase.class).asEagerSingleton();
+                bind(IPlaylistDatabase.class).to(PlaylistDatabase.class).asEagerSingleton();
                 
                 //Services
                 bind(IUserService.class).to(UserService.class);

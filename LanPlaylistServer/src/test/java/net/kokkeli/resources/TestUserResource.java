@@ -6,6 +6,7 @@ import junit.framework.Assert;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Role;
 import net.kokkeli.data.User;
+import net.kokkeli.data.db.NotFoundInDatabase;
 import net.kokkeli.data.services.IUserService;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.player.IPlayer;
@@ -35,7 +36,7 @@ public class TestUserResource {
     private UsersResource userResource;
     
     @Before
-    public void setup() throws NotFoundException, ServiceException {
+    public void setup() throws NotFoundInDatabase, ServiceException {
         mockLogger = mock(ILogger.class);
         mockUserService = mock(IUserService.class);
         mockTemplateService = mock(ITemplateService.class);
@@ -44,7 +45,7 @@ public class TestUserResource {
         existing = new User(EXISTING_USER_ID, "user", Role.NONE);
         
         when(mockUserService.get(EXISTING_USER_ID)).thenReturn(existing);
-        when(mockUserService.get(NONEXISTING_ID)).thenThrow(new NotFoundException("User not found"));
+        when(mockUserService.get(NONEXISTING_ID)).thenThrow(new NotFoundInDatabase("User not found"));
         
         userResource = new UsersResource(mockLogger, mockTemplateService, mockUserService, mockPlayer);
         

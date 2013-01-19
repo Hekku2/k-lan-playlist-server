@@ -17,6 +17,7 @@ import com.sun.jersey.api.NotFoundException;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Role;
 import net.kokkeli.data.User;
+import net.kokkeli.data.db.NotFoundInDatabase;
 import net.kokkeli.data.services.IUserService;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.player.IPlayer;
@@ -98,14 +99,17 @@ public class UsersResource extends BaseResource {
         BaseModel model = buildBaseModel();
         model.setUsername(AuthenticationUtils.extractUsername(req));
         
-        User user = userService.get(id);
-        ModelUser userModel = new ModelUser(user.getId(), user.getUserName(), user.getRole());
-        
-        model.setModel(userModel);
         try {
+            User user = userService.get(id);
+            ModelUser userModel = new ModelUser(user.getId(), user.getUserName(), user.getRole());
+            
+            model.setModel(userModel);
+            
             return Response.ok(templates.process(USER_DETAILS_TEMPLATE, model)).build();
         } catch (RenderException e) {
             throw new ServiceException("There was problem with rendering the template.", e);
+        } catch (NotFoundInDatabase e){
+            throw new NotFoundException("User was not found.");
         }
     }
     
@@ -125,14 +129,17 @@ public class UsersResource extends BaseResource {
         BaseModel model = buildBaseModel();
         model.setUsername(AuthenticationUtils.extractUsername(req));
         
-        User user = userService.get(id);
-        ModelUser modelUser = new ModelUser(user.getId(), user.getUserName(), user.getRole());
-        
-        model.setModel(modelUser);
         try {
+            User user = userService.get(id);
+            ModelUser modelUser = new ModelUser(user.getId(), user.getUserName(), user.getRole());
+            
+            model.setModel(modelUser);
+            
             return Response.ok(templates.process(USER_EDIT_TEMPLATE, model)).build();
         } catch (RenderException e) {
             throw new ServiceException("There was problem with rendering the template.", e);
+        } catch (NotFoundInDatabase e) {
+            throw new NotFoundException("User was not found.");
         }
     }
     
@@ -152,19 +159,20 @@ public class UsersResource extends BaseResource {
     public Response userEdit(@Context HttpServletRequest req, MultivaluedMap<String, String> formParams) throws NotFoundException, ServiceException, BadRequestException{
         containsNeededFieldsForEdit(formParams);
         User editedUser = createEditUser(formParams);
-        
-        // Checks that user exists
-        User user = userService.get(editedUser.getId());
-        
-        if (!isUsernameValid(user.getUserName()))
-            throw new BadRequestException("Username was invalid.");
-
-        
-        
-        //TODO Field validation
-        userService.update(new User(editedUser.getId(), editedUser.getUserName(), editedUser.getRole()));
-        
-        return Response.seeOther(LanServer.getURI(String.format("users/%s", user.getId()))).build();
+        try {
+            // Checks that user exists
+            User user = userService.get(editedUser.getId());
+            
+            if (!isUsernameValid(user.getUserName()))
+                throw new BadRequestException("Username was invalid.");
+            
+            //TODO Field validation
+            userService.update(new User(editedUser.getId(), editedUser.getUserName(), editedUser.getRole()));
+            
+            return Response.seeOther(LanServer.getURI(String.format("users/%s", user.getId()))).build();
+        } catch (NotFoundInDatabase e) {
+            throw new NotFoundException("User not found!");
+        }
     }
 
     /**
