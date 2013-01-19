@@ -14,6 +14,7 @@ import java.util.Map;
 import com.google.inject.Inject;
 
 import net.kokkeli.ISettings;
+import net.kokkeli.resources.Model;
 import net.kokkeli.resources.ModelCollection;
 import net.kokkeli.resources.Field;
 import net.kokkeli.resources.models.ViewModel;
@@ -111,6 +112,7 @@ public class Templates implements ITemplateService {
      * @throws RenderException Thrown if there is problem with model.
      */
     private final Map<String,Object> createMap(ViewModel model) throws RenderException{
+        
         Map<String, Object> map = new HashMap<String, Object>();
         
         //Checks if method contain annotation used for building map.
@@ -121,6 +123,10 @@ public class Templates implements ITemplateService {
                     map.put(method.getName(), method.invoke(model));
                 } else if (method.isAnnotationPresent(ModelCollection.class)){
                     map.put(method.getName(), createMapFromModelCollection(model, method));
+                } else if (method.isAnnotationPresent(Model.class)){
+                    if ((ViewModel)method.invoke(model) != null){
+                        map.put(method.getName(), createMap((ViewModel)method.invoke(model))); 
+                    }
                 }
             } catch (NullPointerException e){
                 throw new RenderException("Method " + method.getName() + " can't be invoked with no arguments.");
