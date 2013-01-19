@@ -13,11 +13,8 @@ import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Role;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.player.IPlayer;
-import net.kokkeli.resources.authentication.AuthenticationUtils;
-import net.kokkeli.resources.models.BaseModel;
-import net.kokkeli.resources.models.ModelPlaylist;
 import net.kokkeli.server.ITemplateService;
-import net.kokkeli.server.RenderException;
+import net.kokkeli.server.LanServer;
 
 /**
  * Class for root resources.
@@ -28,7 +25,6 @@ import net.kokkeli.server.RenderException;
  */
 @Path("/")
 public class RootResource extends BaseResource {
-    private static final String INDEX_TEMPLATE = "index.ftl";
     
     /**
      * Creates resource
@@ -48,16 +44,6 @@ public class RootResource extends BaseResource {
     @Produces("text/html")
     @Access(Role.USER)
     public Response redirect(@Context HttpServletRequest req) throws ServiceException {
-        ModelPlaylist mockList = new ModelPlaylist();
-        
-        BaseModel base = buildBaseModel();
-        base.setUsername(AuthenticationUtils.extractUsername(req));
-        
-        base.setModel(mockList);
-        try {
-            return Response.ok(templates.process(INDEX_TEMPLATE, base)).build();
-        } catch (RenderException e) {
-            throw new ServiceException("There was problem with rendering.", e);
-        }
+        return Response.seeOther(LanServer.getURI("index")).build();
     }
 }

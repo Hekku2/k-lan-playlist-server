@@ -13,6 +13,7 @@ import net.kokkeli.player.IPlayer;
 import net.kokkeli.player.MockPlayer;
 import net.kokkeli.resources.Access;
 import net.kokkeli.resources.CssResource;
+import net.kokkeli.resources.IndexResource;
 import net.kokkeli.resources.RenderExceptionMapper;
 import net.kokkeli.resources.RootResource;
 import net.kokkeli.resources.ServiceExceptionMapper;
@@ -61,6 +62,7 @@ public class LanServletConfig extends GuiceServletContextListener {
                 bind(RootResource.class);
                 bind(UsersResource.class);
                 bind(AuthenticationResource.class);
+                bind(IndexResource.class);
                 
                 //Aspects
                 Injector injector = Guice.createInjector(new LoggingModule());
