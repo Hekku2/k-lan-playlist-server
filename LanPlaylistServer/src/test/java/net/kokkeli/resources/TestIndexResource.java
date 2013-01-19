@@ -69,4 +69,18 @@ public class TestIndexResource {
         Assert.assertEquals(RESPONSE_OK, r.getStatus());
         verify(mockTemplateService).process(anyString(), isA(BaseModel.class));
     }
+    
+    @Test
+    public void  testIndexThrowsServiceExceptionWhenPlaylistServiceThrowsServiceExeption() throws ServiceException, NotFoundInDatabase{
+        final String message = "Explosion";
+        
+        when(mockPlaylistService.getPlaylist(any(Long.class))).thenThrow(new ServiceException(message));
+        
+        try {
+            resource.index(null);
+            Assert.fail("Exception should have been thrown.");
+        } catch (ServiceException e) {
+            Assert.assertEquals(message, e.getMessage());
+        }
+    }
 }
