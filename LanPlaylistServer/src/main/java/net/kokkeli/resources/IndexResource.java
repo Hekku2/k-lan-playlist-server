@@ -1,5 +1,7 @@
 package net.kokkeli.resources;
 
+import java.util.Collection;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -10,12 +12,15 @@ import javax.ws.rs.core.Response;
 import com.google.inject.Inject;
 
 import net.kokkeli.data.ILogger;
+import net.kokkeli.data.PlayListItem;
 import net.kokkeli.data.Role;
+import net.kokkeli.data.services.IPlaylistService;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.player.IPlayer;
 import net.kokkeli.resources.authentication.AuthenticationUtils;
 import net.kokkeli.resources.models.BaseModel;
 import net.kokkeli.resources.models.ModelPlaylist;
+import net.kokkeli.resources.models.ModelPlaylistItem;
 import net.kokkeli.server.ITemplateService;
 import net.kokkeli.server.RenderException;
 
@@ -30,6 +35,8 @@ import net.kokkeli.server.RenderException;
 public class IndexResource extends BaseResource {
     private static final String INDEX_TEMPLATE = "index.ftl";
     
+    private IPlaylistService playlistService;
+    
     /**
      * Creates resource
      * @param logger Logger
@@ -38,8 +45,10 @@ public class IndexResource extends BaseResource {
      */
     @Inject
     protected IndexResource(ILogger logger, ITemplateService templateService,
-            IPlayer player) {
+            IPlayer player, IPlaylistService playlistService) {
         super(logger, templateService, player);
+        
+        this.playlistService = playlistService;
     }
 
     /**
@@ -51,12 +60,24 @@ public class IndexResource extends BaseResource {
     @Produces("text/html")
     @Access(Role.USER)
     public Response index(@Context HttpServletRequest req) throws ServiceException {
-        ModelPlaylist mockList = new ModelPlaylist();
+        long currentPlaylist = player.getCurrentPlaylistId();
+        
+        Collection<PlayListItem> playlist = playlistService.getPlaylist(currentPlaylist);
+        
+        ModelPlaylist modelPlayList = new ModelPlaylist();
+        
+        for (PlayListItem playListItem : playlist) {
+            ModelPlaylistItem model = new ModelPlaylistItem();
+            model.setArtist(playListItem.getArtist());
+            model.setTrackName(playListItem.getTrackName());
+            
+            modelPlayList.add(model);
+        }
         
         BaseModel base = buildBaseModel();
         base.setUsername(AuthenticationUtils.extractUsername(req));
         
-        base.setModel(mockList);
+        base.setModel(modelPlayList);
         try {
             return Response.ok(templates.process(INDEX_TEMPLATE, base)).build();
         } catch (RenderException e) {

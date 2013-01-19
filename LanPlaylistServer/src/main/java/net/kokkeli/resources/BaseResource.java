@@ -12,7 +12,7 @@ import net.kokkeli.server.ITemplateService;
  */
 public abstract class BaseResource {
     private final ILogger logger;
-    private final IPlayer player;
+    protected final IPlayer player;
     protected final ITemplateService templates;
     
     /**

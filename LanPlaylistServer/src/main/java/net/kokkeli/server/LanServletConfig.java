@@ -7,7 +7,9 @@ import net.kokkeli.data.Logging;
 import net.kokkeli.data.LoggingModule;
 import net.kokkeli.data.db.IUserDatabase;
 import net.kokkeli.data.db.UserDatabase;
+import net.kokkeli.data.services.IPlaylistService;
 import net.kokkeli.data.services.IUserService;
+import net.kokkeli.data.services.PlaylistService;
 import net.kokkeli.data.services.UserService;
 import net.kokkeli.player.IPlayer;
 import net.kokkeli.player.MockPlayer;
@@ -56,6 +58,7 @@ public class LanServletConfig extends GuiceServletContextListener {
                 bind(IUserService.class).to(UserService.class);
                 bind(ITemplateService.class).to(Templates.class);
                 bind(IPlayer.class).to(MockPlayer.class);
+                bind(IPlaylistService.class).to(PlaylistService.class);
                 
                 //Resources
                 bind(CssResource.class);
