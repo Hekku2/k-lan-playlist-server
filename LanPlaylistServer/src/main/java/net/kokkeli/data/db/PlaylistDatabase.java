@@ -4,17 +4,18 @@ import java.util.Collection;
 
 import com.google.inject.Inject;
 import net.kokkeli.ISettings;
-import net.kokkeli.data.Track;
 
 public class PlaylistDatabase extends Database implements IPlaylistDatabase {
     private final PlaylistsTable playlistTable;
     private final TrackPlaylistTable trackPlaylistTable;
+    private final TracksTable tracksTable;
     
     @Inject
     public PlaylistDatabase(ISettings settings) throws DatabaseException {
         super(settings);
         playlistTable = new PlaylistsTable(getDatabaseLocation());
         trackPlaylistTable = new TrackPlaylistTable(getDatabaseLocation());
+        tracksTable = new TracksTable(getDatabaseLocation());
         
         CheckDatabaseFormat();
     }
@@ -34,11 +35,7 @@ public class PlaylistDatabase extends Database implements IPlaylistDatabase {
         
         // Fetch tracks from database
         for (Long item : tracks) {
-            Track t = new Track(item);
-            t.setArtist("Best artist");
-            t.setTrackName("Song id " + item);
-            
-            playlist.getItems().add(t);
+            playlist.getItems().add(tracksTable.get(item));
         }
         
         return playlist;
