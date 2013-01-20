@@ -10,6 +10,24 @@ package net.kokkeli.data;
 public class Track {
     private String trackName;
     private String artist;
+    private long id;
+    private String location;
+    
+    /**
+     * Creates track with id.
+     * @param id
+     */
+    public Track(long id){
+        this.id = id;
+    }
+    
+    /**
+     * Returns id of track.
+     * @return
+     */
+    public long getId(){
+        return id;
+    }
     
     /**
      * Sets name of item
@@ -41,5 +59,21 @@ public class Track {
      */
     public String getArtist(){
         return artist;
+    }
+
+    /**
+     * Getter for location
+     * @return Location of track
+     */
+    public String getLocation() {
+        return location;
+    }
+
+    /**
+     * LSetter for location
+     * @param location Location of track
+     */
+    public void setLocation(String location) {
+        this.location = location;
     }
 }

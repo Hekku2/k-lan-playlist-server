@@ -18,7 +18,7 @@ public class PlaylistDatabase implements IPlaylistDatabase {
         playlist.setName("Mock playlist 666");
         
         for (int i = 0; i < 27; i++) {
-            Track item = new Track();
+            Track item = new Track(i);
             item.setArtist("Best artist");
             item.setTrackName("Cool song " + i);
             
