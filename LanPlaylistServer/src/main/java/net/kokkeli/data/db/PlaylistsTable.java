@@ -45,7 +45,7 @@ public class PlaylistsTable{
             }
             db.dispose();
         } catch (SQLiteException e) {
-            throw new DatabaseException("Unable to get user with Id: " + id, e);
+            throw new DatabaseException("Unable to get playlist with Id: " + id, e);
         }
         
         if (list == null)
