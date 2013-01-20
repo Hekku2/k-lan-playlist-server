@@ -8,7 +8,7 @@
 			<#include "common/_topsection.ftl">
 			<h1>${header}</h1>
 			<div class="content">
-				<form method="POST" class="create-form">
+				<form method="POST" class="value-fields">
 					<div class="field">
 						<div class="description">
 							Username: 

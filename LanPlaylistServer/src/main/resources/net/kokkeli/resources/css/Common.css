@@ -12,6 +12,8 @@ h1{
 .inner-body{
 	background-color:white;
 	width: 800px;
+	min-height: 800px;
+	
 	margin-left: auto;
     margin-right: auto;
     
@@ -25,12 +27,12 @@ h1{
     border-right-width: 5px;
 }
 
-.edit-form{
-	margin-left:auto;
-	margin-right:auto;
+.value-fields{
+	border-spacing: 8px;
 }
 
 .field{
+	display: table-row;
 	clear: both;
 	margin-left: 10px;
 	margin-top: 5px;
@@ -38,11 +40,12 @@ h1{
 }
 
 div.description{
-	display: inline;
+	display: table-cell;
+	text-align: right;
 }
 
 div.value{
-	display: inline;
+	display: table-cell;
 }
 
 div.submit-box{

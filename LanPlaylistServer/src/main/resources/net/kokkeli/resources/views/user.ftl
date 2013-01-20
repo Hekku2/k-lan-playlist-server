@@ -8,20 +8,22 @@
 			<#include "common/_topsection.ftl">
 			<h1>${header}</h1>
 			<div class="content">
-				<div class="field">
-					<div class="description">
-						Username: 
+				<div class="value-fields">
+					<div class="field">
+						<div class="description">
+							Username: 
+						</div>
+						<div class=value>
+							${getModel.getUsername}
+						</div>
 					</div>
-					<div class=value>
-						${getModel.getUsername}
-					</div>
-				</div>
-				<div class="field">
-					<div class="description">
-						Role:
-					</div>
-					<div class="value">
-						${getModel.getRole}
+					<div class="field">
+						<div class="description">
+							Role:
+						</div>
+						<div class="value">
+							${getModel.getRole}
+						</div>
 					</div>
 				</div>
 				<div class="navi">

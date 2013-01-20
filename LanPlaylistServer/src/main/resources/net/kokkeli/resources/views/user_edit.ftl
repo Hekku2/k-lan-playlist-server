@@ -8,7 +8,7 @@
 			<#include "common/_topsection.ftl">
 			<h1>${header}</h1>
 			<div class="content">
-				<form method="POST" class="edit-form">
+				<form method="POST" class="value-fields">
 					<input type="hidden" name="id" value="${getModel.getId}">
 					<div class="field">
 						<div class="description">
