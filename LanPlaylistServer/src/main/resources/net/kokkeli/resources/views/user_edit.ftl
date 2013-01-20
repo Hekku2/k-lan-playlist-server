@@ -26,8 +26,8 @@
 							Admin <input type="radio" name="role" value="admin" <#if getModel.getRole == "ADMIN">checked</#if>>
 						</div>
 					</div>
-					<input type="submit" value="Edit">
-					<a href="/users/${getModel.getId}">Cancel</a>
+					<input class="button" type="submit" value="Edit">
+					<a class="button" href="/users/${getModel.getId}">Cancel</a>
 				</form>
 			</div>
 		</div>

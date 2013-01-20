@@ -25,8 +25,10 @@
 							Admin <input type="radio" name="role" value="admin">
 						</div>
 					</div>
-					<input type="submit" value="Create">
-					<a href="/users">Cancel</a>
+					<div class="submit-box">
+						<input class="button" type="submit" value="Create">
+						<a class="button" href="/users">Cancel</a>
+					</div>
 				</form>
 			</div>
 		</div>

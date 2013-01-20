@@ -7,7 +7,7 @@
 			<#include "common/_topsection.ftl">
 			<h1>${header}</h1>
 			<div class="content">
-				<a href="users/create">Create</a>
+				<a class="button" href="users/create">Create</a>
 				<#if getModel.getUsers??>
 					<table>
 						<tr>
