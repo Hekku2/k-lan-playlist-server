@@ -2,7 +2,7 @@ package net.kokkeli.data.db;
 
 import java.util.Collection;
 
-import net.kokkeli.data.PlayListItem;
+import net.kokkeli.data.Track;
 
 public class PlaylistDatabase implements IPlaylistDatabase {
 
@@ -18,7 +18,7 @@ public class PlaylistDatabase implements IPlaylistDatabase {
         playlist.setName("Mock playlist 666");
         
         for (int i = 0; i < 27; i++) {
-            PlayListItem item = new PlayListItem();
+            Track item = new Track();
             item.setArtist("Best artist");
             item.setTrackName("Cool song " + i);
             

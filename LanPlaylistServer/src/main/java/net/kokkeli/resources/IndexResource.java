@@ -12,7 +12,7 @@ import javax.ws.rs.core.Response;
 import com.google.inject.Inject;
 
 import net.kokkeli.data.ILogger;
-import net.kokkeli.data.PlayListItem;
+import net.kokkeli.data.Track;
 import net.kokkeli.data.Role;
 import net.kokkeli.data.db.NotFoundInDatabase;
 import net.kokkeli.data.services.IPlaylistService;
@@ -70,11 +70,11 @@ public class IndexResource extends BaseResource {
             long currentPlaylist;
             try {
                 currentPlaylist = player.getCurrentPlaylistId();
-                Collection<PlayListItem> playlist = playlistService.getPlaylist(currentPlaylist).getItems();
+                Collection<Track> playlist = playlistService.getPlaylist(currentPlaylist).getItems();
                 
                 ModelPlaylist modelPlayList = new ModelPlaylist();
                 
-                for (PlayListItem playListItem : playlist) {
+                for (Track playListItem : playlist) {
                     ModelPlaylistItem model = new ModelPlaylistItem();
                     model.setArtist(playListItem.getArtist());
                     model.setTrackName(playListItem.getTrackName());

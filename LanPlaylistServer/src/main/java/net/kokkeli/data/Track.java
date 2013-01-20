@@ -1,11 +1,13 @@
 package net.kokkeli.data;
 
 /**
- * PlayListItem
+ * Track-class
+ * 
+ * Contains all data related to track.
  * @author Hekku2
  *
  */
-public class PlayListItem {
+public class Track {
     private String trackName;
     private String artist;
     

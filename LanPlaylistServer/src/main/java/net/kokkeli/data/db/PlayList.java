@@ -2,10 +2,10 @@ package net.kokkeli.data.db;
 
 import java.util.ArrayList;
 
-import net.kokkeli.data.PlayListItem;
+import net.kokkeli.data.Track;
 
 public class PlayList {
-    private ArrayList<PlayListItem> items = new ArrayList<PlayListItem>();
+    private ArrayList<Track> items = new ArrayList<Track>();
     private String name;
     
     /**
@@ -28,7 +28,7 @@ public class PlayList {
      * Returns items of playlist
      * @return Items of playlist
      */
-    public ArrayList<PlayListItem> getItems(){
+    public ArrayList<Track> getItems(){
         return items;
     }
 }
