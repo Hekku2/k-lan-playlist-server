@@ -21,8 +21,6 @@ public abstract class Database {
     public Database(ISettings settings) throws DatabaseException{
         SQLite.setLibraryPath(settings.getLibLocation());
         databaseLocation = settings.getDatabaseLocation();
-        
-        CheckDatabaseFormat();
     }
     
     /**

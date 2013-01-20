@@ -14,10 +14,19 @@ import net.kokkeli.resources.Model;
 @Model
 public class ModelPlaylist extends ViewModel{
     private ArrayList<ModelPlaylistItem> items = new ArrayList<ModelPlaylistItem>();
+    private String name;
     
     @Field
     public String getName(){
-        return "MockName";
+        return name;
+    }
+    
+    /**
+     * Setter for name
+     * @param name Playlist name
+     */
+    public void setName(String name){
+        this.name = name;
     }
     
     @ModelCollection

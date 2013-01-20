@@ -54,8 +54,8 @@ public class LanServletConfig extends GuiceServletContextListener {
                 bind(ILogger.class).to(Logging.class);
                 
                 //Database
-                bind(IUserDatabase.class).to(UserDatabase.class).asEagerSingleton();
                 bind(IPlaylistDatabase.class).to(PlaylistDatabase.class).asEagerSingleton();
+                bind(IUserDatabase.class).to(UserDatabase.class).asEagerSingleton();
                 
                 //Services
                 bind(IUserService.class).to(UserService.class);

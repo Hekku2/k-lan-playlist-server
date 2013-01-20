@@ -17,6 +17,6 @@ public class MockPlayer implements IPlayer {
 
     @Override
     public long getCurrentPlaylistId() {
-        return 0;
+        return 1;
     }
 }

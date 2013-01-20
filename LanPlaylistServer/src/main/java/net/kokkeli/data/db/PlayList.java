@@ -7,6 +7,23 @@ import net.kokkeli.data.Track;
 public class PlayList {
     private ArrayList<Track> items = new ArrayList<Track>();
     private String name;
+    private final long id;
+    
+    /**
+     * Creates playlist with specific Id.
+     * @param id Id
+     */
+    public PlayList(long id){
+        this.id = id;
+    }
+    
+    /**
+     * Getter for id
+     * @return Id of playlsit
+     */
+    public long getId(){
+        return id;
+    }
     
     /**
      * Returns name of playlist.

@@ -1,7 +1,5 @@
 package net.kokkeli.resources;
 
-import java.util.Collection;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -15,6 +13,7 @@ import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Track;
 import net.kokkeli.data.Role;
 import net.kokkeli.data.db.NotFoundInDatabase;
+import net.kokkeli.data.db.PlayList;
 import net.kokkeli.data.services.IPlaylistService;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.player.IPlayer;
@@ -70,11 +69,12 @@ public class IndexResource extends BaseResource {
             long currentPlaylist;
             try {
                 currentPlaylist = player.getCurrentPlaylistId();
-                Collection<Track> playlist = playlistService.getPlaylist(currentPlaylist).getItems();
+                PlayList playlist = playlistService.getPlaylist(currentPlaylist);
                 
                 ModelPlaylist modelPlayList = new ModelPlaylist();
+                modelPlayList.setName(playlist.getName());
                 
-                for (Track playListItem : playlist) {
+                for (Track playListItem : playlist.getItems()) {
                     ModelPlaylistItem model = new ModelPlaylistItem();
                     model.setArtist(playListItem.getArtist());
                     model.setTrackName(playListItem.getTrackName());
