@@ -29,7 +29,7 @@ public class CssResource {
      * @return Css-file
      */
     @GET
-    @Produces("text/html")
+    @Produces("text/css")
     public StreamingOutput getCSS(@PathParam("file") final String file) {
         
         return new StreamingOutput() {
