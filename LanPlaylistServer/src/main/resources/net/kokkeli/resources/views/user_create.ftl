@@ -1,4 +1,5 @@
 <#assign header = "Create User">
+<#assign tab = 1>
 
 <html>
 	<#include "common/_header.ftl">

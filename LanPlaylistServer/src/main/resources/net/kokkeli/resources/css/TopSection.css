@@ -4,21 +4,48 @@
 
 .top-section{
 	width: 800px;
-	height: 25px;
+	padding-top: 5px;
+}
+
+div.top-page-bar{
+	display: table-cell;
+	
+	margin-top: 0;
+	border-bottom:2px solid #dcdcdc;
+	width: 100%;
+	height: 2px;
+	margin-right: 0px;
+	vertical-align: top
+}
+
+a.selected{
+	border-bottom: 2px solid white;
 }
 
 .menu-item{
-	display: inline-block;
-	padding-left: 10px;
-	padding-right: 10px;
-	padding-top: 4px;
-	padding-bottom: 4px;
+	display: table-cell;
+
+	border-top-left-radius: 6px;
+	border-top-right-radius: 6px;
+	border-top:2px solid #dcdcdc;
+	border-left:2px solid #dcdcdc;
+	border-right:2px solid #dcdcdc;
+	border-bottom:2px solid #dcdcdc;
+	
+	color:#777777;
+	font-family:arial;
+	font-size:15px;
+	font-weight:bold;
+	padding:6px 24px;
+	text-decoration:none;
+	text-shadow:1px 1px 0px #ffffff;	
 }
 
 .logout-item{
-	float: right;
+	display: table-cell;
 	padding-left: 10px;
 	padding-right: 10px;
 	padding-top: 4px;
 	padding-bottom: 4px;
+	border-bottom:2px solid #dcdcdc;
 }

@@ -1,4 +1,5 @@
-<#assign header = "Users">
+<#assign header = "User details">
+<#assign tab = 1>
 
 <html>
 	<#include "common/_header.ftl">
