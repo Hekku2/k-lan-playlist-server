@@ -16,7 +16,7 @@ import net.kokkeli.data.services.UserService;
 import net.kokkeli.player.IPlayer;
 import net.kokkeli.player.MockPlayer;
 import net.kokkeli.resources.Access;
-import net.kokkeli.resources.CssResource;
+import net.kokkeli.resources.StaticResources;
 import net.kokkeli.resources.IndexResource;
 import net.kokkeli.resources.PlaylistsResource;
 import net.kokkeli.resources.RenderExceptionMapper;
@@ -65,7 +65,7 @@ public class LanServletConfig extends GuiceServletContextListener {
                 bind(IPlaylistService.class).to(PlaylistService.class);
                 
                 //Resources
-                bind(CssResource.class);
+                bind(StaticResources.class);
                 bind(RootResource.class);
                 bind(UsersResource.class);
                 bind(AuthenticationResource.class);

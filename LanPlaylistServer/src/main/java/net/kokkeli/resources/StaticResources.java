@@ -19,8 +19,8 @@ import com.sun.jersey.api.NotFoundException;
  * @author Hekku2
  * @version 0.01
  */
-@Path("/css/{file}")
-public class CssResource {
+@Path("/resource")
+public class StaticResources {
     private static final String CSS_FOLDER = "target\\classes\\net\\kokkeli\\resources\\css\\";
     
     /**
@@ -30,6 +30,7 @@ public class CssResource {
      */
     @GET
     @Produces("text/css")
+    @Path("/css/{file}")
     public StreamingOutput getCSS(@PathParam("file") final String file) {
         
         return new StreamingOutput() {
@@ -58,6 +59,5 @@ public class CssResource {
                 }
             }
         };
-        
     }
 }
