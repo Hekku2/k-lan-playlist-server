@@ -6,6 +6,7 @@
 	<body>
 		<div class="inner-body">
 			<#include "common/_topsection.ftl">
+			<#include "common/_playing.ftl">
 			<h1>${header}</h1>
 			<div class="content">
 				<a class="button" href="users/create">Create</a>
