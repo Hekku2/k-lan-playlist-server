@@ -71,7 +71,7 @@ public class IndexResource extends BaseResource {
                 currentPlaylist = player.getCurrentPlaylistId();
                 PlayList playlist = playlistService.getPlaylist(currentPlaylist);
                 
-                ModelPlaylist modelPlayList = new ModelPlaylist();
+                ModelPlaylist modelPlayList = new ModelPlaylist(playlist.getId());
                 modelPlayList.setName(playlist.getName());
                 
                 for (Track playListItem : playlist.getItems()) {
@@ -79,7 +79,7 @@ public class IndexResource extends BaseResource {
                     model.setArtist(playListItem.getArtist());
                     model.setTrackName(playListItem.getTrackName());
                     
-                    modelPlayList.add(model);
+                    modelPlayList.getItems().add(model);
                 }
                 
                 base.setModel(modelPlayList);

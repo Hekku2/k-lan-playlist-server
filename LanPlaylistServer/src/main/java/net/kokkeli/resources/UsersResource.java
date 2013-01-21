@@ -62,12 +62,13 @@ public class UsersResource extends BaseResource {
     /**
      * Shows list of users
      * @return HTML-page for user list
+     * @throws ServiceException 
      * @throws RenderException Thrown if there is problem with rendering template
      */
     @GET
     @Produces("text/html")
     @Access(Role.ADMIN)
-    public Response userList(@Context HttpServletRequest req) throws RenderException {
+    public Response userList(@Context HttpServletRequest req) throws ServiceException {
         BaseModel model = buildBaseModel();
         model.setUsername(AuthenticationUtils.extractUsername(req));
         
@@ -80,7 +81,11 @@ public class UsersResource extends BaseResource {
 
         model.setModel(modelUsers);
         
-        return Response.ok(templates.process(USERS_TEMPLATE, model)).build();
+        try {
+            return Response.ok(templates.process(USERS_TEMPLATE, model)).build();
+        } catch (RenderException e) {
+            throw new ServiceException("There was problem with rendering the template.", e);
+        }
     }
     
     /**

@@ -13,13 +13,14 @@ import com.google.inject.Inject;
 
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Role;
-import net.kokkeli.data.User;
+import net.kokkeli.data.db.PlayList;
 import net.kokkeli.data.services.IPlaylistService;
+import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.player.IPlayer;
 import net.kokkeli.resources.authentication.AuthenticationUtils;
 import net.kokkeli.resources.models.BaseModel;
-import net.kokkeli.resources.models.ModelUser;
-import net.kokkeli.resources.models.ModelUsers;
+import net.kokkeli.resources.models.ModelPlaylist;
+import net.kokkeli.resources.models.ModelPlaylists;
 import net.kokkeli.server.ITemplateService;
 import net.kokkeli.server.RenderException;
 
@@ -50,15 +51,33 @@ public class PlaylistsResource extends BaseResource {
     /**
      * Shows list of users
      * @return HTML-page for user list
+     * @throws ServiceException Thrown if there was a problem with service.
      * @throws RenderException Thrown if there is problem with rendering template
      */
     @GET
     @Produces("text/html")
     @Access(Role.ADMIN)
-    public Response playlists(@Context HttpServletRequest req) throws RenderException {
+    public Response playlists(@Context HttpServletRequest req) throws ServiceException {
         BaseModel model = buildBaseModel();
         model.setUsername(AuthenticationUtils.extractUsername(req));
+
+        Collection<PlayList> lists = playlistService.getIdNames();
         
-        return Response.ok(templates.process(PLAYLISTS_TEMPLATE, model)).build();
+        ModelPlaylists playlists = new ModelPlaylists();
+        
+        for (PlayList entry : lists) {
+            ModelPlaylist item = new ModelPlaylist(entry.getId());
+            item.setName(entry.getName());
+            
+            playlists.getItems().add(item);
+        }
+        
+        model.setModel(playlists);
+        
+        try {
+            return Response.ok(templates.process(PLAYLISTS_TEMPLATE, model)).build();
+        } catch (RenderException e) {
+            throw new ServiceException("There was a problem with rendering.");
+        }
     }
 }

@@ -1,6 +1,8 @@
 package net.kokkeli.data.db;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import com.almworks.sqlite4java.SQLiteConnection;
 import com.almworks.sqlite4java.SQLiteException;
@@ -61,5 +63,34 @@ public class PlaylistsTable{
      */
     private static String getSingleItemQuery(long id){
         return ALLLISTS + " WHERE "+ COLUMN_ID+" = " + id;
+    }
+
+    /**
+     * Returns collection of playlists. Doesn't contain tracks.
+     * @return Collection of paylists
+     * @throws DatabaseException thrown if there is problem with database.
+     */
+    public Collection<PlayList> get() throws DatabaseException {
+        SQLiteConnection db = new SQLiteConnection(new File(databaseLocation));
+        Collection<PlayList> lists = new ArrayList<PlayList>();
+        
+        try {
+            db.open(false);
+            SQLiteStatement st = db.prepare(ALLLISTS);
+            try {
+                while (st.step()) {
+                    PlayList list = new PlayList(st.columnLong(0));
+                    list.setName(st.columnString(1));
+                    lists.add(list);
+                }
+            } finally {
+                st.dispose();
+            }
+            db.dispose();
+        } catch (SQLiteException e) {
+            throw new DatabaseException("Unable to get playlists.", e);
+        }
+        
+        return lists;
     }
 }

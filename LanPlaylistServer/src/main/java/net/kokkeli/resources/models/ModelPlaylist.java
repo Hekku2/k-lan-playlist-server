@@ -15,6 +15,15 @@ import net.kokkeli.resources.Model;
 public class ModelPlaylist extends ViewModel{
     private ArrayList<ModelPlaylistItem> items = new ArrayList<ModelPlaylistItem>();
     private String name;
+    private long id;
+    
+    /**
+     * Create object with given id.
+     * @param id Id
+     */
+    public ModelPlaylist(long id){
+        this.id = id;
+    }
     
     @Field
     public String getName(){
@@ -34,7 +43,8 @@ public class ModelPlaylist extends ViewModel{
         return items;
     }
     
-    public void add(ModelPlaylistItem item){
-        items.add(item);
+    @Field
+    public long getId(){
+        return id;
     }
 }

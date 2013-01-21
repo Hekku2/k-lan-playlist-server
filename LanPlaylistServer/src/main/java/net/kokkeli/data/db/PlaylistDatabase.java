@@ -50,4 +50,9 @@ public class PlaylistDatabase extends Database implements IPlaylistDatabase {
     public void add(PlayList item) throws DatabaseException {
         throw new DatabaseException("Method not implemented.");
     }
+
+    @Override
+    public Collection<PlayList> getOnlyIdAndName() throws DatabaseException {
+        return playlistTable.get();
+    }
 }

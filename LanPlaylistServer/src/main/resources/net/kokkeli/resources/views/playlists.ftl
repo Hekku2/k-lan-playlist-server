@@ -10,7 +10,18 @@
 			<h1>${header}</h1>
 			<div class="content">
 				<#if getModel?? && getModel.getItems??>
-					<#include "_playlists.ftl">
+					<table>
+						<tr>
+							<th>Name</th>
+							<th>Man.<th>
+						</tr>
+						<#list getModel.getItems as item>
+							<tr>
+								<td>${item.getName}</td>
+								<td><a href="/playlists/${item.getId}">Details</a></td>
+							</tr>
+						</#list>
+					</table>
 				<#else>
 					No playlists found.
 				</#if>

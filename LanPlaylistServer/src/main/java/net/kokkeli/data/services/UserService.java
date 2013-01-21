@@ -45,14 +45,14 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Collection<User> get() {
+    public Collection<User> get() throws ServiceException {
         try {
             Collection<User> users = userDatabase.get();
             logger.log("Users gotten.", 1);
             return users;
         } catch (DatabaseException e) {
             logger.log("Something went wrong.", 5);
-            return null;
+            throw new ServiceException("There was problem with database.", e);
         }
     }
 

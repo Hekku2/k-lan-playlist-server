@@ -27,7 +27,7 @@ public interface IUserService {
      * @throws ServiceException Thrown if there is problem with service
      * @throws NotFoundException Thrown if there is no user with given id.
      */
-    Collection<User> get();
+    Collection<User> get() throws ServiceException;
 
     /**
      * Updates given user.

@@ -1,5 +1,7 @@
 package net.kokkeli.data.services;
 
+import java.util.Collection;
+
 import com.google.inject.Inject;
 
 import net.kokkeli.data.ILogger;
@@ -42,6 +44,16 @@ public class PlaylistService implements IPlaylistService {
         } catch (NotFoundInDatabase e) {
             logger.log("No playlist found with given id.", 2);
             throw e;
+        } catch (DatabaseException e) {
+            logger.log("There was a database problem.", 5);
+            throw new ServiceException("There was something wrong with the database.",  e);
+        }
+    }
+
+    @Override
+    public Collection<PlayList> getIdNames() throws ServiceException {
+        try {
+            return database.getOnlyIdAndName();
         } catch (DatabaseException e) {
             logger.log("There was a database problem.", 5);
             throw new ServiceException("There was something wrong with the database.",  e);
