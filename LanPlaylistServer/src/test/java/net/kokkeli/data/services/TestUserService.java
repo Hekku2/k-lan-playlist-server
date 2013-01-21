@@ -11,8 +11,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.sun.jersey.api.NotFoundException;
-
 import static org.mockito.Mockito.*;
 
 public class TestUserService {
@@ -37,15 +35,27 @@ public class TestUserService {
     
     @Test
     public void testUserServiceGetThrowsNotFoundExceptionWhenThereIsNoUser() throws NotFoundInDatabase, DatabaseException, ServiceException{
-        when(mockDatabase.get(NON_EXISTING_USER_ID)).thenThrow(new NotFoundException("User not found."));
+        when(mockDatabase.get(NON_EXISTING_USER_ID)).thenThrow(new NotFoundInDatabase("User not found."));
         
         try {
             userService.get(NON_EXISTING_USER_ID);
-            Assert.fail("NotFoundException was not thrown.");
-        } catch (NotFoundException e) {
-            // This should happen
+            Assert.fail("Correct exception was not thrown.");
+        } catch (NotFoundInDatabase e) {
+            Assert.assertEquals("User not found.", e.getMessage());
         }
     }
+    
+    @Test
+    public void testUserServiceIdGetThrowsServiceExceptionWhenDatabaseExceptionIsThrown() throws DatabaseException, NotFoundInDatabase{
+        when(mockDatabase.get(USER_ID)).thenThrow(new DatabaseException("User not found."));
+        
+        try {
+            userService.get(USER_ID);
+            Assert.fail("Correct exception was not thrown.");
+        } catch (ServiceException e) {
+            Assert.assertEquals("There was problem with database.", e.getMessage());
+        }
+    };
     
     @Test
     public void testUserServiceGetReturnsCorrectUser() throws NotFoundInDatabase, ServiceException{
