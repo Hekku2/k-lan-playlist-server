@@ -1,5 +1,8 @@
 package net.kokkeli.data.services;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Role;
 import net.kokkeli.data.User;
@@ -16,6 +19,7 @@ import static org.mockito.Mockito.*;
 public class TestUserService {
     private final static long NON_EXISTING_USER_ID = 4;
     private final static long USER_ID = 666;
+    
     private final static String USERNAME = "Jarmo";
     private final static Role USERROLE = Role.USER;
     
@@ -34,7 +38,7 @@ public class TestUserService {
     }
     
     @Test
-    public void testUserServiceGetThrowsNotFoundExceptionWhenThereIsNoUser() throws NotFoundInDatabase, DatabaseException, ServiceException{
+    public void testUserServiceIdGetThrowsNotFoundExceptionWhenThereIsNoUser() throws NotFoundInDatabase, DatabaseException, ServiceException{
         when(mockDatabase.get(NON_EXISTING_USER_ID)).thenThrow(new NotFoundInDatabase("User not found."));
         
         try {
@@ -58,12 +62,26 @@ public class TestUserService {
     };
     
     @Test
-    public void testUserServiceGetReturnsCorrectUser() throws NotFoundInDatabase, ServiceException{
+    public void testUserServiceIdGetReturnsCorrectUser() throws NotFoundInDatabase, ServiceException{
         User user = userService.get(USER_ID);
         
         Assert.assertNotNull(user);
         Assert.assertEquals(USER_ID, user.getId());
         Assert.assertEquals(USERNAME, user.getUserName());
         Assert.assertEquals(USERROLE, user.getRole());
+    }
+    
+    @Test
+    public void testUserServiceGetReturnsAllUsers() throws DatabaseException, ServiceException{
+        ArrayList<User> users = new ArrayList<User>();
+        users.add(new User("Name1", Role.ADMIN));
+        users.add(new User("Name2", Role.USER));
+        users.add(new User("Name3", Role.ADMIN));
+        
+        when(mockDatabase.get()).thenReturn(users);
+        
+        Collection<User> get = userService.get();
+        
+        Assert.assertEquals(users.size(), get.size());
     }
 }
