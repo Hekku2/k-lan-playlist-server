@@ -22,6 +22,7 @@ import com.sun.jersey.api.NotFoundException;
 @Path("/resource")
 public class StaticResources {
     private static final String CSS_FOLDER = "target\\classes\\net\\kokkeli\\resources\\css\\";
+    private static final String IMAGES_FOLDER = "target\\classes\\net\\kokkeli\\resources\\images\\";
     
     /**
      * Loads css-file with given name from resources.
@@ -32,7 +33,29 @@ public class StaticResources {
     @Produces("text/css")
     @Path("/css/{file}")
     public StreamingOutput getCSS(@PathParam("file") final String file) {
-        
+        return getStream(CSS_FOLDER, file);
+    }
+    
+    /**
+     * Loads css-file with given name from resources.
+     * @param file Name of file.
+     * @return Css-file
+     */
+    @GET
+    @Produces("image/png")
+    @Path("/images/{file}")
+    public StreamingOutput getImage(@PathParam("file") final String file) {
+        return getStream(IMAGES_FOLDER, file);
+    }
+    
+    /**
+     * Buid Streaming output for resources.
+     * Streaming output throws NotFoundException if file is not found.
+     * @param source Source of file
+     * @param file File name
+     * @return Streaming output
+     */
+    private StreamingOutput getStream(final String source, final String file) {
         return new StreamingOutput() {
             /**
              * Writes file to output-stream.
@@ -42,7 +65,7 @@ public class StaticResources {
              */
             public void write(OutputStream output) throws IOException, NotFoundException {
                 try {
-                    FileInputStream fis = new FileInputStream(CSS_FOLDER + file);
+                    FileInputStream fis = new FileInputStream(source + file);
                     
                     byte[] buffer = new byte[4096];
                     int len; 

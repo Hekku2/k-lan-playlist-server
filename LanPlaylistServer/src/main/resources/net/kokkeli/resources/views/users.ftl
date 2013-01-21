@@ -21,7 +21,7 @@
 							<tr>
 								<td>${item.getUsername}</td>
 								<td>${item.getRole}</td>
-								<td><a href="/users/${item.getId}">Details</a></td>
+								<td><a href="/users/${item.getId}"><img src="/resource/images/details-icon-20x20.png"/></a></td>
 							</tr>
 						</#list>
 					</table>
