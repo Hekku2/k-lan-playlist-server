@@ -14,7 +14,7 @@
   	<dependency>
   		<groupId>com.sun.jersey</groupId>
   		<artifactId>jersey-server</artifactId>
-  		<version>1.7</version>
+  		<version>1.16</version>
   	</dependency>
   	<dependency>
   		<groupId>org.freemarker</groupId>
@@ -34,7 +34,7 @@
   	<dependency>
   		<groupId>com.sun.jersey.contribs</groupId>
   		<artifactId>jersey-guice</artifactId>
-  		<version>1.7</version>
+  		<version>1.16</version>
   	</dependency>
   	<dependency>
   		<groupId>com.almworks.sqlite4java</groupId>
@@ -56,6 +56,11 @@
   		<groupId>uk.co.caprica</groupId>
   		<artifactId>vlcj</artifactId>
   		<version>2.1.0</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>com.sun.jersey.contribs</groupId>
+  		<artifactId>jersey-multipart</artifactId>
+  		<version>1.16</version>
   	</dependency>
   </dependencies>
 </project>

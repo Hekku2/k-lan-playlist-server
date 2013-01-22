@@ -1,15 +1,22 @@
 package net.kokkeli.resources;
 
+import java.io.InputStream;
 import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.google.inject.Inject;
+import com.sun.jersey.core.header.FormDataContentDisposition;
+import com.sun.jersey.multipart.FormDataParam;
 
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Role;
@@ -31,7 +38,8 @@ import net.kokkeli.server.RenderException;
  */
 @Path("/playlists")
 public class PlaylistsResource extends BaseResource {
-    private static final String PLAYLISTS_TEMPLATE = "playlists.ftl";
+    private static final String PLAYLISTS_TEMPLATE = "playlist/playlists.ftl";
+    private static final String PLAYLIST_TRACK_ADD_TEMPLATE ="playlist/add.ftl";
     
     private final IPlaylistService playlistService;
     
@@ -80,4 +88,59 @@ public class PlaylistsResource extends BaseResource {
             throw new ServiceException("There was a problem with rendering.");
         }
     }
+    
+    @GET
+    @Produces("text/html")
+    @Access(Role.USER)
+    @Path("/add/{playlistId: [0-9]*}")
+    public Response add(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId) throws ServiceException {
+        BaseModel model = buildBaseModel();
+        model.setUsername(AuthenticationUtils.extractUsername(req));
+        
+        try {
+            return Response.ok(templates.process(PLAYLIST_TRACK_ADD_TEMPLATE, model)).build();
+        } catch (RenderException e) {
+            throw new ServiceException("There was a problem with rendering.");
+        }
+    }
+    
+    /**
+     * POST for add. Adds track to playlist.
+     * @param req Request
+     * @param playlistId Target playlist
+     * @param artist Artist name
+     * @param track Track name
+     * @param uploadedInputStream Inputstream containing the fie
+     * @param fileDetail Filedetails
+     * @return Redirect to playlist detais
+     * @throws ServiceException Thrown if there is  problem with service
+     */
+    @POST
+    @Produces("text/html")
+    @Access(Role.USER)
+    @Path("/add/{playlistId: [0-9]*}")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response add(@Context HttpServletRequest req,
+            @PathParam("playlistId") long playlistId,
+            @FormDataParam("artist") String artist,
+            @FormDataParam("track") String track,
+            @FormDataParam("file") InputStream uploadedInputStream,
+            @FormDataParam("file") FormDataContentDisposition fileDetail) throws ServiceException {
+        BaseModel model = buildBaseModel();
+        model.setUsername(AuthenticationUtils.extractUsername(req));
+        
+        //TODO Validate artist and track name
+        
+        log("User trying to upload file: " + fileDetail.getFileName() + ", Filetype: " + fileDetail.getType(), 1);
+        
+        //TODO Validate that file is audio
+        
+        //TODO Write stream to disk.
+        try {
+            return Response.ok(templates.process(PLAYLIST_TRACK_ADD_TEMPLATE, model)).build();
+        } catch (RenderException e) {
+            throw new ServiceException("There was a problem with rendering.");
+        }
+    }
+    
 }

@@ -10,7 +10,8 @@
 			<h1>${header}</h1>
 			<div class="content">
 				<#if getModel?? && getModel.getItems??>
-					<#include "_playlist.ftl">
+					<a class="button" href="/playlists/add/${getModel.getId}">Add song</a>
+					<#include "common/_playlist.ftl">
 				<#else>
 					No playlist loaded.
 				</#if>
