@@ -14,4 +14,12 @@ public interface IPlaylistService {
      * @throws ServiceException Thrown if there is something wrong with service.
      */
     Collection<PlayList> getIdNames() throws ServiceException;
+
+    /**
+     * Updates playlist. Adds missing tracks to database, removes removed tracks from database and updates changed tracks.
+     * @param playlist Playlist to update
+     * @throws NotFoundInDatabase Thrown if there is no playlist with given id.
+     * @throws ServiceException Thrown if there is something wrong with service.
+     */
+    void update(PlayList playlist) throws NotFoundInDatabase, ServiceException;
 }

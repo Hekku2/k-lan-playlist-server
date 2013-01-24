@@ -93,4 +93,13 @@ public class PlaylistsTable{
         
         return lists;
     }
+
+    /**
+     * Updates playlist. Doesn't update tracks.
+     * @param playlist Playlist
+     * @throws DatabaseException Thrown if there is problem with database
+     */
+    public void update(PlayList playlist) throws DatabaseException {
+        //TODO Update playlist
+    }
 }

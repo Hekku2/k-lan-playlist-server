@@ -20,6 +20,8 @@ import com.sun.jersey.multipart.FormDataParam;
 
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Role;
+import net.kokkeli.data.Track;
+import net.kokkeli.data.db.NotFoundInDatabase;
 import net.kokkeli.data.db.PlayList;
 import net.kokkeli.data.services.IPlaylistService;
 import net.kokkeli.data.services.ServiceException;
@@ -114,6 +116,7 @@ public class PlaylistsResource extends BaseResource {
      * @param fileDetail Filedetails
      * @return Redirect to playlist detais
      * @throws ServiceException Thrown if there is  problem with service
+     * @throws NotFoundInDatabase Thrown if there is no such playlist.
      */
     @POST
     @Produces("text/html")
@@ -125,7 +128,7 @@ public class PlaylistsResource extends BaseResource {
             @FormDataParam("artist") String artist,
             @FormDataParam("track") String track,
             @FormDataParam("file") InputStream uploadedInputStream,
-            @FormDataParam("file") FormDataContentDisposition fileDetail) throws ServiceException {
+            @FormDataParam("file") FormDataContentDisposition fileDetail) throws ServiceException, NotFoundInDatabase {
         BaseModel model = buildBaseModel();
         model.setUsername(AuthenticationUtils.extractUsername(req));
         
@@ -135,12 +138,23 @@ public class PlaylistsResource extends BaseResource {
         
         //TODO Validate that file is audio
         
-        //TODO Write stream to disk.
+        
+        //TODO Check that disk has space
         try {
+            PlayList playlist = playlistService.getPlaylist(playlistId);
+            Track item = new Track();
+            
+            item.setArtist(artist);
+            item.setTrackName(track);
+            //TODO Add location
+            
+            playlist.getItems().add(item);
+            playlistService.update(playlist);
+            
             return Response.ok(templates.process(PLAYLIST_TRACK_ADD_TEMPLATE, model)).build();
         } catch (RenderException e) {
             throw new ServiceException("There was a problem with rendering.");
-        }
+        } 
     }
     
 }

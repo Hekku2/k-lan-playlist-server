@@ -59,4 +59,14 @@ public class PlaylistService implements IPlaylistService {
             throw new ServiceException("There was something wrong with the database.",  e);
         }
     }
+
+    @Override
+    public void update(PlayList playlist) throws NotFoundInDatabase, ServiceException {
+        try {
+            database.update(playlist);
+        } catch (DatabaseException e) {
+            logger.log("There was a database problem.", 5);
+            throw new ServiceException("There was something wrong with the database.",  e);
+        }
+    }
 }
