@@ -22,6 +22,21 @@ public class Track {
     }
     
     /**
+     * Creates track with no id.
+     */
+    public Track(){
+        
+    }
+    
+    /**
+     * Setter for id
+     * @param id Id
+     */
+    public void setId(long id){
+        this.id = id;
+    }
+    
+    /**
      * Returns id of track.
      * @return
      */
