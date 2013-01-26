@@ -9,6 +9,9 @@
 			<#include "/common/_playing.ftl">
 			<h1>${header}</h1>
 			<div class="content">
+				<#if getError??>
+					<div> ${getError}</div>
+				</#if>
 				<form action="" enctype="multipart/form-data" method="post">
 					<div class="field">
 						<div class="description">

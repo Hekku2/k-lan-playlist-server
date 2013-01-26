@@ -18,6 +18,7 @@ import com.google.inject.Inject;
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
 
+import net.kokkeli.ValidationUtils;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Role;
 import net.kokkeli.data.Track;
@@ -132,15 +133,25 @@ public class PlaylistsResource extends BaseResource {
         BaseModel model = buildBaseModel();
         model.setUsername(AuthenticationUtils.extractUsername(req));
         
-        //TODO Validate artist and track name
-        
-        log("User trying to upload file: " + fileDetail.getFileName() + ", Filetype: " + fileDetail.getType(), 1);
-        
-        //TODO Validate that file is audio
-        
-        
-        //TODO Check that disk has space
         try {
+            if (ValidationUtils.isEmpty(track) || ValidationUtils.isEmpty(artist)){
+                model.setError("Track must have name and artist.");
+                
+                return Response.ok(templates.process(PLAYLIST_TRACK_ADD_TEMPLATE, model)).build();
+            }
+            
+            if (!ValidationUtils.containsOnlyNumbersAndLettersAndWhiteSpace(track)
+             || !ValidationUtils.containsOnlyNumbersAndLettersAndWhiteSpace(artist)){
+                model.setError("Track or artist contained invalid charachters.");
+                
+                return Response.ok(templates.process(PLAYLIST_TRACK_ADD_TEMPLATE, model)).build();
+            }
+            
+            log("User trying to upload file: " + fileDetail.getFileName() + ", Filetype: " + fileDetail.getType(), 1);
+            
+            //TODO Validate that file is audio
+            //TODO Check that disk has space
+
             PlayList playlist = playlistService.getPlaylist(playlistId);
             Track item = new Track();
             

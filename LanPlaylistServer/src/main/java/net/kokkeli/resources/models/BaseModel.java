@@ -13,6 +13,7 @@ import net.kokkeli.resources.Model;
 public class BaseModel extends ViewModel {
     private String nowPlaying;
     private String userName;
+    private String error;
     private ViewModel model;
     
     /**
@@ -48,5 +49,18 @@ public class BaseModel extends ViewModel {
     
     public void setUsername(String userName){
         this.userName = userName;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+    
+    /**
+     * Return error string.
+     * @return Error string
+     */
+    @Field
+    public String getError(){
+        return error;
     }
 }
