@@ -83,7 +83,7 @@ public class TracksTable {
             }
             
             id = db.getLastInsertId();
-            
+            db.dispose();
         } catch (SQLiteException e) {
             throw new DatabaseException("Unabe to insert track to database.", e);
         }

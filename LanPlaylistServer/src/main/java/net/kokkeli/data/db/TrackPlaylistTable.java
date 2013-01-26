@@ -72,6 +72,7 @@ public class TrackPlaylistTable {
             } finally {
                 st.dispose();
             }
+            db.dispose();
         } catch (SQLiteException e) {
             throw new DatabaseException("Unable to delete item. TrackId: " + trackId + ", PlaylistId: " + playlistId, e);
         }
@@ -94,6 +95,7 @@ public class TrackPlaylistTable {
             } finally {
                 st.dispose();
             }
+            db.dispose();
         } catch (SQLiteException e) {
             throw new DatabaseException("Unable to insert item. TrackId: " + trackId + ", PlaylistId: " + playlistId, e);
         }
