@@ -8,9 +8,7 @@
 			<#include "common/_topsection.ftl">
 			<h1>${header}</h1>
 			<div class="content">
-				<#if getError??>
-					<div> ${getError}</div>
-				</#if>
+				<#include "common/_info_error.ftl">
 				<form method="POST" class="value-fields">
 					<div class="field">
 						<div class="description">

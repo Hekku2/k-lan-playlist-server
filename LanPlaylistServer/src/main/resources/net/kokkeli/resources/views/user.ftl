@@ -8,6 +8,7 @@
 			<#include "common/_topsection.ftl">
 			<h1>${header}</h1>
 			<div class="content">
+				<#include "common/_info_error.ftl">
 				<div class="value-fields">
 					<div class="field">
 						<div class="description">

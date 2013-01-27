@@ -1,5 +1,5 @@
 <#assign header = "Add to playlist">
-<#assign tab = 0>
+<#assign tab = 2>
 
 <html>
 	<#include "/common/_header.ftl">
@@ -9,9 +9,7 @@
 			<#include "/common/_playing.ftl">
 			<h1>${header}</h1>
 			<div class="content">
-				<#if getError??>
-					<div> ${getError}</div>
-				</#if>
+				<#include "common/_info_error.ftl">
 				<form action="" enctype="multipart/form-data" method="post">
 					<div class="field">
 						<div class="description">

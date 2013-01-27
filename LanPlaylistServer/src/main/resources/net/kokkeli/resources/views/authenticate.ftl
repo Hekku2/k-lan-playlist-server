@@ -7,6 +7,7 @@
 			<#include "common/_topsection.ftl">
 			<h1>${header}</h1>
 			<div class="content">
+				<#include "common/_info_error.ftl">
 				<form name="input" action="authentication" method="post">
 					<div class="field">
 						<div class="description">
