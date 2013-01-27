@@ -11,6 +11,8 @@ public final class ValidationUtils {
      */
     private static final String REGEX_ONLY_LETTER_AND_NUMBERS = "[\\p{L}\\p{N} ]*";
     
+    private static final String REGEX_USERNAME = "[a-zA-Z0-9]+";
+    
     /**
      * Checks if given string contains only numbers and letters.
      * @param input input string. If it's null, false is returned.
@@ -33,6 +35,18 @@ public final class ValidationUtils {
             return true;
         
         return input.trim().length() == 0;
+    }
+    
+    /**
+     * Checks if username is valid. Username can only contain small and big letters and numbers.
+     * @param username Username. If it's null, false is returned.
+     * @return True, if username is valid.
+     */
+    public static boolean isValidUsername(String username){
+        if (username == null)
+            return false;
+        
+        return username.matches(REGEX_USERNAME) && username.length() <= 255;
     }
     
     /**

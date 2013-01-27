@@ -36,4 +36,20 @@ public class TestValidationUtis {
         Assert.assertFalse(ValidationUtils.isEmpty("Harmi"));
         Assert.assertFalse(ValidationUtils.isEmpty("       \tH"));
     }
+    
+    @Test
+    public void testIsValidUsername(){
+        Assert.assertTrue(ValidationUtils.isValidUsername("ghjjk"));
+        Assert.assertTrue(ValidationUtils.isValidUsername("543"));
+        Assert.assertTrue(ValidationUtils.isValidUsername("543dfasfd"));
+        Assert.assertTrue(ValidationUtils
+                .isValidUsername("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
+
+        Assert.assertFalse(ValidationUtils.isValidUsername(""));
+        Assert.assertFalse(ValidationUtils.isValidUsername("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
+        Assert.assertFalse(ValidationUtils.isValidUsername(" fdasf"));
+        Assert.assertFalse(ValidationUtils.isValidUsername("    "));
+        Assert.assertFalse(ValidationUtils.isValidUsername("_"));
+        Assert.assertFalse(ValidationUtils.isValidUsername(null));
+    }
 }

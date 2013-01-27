@@ -14,6 +14,7 @@ import javax.ws.rs.core.Response;
 import com.google.inject.Inject;
 import com.sun.jersey.api.NotFoundException;
 
+import net.kokkeli.ValidationUtils;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Role;
 import net.kokkeli.data.User;
@@ -168,7 +169,7 @@ public class UsersResource extends BaseResource {
             // Checks that user exists
             User user = userService.get(editedUser.getId());
             
-            if (!isUsernameValid(user.getUserName()))
+            if (!ValidationUtils.isValidUsername(user.getUserName()))
                 throw new BadRequestException("Username was invalid.");
             
             //TODO Field validation
@@ -214,16 +215,26 @@ public class UsersResource extends BaseResource {
     @Access(Role.ADMIN)
     @Path("/create/")
     public Response userCreate(@Context HttpServletRequest req, MultivaluedMap<String, String> formParams) throws BadRequestException, ServiceException{
-        containsNeededFieldsForCreate(formParams);
-        User user = createUser(formParams);
-        
-        //TODO Validation for user values.
-        if (!isUsernameValid(user.getUserName()))
-            throw new BadRequestException("Username was invalid.");
-        
-        userService.add(user);
-        
-        return Response.seeOther(LanServer.getURI("users")).build();
+        try {
+            containsNeededFieldsForCreate(formParams);
+            User user = createUser(formParams);
+            
+            //TODO Validation for user values.
+            if (!ValidationUtils.isValidUsername(user.getUserName())){
+                BaseModel model = super.buildBaseModel();
+                model.setUsername(AuthenticationUtils.extractUsername(req));
+                model.setError("Username was invalid.");
+                return Response.ok(templates.process(USER_CREATE_TEMPLATE, model)).build();
+            }
+                
+            
+            userService.add(user);
+            
+            return Response.seeOther(LanServer.getURI("users")).build();
+        } catch (RenderException e) {
+            throw new ServiceException("Rendering failed.");
+        }
+
     }
     
     /**
@@ -294,15 +305,5 @@ public class UsersResource extends BaseResource {
         }
         
         return new User(username,role);
-    }
-    
-    /**
-     * Checks for username validity
-     * @param username Username
-     * @return True, if username is valid
-     */
-    private static boolean isUsernameValid(String username){
-        //TODO Check for invalid charachters
-        return username != null && !username.isEmpty() && username.length() <= 255;
     }
 }
