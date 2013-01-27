@@ -14,6 +14,8 @@ public class BaseModel extends ViewModel {
     private String nowPlaying;
     private String userName;
     private String error;
+    private String info;
+    
     private ViewModel model;
     
     /**
@@ -26,31 +28,51 @@ public class BaseModel extends ViewModel {
     }
     
     /**
-     * Sets
-     * @param nowPlaying
+     * Setter for now playing.
+     * @param nowPlaying Now playing
      */
     public void setNowPlaying(String nowPlaying){
         this.nowPlaying = nowPlaying;
     }
     
+    /**
+     * Getter for model
+     * @return Model
+     */
     @Model
     public ViewModel getModel(){
         return model;
     }
     
+    /**
+     * Setter for model
+     * @param model Model
+     */
     public void setModel(ViewModel model){
         this.model = model;
     }
     
+    /**
+     * Getter for username
+     * @return Username
+     */
     @Field
     public String getUsername(){
         return userName;
     }
     
+    /**
+     * Setter for username
+     * @param userName Username
+     */
     public void setUsername(String userName){
         this.userName = userName;
     }
 
+    /**
+     * Setter for error
+     * @param error Error
+     */
     public void setError(String error) {
         this.error = error;
     }
@@ -62,5 +84,22 @@ public class BaseModel extends ViewModel {
     @Field
     public String getError(){
         return error;
+    }
+    
+    /**
+     * Setter for Info
+     * @param info Info
+     */
+    public void setInfo(String info) {
+        this.info = info;
+    }
+    
+    /**
+     * Return Info string.
+     * @return Info string
+     */
+    @Field
+    public String getInfo(){
+        return info;
     }
 }

@@ -11,6 +11,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
 import com.google.inject.Inject;
 import com.sun.jersey.api.NotFoundException;
 
@@ -72,16 +74,8 @@ public class UsersResource extends BaseResource {
     public Response userList(@Context HttpServletRequest req) throws ServiceException {
         BaseModel model = buildBaseModel();
         model.setUsername(AuthenticationUtils.extractUsername(req));
-        
-        ModelUsers modelUsers = new ModelUsers();
-        
-        Collection<User> users = userService.get();
-        for (User user : users) {
-            modelUsers.add(new ModelUser(user.getId(), user.getUserName(), user.getRole()));
-        }      
 
-        model.setModel(modelUsers);
-        
+        model.setModel(createModelUsers());
         try {
             return Response.ok(templates.process(USERS_TEMPLATE, model)).build();
         } catch (RenderException e) {
@@ -216,25 +210,42 @@ public class UsersResource extends BaseResource {
     @Path("/create/")
     public Response userCreate(@Context HttpServletRequest req, MultivaluedMap<String, String> formParams) throws BadRequestException, ServiceException{
         try {
+            BaseModel model = super.buildBaseModel();
+            model.setUsername(AuthenticationUtils.extractUsername(req));
+            
             containsNeededFieldsForCreate(formParams);
             User user = createUser(formParams);
-            
+
             //TODO Validation for user values.
             if (!ValidationUtils.isValidUsername(user.getUserName())){
-                BaseModel model = super.buildBaseModel();
-                model.setUsername(AuthenticationUtils.extractUsername(req));
                 model.setError("Username was invalid.");
                 return Response.ok(templates.process(USER_CREATE_TEMPLATE, model)).build();
             }
-                
             
             userService.add(user);
+            model.setInfo("User created.");
             
-            return Response.seeOther(LanServer.getURI("users")).build();
+            model.setModel(createModelUsers());
+            return Response.ok(templates.process(USERS_TEMPLATE, model)).location(LanServer.getURI("users")).status(Status.SEE_OTHER).build();
         } catch (RenderException e) {
             throw new ServiceException("Rendering failed.");
         }
 
+    }
+    
+    /**
+     * Creates model with all users.
+     * @return ModelUsers
+     * @throws ServiceException thrown if there is problem with service.
+     */
+    private ModelUsers createModelUsers() throws ServiceException{
+        ModelUsers modelUsers = new ModelUsers();
+        
+        Collection<User> users = userService.get();
+        for (User user : users) {
+            modelUsers.add(new ModelUser(user.getId(), user.getUserName(), user.getRole()));
+        }
+        return modelUsers;
     }
     
     /**
