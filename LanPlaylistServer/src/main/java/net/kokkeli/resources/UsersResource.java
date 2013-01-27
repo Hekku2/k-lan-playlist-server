@@ -224,8 +224,11 @@ public class UsersResource extends BaseResource {
             
             userService.add(user);
             model.setInfo("User created.");
+            model.setModel(createModelUsers());
+            log("User created.", 1);
             
             model.setModel(createModelUsers());
+            //TODO Save info to session.
             return Response.ok(templates.process(USERS_TEMPLATE, model)).location(LanServer.getURI("users")).status(Status.SEE_OTHER).build();
         } catch (RenderException e) {
             throw new ServiceException("Rendering failed.");
