@@ -1,5 +1,6 @@
 package net.kokkeli.server;
 
+import java.io.File;
 import java.net.URI;
 
 import javax.ws.rs.core.UriBuilder;
@@ -8,6 +9,7 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 
+import net.kokkeli.ISettings;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.LoggingModule;
 
@@ -24,7 +26,8 @@ public class LanServer {
     private static final String URL = "http://localhost/";
     private static final int PORT = 9998;
     private static final URI BASE_URI = getBaseURI();
-    private ILogger logger;
+    private final ILogger logger;
+    private final ISettings settings;
     
     private Server server;
     
@@ -35,6 +38,16 @@ public class LanServer {
     public LanServer() throws ServerException{
         Injector injector = Guice.createInjector(new LoggingModule());
         logger = injector.getInstance(ILogger.class);
+        
+        settings = injector.getInstance(ISettings.class);
+        
+        File trackFolder = new File(settings.getTracksFolder());
+
+        if (!trackFolder.exists()){
+              logger.log("creating directory: " + settings.getTracksFolder(), 1);
+              if(!trackFolder.mkdir())
+                  throw new ServerException("Can't create folder.");
+        }
     }
     
     /**

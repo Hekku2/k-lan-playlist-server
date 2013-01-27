@@ -30,4 +30,12 @@ public class Settings implements ISettings {
     public String getTemplatesLocation() {
         return "target\\classes\\net\\kokkeli\\resources\\views";
     }
+    
+    /**
+     * Returns location of tracks
+     * @return location of tracks.
+     */
+    public String getTracksFolder() {
+        return "tracks";
+    }
 }

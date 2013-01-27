@@ -18,4 +18,10 @@ public interface ISettings {
      * @return Location of templates
      */
     String getTemplatesLocation();
+    
+    /**
+     * Returns location of tracks
+     * @return Locaiton of tracks
+     */
+    String getTracksFolder();
 }
