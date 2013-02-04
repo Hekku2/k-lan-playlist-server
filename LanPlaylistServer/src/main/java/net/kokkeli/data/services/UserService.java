@@ -27,7 +27,6 @@ public class UserService implements IUserService {
     public UserService(ILogger logger, IUserDatabase database){
         this.logger = logger;
         this.userDatabase = database;
-        
     }
     
     @Override
