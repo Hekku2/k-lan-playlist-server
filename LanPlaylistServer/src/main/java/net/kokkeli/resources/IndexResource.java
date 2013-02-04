@@ -15,10 +15,10 @@ import net.kokkeli.data.Role;
 import net.kokkeli.data.db.NotFoundInDatabase;
 import net.kokkeli.data.db.PlayList;
 import net.kokkeli.data.services.IPlaylistService;
+import net.kokkeli.data.services.ISessionService;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.player.IPlayer;
 import net.kokkeli.player.NotPlaylistPlayingException;
-import net.kokkeli.resources.authentication.AuthenticationUtils;
 import net.kokkeli.resources.models.BaseModel;
 import net.kokkeli.resources.models.ModelPlaylist;
 import net.kokkeli.resources.models.ModelPlaylistItem;
@@ -46,8 +46,8 @@ public class IndexResource extends BaseResource {
      */
     @Inject
     protected IndexResource(ILogger logger, ITemplateService templateService,
-            IPlayer player, IPlaylistService playlistService) {
-        super(logger, templateService, player);
+            IPlayer player, IPlaylistService playlistService, ISessionService sessions) {
+        super(logger, templateService, player, sessions);
         
         this.playlistService = playlistService;
     }
@@ -63,8 +63,7 @@ public class IndexResource extends BaseResource {
     public Response index(@Context HttpServletRequest req) throws ServiceException {
         try {
             
-            BaseModel base = buildBaseModel();
-            base.setUsername(AuthenticationUtils.extractUsername(req));
+            BaseModel base = buildBaseModel(req);
             
             long currentPlaylist;
             try {

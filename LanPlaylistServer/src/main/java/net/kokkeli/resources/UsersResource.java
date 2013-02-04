@@ -21,10 +21,10 @@ import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Role;
 import net.kokkeli.data.User;
 import net.kokkeli.data.db.NotFoundInDatabase;
+import net.kokkeli.data.services.ISessionService;
 import net.kokkeli.data.services.IUserService;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.player.IPlayer;
-import net.kokkeli.resources.authentication.AuthenticationUtils;
 import net.kokkeli.resources.models.BaseModel;
 import net.kokkeli.resources.models.ModelUser;
 import net.kokkeli.resources.models.ModelUsers;
@@ -57,8 +57,8 @@ public class UsersResource extends BaseResource {
      * @param logger
      */
     @Inject
-    protected UsersResource(ILogger logger, ITemplateService templateService, IUserService userservice, IPlayer player) {
-        super(logger, templateService, player);
+    protected UsersResource(ILogger logger, ITemplateService templateService, IUserService userservice, IPlayer player, ISessionService sessions) {
+        super(logger, templateService, player, sessions);
         this.userService = userservice;
     }
     
@@ -72,8 +72,7 @@ public class UsersResource extends BaseResource {
     @Produces("text/html")
     @Access(Role.ADMIN)
     public Response userList(@Context HttpServletRequest req) throws ServiceException {
-        BaseModel model = buildBaseModel();
-        model.setUsername(AuthenticationUtils.extractUsername(req));
+        BaseModel model = buildBaseModel(req);
 
         model.setModel(createModelUsers());
         try {
@@ -96,8 +95,7 @@ public class UsersResource extends BaseResource {
     @Access(Role.ADMIN)
     @Path("{id: [0-9]*}")
     public Response userDetails(@Context HttpServletRequest req, @PathParam("id") long id) throws NotFoundException, ServiceException{
-        BaseModel model = buildBaseModel();
-        model.setUsername(AuthenticationUtils.extractUsername(req));
+        BaseModel model = buildBaseModel(req);
         
         try {
             User user = userService.get(id);
@@ -126,8 +124,7 @@ public class UsersResource extends BaseResource {
     @Access(Role.ADMIN)
     @Path("/edit/{id: [0-9]*}")
     public Response userEdit(@Context HttpServletRequest req, @PathParam("id") long id) throws NotFoundException, ServiceException{
-        BaseModel model = buildBaseModel();
-        model.setUsername(AuthenticationUtils.extractUsername(req));
+        BaseModel model = buildBaseModel(req);
         
         try {
             User user = userService.get(id);
@@ -186,8 +183,7 @@ public class UsersResource extends BaseResource {
     @Access(Role.ADMIN)
     @Path("/create/")
     public Response userCreate(@Context HttpServletRequest req) throws ServiceException{
-        BaseModel model = super.buildBaseModel();
-        model.setUsername(AuthenticationUtils.extractUsername(req));
+        BaseModel model = buildBaseModel(req);
         
         try {
             return Response.ok(templates.process(USER_CREATE_TEMPLATE, model)).build();
@@ -210,8 +206,7 @@ public class UsersResource extends BaseResource {
     @Path("/create/")
     public Response userCreate(@Context HttpServletRequest req, MultivaluedMap<String, String> formParams) throws BadRequestException, ServiceException{
         try {
-            BaseModel model = super.buildBaseModel();
-            model.setUsername(AuthenticationUtils.extractUsername(req));
+            BaseModel model = buildBaseModel(req);
             
             containsNeededFieldsForCreate(formParams);
             User user = createUser(formParams);

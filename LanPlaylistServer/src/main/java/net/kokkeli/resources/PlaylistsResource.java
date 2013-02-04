@@ -31,9 +31,9 @@ import net.kokkeli.data.Track;
 import net.kokkeli.data.db.NotFoundInDatabase;
 import net.kokkeli.data.db.PlayList;
 import net.kokkeli.data.services.IPlaylistService;
+import net.kokkeli.data.services.ISessionService;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.player.IPlayer;
-import net.kokkeli.resources.authentication.AuthenticationUtils;
 import net.kokkeli.resources.models.BaseModel;
 import net.kokkeli.resources.models.ModelPlaylist;
 import net.kokkeli.resources.models.ModelPlaylists;
@@ -60,8 +60,8 @@ public class PlaylistsResource extends BaseResource {
      * @param player
      */
     @Inject
-    protected PlaylistsResource(ILogger logger, ITemplateService templateService, IPlayer player, ISettings settings, IPlaylistService playlistService) {
-        super(logger, templateService, player);
+    protected PlaylistsResource(ILogger logger, ITemplateService templateService, IPlayer player, ISessionService sessions, ISettings settings, IPlaylistService playlistService) {
+        super(logger, templateService, player, sessions);
         
         this.playlistService = playlistService;
         this.settings = settings;
@@ -77,8 +77,7 @@ public class PlaylistsResource extends BaseResource {
     @Produces("text/html")
     @Access(Role.ADMIN)
     public Response playlists(@Context HttpServletRequest req) throws ServiceException {
-        BaseModel model = buildBaseModel();
-        model.setUsername(AuthenticationUtils.extractUsername(req));
+        BaseModel model = buildBaseModel(req);
 
         Collection<PlayList> lists = playlistService.getIdNames();
         
@@ -105,8 +104,7 @@ public class PlaylistsResource extends BaseResource {
     @Access(Role.USER)
     @Path("/add/{playlistId: [0-9]*}")
     public Response add(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId) throws ServiceException {
-        BaseModel model = buildBaseModel();
-        model.setUsername(AuthenticationUtils.extractUsername(req));
+        BaseModel model = buildBaseModel(req);
         
         try {
             return Response.ok(templates.process(PLAYLIST_TRACK_ADD_TEMPLATE, model)).build();
@@ -138,8 +136,7 @@ public class PlaylistsResource extends BaseResource {
             @FormDataParam("track") String track,
             @FormDataParam("file") InputStream uploadedInputStream,
             @FormDataParam("file") FormDataContentDisposition fileDetail) throws ServiceException, NotFoundInDatabase {
-        BaseModel model = buildBaseModel();
-        model.setUsername(AuthenticationUtils.extractUsername(req));
+        BaseModel model = buildBaseModel(req);
         
         try {
             if (ValidationUtils.isEmpty(track) || ValidationUtils.isEmpty(artist)){

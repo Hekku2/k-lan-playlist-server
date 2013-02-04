@@ -10,8 +10,10 @@ import net.kokkeli.data.db.IUserDatabase;
 import net.kokkeli.data.db.PlaylistDatabase;
 import net.kokkeli.data.db.UserDatabase;
 import net.kokkeli.data.services.IPlaylistService;
+import net.kokkeli.data.services.ISessionService;
 import net.kokkeli.data.services.IUserService;
 import net.kokkeli.data.services.PlaylistService;
+import net.kokkeli.data.services.SessionService;
 import net.kokkeli.data.services.UserService;
 import net.kokkeli.player.IPlayer;
 import net.kokkeli.player.MockPlayer;
@@ -59,10 +61,12 @@ public class LanServletConfig extends GuiceServletContextListener {
                 bind(IUserDatabase.class).to(UserDatabase.class).asEagerSingleton();
                 
                 //Services
-                bind(IUserService.class).to(UserService.class);
+                bind(ISessionService.class).to(SessionService.class);
                 bind(ITemplateService.class).to(Templates.class);
                 bind(IPlayer.class).to(MockPlayer.class);
+                bind(IUserService.class).to(UserService.class);
                 bind(IPlaylistService.class).to(PlaylistService.class);
+
                 
                 //Resources
                 bind(StaticResources.class);
@@ -75,7 +79,7 @@ public class LanServletConfig extends GuiceServletContextListener {
                 //Aspects
                 Injector injector = Guice.createInjector(new LoggingModule());
                 bindInterceptor(Matchers.any(), 
-                    Matchers.annotatedWith(Access.class), new AuthenticationInceptor(injector.getInstance(ILogger.class)));
+                    Matchers.annotatedWith(Access.class), new AuthenticationInceptor(injector.getInstance(ILogger.class), injector.getInstance(ISessionService.class)));
              
             // Route all requests through GuiceContainer
             serve("/*").with(GuiceContainer.class);

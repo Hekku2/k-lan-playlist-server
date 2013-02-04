@@ -16,6 +16,7 @@ import com.google.inject.Inject;
 
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Role;
+import net.kokkeli.data.services.ISessionService;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.player.IPlayer;
 import net.kokkeli.resources.Access;
@@ -36,8 +37,8 @@ public class AuthenticationResource extends BaseResource {
     private static final String AUTHENTICATE_TEMPLATE = "authenticate.ftl";
 
     @Inject
-    protected AuthenticationResource(ILogger logger, ITemplateService templateService, IPlayer player) {
-        super(logger, templateService, player);
+    protected AuthenticationResource(ILogger logger, ITemplateService templateService, IPlayer player, ISessionService sessions) {
+        super(logger, templateService, player, sessions);
     }
 
     @GET

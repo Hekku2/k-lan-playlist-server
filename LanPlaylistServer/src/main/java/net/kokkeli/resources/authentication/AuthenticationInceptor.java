@@ -8,8 +8,11 @@ import javax.ws.rs.core.UriBuilder;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Logging;
 import net.kokkeli.data.Role;
+import net.kokkeli.data.db.NotFoundInDatabase;
+import net.kokkeli.data.services.ISessionService;
 import net.kokkeli.resources.Access;
 import net.kokkeli.server.LanServer;
+import net.kokkeli.data.*;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 
@@ -19,13 +22,15 @@ import org.aopalliance.intercept.MethodInvocation;
  */
 public class AuthenticationInceptor implements MethodInterceptor{
     private final ILogger logger;
+    private final ISessionService sessions;
     
     /**
      * Creates authencation inceptor for catching Access-annotations
      * @param iLogger Logger
      */
-    public AuthenticationInceptor(ILogger iLogger){
+    public AuthenticationInceptor(ILogger iLogger, ISessionService sessions){
         this.logger = iLogger;
+        this.sessions = sessions;
     }
     
     /**
@@ -47,17 +52,15 @@ public class AuthenticationInceptor implements MethodInterceptor{
             logger.log("Checking authentication...", 0);
             HttpServletRequest request = AuthenticationUtils.extractRequest(invocation.getArguments());
             Cookie authCookie = AuthenticationUtils.extractLoginCookie(request.getCookies());
-
-            if (!authCookie.getValue().equals("Ok")){
-                logger.log("Cookie value: " + authCookie.getValue(), 1);
-                return Response.seeOther(UriBuilder.fromUri(LanServer.getBaseURI()).path("/authentication").build()).build();
-            }
-            //TODO Proper checking for auth validity...
+            Session session = sessions.get(authCookie.getValue());
+            logger.log("User authenticated: " + session.getUser(), 1);
             
-            logger.log("User authenticated: " + authCookie.getValue() + ", " + access.value(), 1);
             return invocation.proceed();
+        } catch (NotFoundInDatabase e) {
+            logger.log("Old or invalid authentication." + e.getMessage(), 1);
+            return Response.seeOther(UriBuilder.fromUri(LanServer.getBaseURI()).path("/authentication").build()).build();
         } catch (AuthenticationException e) {
-            logger.log("User was not authenticated. " + e.getMessage(), 0);
+            logger.log("There were no authenticaiton data: " + e.getMessage(), 1);
             return Response.seeOther(UriBuilder.fromUri(LanServer.getBaseURI()).path("/authentication").build()).build();
         }
 

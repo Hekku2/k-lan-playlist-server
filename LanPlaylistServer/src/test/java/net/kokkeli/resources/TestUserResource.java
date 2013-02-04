@@ -8,6 +8,7 @@ import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Role;
 import net.kokkeli.data.User;
 import net.kokkeli.data.db.NotFoundInDatabase;
+import net.kokkeli.data.services.ISessionService;
 import net.kokkeli.data.services.IUserService;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.player.IPlayer;
@@ -36,6 +37,7 @@ public class TestUserResource {
     private IUserService mockUserService;
     private ITemplateService mockTemplateService;
     private IPlayer mockPlayer;
+    private ISessionService mockSessionService;
     
     private User existing;
     
@@ -46,6 +48,7 @@ public class TestUserResource {
         mockLogger = mock(ILogger.class);
         mockUserService = mock(IUserService.class);
         mockTemplateService = mock(ITemplateService.class);
+        mockSessionService = mock(ISessionService.class);
         mockPlayer = mock(IPlayer.class);
         
         existing = new User(EXISTING_USER_ID, "user", Role.NONE);
@@ -53,7 +56,7 @@ public class TestUserResource {
         when(mockUserService.get(EXISTING_USER_ID)).thenReturn(existing);
         when(mockUserService.get(NONEXISTING_ID)).thenThrow(new NotFoundInDatabase("User not found"));
         
-        userResource = new UsersResource(mockLogger, mockTemplateService, mockUserService, mockPlayer);
+        userResource = new UsersResource(mockLogger, mockTemplateService, mockUserService, mockPlayer, mockSessionService);
         
     }
     

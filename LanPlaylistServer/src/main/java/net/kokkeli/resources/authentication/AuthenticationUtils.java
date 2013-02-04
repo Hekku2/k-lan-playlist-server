@@ -67,15 +67,6 @@ public final class AuthenticationUtils {
     }
     
     /**
-     * TODO Extract username from httpServletRequest.
-     * @param req
-     * @return
-     */
-    public static String extractUsername(HttpServletRequest req){
-        return "mockUser1";
-    }
-    
-    /**
      * Hidden constructor.
      */
     private AuthenticationUtils(){}

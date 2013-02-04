@@ -13,6 +13,7 @@ import junit.framework.Assert;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.db.NotFoundInDatabase;
 import net.kokkeli.data.services.IPlaylistService;
+import net.kokkeli.data.services.ISessionService;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.player.IPlayer;
 import net.kokkeli.player.NotPlaylistPlayingException;
@@ -32,6 +33,7 @@ public class TestIndexResource {
     private ITemplateService mockTemplateService;
     private IPlayer mockPlayer;
     private IPlaylistService mockPlaylistService;
+    private ISessionService mockSessionService;
     
     private IndexResource resource;
     
@@ -42,8 +44,9 @@ public class TestIndexResource {
         mockTemplateService = mock(ITemplateService.class);
         mockPlayer = mock(IPlayer.class);
         mockPlaylistService = mock(IPlaylistService.class);
+        mockSessionService = mock(ISessionService.class);
         
-        resource = new IndexResource(mockLogger, mockTemplateService, mockPlayer, mockPlaylistService);
+        resource = new IndexResource(mockLogger, mockTemplateService, mockPlayer, mockPlaylistService, mockSessionService);
     }
     
     @Test

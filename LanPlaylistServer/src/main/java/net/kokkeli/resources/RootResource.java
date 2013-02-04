@@ -11,6 +11,7 @@ import com.google.inject.Inject;
 
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Role;
+import net.kokkeli.data.services.ISessionService;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.player.IPlayer;
 import net.kokkeli.server.ITemplateService;
@@ -31,8 +32,8 @@ public class RootResource extends BaseResource {
      * @param logger
      */
     @Inject
-    protected RootResource(ILogger logger, ITemplateService templateService, IPlayer player) {
-        super(logger, templateService, player);
+    protected RootResource(ILogger logger, ITemplateService templateService, IPlayer player, ISessionService sessions) {
+        super(logger, templateService, player, sessions);
     }
    
     /**
