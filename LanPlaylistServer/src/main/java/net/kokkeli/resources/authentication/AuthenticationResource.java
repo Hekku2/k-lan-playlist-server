@@ -16,7 +16,6 @@ import com.google.inject.Inject;
 
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Role;
-import net.kokkeli.data.db.NotFoundInDatabase;
 import net.kokkeli.data.services.ISessionService;
 import net.kokkeli.data.services.IUserService;
 import net.kokkeli.data.services.ServiceException;
