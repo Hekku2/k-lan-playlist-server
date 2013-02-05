@@ -8,6 +8,7 @@ package net.kokkeli.data;
 public class Session {
     private User user;
     private String authId;
+    private String error;
     
     /**
      * Constructs session from user.
@@ -39,5 +40,21 @@ public class Session {
      */
     public void setAuthId(String authId){
         this.authId = authId;
+    }
+    
+    /**
+     * setter for temporary error field
+     * @param error Error
+     */
+    public void setError(String error){
+        this.error = error;
+    }
+    
+    /**
+     * Getter for temporary error field
+     * @return Error
+     */
+    public String getError(){
+        return error;
     }
 }

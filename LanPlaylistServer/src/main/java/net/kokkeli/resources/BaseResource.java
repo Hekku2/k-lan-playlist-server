@@ -59,6 +59,10 @@ public abstract class BaseResource {
         try {
             Session session = sessions.get(AuthenticationUtils.extractLoginCookie(req.getCookies()).getValue());
             model.setUsername(session.getUser().getUserName());
+            model.setCurrentSession(session);
+            model.setError(session.getError());
+            sessions.clearError(session.getAuthId());
+            
         } catch (AuthenticationCookieNotFound e) {
             throw new ServiceException("There was a problem with authentication.", e);
         } catch (NotFoundInDatabase e) {

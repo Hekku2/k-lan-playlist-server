@@ -107,7 +107,8 @@ public class UsersResource extends BaseResource {
         } catch (RenderException e) {
             throw new ServiceException("There was problem with rendering the template.", e);
         } catch (NotFoundInDatabase e){
-            throw new NotFoundException("User was not found.");
+            sessions.setError(model.getCurrentSession().getAuthId(), "User not found.");
+            return Response.seeOther(LanServer.getURI("users")).build();
         }
     }
     

@@ -1,5 +1,6 @@
 package net.kokkeli.resources.models;
 
+import net.kokkeli.data.Session;
 import net.kokkeli.resources.Field;
 import net.kokkeli.resources.Model;
 
@@ -17,6 +18,7 @@ public class BaseModel extends ViewModel {
     private String info;
     
     private ViewModel model;
+    private Session session;
     
     /**
      * Track currently playing
@@ -101,5 +103,21 @@ public class BaseModel extends ViewModel {
     @Field
     public String getInfo(){
         return info;
+    }
+
+    /**
+     * Setter for current user.
+     * @param session current session
+     */
+    public void setCurrentSession(Session session) {
+        this.session = session;
+    }
+    
+    /**
+     * Getter for current sessions
+     * @return Current session
+     */
+    public Session getCurrentSession(){
+        return session;
     }
 }

@@ -58,4 +58,16 @@ public class SessionService implements ISessionService{
         sessions.put(session.getAuthId(), session);
         return session;
     }
+
+    @Override
+    public void setError(String authId, String error) {
+        //TODO Proper exception handling.
+        sessions.get(authId).setError(error);
+    }
+
+    @Override
+    public void clearError(String authId) {
+        // TODO Proper exception handling
+        sessions.get(authId).setError(null);
+    }
 }
