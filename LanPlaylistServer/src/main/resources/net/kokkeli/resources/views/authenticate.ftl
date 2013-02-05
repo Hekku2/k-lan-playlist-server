@@ -1,4 +1,5 @@
 <#assign header = "Authentication">
+<link rel="stylesheet" type="text/css" href="/resource/css/Authentication.css">
 
 <html>
 	<#include "common/_header.ftl">
@@ -8,7 +9,7 @@
 			<h1>${header}</h1>
 			<div class="content">
 				<#include "common/_info_error.ftl">
-				<form name="input" action="authentication" method="post">
+				<form name="input" action="authentication" method="post" class="authentication-box">
 					<div class="field">
 						<div class="description">
 							Username: 
@@ -25,7 +26,9 @@
 							<input type="password" name="pwd">
 						</div>
 					</div>
-					<input type="submit" value="Submit" class="submit-button">
+					<div class="login-button-container">
+						<input type="submit" value="Log in" class="button">
+					</div>
 				</form>
 			</div>
 		</div>

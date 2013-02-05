@@ -42,6 +42,8 @@ h1{
 div.description{
 	display: table-cell;
 	text-align: right;
+	padding-right: 5px;
+	padding-left: 5px;
 }
 
 div.value{
@@ -50,10 +52,6 @@ div.value{
 
 div.submit-box{
 	margin-top: 10px;
-}
-
-.submit-button{
-	float: right;
 }
 
 div.content{
