@@ -9,7 +9,7 @@
 			<#include "/common/_playing.ftl">
 			<h1>${header}</h1>
 			<div class="content">
-				<#include "common/_info_error.ftl">
+				<#include "/common/_info_error.ftl">
 				<#if getModel?? && getModel.getItems??>
 					<table>
 						<tr>
