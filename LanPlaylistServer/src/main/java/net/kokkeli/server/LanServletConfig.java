@@ -4,7 +4,6 @@ import net.kokkeli.ISettings;
 import net.kokkeli.Settings;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Logging;
-import net.kokkeli.data.LoggingModule;
 import net.kokkeli.data.db.IPlaylistDatabase;
 import net.kokkeli.data.db.IUserDatabase;
 import net.kokkeli.data.db.PlaylistDatabase;
@@ -61,13 +60,12 @@ public class LanServletConfig extends GuiceServletContextListener {
                 bind(IUserDatabase.class).to(UserDatabase.class).asEagerSingleton();
                 
                 //Services
-                bind(ISessionService.class).to(SessionService.class);
+                bind(ISessionService.class).to(SessionService.class).asEagerSingleton();
                 bind(ITemplateService.class).to(Templates.class);
                 bind(IPlayer.class).to(MockPlayer.class);
                 bind(IUserService.class).to(UserService.class);
                 bind(IPlaylistService.class).to(PlaylistService.class);
 
-                
                 //Resources
                 bind(StaticResources.class);
                 bind(RootResource.class);
@@ -77,12 +75,15 @@ public class LanServletConfig extends GuiceServletContextListener {
                 bind(PlaylistsResource.class);
                 
                 //Aspects
-                Injector injector = Guice.createInjector(new LoggingModule());
+                AuthenticationInceptor interceptor = new AuthenticationInceptor();
+                requestInjection(interceptor);
+                
                 bindInterceptor(Matchers.any(), 
-                    Matchers.annotatedWith(Access.class), new AuthenticationInceptor(injector.getInstance(ILogger.class), injector.getInstance(ISessionService.class)));
+                    Matchers.annotatedWith(Access.class), interceptor);
              
-            // Route all requests through GuiceContainer
-            serve("/*").with(GuiceContainer.class);
+                
+                // Route all requests through GuiceContainer
+                serve("/*").with(GuiceContainer.class);
             }
         });
     }

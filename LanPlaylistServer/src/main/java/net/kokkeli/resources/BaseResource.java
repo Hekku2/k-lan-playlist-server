@@ -22,7 +22,7 @@ public abstract class BaseResource {
     private final ILogger logger;
     protected final IPlayer player;
     protected final ITemplateService templates;
-    private final ISessionService sessions;
+    protected final ISessionService sessions;
     
     /**
      * Initializes class.

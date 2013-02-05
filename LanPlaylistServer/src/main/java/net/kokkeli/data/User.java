@@ -94,4 +94,12 @@ public class User {
 
         return equals((User)object);
     }
+
+    /**
+     * Returns password hash of user
+     * @return
+     */
+    public String getPasswordHash() {
+        return "mockHash";
+    }
 }

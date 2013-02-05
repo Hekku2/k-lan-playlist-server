@@ -16,6 +16,9 @@ import com.google.inject.Inject;
 
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Role;
+import net.kokkeli.data.Session;
+import net.kokkeli.data.User;
+import net.kokkeli.data.db.NotFoundInDatabase;
 import net.kokkeli.data.services.ISessionService;
 import net.kokkeli.data.services.IUserService;
 import net.kokkeli.data.services.ServiceException;
@@ -67,9 +70,12 @@ public class AuthenticationResource extends BaseResource {
             @FormParam("user") String username,
             @FormParam("pwd") String password) throws ServiceException {
         log("User " + username + " trying to authenticate.", 1);
-
-        //Shows error if username is wrong
-        if (!users.exists(username)){
+        
+        User user;
+        try {
+            user = users.get(username, password);
+        } catch (NotFoundInDatabase exception) {
+            //Shows error if username or password is wrong.
             BaseModel model = buildBaseModel();
             model.setUsername("");
             model.setError("Wrong username or password.");
@@ -80,24 +86,24 @@ public class AuthenticationResource extends BaseResource {
             }
         }
         
-        // TODO Add authentication here
-        Cookie cook = null;
+        Session session = sessions.createSession(user); 
         try {
-            cook = AuthenticationUtils.extractLoginCookie(req.getCookies());
+            Cookie cook = AuthenticationUtils.extractLoginCookie(req.getCookies());
+            log("Old cookie found, modifying...", 0);
+            NewCookie modified = new NewCookie(cook.getName(), session.getAuthId(), "/",
+                    cook.getDomain(), cook.getComment(), cook.getMaxAge(),
+                    cook.getSecure());
+
+            return Response.seeOther(LanServer.getBaseURI()).cookie(modified)
+                    .build();
+            
         } catch (AuthenticationCookieNotFound e) {
-            // TODO Add authentication here
             log("No old cookie found, creating new.", 0);
-            NewCookie auth = new NewCookie("auth", "Ok");
+            NewCookie auth = new NewCookie("auth", session.getAuthId());
             return Response.seeOther(LanServer.getBaseURI()).cookie(auth)
                     .build();
         }
-        log("Old cookie found, modifying...", 0);
-        NewCookie modified = new NewCookie(cook.getName(), "Ok", "/",
-                cook.getDomain(), cook.getComment(), cook.getMaxAge(),
-                cook.getSecure());
 
-        return Response.seeOther(LanServer.getBaseURI()).cookie(modified)
-                .build();
     }
 
     @GET

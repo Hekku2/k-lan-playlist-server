@@ -1,20 +1,23 @@
 package net.kokkeli.data.services;
 
+import java.util.HashMap;
+import java.util.UUID;
+
 import com.google.inject.Inject;
 
 import net.kokkeli.data.ILogger;
-import net.kokkeli.data.Role;
 import net.kokkeli.data.Session;
 import net.kokkeli.data.User;
 import net.kokkeli.data.db.NotFoundInDatabase;
 
 /**
- * Servuce for sessiondata
+ * Service for sessiondata
  * @author Hekku2
  *
  */
 public class SessionService implements ISessionService{
     private ILogger logger;
+    private HashMap<String, Session> sessions;
     
     /**
      * Creates user service with given logger
@@ -23,6 +26,8 @@ public class SessionService implements ISessionService{
     @Inject
     public SessionService(ILogger logger){
         this.logger = logger;
+        
+        sessions = new HashMap<String, Session>();
     }
     
     /**
@@ -31,13 +36,26 @@ public class SessionService implements ISessionService{
      * @throws NotFoundInDatabase thrown if there is no session with given authentication.
      */
     public Session get(String authId) throws NotFoundInDatabase{
-        //TODO Make proper implementation.
-        if (!authId.equals("Ok"))
+        if (!sessions.containsKey(authId))
             throw new NotFoundInDatabase("Auth not found in database.");
-        User user = new User("mockMan", Role.ADMIN);
-        user.setId(42);
         
-        logger.log("Session found for user: " + user.getId(), 1);
-        return new Session(user);
+        Session session = sessions.get(authId);
+        logger.log("Session found for user: " + session.getUser().getId(), 1);
+        return session;
+    }
+
+    @Override
+    public Session createSession(User user) {
+        Session session = new Session(user);
+        
+        UUID random;
+        //Random until there is no similar key in sesisons. Should not happen. :D
+        do{
+            random = UUID.randomUUID();
+        } while(sessions.containsKey(random.toString()));
+            session.setAuthId(random.toString());
+            
+        sessions.put(session.getAuthId(), session);
+        return session;
     }
 }

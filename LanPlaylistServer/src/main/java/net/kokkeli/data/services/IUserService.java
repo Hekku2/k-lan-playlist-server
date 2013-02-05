@@ -49,7 +49,7 @@ public interface IUserService {
      * @param username Username
      * @return Username
      * @throws ServiceException Thrown if there is problem with the service
-     * @throws NotFoundInDatabase Thrown if there is no such user in database. 
+     * @throws NotFoundInDatabase Thrown if there is no such user in the database. 
      */
     User get(String username) throws ServiceException, NotFoundInDatabase;
 
@@ -57,7 +57,17 @@ public interface IUserService {
      * Checks that user with given username exists
      * @param username
      * @return True, if user with username exists.
-     * @throws ServiceException Thrown is there is problem with database
+     * @throws ServiceException Thrown is there is problem with the database
      */
     boolean exists(String username) throws ServiceException;
+
+    /**
+     * Returns user with given username, ONLY if password matches
+     * @param username Username
+     * @param password Password
+     * @return User Found user.
+     * @throws NotFoundInDatabase Thrown if username or password is wrong.
+     * @throws ServiceException Thrown if there is problem with the database.
+     */
+    User get(String username, String password) throws NotFoundInDatabase, ServiceException;
 }

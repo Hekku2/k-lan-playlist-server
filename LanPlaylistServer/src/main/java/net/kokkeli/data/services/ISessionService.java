@@ -1,6 +1,7 @@
 package net.kokkeli.data.services;
 
 import net.kokkeli.data.Session;
+import net.kokkeli.data.User;
 import net.kokkeli.data.db.NotFoundInDatabase;
 
 /**
@@ -17,4 +18,6 @@ public interface ISessionService {
      * @throws NotFoundInDatabase Thrown if session with given authentication is not found.
      */
     Session get(String authId) throws NotFoundInDatabase;
+
+    Session createSession(User user);
 }

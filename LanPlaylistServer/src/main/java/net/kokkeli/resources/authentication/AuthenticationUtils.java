@@ -67,6 +67,17 @@ public final class AuthenticationUtils {
     }
     
     /**
+     * Checks if password matches hash
+     * @param password Password
+     * @param passwordHash Password hash
+     * @return True, if password matches hash
+     */
+    public static boolean matches(String password, String passwordHash) {
+        //TODO Proper implementation
+        return true;
+    }
+    
+    /**
      * Hidden constructor.
      */
     private AuthenticationUtils(){}

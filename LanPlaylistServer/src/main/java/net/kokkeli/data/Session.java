@@ -7,6 +7,7 @@ package net.kokkeli.data;
  */
 public class Session {
     private User user;
+    private String authId;
     
     /**
      * Constructs session from user.
@@ -22,5 +23,21 @@ public class Session {
      */
     public User getUser(){
         return user;
+    }
+
+    /**
+     * Authentication ID for this session
+     * @return
+     */
+    public String getAuthId() {
+        return authId;
+    }
+    
+    /**
+     * Sets authentication id for this session.
+     * @param authId Authentication id
+     */
+    public void setAuthId(String authId){
+        this.authId = authId;
     }
 }

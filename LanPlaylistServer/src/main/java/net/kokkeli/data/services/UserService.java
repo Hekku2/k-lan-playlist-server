@@ -7,6 +7,7 @@ import net.kokkeli.data.User;
 import net.kokkeli.data.db.DatabaseException;
 import net.kokkeli.data.db.IUserDatabase;
 import net.kokkeli.data.db.NotFoundInDatabase;
+import net.kokkeli.resources.authentication.AuthenticationUtils;
 
 import com.google.inject.Inject;
 
@@ -111,5 +112,14 @@ public class UserService implements IUserService {
         } catch (NotFoundInDatabase e) {
             return false;
         }
+    }
+
+    @Override
+    public User get(String username, String password) throws NotFoundInDatabase, ServiceException {
+        User user = get(username);
+        if (AuthenticationUtils.matches(password, user.getPasswordHash())){
+            return user;
+        }
+        throw new NotFoundInDatabase("Wrong username or password.");
     }
 }

@@ -16,21 +16,30 @@ import net.kokkeli.data.*;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 
+import com.google.inject.Inject;
+
 /**
  * Authentication checker class
  * @author Hekku2
  */
 public class AuthenticationInceptor implements MethodInterceptor{
-    private final ILogger logger;
-    private final ISessionService sessions;
+    
+    /**
+     * ILogger. This is protected for injecting.
+     */
+    @Inject
+    protected ILogger logger;
+    
+    /**
+     * ISessionService. This is proteced for injecting.
+     */
+    @Inject
+    protected ISessionService sessions;
     
     /**
      * Creates authencation inceptor for catching Access-annotations
-     * @param iLogger Logger
      */
-    public AuthenticationInceptor(ILogger iLogger, ISessionService sessions){
-        this.logger = iLogger;
-        this.sessions = sessions;
+    public AuthenticationInceptor(){
     }
     
     /**
@@ -45,7 +54,6 @@ public class AuthenticationInceptor implements MethodInterceptor{
             
             //If no role is needed, continue proceeded without checking authentication
             if (access.value() == Role.NONE){
-
                 return invocation.proceed();
             }
 
