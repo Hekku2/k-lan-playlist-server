@@ -43,4 +43,21 @@ public interface IUserService {
      * @throws ServiceException Thrown if there is problem with service
      */
     void add(User user) throws ServiceException;
+
+    /**
+     * Returns user that has given username
+     * @param username Username
+     * @return Username
+     * @throws ServiceException Thrown if there is problem with the service
+     * @throws NotFoundInDatabase Thrown if there is no such user in database. 
+     */
+    User get(String username) throws ServiceException, NotFoundInDatabase;
+
+    /**
+     * Checks that user with given username exists
+     * @param username
+     * @return True, if user with username exists.
+     * @throws ServiceException Thrown is there is problem with database
+     */
+    boolean exists(String username) throws ServiceException;
 }

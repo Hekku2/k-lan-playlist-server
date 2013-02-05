@@ -85,7 +85,31 @@ public class UserService implements IUserService {
         } catch (DatabaseException e) {
             throw new ServiceException("There was problem with database.", e);
         }
-        
-        
+    }
+
+    @Override
+    public User get(String username) throws ServiceException, NotFoundInDatabase {
+        try {
+            Collection<User> users = userDatabase.get();
+            
+            for (User user : users) {
+                if (username.equals(user.getUserName()))
+                    return user;
+            }
+            throw new NotFoundInDatabase(String.format("User with username %s not found.", username));
+            
+        } catch (DatabaseException e) {
+            throw new ServiceException("There is a problem with the database.", e);
+        }
+    }
+
+    @Override
+    public boolean exists(String username) throws ServiceException {
+        try {
+            get(username);
+            return true;
+        } catch (NotFoundInDatabase e) {
+            return false;
+        }
     }
 }

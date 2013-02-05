@@ -16,7 +16,9 @@ import com.google.inject.Inject;
 
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Role;
+import net.kokkeli.data.db.NotFoundInDatabase;
 import net.kokkeli.data.services.ISessionService;
+import net.kokkeli.data.services.IUserService;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.player.IPlayer;
 import net.kokkeli.resources.Access;
@@ -35,21 +37,24 @@ import net.kokkeli.server.RenderException;
 @Path("/authentication")
 public class AuthenticationResource extends BaseResource {
     private static final String AUTHENTICATE_TEMPLATE = "authenticate.ftl";
+    
+    private final IUserService users;
 
     @Inject
-    protected AuthenticationResource(ILogger logger, ITemplateService templateService, IPlayer player, ISessionService sessions) {
+    protected AuthenticationResource(ILogger logger, ITemplateService templateService, IPlayer player, ISessionService sessions, IUserService users) {
         super(logger, templateService, player, sessions);
+        this.users = users;
     }
 
     @GET
     @Produces("text/html")
     @Access(Role.NONE)
-    public String authenticate() throws ServiceException {
+    public Response authenticate() throws ServiceException {
         BaseModel model = buildBaseModel();
         model.setUsername("");
         
         try {
-            return templates.process(AUTHENTICATE_TEMPLATE, model);
+            return Response.ok(templates.process(AUTHENTICATE_TEMPLATE, model)).build();
         } catch (RenderException e) {
             throw new ServiceException("There was problem with rendering.");
         }
@@ -61,11 +66,22 @@ public class AuthenticationResource extends BaseResource {
     @Access(Role.NONE)
     public Response authenticate(@Context HttpServletRequest req,
             @FormParam("user") String username,
-            @FormParam("pwd") String password) {
+            @FormParam("pwd") String password) throws ServiceException {
         log("User " + username + " trying to authenticate.", 1);
 
+        //Shows error if username is wrong
+        if (!users.exists(username)){
+            BaseModel model = buildBaseModel();
+            model.setUsername("");
+            model.setError("Wrong username or password.");
+            try {
+                return Response.ok(templates.process(AUTHENTICATE_TEMPLATE, model)).build();
+            } catch (RenderException e) {
+                throw new ServiceException("There was problem with rendering.");
+            }
+        }
+        
         // TODO Add authentication here
-
         Cookie cook = null;
         try {
             cook = AuthenticationUtils.extractLoginCookie(req.getCookies());
