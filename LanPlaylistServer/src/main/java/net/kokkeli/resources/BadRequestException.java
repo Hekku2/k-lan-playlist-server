@@ -1,7 +1,7 @@
 package net.kokkeli.resources;
 
 /**
- * Exception thrown when request is bad..
+ * Exception thrown when request is bad.
  * @author Hekku2
  *
  */
