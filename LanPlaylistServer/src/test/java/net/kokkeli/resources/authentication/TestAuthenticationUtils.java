@@ -1,7 +1,6 @@
 package net.kokkeli.resources.authentication;
 
 import java.lang.annotation.Annotation;
-
 import javax.servlet.http.Cookie;
 
 import junit.framework.Assert;

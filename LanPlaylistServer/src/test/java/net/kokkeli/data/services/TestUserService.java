@@ -3,6 +3,7 @@ package net.kokkeli.data.services;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import net.kokkeli.ISettings;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Role;
 import net.kokkeli.data.User;
@@ -25,16 +26,18 @@ public class TestUserService {
     
     private IUserDatabase mockDatabase;
     private ILogger mockLogger;
+    private ISettings mockSettings;
     
     private UserService userService;
     
     @Before
-    public void setup() throws NotFoundInDatabase, DatabaseException{
+    public void setup() throws NotFoundInDatabase, DatabaseException, ServiceException{
         mockDatabase = mock(IUserDatabase.class);
         mockLogger = mock(ILogger.class);
+        mockSettings = mock(ISettings.class);
         when(mockDatabase.get(USER_ID)).thenReturn(new User(USER_ID, USERNAME, USERROLE));
         
-        userService = new UserService(mockLogger, mockDatabase);
+        userService = new UserService(mockLogger, mockDatabase, mockSettings);
     }
     
     @Test
@@ -83,5 +86,23 @@ public class TestUserService {
         Collection<User> get = userService.get();
         
         Assert.assertEquals(users.size(), get.size());
+    }
+    
+    @Test
+    public void testUserServiceGetUsernamePasswordWrongPasswordThrowsException() throws DatabaseException, ServiceException{
+        User user = new User("jarmoke", Role.ADMIN);
+        user.setPasswordHash("wrong hash...");
+        
+        ArrayList<User> users = new ArrayList<User>();
+        users.add(user);
+        
+        when(mockDatabase.get()).thenReturn(users);
+        
+        try {
+            userService.get(user.getUserName(), "kokkeli");
+            Assert.fail("Exception should have been thrown.");
+        } catch (NotFoundInDatabase e) {
+            Assert.assertEquals("Wrong username or password.", e.getMessage());
+        }
     }
 }

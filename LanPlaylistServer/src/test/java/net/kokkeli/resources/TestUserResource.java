@@ -4,19 +4,14 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
 import junit.framework.Assert;
-import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Role;
 import net.kokkeli.data.User;
 import net.kokkeli.data.db.NotFoundInDatabase;
-import net.kokkeli.data.services.ISessionService;
 import net.kokkeli.data.services.IUserService;
 import net.kokkeli.data.services.ServiceException;
-import net.kokkeli.player.IPlayer;
 import net.kokkeli.resources.models.BaseModel;
-import net.kokkeli.server.ITemplateService;
 import net.kokkeli.server.RenderException;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -25,7 +20,7 @@ import com.sun.jersey.api.NotFoundException;
 
 import static org.mockito.Mockito.*;
 
-public class TestUserResource {
+public class TestUserResource extends ResourceTestsBase{
     private static long EXISTING_USER_ID = 54;
     private static long NONEXISTING_ID = -3;
     private static int RESPONSE_OK = 200;
@@ -33,48 +28,35 @@ public class TestUserResource {
     private static final String FORM_USERNAME = "username";
     private static final String FORM_ROLE = "role";
     
-    private ILogger mockLogger;
     private IUserService mockUserService;
-    private ITemplateService mockTemplateService;
-    private IPlayer mockPlayer;
-    private ISessionService mockSessionService;
     
     private User existing;
     
     private UsersResource userResource;
-    
-    @Before
-    public void setup() throws NotFoundInDatabase, ServiceException {
-        mockLogger = mock(ILogger.class);
+
+    public void before() throws NotFoundInDatabase, ServiceException {
         mockUserService = mock(IUserService.class);
-        mockTemplateService = mock(ITemplateService.class);
-        mockSessionService = mock(ISessionService.class);
-        mockPlayer = mock(IPlayer.class);
         
         existing = new User(EXISTING_USER_ID, "user", Role.NONE);
         
         when(mockUserService.get(EXISTING_USER_ID)).thenReturn(existing);
         when(mockUserService.get(NONEXISTING_ID)).thenThrow(new NotFoundInDatabase("User not found"));
         
-        userResource = new UsersResource(mockLogger, mockTemplateService, mockUserService, mockPlayer, mockSessionService);
+        userResource = new UsersResource(getLogger(), getTemplateService(), mockUserService, getPlayer(), getSessionService());
         
     }
     
     @Test
     public void testGetDetailsThrowsNotFoundException() throws RenderException, ServiceException{
-        try {
-            userResource.userDetails(null, NONEXISTING_ID);
-            Assert.fail("Getting nonexisting user shoudl throw exception.");
-        } catch (NotFoundException e) {
-            // This should happen.
-        }
+        userResource.userDetails(buildRequest(), NONEXISTING_ID);
+        verify(getSessionService(), times(1)).setError(null, "User not found.");
     }
     
     @Test
     public void testGetDetailsServiceExceptionIsThrownWhenTemplateCantBeProcessed() throws RenderException{
-        when(mockTemplateService.process(any(String.class), any(BaseModel.class))).thenThrow(new RenderException("Rendering failed"));
+        when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenThrow(new RenderException("Rendering failed"));
         try {
-            userResource.userDetails(null, EXISTING_USER_ID);
+            userResource.userDetails(buildRequest(), EXISTING_USER_ID);
             Assert.fail("Service exception should have been thrown.");
         } catch (ServiceException e) {
             // This should happen.
@@ -85,18 +67,18 @@ public class TestUserResource {
     public void testGetDetailsPutsTemplateAndOkInResponse() throws NotFoundException, ServiceException, RenderException {
         final String processedTemplate = "Jeeah";
         
-        when(mockTemplateService.process(any(String.class), any(BaseModel.class))).thenReturn(processedTemplate);
+        when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenReturn(processedTemplate);
         
-        Response r = userResource.userDetails(null, EXISTING_USER_ID);
+        Response r = userResource.userDetails(buildRequest(), EXISTING_USER_ID);
         Assert.assertEquals(processedTemplate, r.getEntity().toString());
         Assert.assertEquals(RESPONSE_OK, r.getStatus());
-        verify(mockTemplateService).process(anyString(), isA(BaseModel.class));
+        verify(getTemplateService()).process(anyString(), isA(BaseModel.class));
     }
     
     @Test
     public void testGetEditThrowsNotFoundException() throws ServiceException{
         try {
-            userResource.userEdit(null, NONEXISTING_ID);
+            userResource.userEdit(buildRequest(), NONEXISTING_ID);
             Assert.fail("Not found exception should have been thrown.");
         } catch (NotFoundException e) {
         }
@@ -104,9 +86,9 @@ public class TestUserResource {
     
     @Test
     public void testGetEditThrowsServiceExceptionWhenTemplateServiceFails() throws RenderException{
-        when(mockTemplateService.process(any(String.class), any(BaseModel.class))).thenThrow(new RenderException("Rendering failed"));
+        when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenThrow(new RenderException("Rendering failed"));
         try {
-            userResource.userEdit(null, EXISTING_USER_ID);
+            userResource.userEdit(buildRequest(), EXISTING_USER_ID);
             Assert.fail("Service exception should have been thrown.");
         } catch (ServiceException e) {
             // This should happen.
@@ -116,24 +98,24 @@ public class TestUserResource {
     @Test
     public void testGetEditPutsTemplateAndOkInResponso() throws RenderException, NotFoundException, ServiceException{
         final String processedTemplate = "Jeeah";
-        when(mockTemplateService.process(any(String.class), any(BaseModel.class))).thenReturn(processedTemplate);
+        when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenReturn(processedTemplate);
         
-        Response r = userResource.userEdit(null, EXISTING_USER_ID);
+        Response r = userResource.userEdit(buildRequest(), EXISTING_USER_ID);
         Assert.assertEquals(processedTemplate, r.getEntity().toString());
         Assert.assertEquals(RESPONSE_OK, r.getStatus());
-        verify(mockTemplateService).process(anyString(), isA(BaseModel.class));
+        verify(getTemplateService()).process(anyString(), isA(BaseModel.class));
     }
     
     @Test
     public void testCreatePostWithWrongUsernameReturnsError() throws RenderException, BadRequestException, ServiceException{
         ModelAnswer answer = new ModelAnswer();
-        when(mockTemplateService.process(any(String.class), any(BaseModel.class))).thenAnswer(answer);
+        when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(answer);
         
-        Response r = userResource.userCreate(null, createUserPost("", Role.ADMIN));
+        Response r = userResource.userCreate(buildRequest(), createUserPost("", Role.ADMIN));
         Assert.assertEquals("Username was invalid.", answer.getModel().getError());
         Assert.assertEquals(RESPONSE_OK, r.getStatus());
         
-        r = userResource.userCreate(null, createUserPost("<", Role.ADMIN));
+        r = userResource.userCreate(buildRequest(), createUserPost("<", Role.ADMIN));
         Assert.assertEquals("Username was invalid.", answer.getModel().getError());
         Assert.assertEquals(RESPONSE_OK, r.getStatus());
     }
@@ -141,9 +123,9 @@ public class TestUserResource {
     @Test
     public void testCreatePostWithCorrectUsernameSucceeds() throws RenderException, BadRequestException, ServiceException{
         ModelAnswer answer = new ModelAnswer();
-        when(mockTemplateService.process(any(String.class), any(BaseModel.class))).thenAnswer(answer);
+        when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(answer);
         
-        userResource.userCreate(null, createUserPost("fdas", Role.ADMIN));
+        userResource.userCreate(buildRequest(), createUserPost("fdas", Role.ADMIN));
         Assert.assertNull(answer.getModel().getError());
         Assert.assertEquals("User created.", answer.getModel().getInfo());
     }
