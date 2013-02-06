@@ -9,7 +9,7 @@ import net.kokkeli.resources.Field;
  *
  */
 public final class ModelUser extends ViewModel {
-    private final String username;
+    private String username;
     private final Role role;
     private final long id;
     
@@ -41,11 +41,27 @@ public final class ModelUser extends ViewModel {
     }
     
     /**
+     * Getter for role enum
+     * @return Role as enum.
+     */
+    public Role getRoleEnum(){
+        return role;
+    }
+    
+    /**
      * Getter for int 
      * @return Id of user
      */
     @Field
     public long getId(){
         return id;
+    }
+    
+    /**
+     * Setter for username
+     * @param username Username
+     */
+    public void setUsername(String username){
+        this.username = username;
     }
 }

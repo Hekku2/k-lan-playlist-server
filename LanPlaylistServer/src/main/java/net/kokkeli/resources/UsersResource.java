@@ -159,27 +159,22 @@ public class UsersResource extends BaseResource {
         BaseModel model = buildBaseModel(req);
         
         containsNeededFieldsForEdit(formParams);
-        User editedUser = createEditUser(formParams);
+        ModelUser editedUser = createEditUser(formParams);
         try {
             // Checks that user exists
             User user = userService.get(editedUser.getId());
             
-            if (userService.exists(editedUser.getUserName())){
-                ModelUser modelUser = new ModelUser(user.getId(), user.getUserName(), editedUser.getRole());
-                model.setModel(modelUser);
-                model.setError("Username already exists.");
-                return Response.ok(templates.process(USER_EDIT_TEMPLATE, model)).build();
+            if (userService.exists(editedUser.getUsername())){
+                return editPostErrorResponse(model, editedUser, "Username already exists.");
             }
             
-            if (!ValidationUtils.isValidUsername(editedUser.getUserName())){
-                ModelUser modelUser = new ModelUser(user.getId(), user.getUserName(), editedUser.getRole());
-                model.setModel(modelUser);
-                model.setError("Invalid username.");
-                return Response.ok(templates.process(USER_EDIT_TEMPLATE, model)).build();
+            if (!ValidationUtils.isValidUsername(editedUser.getUsername())){
+                editedUser.setUsername(user.getUserName());
+                return editPostErrorResponse(model, editedUser, "Invalid username.");
             }  
             
             //TODO Field validation
-            userService.update(new User(editedUser.getId(), editedUser.getUserName(), editedUser.getRole()));
+            userService.update(new User(editedUser.getId(), editedUser.getUsername(), editedUser.getRoleEnum()));
             sessions.setInfo(model.getCurrentSession().getAuthId(), "User edited.");
             return Response.seeOther(LanServer.getURI(String.format("users/%s", user.getId()))).build();
         } catch (NotFoundInDatabase e) {
@@ -225,15 +220,15 @@ public class UsersResource extends BaseResource {
             BaseModel model = buildBaseModel(req);
             
             containsNeededFieldsForCreate(formParams);
-            User user = createUser(formParams);
+            ModelUser user = createUser(formParams);
 
             //TODO Validation for user values.
-            if (!ValidationUtils.isValidUsername(user.getUserName())){
+            if (!ValidationUtils.isValidUsername(user.getUsername())){
                 model.setError("Username was invalid.");
                 return Response.ok(templates.process(USER_CREATE_TEMPLATE, model)).build();
             }
             
-            userService.add(user);
+            userService.add(new User(user.getUsername(),user.getRoleEnum()));
             model.setInfo("User created.");
             model.setModel(createModelUsers());
             log("User created.", 1);
@@ -292,7 +287,7 @@ public class UsersResource extends BaseResource {
      * @return Created ModelUser
      * @throws BadRequestException Thrown formParams contain illegal input.
      */
-    private User createEditUser(MultivaluedMap<String, String> formParams) throws BadRequestException{
+    private ModelUser createEditUser(MultivaluedMap<String, String> formParams) throws BadRequestException{
         long id;
         
         try {
@@ -310,7 +305,7 @@ public class UsersResource extends BaseResource {
             throw new BadRequestException("There was no such role.", e);
         }
         
-        return new User(id, username, role);
+        return new ModelUser(id, username, role);
     }
     
     /**
@@ -319,7 +314,7 @@ public class UsersResource extends BaseResource {
      * @return
      * @throws BadRequestException
      */
-    private User createUser(MultivaluedMap<String, String> formParams) throws BadRequestException{
+    private ModelUser createUser(MultivaluedMap<String, String> formParams) throws BadRequestException{
         String username = formParams.getFirst(FORM_USERNAME).trim();
         
         Role role;
@@ -329,6 +324,13 @@ public class UsersResource extends BaseResource {
             throw new BadRequestException("There was no such role.", e);
         }
         
-        return new User(username,role);
+        return new ModelUser(0, username,role);
+    }
+    
+    private Response editPostErrorResponse(BaseModel base, ModelUser user, String error) throws RenderException{
+        ModelUser modelUser = new ModelUser(user.getId(), user.getUsername(), user.getRoleEnum());
+        base.setModel(modelUser);
+        base.setError(error);
+        return Response.ok(templates.process(USER_EDIT_TEMPLATE, base)).build();
     }
 }
