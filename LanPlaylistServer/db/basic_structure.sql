@@ -1,7 +1,8 @@
 CREATE TABLE users(
     Id INTEGER NOT NULL PRIMARY KEY,
     UserName varchar(255) UNIQUE,
-    Role int 
+    Role int,
+    PasswordHash varchar(255)
 );
 
 CREATE TABLE tracks(

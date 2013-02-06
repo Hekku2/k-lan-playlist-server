@@ -10,6 +10,7 @@ public class User {
     private String userName;
     private long id;
     private Role role;
+    private String passwordHash;
     
     /**
      * Creates user with given username and role
@@ -100,6 +101,14 @@ public class User {
      * @return
      */
     public String getPasswordHash() {
-        return "mockHash";
+        return passwordHash;
+    }
+
+    /**
+     * Setter for password hash
+     * @param passwordHash Password hash
+     */
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
     }
 }

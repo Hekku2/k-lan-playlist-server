@@ -47,6 +47,8 @@ public class UsersTable {
                     }
 
                     user = new User(userId, userName, role);
+                    user.setPasswordHash(st.columnString(3));
+                    
                 }
             } finally {
                 st.dispose();
@@ -82,7 +84,10 @@ public class UsersTable {
                         throw new DatabaseException(String.format("Value in Role column was invalid. It was %s", roleId));
                     }
 
-                    users.add(new User(id, userName, role));
+                    User user = new User(id, userName, role);
+                    user.setPasswordHash(st.columnString(3));
+                    
+                    users.add(user);
                 }
             } finally {
                 st.dispose();

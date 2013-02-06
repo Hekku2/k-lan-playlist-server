@@ -1,14 +1,16 @@
 package net.kokkeli.data.services;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 
+import net.kokkeli.ISettings;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.User;
 import net.kokkeli.data.db.DatabaseException;
 import net.kokkeli.data.db.IUserDatabase;
 import net.kokkeli.data.db.NotFoundInDatabase;
-import net.kokkeli.resources.authentication.AuthenticationUtils;
-
 import com.google.inject.Inject;
 
 /**
@@ -17,17 +19,29 @@ import com.google.inject.Inject;
  *
  */
 public class UserService implements IUserService {
-    private ILogger logger;
-    private IUserDatabase userDatabase;
+    private final ILogger logger;
+    private final IUserDatabase userDatabase;
+    private final MessageDigest hasher;
+    
+    private final String passwordSalt;
     
     /**
      * Creates user service with given logger
      * @param logger Logger.
+     * @throws ServiceException Thrown if service can't be created.
      */
     @Inject
-    public UserService(ILogger logger, IUserDatabase database){
+    public UserService(ILogger logger, IUserDatabase database, ISettings settings) throws ServiceException{
         this.logger = logger;
         this.userDatabase = database;
+        
+        passwordSalt = settings.getPasswordSalt();
+        
+        try {
+            hasher = MessageDigest.getInstance("SHA");
+        } catch (NoSuchAlgorithmException e) {
+            throw new ServiceException("Service can't be created: " + e, e);
+        }
     }
     
     @Override
@@ -117,9 +131,26 @@ public class UserService implements IUserService {
     @Override
     public User get(String username, String password) throws NotFoundInDatabase, ServiceException {
         User user = get(username);
-        if (AuthenticationUtils.matches(password, user.getPasswordHash())){
+        if (matches(password, user.getPasswordHash())){
             return user;
         }
         throw new NotFoundInDatabase("Wrong username or password.");
+    }
+    
+    /**
+     * Checks if password matches hash
+     * @param password Password
+     * @param passwordHash Password hash
+     * @return True, if password matches hash
+     */
+    private boolean matches(String password, String passwordHash) {
+        String combined = password + passwordSalt;
+        hasher.update(combined.getBytes(), 0, combined.length());
+        String hash = new BigInteger(1,hasher.digest()).toString(16);
+        
+        logger.log(password + passwordSalt, 3);
+        logger.log("Calculated: " + hash, 3);
+        logger.log("Database  : " + passwordHash, 3);
+        return hash.equals(passwordHash);
     }
 }

@@ -24,4 +24,10 @@ public interface ISettings {
      * @return Locaiton of tracks
      */
     String getTracksFolder();
+    
+    /**
+     * Returns password salt
+     * @return Salt
+     */
+    String getPasswordSalt();
 }

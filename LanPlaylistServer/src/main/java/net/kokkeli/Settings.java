@@ -38,4 +38,9 @@ public class Settings implements ISettings {
     public String getTracksFolder() {
         return "tracks";
     }
+
+    @Override
+    public String getPasswordSalt() {
+        return "hgdfskh4341%";
+    }
 }

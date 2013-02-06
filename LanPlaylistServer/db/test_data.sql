@@ -1,5 +1,5 @@
-INSERT INTO users (UserName, Role) VALUES ('admin',2);
-INSERT INTO users (UserName, Role) VALUES ('user',1);
+INSERT INTO users (UserName, Role, PasswordHash) VALUES ('admin', 2, '4c971b7a598e1c1fb09e6fe1750c6fd3ed1e73ff');
+INSERT INTO users (UserName, Role, PasswordHash) VALUES ('user', 1, '4c971b7a598e1c1fb09e6fe1750c6fd3ed1e73ff');
 
 -- Tracks
 INSERT INTO tracks (Track, Artist, Location) VALUES ('Seitan is guud', 'Lucifer Virtanen', 'D:\Music\song.ogg');

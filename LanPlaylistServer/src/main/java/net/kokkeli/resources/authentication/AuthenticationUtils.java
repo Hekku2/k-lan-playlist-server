@@ -1,7 +1,6 @@
 package net.kokkeli.resources.authentication;
 
 import java.lang.annotation.Annotation;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
@@ -64,17 +63,6 @@ public final class AuthenticationUtils {
             }
         }
         throw new AuthenticationException("HttpServletRequest not found from parameters.");
-    }
-    
-    /**
-     * Checks if password matches hash
-     * @param password Password
-     * @param passwordHash Password hash
-     * @return True, if password matches hash
-     */
-    public static boolean matches(String password, String passwordHash) {
-        //TODO Proper implementation
-        return true;
     }
     
     /**
