@@ -30,6 +30,7 @@ import net.kokkeli.resources.models.ModelUser;
 import net.kokkeli.resources.models.ModelUsers;
 import net.kokkeli.server.ITemplateService;
 import net.kokkeli.server.LanServer;
+import net.kokkeli.server.NotAuthenticatedException;
 import net.kokkeli.server.RenderException;
 
 /**
@@ -66,19 +67,22 @@ public class UsersResource extends BaseResource {
      * Shows list of users
      * @return HTML-page for user list
      * @throws ServiceException 
+     * @throws NotAuthenticatedException Thrown if there is problem with user session
      * @throws RenderException Thrown if there is problem with rendering template
      */
     @GET
     @Produces("text/html")
     @Access(Role.ADMIN)
-    public Response userList(@Context HttpServletRequest req) throws ServiceException {
+    public Response userList(@Context HttpServletRequest req) throws NotAuthenticatedException {
         BaseModel model = buildBaseModel(req);
 
-        model.setModel(createModelUsers());
         try {
+            model.setModel(createModelUsers());
             return Response.ok(templates.process(USERS_TEMPLATE, model)).build();
         } catch (RenderException e) {
-            throw new ServiceException("There was problem with rendering the template.", e);
+            return handleRenderingError(model);
+        } catch (ServiceException e) {
+            return handleServiceException(model);
         }
     }
     
@@ -89,12 +93,13 @@ public class UsersResource extends BaseResource {
      * @return Response
      * @throws NotFoundException Thrown if id was not found.
      * @throws ServiceException Thrown if there was problem with services.
+     * @throws NotAuthenticatedException Thrown if there is problem with user session
      */
     @GET
     @Produces("text/html")
     @Access(Role.ADMIN)
     @Path("{id: [0-9]*}")
-    public Response userDetails(@Context HttpServletRequest req, @PathParam("id") long id) throws NotFoundException, ServiceException{
+    public Response userDetails(@Context HttpServletRequest req, @PathParam("id") long id) throws NotAuthenticatedException{
         BaseModel model = buildBaseModel(req);
         
         try {
@@ -105,10 +110,12 @@ public class UsersResource extends BaseResource {
             
             return Response.ok(templates.process(USER_DETAILS_TEMPLATE, model)).build();
         } catch (RenderException e) {
-            throw new ServiceException("There was problem with rendering the template.", e);
+            return handleRenderingError(model);
         } catch (NotFoundInDatabase e){
             sessions.setError(model.getCurrentSession().getAuthId(), "User not found.");
             return Response.seeOther(LanServer.getURI("users")).build();
+        } catch (ServiceException e) {
+            return handleServiceException(model);
         }
     }
     
@@ -119,12 +126,13 @@ public class UsersResource extends BaseResource {
      * @return Response
      * @throws NotFoundException Thrown if id was not found.
      * @throws ServiceException Thrown if there was problem with services.
+     * @throws NotAuthenticatedException Thrown is user session is invalid
      */
     @GET
     @Produces("text/html")
     @Access(Role.ADMIN)
     @Path("/edit/{id: [0-9]*}")
-    public Response userEdit(@Context HttpServletRequest req, @PathParam("id") long id) throws ServiceException{
+    public Response userEdit(@Context HttpServletRequest req, @PathParam("id") long id) throws NotAuthenticatedException{
         BaseModel model = buildBaseModel(req);
         
         try {
@@ -134,10 +142,12 @@ public class UsersResource extends BaseResource {
             
             return Response.ok(templates.process(USER_EDIT_TEMPLATE, model)).build();
         } catch (RenderException e) {
-            throw new ServiceException("There was problem with rendering the template.", e);
+            return handleRenderingError(model);
         } catch (NotFoundInDatabase e) {
             sessions.setError(model.getCurrentSession().getAuthId(), "User not found.");
             return Response.seeOther(LanServer.getURI("users")).build();
+        } catch (ServiceException e) {
+            return handleServiceException(model);
         }
     }
     
@@ -150,12 +160,13 @@ public class UsersResource extends BaseResource {
      * @throws ServiceException Thrown if there was problem with services.
      * @throws BadRequestException Thrown if request is bad.
      * @throws RenderException 
+     * @throws NotAuthenticatedException Thrown is user session is not valid.
      */
     @POST
     @Produces("text/html")
     @Access(Role.ADMIN)
     @Path("/edit/{id: [0-9]*}")
-    public Response userEdit(@Context HttpServletRequest req, MultivaluedMap<String, String> formParams) throws ServiceException, BadRequestException, RenderException{
+    public Response userEdit(@Context HttpServletRequest req, MultivaluedMap<String, String> formParams) throws BadRequestException, RenderException, NotAuthenticatedException{
         BaseModel model = buildBaseModel(req);
         
         containsNeededFieldsForEdit(formParams);
@@ -180,6 +191,8 @@ public class UsersResource extends BaseResource {
         } catch (NotFoundInDatabase e) {
             sessions.setError(model.getCurrentSession().getAuthId(), "User not found.");
             return Response.seeOther(LanServer.getURI("users")).build();
+        } catch (ServiceException e) {
+            return handleServiceException(model);
         }
     }
 
@@ -188,18 +201,19 @@ public class UsersResource extends BaseResource {
      * @param req Request
      * @return Response
      * @throws ServiceException Thrown if rendering fails.
+     * @throws NotAuthenticatedException 
      */
     @GET
     @Produces("text/html")
     @Access(Role.ADMIN)
     @Path("/create/")
-    public Response userCreate(@Context HttpServletRequest req) throws ServiceException{
+    public Response userCreate(@Context HttpServletRequest req) throws NotAuthenticatedException{
         BaseModel model = buildBaseModel(req);
         
         try {
             return Response.ok(templates.process(USER_CREATE_TEMPLATE, model)).build();
         } catch (RenderException e) {
-            throw new ServiceException("Template processing failed.", e);
+            return handleRenderingError(model);
         }
     }
     
@@ -210,15 +224,16 @@ public class UsersResource extends BaseResource {
      * @return Response
      * @throws ServiceException Thrown if rendering fails.
      * @throws BadRequestException Thrown if request contained invalid values.
+     * @throws NotAuthenticatedException 
      */
     @POST
     @Produces("text/html")
     @Access(Role.ADMIN)
     @Path("/create/")
-    public Response userCreate(@Context HttpServletRequest req, MultivaluedMap<String, String> formParams) throws BadRequestException, ServiceException{
+    public Response userCreate(@Context HttpServletRequest req, MultivaluedMap<String, String> formParams) throws BadRequestException, NotAuthenticatedException{
+        BaseModel model = buildBaseModel(req);
+        
         try {
-            BaseModel model = buildBaseModel(req);
-            
             containsNeededFieldsForCreate(formParams);
             ModelUser user = createUser(formParams);
 
@@ -237,7 +252,9 @@ public class UsersResource extends BaseResource {
             //TODO Save info to session.
             return Response.ok(templates.process(USERS_TEMPLATE, model)).location(LanServer.getURI("users")).status(Status.SEE_OTHER).build();
         } catch (RenderException e) {
-            throw new ServiceException("Rendering failed.");
+            return handleRenderingError(model);
+        } catch (ServiceException e){
+            return handleServiceException(model);
         }
 
     }
@@ -327,10 +344,38 @@ public class UsersResource extends BaseResource {
         return new ModelUser(0, username,role);
     }
     
+    /**
+     * Creates edit post error response. Creates model user and fills fields from user.
+     * @param base Basemodel, which is used to render.
+     * @param user User
+     * @param error Error message that is shown
+     * @return Response
+     * @throws RenderException Thrown is there is problem with rendering.
+     */
     private Response editPostErrorResponse(BaseModel base, ModelUser user, String error) throws RenderException{
         ModelUser modelUser = new ModelUser(user.getId(), user.getUsername(), user.getRoleEnum());
         base.setModel(modelUser);
         base.setError(error);
         return Response.ok(templates.process(USER_EDIT_TEMPLATE, base)).build();
+    }
+    
+    /**
+     * Creates response for rendering errors. Redirects user to main page.
+     * @param model BaseModel
+     * @return Response
+     */
+    private Response handleRenderingError(BaseModel model){
+        sessions.setError(model.getCurrentSession().getAuthId(), "There was problem with rendering the template.");
+        return Response.seeOther(LanServer.getURI("")).build();
+    }
+    
+    /**
+     * Creates response for service exceptions. Redirects user to main page.
+     * @param model Basemodel
+     * @return Response
+     */
+    private Response handleServiceException(BaseModel model){
+        sessions.setError(model.getCurrentSession().getAuthId(), "Something went wrong with service.");
+        return Response.seeOther(LanServer.getURI("")).build();
     }
 }

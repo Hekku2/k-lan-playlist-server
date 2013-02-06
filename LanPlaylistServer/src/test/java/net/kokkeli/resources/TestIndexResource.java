@@ -15,6 +15,7 @@ import net.kokkeli.data.services.IPlaylistService;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.player.NotPlaylistPlayingException;
 import net.kokkeli.resources.models.BaseModel;
+import net.kokkeli.server.NotAuthenticatedException;
 import net.kokkeli.server.RenderException;
 
 import org.junit.Test;
@@ -35,7 +36,7 @@ public class TestIndexResource extends ResourceTestsBase{
     }
     
     @Test
-    public void testIndexthrowsExceptionWhenPlaylistIsNotFound() throws NotFoundInDatabase, ServiceException{
+    public void testIndexthrowsExceptionWhenPlaylistIsNotFound() throws NotFoundInDatabase, ServiceException, NotAuthenticatedException{
         when(mockPlaylistService.getPlaylist(any(Long.class))).thenThrow(new NotFoundInDatabase("Not found."));
         
         try {
@@ -47,7 +48,7 @@ public class TestIndexResource extends ResourceTestsBase{
     }
     
     @Test
-    public void testIndexIsStillRenderedWhenThereIsNoPlaylistPlaying() throws NotPlaylistPlayingException, ServiceException, RenderException{
+    public void testIndexIsStillRenderedWhenThereIsNoPlaylistPlaying() throws NotPlaylistPlayingException, ServiceException, RenderException, NotAuthenticatedException{
         final String processedTemplate = "Jeeah";
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenReturn(processedTemplate);
         when(getPlayer().getCurrentPlaylistId()).thenThrow(new NotPlaylistPlayingException("No playlist playing."));
@@ -59,7 +60,7 @@ public class TestIndexResource extends ResourceTestsBase{
     }
     
     @Test
-    public void  testIndexThrowsServiceExceptionWhenPlaylistServiceThrowsServiceExeption() throws ServiceException, NotFoundInDatabase{
+    public void  testIndexThrowsServiceExceptionWhenPlaylistServiceThrowsServiceExeption() throws ServiceException, NotFoundInDatabase, NotAuthenticatedException{
         final String message = "Explosion";
         
         when(mockPlaylistService.getPlaylist(any(Long.class))).thenThrow(new ServiceException(message));

@@ -38,6 +38,7 @@ import net.kokkeli.resources.models.BaseModel;
 import net.kokkeli.resources.models.ModelPlaylist;
 import net.kokkeli.resources.models.ModelPlaylists;
 import net.kokkeli.server.ITemplateService;
+import net.kokkeli.server.NotAuthenticatedException;
 import net.kokkeli.server.RenderException;
 
 /**
@@ -71,12 +72,13 @@ public class PlaylistsResource extends BaseResource {
      * Shows list of users
      * @return HTML-page for user list
      * @throws ServiceException Thrown if there was a problem with service.
+     * @throws NotAuthenticatedException Thrown if there is problem with session.
      * @throws RenderException Thrown if there is problem with rendering template
      */
     @GET
     @Produces("text/html")
     @Access(Role.ADMIN)
-    public Response playlists(@Context HttpServletRequest req) throws ServiceException {
+    public Response playlists(@Context HttpServletRequest req) throws ServiceException, NotAuthenticatedException {
         BaseModel model = buildBaseModel(req);
 
         Collection<PlayList> lists = playlistService.getIdNames();
@@ -103,7 +105,7 @@ public class PlaylistsResource extends BaseResource {
     @Produces("text/html")
     @Access(Role.USER)
     @Path("/add/{playlistId: [0-9]*}")
-    public Response add(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId) throws ServiceException {
+    public Response add(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId) throws ServiceException, NotAuthenticatedException {
         BaseModel model = buildBaseModel(req);
         
         try {
@@ -124,6 +126,7 @@ public class PlaylistsResource extends BaseResource {
      * @return Redirect to playlist detais
      * @throws ServiceException Thrown if there is  problem with service
      * @throws NotFoundInDatabase Thrown if there is no such playlist.
+     * @throws NotAuthenticatedException Thrown if there is problem with session.
      */
     @POST
     @Produces("text/html")
@@ -135,7 +138,7 @@ public class PlaylistsResource extends BaseResource {
             @FormDataParam("artist") String artist,
             @FormDataParam("track") String track,
             @FormDataParam("file") InputStream uploadedInputStream,
-            @FormDataParam("file") FormDataContentDisposition fileDetail) throws ServiceException, NotFoundInDatabase {
+            @FormDataParam("file") FormDataContentDisposition fileDetail) throws ServiceException, NotFoundInDatabase, NotAuthenticatedException {
         BaseModel model = buildBaseModel(req);
         
         try {

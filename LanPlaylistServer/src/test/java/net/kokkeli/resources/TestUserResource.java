@@ -10,6 +10,7 @@ import net.kokkeli.data.db.NotFoundInDatabase;
 import net.kokkeli.data.services.IUserService;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.resources.models.BaseModel;
+import net.kokkeli.server.NotAuthenticatedException;
 import net.kokkeli.server.RenderException;
 
 import org.junit.Test;
@@ -46,24 +47,18 @@ public class TestUserResource extends ResourceTestsBase{
     
     // USER DETAILS GET
     @Test
-    public void testGetDetailsRedirectsWhenUserIsNotFound() throws RenderException, ServiceException{
-        userResource.userDetails(buildRequest(), NONEXISTING_ID);
-        verify(getSessionService(), times(1)).setError(null, "User not found.");
+    public void testGetDetailsRedirectsWhenUserIsNotFound() throws RenderException, ServiceException, NotAuthenticatedException{
+        assertRedirectAndError(userResource.userDetails(buildRequest(), NONEXISTING_ID), "User not found.");
     }
     
     @Test
-    public void testGetDetailsServiceExceptionIsThrownWhenTemplateCantBeProcessed() throws RenderException{
+    public void testGetDetailsServiceExceptionIsThrownWhenTemplateCantBeProcessed() throws RenderException, NotFoundException, NotAuthenticatedException{
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenThrow(new RenderException("Rendering failed"));
-        try {
-            userResource.userDetails(buildRequest(), EXISTING_USER_ID);
-            Assert.fail("Service exception should have been thrown.");
-        } catch (ServiceException e) {
-            // This should happen.
-        }
+        assertRedirectAndError(userResource.userDetails(buildRequest(), EXISTING_USER_ID), "There was problem with rendering the template.");
     }
     
     @Test
-    public void testGetDetailsPutsTemplateAndOkInResponse() throws NotFoundException, ServiceException, RenderException {
+    public void testGetDetailsPutsTemplateAndOkInResponse() throws NotFoundException, ServiceException, RenderException, NotAuthenticatedException {
         final String processedTemplate = "Jeeah";
         
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenReturn(processedTemplate);
@@ -76,25 +71,18 @@ public class TestUserResource extends ResourceTestsBase{
     
     //EDIT GET
     @Test
-    public void testGetEditThrowsNotFoundException() throws ServiceException{
-        Response r = userResource.userEdit(buildRequest(), NONEXISTING_ID);
-        Assert.assertEquals(REDIRECT, r.getStatus());
-        assertSessionError("User not found.");
+    public void testGetEditThrowsNotFoundException() throws ServiceException, NotAuthenticatedException{
+        assertRedirectAndError(userResource.userEdit(buildRequest(), NONEXISTING_ID), "User not found.");
     }
     
     @Test
-    public void testGetEditThrowsServiceExceptionWhenTemplateServiceFails() throws RenderException{
+    public void testGetEditThrowsServiceExceptionWhenTemplateServiceFails() throws RenderException, NotAuthenticatedException{
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenThrow(new RenderException("Rendering failed"));
-        try {
-            userResource.userEdit(buildRequest(), EXISTING_USER_ID);
-            Assert.fail("Service exception should have been thrown.");
-        } catch (ServiceException e) {
-            // This should happen.
-        }
+        assertRedirectAndError(userResource.userEdit(buildRequest(), EXISTING_USER_ID), "There was problem with rendering the template.");
     }
     
     @Test
-    public void testGetEditPutsTemplateAndOkInResponso() throws RenderException, NotFoundException, ServiceException{
+    public void testGetEditPutsTemplateAndOkInResponso() throws RenderException, NotFoundException, ServiceException, NotAuthenticatedException{
         final String processedTemplate = "Jeeah";
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenReturn(processedTemplate);
         
@@ -106,7 +94,7 @@ public class TestUserResource extends ResourceTestsBase{
     
     //EDIT POST
     @Test
-    public void testPostEditUpdatesUser() throws ServiceException, BadRequestException, RenderException{
+    public void testPostEditUpdatesUser() throws ServiceException, BadRequestException, RenderException, NotAuthenticatedException{
         final String newUsername = "editedUser";
         final Role newRole = Role.ADMIN;
         
@@ -115,7 +103,7 @@ public class TestUserResource extends ResourceTestsBase{
     }
     
     @Test
-    public void testPostEditWithInvalidUsernameThrowsBadRequest() throws ServiceException, RenderException, BadRequestException{
+    public void testPostEditWithInvalidUsernameThrowsBadRequest() throws ServiceException, RenderException, BadRequestException, NotAuthenticatedException{
         final String newUsername = "editedUser<";
         final Role newRole = Role.ADMIN;
         ModelAnswer answer = new ModelAnswer();
@@ -127,7 +115,7 @@ public class TestUserResource extends ResourceTestsBase{
     }
     
     @Test
-    public void testPostEditWithExistingUsernameReturnsError() throws ServiceException, RenderException, BadRequestException{
+    public void testPostEditWithExistingUsernameReturnsError() throws ServiceException, RenderException, BadRequestException, NotAuthenticatedException{
         final String existing = "existing";
         final Role newRole = Role.ADMIN;
         
@@ -142,7 +130,7 @@ public class TestUserResource extends ResourceTestsBase{
     
     //CREATE POST
     @Test
-    public void testCreatePostWithWrongUsernameReturnsError() throws RenderException, BadRequestException, ServiceException{
+    public void testCreatePostWithWrongUsernameReturnsError() throws RenderException, BadRequestException, ServiceException, NotAuthenticatedException{
         ModelAnswer answer = new ModelAnswer();
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(answer);
         
@@ -156,7 +144,7 @@ public class TestUserResource extends ResourceTestsBase{
     }
     
     @Test
-    public void testCreatePostWithCorrectUsernameSucceeds() throws RenderException, BadRequestException, ServiceException{
+    public void testCreatePostWithCorrectUsernameSucceeds() throws RenderException, BadRequestException, ServiceException, NotAuthenticatedException{
         ModelAnswer answer = new ModelAnswer();
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(answer);
         
@@ -196,6 +184,16 @@ public class TestUserResource extends ResourceTestsBase{
         when(map.getFirst(FORM_ID)).thenReturn(id + "");
         
         return map;
+    }
+    
+    /**
+     * Asserts that Response is redirect and error is correct.
+     * @param response Response
+     * @param error Error
+     */
+    private void assertRedirectAndError(Response response, String error){
+        assertSessionError(error);
+        Assert.assertEquals(REDIRECT, response.getStatus());
     }
     
     /**

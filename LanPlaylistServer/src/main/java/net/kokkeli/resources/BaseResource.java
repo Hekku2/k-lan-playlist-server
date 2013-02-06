@@ -6,12 +6,12 @@ import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Session;
 import net.kokkeli.data.db.NotFoundInDatabase;
 import net.kokkeli.data.services.ISessionService;
-import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.player.IPlayer;
 import net.kokkeli.resources.authentication.AuthenticationCookieNotFound;
 import net.kokkeli.resources.authentication.AuthenticationUtils;
 import net.kokkeli.resources.models.BaseModel;
 import net.kokkeli.server.ITemplateService;
+import net.kokkeli.server.NotAuthenticatedException;
 
 /**
  * Abstract class for basic resource
@@ -50,9 +50,9 @@ public abstract class BaseResource {
      * This should never happen, because authentication checking should be used before this.
      * @param req Request
      * @return Base model
-     * @throws ServiceException Thrown is user can't be extracted from request.
+     * @throws NotAuthenticatedException Thrown is authentication is invalid for some reason
      */
-    protected final BaseModel buildBaseModel(HttpServletRequest req) throws ServiceException{
+    protected final BaseModel buildBaseModel(HttpServletRequest req) throws NotAuthenticatedException{
         BaseModel model = new BaseModel();
         model.setNowPlaying(player.getTitle());
         
@@ -66,9 +66,9 @@ public abstract class BaseResource {
             sessions.clearInfo(session.getAuthId());
             
         } catch (AuthenticationCookieNotFound e) {
-            throw new ServiceException("There was a problem with authentication.", e);
+            throw new NotAuthenticatedException("There was a problem with authentication.", e);
         } catch (NotFoundInDatabase e) {
-            throw new ServiceException("There was a problem with authentication.", e);
+            throw new NotAuthenticatedException("There was a problem with authentication.", e);
         }
         
         return model;

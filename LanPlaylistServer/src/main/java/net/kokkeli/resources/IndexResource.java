@@ -23,6 +23,7 @@ import net.kokkeli.resources.models.BaseModel;
 import net.kokkeli.resources.models.ModelPlaylist;
 import net.kokkeli.resources.models.ModelPlaylistItem;
 import net.kokkeli.server.ITemplateService;
+import net.kokkeli.server.NotAuthenticatedException;
 import net.kokkeli.server.RenderException;
 
 /**
@@ -56,11 +57,12 @@ public class IndexResource extends BaseResource {
      * Shows index page for user
      * @return HTML-page, main page
      * @throws ServiceException Thrown when there is problem with rendering.
+     * @throws NotAuthenticatedException Thrown if there is problem with session.
      */
     @GET
     @Produces("text/html")
     @Access(Role.USER)
-    public Response index(@Context HttpServletRequest req) throws ServiceException {
+    public Response index(@Context HttpServletRequest req) throws ServiceException, NotAuthenticatedException {
         try {
             
             BaseModel base = buildBaseModel(req);
