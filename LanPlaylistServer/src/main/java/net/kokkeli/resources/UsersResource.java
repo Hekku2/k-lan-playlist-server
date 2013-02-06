@@ -124,7 +124,7 @@ public class UsersResource extends BaseResource {
     @Produces("text/html")
     @Access(Role.ADMIN)
     @Path("/edit/{id: [0-9]*}")
-    public Response userEdit(@Context HttpServletRequest req, @PathParam("id") long id) throws NotFoundException, ServiceException{
+    public Response userEdit(@Context HttpServletRequest req, @PathParam("id") long id) throws ServiceException{
         BaseModel model = buildBaseModel(req);
         
         try {
@@ -137,7 +137,8 @@ public class UsersResource extends BaseResource {
         } catch (RenderException e) {
             throw new ServiceException("There was problem with rendering the template.", e);
         } catch (NotFoundInDatabase e) {
-            throw new NotFoundException("User was not found.");
+            sessions.setError(model.getCurrentSession().getAuthId(), "User not found.");
+            return Response.seeOther(LanServer.getURI("users")).build();
         }
     }
     
@@ -154,7 +155,7 @@ public class UsersResource extends BaseResource {
     @Produces("text/html")
     @Access(Role.ADMIN)
     @Path("/edit/{id: [0-9]*}")
-    public Response userEdit(@Context HttpServletRequest req, MultivaluedMap<String, String> formParams) throws NotFoundException, ServiceException, BadRequestException{
+    public Response userEdit(@Context HttpServletRequest req, MultivaluedMap<String, String> formParams) throws ServiceException, BadRequestException{
         containsNeededFieldsForEdit(formParams);
         User editedUser = createEditUser(formParams);
         try {
@@ -169,7 +170,9 @@ public class UsersResource extends BaseResource {
             
             return Response.seeOther(LanServer.getURI(String.format("users/%s", user.getId()))).build();
         } catch (NotFoundInDatabase e) {
-            throw new NotFoundException("User not found!");
+            BaseModel model = buildBaseModel(req);
+            sessions.setError(model.getCurrentSession().getAuthId(), "User not found.");
+            return Response.seeOther(LanServer.getURI("users")).build();
         }
     }
 

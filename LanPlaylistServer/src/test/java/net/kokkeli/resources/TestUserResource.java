@@ -22,9 +22,7 @@ import static org.mockito.Mockito.*;
 
 public class TestUserResource extends ResourceTestsBase{
     private static long EXISTING_USER_ID = 54;
-    private static long NONEXISTING_ID = -3;
-    private static int RESPONSE_OK = 200;
-    
+    private static long NONEXISTING_ID = -3;    
     private static final String FORM_USERNAME = "username";
     private static final String FORM_ROLE = "role";
     
@@ -43,11 +41,10 @@ public class TestUserResource extends ResourceTestsBase{
         when(mockUserService.get(NONEXISTING_ID)).thenThrow(new NotFoundInDatabase("User not found"));
         
         userResource = new UsersResource(getLogger(), getTemplateService(), mockUserService, getPlayer(), getSessionService());
-        
     }
     
     @Test
-    public void testGetDetailsThrowsNotFoundException() throws RenderException, ServiceException{
+    public void testGetDetailsRedirectsWhenUserIsNotFound() throws RenderException, ServiceException{
         userResource.userDetails(buildRequest(), NONEXISTING_ID);
         verify(getSessionService(), times(1)).setError(null, "User not found.");
     }
@@ -77,11 +74,9 @@ public class TestUserResource extends ResourceTestsBase{
     
     @Test
     public void testGetEditThrowsNotFoundException() throws ServiceException{
-        try {
-            userResource.userEdit(buildRequest(), NONEXISTING_ID);
-            Assert.fail("Not found exception should have been thrown.");
-        } catch (NotFoundException e) {
-        }
+        Response r = userResource.userEdit(buildRequest(), NONEXISTING_ID);
+        Assert.assertEquals(REDIRECT, r.getStatus());
+        verify(getSessionService(), times(1)).setError(null, "User not found.");
     }
     
     @Test

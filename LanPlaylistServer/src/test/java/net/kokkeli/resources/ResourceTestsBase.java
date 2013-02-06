@@ -18,6 +18,9 @@ import net.kokkeli.server.ITemplateService;
 import org.junit.Before;
 
 public abstract class ResourceTestsBase {
+    protected static final int RESPONSE_OK = 200;
+    protected static final int REDIRECT = 303;
+    
     private ILogger mockLogger;
     private ITemplateService mockTemplateService;
     private IPlayer mockPlayer;
