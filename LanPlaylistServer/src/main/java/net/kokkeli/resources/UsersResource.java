@@ -171,9 +171,11 @@ public class UsersResource extends BaseResource {
                 return Response.ok(templates.process(USER_EDIT_TEMPLATE, model)).build();
             }
             
-            // This should be validated clientside, so bad request is thrown.
             if (!ValidationUtils.isValidUsername(editedUser.getUserName())){
-                throw new BadRequestException("Username was invalid.");
+                ModelUser modelUser = new ModelUser(user.getId(), user.getUserName(), editedUser.getRole());
+                model.setModel(modelUser);
+                model.setError("Invalid username.");
+                return Response.ok(templates.process(USER_EDIT_TEMPLATE, model)).build();
             }  
             
             //TODO Field validation

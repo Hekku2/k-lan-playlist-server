@@ -115,16 +115,15 @@ public class TestUserResource extends ResourceTestsBase{
     }
     
     @Test
-    public void testPostEditWithInvalidUsernameThrowsBadRequest() throws ServiceException, RenderException{
+    public void testPostEditWithInvalidUsernameThrowsBadRequest() throws ServiceException, RenderException, BadRequestException{
         final String newUsername = "editedUser<";
         final Role newRole = Role.ADMIN;
+        ModelAnswer answer = new ModelAnswer();
+        when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(answer);
         
-        try {
-            userResource.userEdit(buildRequest(), editUserPost(EXISTING_USER_ID, newUsername, newRole));
-            Assert.fail("There should have been error.");
-        } catch (BadRequestException e) {
-            Assert.assertEquals("Username was invalid.", e.getMessage());
-        }
+        Response r = userResource.userEdit(buildRequest(), editUserPost(EXISTING_USER_ID, newUsername, newRole));
+        Assert.assertEquals("Invalid username.", answer.getModel().getError());
+        Assert.assertEquals(RESPONSE_OK, r.getStatus());
     }
     
     @Test
@@ -136,8 +135,9 @@ public class TestUserResource extends ResourceTestsBase{
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(answer);
         when(mockUserService.exists(any(String.class))).thenReturn(true);
         
-        userResource.userEdit(buildRequest(), editUserPost(EXISTING_USER_ID, existing, newRole));
+        Response r = userResource.userEdit(buildRequest(), editUserPost(EXISTING_USER_ID, existing, newRole));
         Assert.assertEquals("Username already exists.", answer.getModel().getError());
+        Assert.assertEquals(RESPONSE_OK, r.getStatus());
     }
     
     //CREATE POST
