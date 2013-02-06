@@ -147,10 +147,6 @@ public class UserService implements IUserService {
         String combined = password + passwordSalt;
         hasher.update(combined.getBytes(), 0, combined.length());
         String hash = new BigInteger(1,hasher.digest()).toString(16);
-        
-        logger.log(password + passwordSalt, 3);
-        logger.log("Calculated: " + hash, 3);
-        logger.log("Database  : " + passwordHash, 3);
         return hash.equals(passwordHash);
     }
 }
