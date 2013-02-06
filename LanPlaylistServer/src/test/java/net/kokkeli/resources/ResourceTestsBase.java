@@ -2,6 +2,8 @@ package net.kokkeli.resources;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import javax.servlet.http.Cookie;
@@ -45,14 +47,14 @@ public abstract class ResourceTestsBase {
         when(req.getCookies()).thenReturn(buildAuthenticationCookies());
         
         return req;
-        
     }
     
-    private Cookie[] buildAuthenticationCookies(){
-        Cookie[] cookies = new Cookie[1];
-        cookies[0] = new Cookie("auth", "");
-        
-        return cookies;
+    public void assertSessionError(String error){
+        verify(getSessionService(), times(1)).setError(null, error);
+    }
+    
+    public void assertSessionInfo(String info){
+        verify(getSessionService(), times(1)).setInfo(null, info);
     }
     
     public abstract void before() throws Exception;
@@ -71,5 +73,12 @@ public abstract class ResourceTestsBase {
     
     public ISessionService getSessionService(){
         return mockSessionService;
+    }
+    
+    private Cookie[] buildAuthenticationCookies(){
+        Cookie[] cookies = new Cookie[1];
+        cookies[0] = new Cookie("auth", "");
+        
+        return cookies;
     }
 }

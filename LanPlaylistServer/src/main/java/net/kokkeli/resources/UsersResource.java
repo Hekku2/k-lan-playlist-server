@@ -130,7 +130,6 @@ public class UsersResource extends BaseResource {
         try {
             User user = userService.get(id);
             ModelUser modelUser = new ModelUser(user.getId(), user.getUserName(), user.getRole());
-            
             model.setModel(modelUser);
             
             return Response.ok(templates.process(USER_EDIT_TEMPLATE, model)).build();
@@ -150,27 +149,38 @@ public class UsersResource extends BaseResource {
      * @throws NotFoundException Thrown if id was not found.
      * @throws ServiceException Thrown if there was problem with services.
      * @throws BadRequestException Thrown if request is bad.
+     * @throws RenderException 
      */
     @POST
     @Produces("text/html")
     @Access(Role.ADMIN)
     @Path("/edit/{id: [0-9]*}")
-    public Response userEdit(@Context HttpServletRequest req, MultivaluedMap<String, String> formParams) throws ServiceException, BadRequestException{
+    public Response userEdit(@Context HttpServletRequest req, MultivaluedMap<String, String> formParams) throws ServiceException, BadRequestException, RenderException{
+        BaseModel model = buildBaseModel(req);
+        
         containsNeededFieldsForEdit(formParams);
         User editedUser = createEditUser(formParams);
         try {
             // Checks that user exists
             User user = userService.get(editedUser.getId());
             
-            if (!ValidationUtils.isValidUsername(user.getUserName()))
+            if (userService.exists(editedUser.getUserName())){
+                ModelUser modelUser = new ModelUser(user.getId(), user.getUserName(), editedUser.getRole());
+                model.setModel(modelUser);
+                model.setError("Username already exists.");
+                return Response.ok(templates.process(USER_EDIT_TEMPLATE, model)).build();
+            }
+            
+            // This should be validated clientside, so bad request is thrown.
+            if (!ValidationUtils.isValidUsername(editedUser.getUserName())){
                 throw new BadRequestException("Username was invalid.");
+            }  
             
             //TODO Field validation
             userService.update(new User(editedUser.getId(), editedUser.getUserName(), editedUser.getRole()));
-            
+            sessions.setInfo(model.getCurrentSession().getAuthId(), "User edited.");
             return Response.seeOther(LanServer.getURI(String.format("users/%s", user.getId()))).build();
         } catch (NotFoundInDatabase e) {
-            BaseModel model = buildBaseModel(req);
             sessions.setError(model.getCurrentSession().getAuthId(), "User not found.");
             return Response.seeOther(LanServer.getURI("users")).build();
         }

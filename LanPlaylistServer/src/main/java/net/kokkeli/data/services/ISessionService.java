@@ -38,4 +38,17 @@ public interface ISessionService {
      * @param authId Auth id of session
      */
     void clearError(String authId);
+
+    /**
+     * Sets info for given sessions
+     * @param authId Session id
+     * @param info Info for session
+     */
+    void setInfo(String authId, String info);
+
+    /**
+     * Clears info for given session
+     * @param authId Auth if of session
+     */
+    void clearInfo(String authId);
 }

@@ -25,6 +25,7 @@ public class TestUserResource extends ResourceTestsBase{
     private static long NONEXISTING_ID = -3;    
     private static final String FORM_USERNAME = "username";
     private static final String FORM_ROLE = "role";
+    private static final String FORM_ID = "id";
     
     private IUserService mockUserService;
     
@@ -43,6 +44,7 @@ public class TestUserResource extends ResourceTestsBase{
         userResource = new UsersResource(getLogger(), getTemplateService(), mockUserService, getPlayer(), getSessionService());
     }
     
+    // USER DETAILS GET
     @Test
     public void testGetDetailsRedirectsWhenUserIsNotFound() throws RenderException, ServiceException{
         userResource.userDetails(buildRequest(), NONEXISTING_ID);
@@ -72,11 +74,12 @@ public class TestUserResource extends ResourceTestsBase{
         verify(getTemplateService()).process(anyString(), isA(BaseModel.class));
     }
     
+    //EDIT GET
     @Test
     public void testGetEditThrowsNotFoundException() throws ServiceException{
         Response r = userResource.userEdit(buildRequest(), NONEXISTING_ID);
         Assert.assertEquals(REDIRECT, r.getStatus());
-        verify(getSessionService(), times(1)).setError(null, "User not found.");
+        assertSessionError("User not found.");
     }
     
     @Test
@@ -101,6 +104,43 @@ public class TestUserResource extends ResourceTestsBase{
         verify(getTemplateService()).process(anyString(), isA(BaseModel.class));
     }
     
+    //EDIT POST
+    @Test
+    public void testPostEditUpdatesUser() throws ServiceException, BadRequestException, RenderException{
+        final String newUsername = "editedUser";
+        final Role newRole = Role.ADMIN;
+        
+        userResource.userEdit(buildRequest(), editUserPost(EXISTING_USER_ID, newUsername, newRole));
+        assertSessionInfo("User edited.");
+    }
+    
+    @Test
+    public void testPostEditWithInvalidUsernameThrowsBadRequest() throws ServiceException, RenderException{
+        final String newUsername = "editedUser<";
+        final Role newRole = Role.ADMIN;
+        
+        try {
+            userResource.userEdit(buildRequest(), editUserPost(EXISTING_USER_ID, newUsername, newRole));
+            Assert.fail("There should have been error.");
+        } catch (BadRequestException e) {
+            Assert.assertEquals("Username was invalid.", e.getMessage());
+        }
+    }
+    
+    @Test
+    public void testPostEditWithExistingUsernameReturnsError() throws ServiceException, RenderException, BadRequestException{
+        final String existing = "existing";
+        final Role newRole = Role.ADMIN;
+        
+        ModelAnswer answer = new ModelAnswer();
+        when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(answer);
+        when(mockUserService.exists(any(String.class))).thenReturn(true);
+        
+        userResource.userEdit(buildRequest(), editUserPost(EXISTING_USER_ID, existing, newRole));
+        Assert.assertEquals("Username already exists.", answer.getModel().getError());
+    }
+    
+    //CREATE POST
     @Test
     public void testCreatePostWithWrongUsernameReturnsError() throws RenderException, BadRequestException, ServiceException{
         ModelAnswer answer = new ModelAnswer();
@@ -140,6 +180,21 @@ public class TestUserResource extends ResourceTestsBase{
         
         when(map.getFirst(FORM_USERNAME)).thenReturn(username);
         when(map.getFirst(FORM_ROLE)).thenReturn(role.name().toUpperCase());
+        return map;
+    }
+    
+    /**
+     * Mocks MultivaluedMap var user dit posts.
+     * @param username
+     * @param role
+     * @return
+     */
+    private MultivaluedMap<String, String> editUserPost(long id, String username, Role role){
+        MultivaluedMap<String, String> map = createUserPost(username, role);
+        
+        when(map.containsKey(FORM_ID)).thenReturn(true);
+        when(map.getFirst(FORM_ID)).thenReturn(id + "");
+        
         return map;
     }
     
