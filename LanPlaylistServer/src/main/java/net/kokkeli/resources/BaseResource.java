@@ -1,6 +1,7 @@
 package net.kokkeli.resources;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Response;
 
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Session;
@@ -11,6 +12,7 @@ import net.kokkeli.resources.authentication.AuthenticationCookieNotFound;
 import net.kokkeli.resources.authentication.AuthenticationUtils;
 import net.kokkeli.resources.models.BaseModel;
 import net.kokkeli.server.ITemplateService;
+import net.kokkeli.server.LanServer;
 import net.kokkeli.server.NotAuthenticatedException;
 
 /**
@@ -40,7 +42,7 @@ public abstract class BaseResource {
      * @param message Message
      * @param severity Severity
      */
-    protected void log(String message, int severity){
+    protected final void log(String message, int severity){
         logger.log(message, severity);
     }
     
@@ -83,5 +85,25 @@ public abstract class BaseResource {
         model.setNowPlaying(player.getTitle());
         model.setUsername("");
         return model;
+    }
+    
+    /**
+     * Creates response for rendering errors. Redirects user to main page.
+     * @param model BaseModel
+     * @return Response
+     */
+    protected final Response handleRenderingError(BaseModel model){
+        sessions.setError(model.getCurrentSession().getAuthId(), "There was problem with rendering the template.");
+        return Response.seeOther(LanServer.getURI("")).build();
+    }
+    
+    /**
+     * Creates response for service exceptions. Redirects user to main page.
+     * @param model Basemodel
+     * @return Response
+     */
+    protected final Response handleServiceException(BaseModel model){
+        sessions.setError(model.getCurrentSession().getAuthId(), "Something went wrong with service.");
+        return Response.seeOther(LanServer.getURI("")).build();
     }
 }

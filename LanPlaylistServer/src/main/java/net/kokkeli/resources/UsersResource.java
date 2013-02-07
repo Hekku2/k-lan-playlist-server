@@ -358,24 +358,4 @@ public class UsersResource extends BaseResource {
         base.setError(error);
         return Response.ok(templates.process(USER_EDIT_TEMPLATE, base)).build();
     }
-    
-    /**
-     * Creates response for rendering errors. Redirects user to main page.
-     * @param model BaseModel
-     * @return Response
-     */
-    private Response handleRenderingError(BaseModel model){
-        sessions.setError(model.getCurrentSession().getAuthId(), "There was problem with rendering the template.");
-        return Response.seeOther(LanServer.getURI("")).build();
-    }
-    
-    /**
-     * Creates response for service exceptions. Redirects user to main page.
-     * @param model Basemodel
-     * @return Response
-     */
-    private Response handleServiceException(BaseModel model){
-        sessions.setError(model.getCurrentSession().getAuthId(), "Something went wrong with service.");
-        return Response.seeOther(LanServer.getURI("")).build();
-    }
 }
