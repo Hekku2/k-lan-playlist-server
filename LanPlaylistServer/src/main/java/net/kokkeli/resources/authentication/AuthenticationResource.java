@@ -68,6 +68,13 @@ public class AuthenticationResource extends BaseResource {
         }
     }
 
+    /**
+     * Handles authentication post.
+     * @param req Request
+     * @param username Username
+     * @param password Password
+     * @return Response
+     */
     @POST
     @Consumes("application/x-www-form-urlencoded")
     @Produces("text/html")
@@ -107,6 +114,11 @@ public class AuthenticationResource extends BaseResource {
 
     }
 
+    /**
+     * Logs user out.
+     * @param req Request
+     * @return Response
+     */
     @GET
     @Path("/logout")
     public Response logout(@Context HttpServletRequest req) {
