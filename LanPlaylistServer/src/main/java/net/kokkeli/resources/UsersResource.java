@@ -11,8 +11,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
 import com.google.inject.Inject;
 import com.sun.jersey.api.NotFoundException;
 
@@ -175,14 +173,18 @@ public class UsersResource extends BaseResource {
             // Checks that user exists
             User user = userService.get(editedUser.getId());
             
-            if (userService.exists(editedUser.getUsername())){
-                return editPostErrorResponse(model, editedUser, "Username already exists.");
+            if (ValidationUtils.isEmpty(editedUser.getUsername())){
+                return editPostErrorResponse(model, editedUser, "Username is required.");
             }
             
             if (!ValidationUtils.isValidUsername(editedUser.getUsername())){
                 editedUser.setUsername(user.getUserName());
                 return editPostErrorResponse(model, editedUser, "Invalid username.");
-            }  
+            }
+            
+            if (userService.exists(editedUser.getUsername())){
+                return editPostErrorResponse(model, editedUser, "Username already exists.");
+            }
             
             //TODO Field validation
             userService.update(new User(editedUser.getId(), editedUser.getUsername(), editedUser.getRoleEnum()));
@@ -238,19 +240,21 @@ public class UsersResource extends BaseResource {
             ModelUser user = createUser(formParams);
 
             //TODO Validation for user values.
+            if (ValidationUtils.isEmpty(user.getUsername())){
+                model.setError("Username is required.");
+                return Response.ok(templates.process(USER_CREATE_TEMPLATE, model)).build();
+            }
+            
             if (!ValidationUtils.isValidUsername(user.getUsername())){
                 model.setError("Username was invalid.");
                 return Response.ok(templates.process(USER_CREATE_TEMPLATE, model)).build();
             }
             
-            userService.add(new User(user.getUsername(),user.getRoleEnum()));
-            model.setInfo("User created.");
-            model.setModel(createModelUsers());
+            long id = userService.add(new User(user.getUsername(),user.getRoleEnum())).getId();
             log("User created.", 1);
             
-            model.setModel(createModelUsers());
-            //TODO Save info to session.
-            return Response.ok(templates.process(USERS_TEMPLATE, model)).location(LanServer.getURI("users")).status(Status.SEE_OTHER).build();
+            sessions.setInfo(model.getCurrentSession().getAuthId(), "User created.");
+            return Response.seeOther(LanServer.getURI(String.format("users/%s", id))).build();
         } catch (RenderException e) {
             return handleRenderingError(model);
         } catch (ServiceException e){

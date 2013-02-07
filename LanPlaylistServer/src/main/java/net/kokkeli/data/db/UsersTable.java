@@ -100,12 +100,12 @@ public class UsersTable {
         return users;
     }
 
-    public void add(User item) throws DatabaseException {
+    public User add(User item) throws DatabaseException {
         if (equals(item.getUserName()))
             throw new DatabaseException("Username already exists.");
         
         SQLiteConnection db = new SQLiteConnection(new File(databaseLocation));
-        
+        long id;
         try {
             db.open(false);
             SQLiteStatement st = db.prepare(createInsertString(item));
@@ -114,10 +114,15 @@ public class UsersTable {
             } finally {
                 st.dispose();
             }
+            id = db.getLastInsertId();
+            
             db.dispose();
         } catch (SQLiteException e) {
             throw new DatabaseException("There was problem with database", e);
         }
+        
+        item.setId(id);
+        return item;
     }
     
     public boolean exists(String username) throws DatabaseException {
@@ -133,6 +138,7 @@ public class UsersTable {
             } finally {
                 st.dispose();
             }
+            
             db.dispose();
         } catch (SQLiteException e) {
             throw new DatabaseException("Problem with database.", e);

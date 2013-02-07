@@ -20,5 +20,11 @@ public interface IDatabase<T> {
      */
     Collection<T> get() throws DatabaseException;
     
-    void add(T item) throws DatabaseException;
+    /**
+     * Adds item to database
+     * @param item Item to add
+     * @return Added item, with id, if it has one.
+     * @throws DatabaseException Thrown if there is a problem with the database.
+     */
+    T add(T item) throws DatabaseException;
 }

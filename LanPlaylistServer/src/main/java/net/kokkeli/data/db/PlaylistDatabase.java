@@ -62,7 +62,7 @@ public class PlaylistDatabase extends Database implements IPlaylistDatabase {
     }
 
     @Override
-    public void add(PlayList item) throws DatabaseException {
+    public PlayList add(PlayList item) throws DatabaseException {
         throw new DatabaseException("Method not implemented.");
     }
 

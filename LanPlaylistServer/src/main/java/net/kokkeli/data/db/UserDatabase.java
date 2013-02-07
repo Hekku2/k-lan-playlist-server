@@ -37,8 +37,8 @@ public class UserDatabase extends Database implements IUserDatabase {
     }
 
     @Override
-    public void add(User item) throws DatabaseException {
-        users.add(item);
+    public User add(User item) throws DatabaseException {
+        return users.add(item);
     }
 
     @Override

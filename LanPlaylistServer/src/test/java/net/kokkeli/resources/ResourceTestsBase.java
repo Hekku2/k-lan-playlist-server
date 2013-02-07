@@ -71,9 +71,20 @@ public abstract class ResourceTestsBase {
      * @param info
      */
     public static void assertModelResponse(Response r, ModelAnswer model, String error, String info){
+        assertModelResponse(RESPONSE_OK, r, model, error, info);
+    }
+    
+    /**
+     * Asserts that model contains correct response and modelanswer contains correct error and info.
+     * @param r
+     * @param model
+     * @param error
+     * @param info
+     */
+    public static void assertModelResponse(int statusCode, Response r, ModelAnswer model, String error, String info){
         Assert.assertEquals(error, model.getModel().getError());
         Assert.assertEquals(info, model.getModel().getInfo());
-        Assert.assertEquals(RESPONSE_OK, r.getStatus());
+        Assert.assertEquals(statusCode, r.getStatus());
     }
     
     public abstract void before() throws Exception;

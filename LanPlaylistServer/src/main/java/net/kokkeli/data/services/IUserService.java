@@ -40,9 +40,10 @@ public interface IUserService {
     /**
      * Adds given user. If user doesn't have Id, enw is created.
      * @param user New user.
+     * @return Created user.
      * @throws ServiceException Thrown if there is problem with service
      */
-    void add(User user) throws ServiceException;
+    User add(User user) throws ServiceException;
 
     /**
      * Returns user that has given username

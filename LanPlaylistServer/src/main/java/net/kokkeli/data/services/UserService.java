@@ -92,11 +92,11 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void add(User user) throws ServiceException {
+    public User add(User user) throws ServiceException {
         //TODO SQL Injection protection
         
         try {
-            userDatabase.add(user);
+            return userDatabase.add(user);
         } catch (DatabaseException e) {
             throw new ServiceException("There was problem with database.", e);
         }

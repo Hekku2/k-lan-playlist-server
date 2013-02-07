@@ -19,11 +19,14 @@ import com.sun.jersey.api.NotFoundException;
 import static org.mockito.Mockito.*;
 
 public class TestUserResource extends ResourceTestsBase{
-    private static long EXISTING_USER_ID = 54;
-    private static long NONEXISTING_ID = -3;    
+    private static final long EXISTING_USER_ID = 54;
+    private static final long NONEXISTING_ID = -3;    
     private static final String FORM_USERNAME = "username";
     private static final String FORM_ROLE = "role";
     private static final String FORM_ID = "id";
+    
+    private static final String INVALID_CHARACHTERS_USERNAME = "editedUser<";
+    private static final String EMPTY_USERNAME = "";
     
     private IUserService mockUserService;
     
@@ -91,24 +94,24 @@ public class TestUserResource extends ResourceTestsBase{
     
     //EDIT POST
     @Test
-    public void testPostEditUpdatesUser() throws ServiceException, BadRequestException, RenderException, NotAuthenticatedException{
+    public void testPostEditUpdatesUser() throws ServiceException, BadRequestException, RenderException, NotAuthenticatedException, NotFoundInDatabase{
         final String newUsername = "editedUser";
         final Role newRole = Role.ADMIN;
         
-        userResource.userEdit(buildRequest(), editUserPost(EXISTING_USER_ID, newUsername, newRole));
+        Response r = userResource.userEdit(buildRequest(), editUserPost(EXISTING_USER_ID, newUsername, newRole));
         assertSessionInfo("User edited.");
+        Assert.assertEquals(REDIRECT, r.getStatus());
+        verify(mockUserService, times(1)).update(new User(EXISTING_USER_ID, newUsername, newRole));
     }
     
     @Test
     public void testPostEditWithInvalidUsernameReturnsError() throws RenderException, BadRequestException, NotAuthenticatedException {
-        final String newUsername = "editedUser<";
         final Role newRole = Role.ADMIN;
         ModelAnswer answer = new ModelAnswer();
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(answer);
         
-        Response r = userResource.userEdit(buildRequest(), editUserPost(EXISTING_USER_ID, newUsername, newRole));
-        Assert.assertEquals("Invalid username.", answer.getModel().getError());
-        Assert.assertEquals(RESPONSE_OK, r.getStatus());
+        assertModelResponse(userResource.userEdit(buildRequest(), editUserPost(EXISTING_USER_ID, INVALID_CHARACHTERS_USERNAME, newRole)), answer, "Invalid username.", null);
+        assertModelResponse(userResource.userEdit(buildRequest(), editUserPost(EXISTING_USER_ID, EMPTY_USERNAME, newRole)), answer, "Username is required.", null);
     }
     
     @Test
@@ -120,9 +123,7 @@ public class TestUserResource extends ResourceTestsBase{
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(answer);
         when(mockUserService.exists(any(String.class))).thenReturn(true);
         
-        Response r = userResource.userEdit(buildRequest(), editUserPost(EXISTING_USER_ID, existing, newRole));
-        Assert.assertEquals("Username already exists.", answer.getModel().getError());
-        Assert.assertEquals(RESPONSE_OK, r.getStatus());
+        assertModelResponse(userResource.userEdit(buildRequest(), editUserPost(EXISTING_USER_ID, existing, newRole)), answer, "Username already exists.", null);
     }
     
     //CREATE POST
@@ -131,25 +132,26 @@ public class TestUserResource extends ResourceTestsBase{
         ModelAnswer answer = new ModelAnswer();
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(answer);
         
-        Response r = userResource.userCreate(buildRequest(), createUserPost("", Role.ADMIN));
-        Assert.assertEquals("Username was invalid.", answer.getModel().getError());
-        Assert.assertEquals(RESPONSE_OK, r.getStatus());
-        
-        r = userResource.userCreate(buildRequest(), createUserPost("<", Role.ADMIN));
-        Assert.assertEquals("Username was invalid.", answer.getModel().getError());
-        Assert.assertEquals(RESPONSE_OK, r.getStatus());
+        assertModelResponse(userResource.userCreate(buildRequest(), createUserPost(INVALID_CHARACHTERS_USERNAME, Role.ADMIN)), answer, "Username was invalid.", null);
+        assertModelResponse(userResource.userCreate(buildRequest(), createUserPost(EMPTY_USERNAME, Role.ADMIN)), answer, "Username is required.", null);
     }
     
     @Test
     public void testCreatePostWithCorrectUsernameSucceeds() throws RenderException, BadRequestException, ServiceException, NotAuthenticatedException{
-        ModelAnswer answer = new ModelAnswer();
-        when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(answer);
+        final String username = "fdsfsd";
+        final Role role = Role.ADMIN;
+        final long anyId = 434;
         
-        userResource.userCreate(buildRequest(), createUserPost("fdas", Role.ADMIN));
-        Assert.assertNull(answer.getModel().getError());
-        Assert.assertEquals("User created.", answer.getModel().getInfo());
+        User mockUser = mock(User.class);
+        when(mockUser.getId()).thenReturn(anyId);
+        when(mockUserService.add(any(User.class))).thenReturn(mockUser);
+        
+        Response r = userResource.userCreate(buildRequest(), createUserPost(username, Role.ADMIN));
+        Assert.assertEquals(REDIRECT, r.getStatus());
+        assertSessionInfo("User created.");
+        verify(mockUserService, times(1)).add(new User(username, role));
     }
-    
+
     //CREATE GET
     @Test
     public void testCreateGetReturnsResponse() throws RenderException, NotAuthenticatedException {
