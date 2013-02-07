@@ -93,7 +93,7 @@ public abstract class BaseResource {
      * @return Response
      */
     protected final Response handleRenderingError(BaseModel model){
-        sessions.setError(model.getCurrentSession().getAuthId(), "There was problem with rendering the template.");
+        sessions.setError(model.getCurrentSession().getAuthId(), "There was a problem with rendering the template.");
         return Response.seeOther(LanServer.getURI("")).build();
     }
     

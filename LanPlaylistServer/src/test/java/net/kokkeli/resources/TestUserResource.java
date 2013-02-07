@@ -54,7 +54,7 @@ public class TestUserResource extends ResourceTestsBase{
     @Test
     public void testGetDetailsServiceExceptionIsThrownWhenTemplateCantBeProcessed() throws RenderException, NotFoundException, NotAuthenticatedException{
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenThrow(new RenderException("Rendering failed"));
-        assertRedirectAndError(userResource.userDetails(buildRequest(), EXISTING_USER_ID), "There was problem with rendering the template.");
+        assertRedirectAndError(userResource.userDetails(buildRequest(), EXISTING_USER_ID), "There was a problem with rendering the template.");
     }
     
     @Test
@@ -78,7 +78,7 @@ public class TestUserResource extends ResourceTestsBase{
     @Test
     public void testGetEditThrowsServiceExceptionWhenTemplateServiceFails() throws RenderException, NotAuthenticatedException{
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenThrow(new RenderException("Rendering failed"));
-        assertRedirectAndError(userResource.userEdit(buildRequest(), EXISTING_USER_ID), "There was problem with rendering the template.");
+        assertRedirectAndError(userResource.userEdit(buildRequest(), EXISTING_USER_ID), "There was a problem with rendering the template.");
     }
     
     @Test
@@ -151,6 +151,28 @@ public class TestUserResource extends ResourceTestsBase{
         userResource.userCreate(buildRequest(), createUserPost("fdas", Role.ADMIN));
         Assert.assertNull(answer.getModel().getError());
         Assert.assertEquals("User created.", answer.getModel().getInfo());
+    }
+    
+    //CREATE GET
+    @Test
+    public void testCreateGetReturnsResponse() throws RenderException, NotAuthenticatedException {
+        ModelAnswer answer = new ModelAnswer();
+        when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(answer);
+        
+        Response r = userResource.userCreate(buildRequest());
+        Assert.assertNotNull(r);
+        Assert.assertEquals(RESPONSE_OK, r.getStatus());
+        
+        Assert.assertNull(answer.getModel().getError());
+        Assert.assertNull(answer.getModel().getInfo());
+        Assert.assertNull(answer.getModel().getModel());
+    }
+    
+    @Test
+    public void testCreateGetReturnsRedirectWhenRenderingFails() throws RenderException, NotAuthenticatedException
+    {
+        when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenThrow(new RenderException("Suprise exception."));
+        assertRedirectAndError(userResource.userCreate(buildRequest()), "There was a problem with rendering the template.");
     }
     
     /**

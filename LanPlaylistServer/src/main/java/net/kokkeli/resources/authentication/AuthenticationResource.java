@@ -42,6 +42,14 @@ public class AuthenticationResource extends BaseResource {
     
     private final IUserService users;
 
+    /**
+     * Creates Authentication resource.
+     * @param logger Logger
+     * @param templateService Templateservice
+     * @param player Player
+     * @param sessions Session service
+     * @param users User service
+     */
     @Inject
     protected AuthenticationResource(ILogger logger, ITemplateService templateService, IPlayer player, ISessionService sessions, IUserService users) {
         super(logger, templateService, player, sessions);
