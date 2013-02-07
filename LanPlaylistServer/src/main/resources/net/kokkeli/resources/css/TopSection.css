@@ -5,6 +5,7 @@
 .top-section{
 	width: 800px;
 	padding-top: 5px;
+	display: table;
 }
 
 div.top-page-bar{
