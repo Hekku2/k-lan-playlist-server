@@ -8,6 +8,9 @@ import static org.mockito.Mockito.when;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Response;
+
+import junit.framework.Assert;
 
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Role;
@@ -15,9 +18,12 @@ import net.kokkeli.data.Session;
 import net.kokkeli.data.User;
 import net.kokkeli.data.services.ISessionService;
 import net.kokkeli.player.IPlayer;
+import net.kokkeli.resources.models.BaseModel;
 import net.kokkeli.server.ITemplateService;
 
 import org.junit.Before;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 public abstract class ResourceTestsBase {
     protected static final int RESPONSE_OK = 200;
@@ -57,6 +63,19 @@ public abstract class ResourceTestsBase {
         verify(getSessionService(), times(1)).setInfo(null, info);
     }
     
+    /**
+     * Asserts that model contains correct response and modelanswer contains correct error and info.
+     * @param r
+     * @param model
+     * @param error
+     * @param info
+     */
+    public static void assertModelResponse(Response r, ModelAnswer model, String error, String info){
+        Assert.assertEquals(error, model.getModel().getError());
+        Assert.assertEquals(info, model.getModel().getInfo());
+        Assert.assertEquals(RESPONSE_OK, r.getStatus());
+    }
+    
     public abstract void before() throws Exception;
     
     public ILogger getLogger(){
@@ -80,5 +99,24 @@ public abstract class ResourceTestsBase {
         cookies[0] = new Cookie("auth", "");
         
         return cookies;
+    }
+    
+    /**
+     * Answer that holds Model
+     * @author Hekku2
+     *
+     */
+    protected final class ModelAnswer implements Answer<String>{
+        private BaseModel model;
+        
+        @Override
+        public String answer(InvocationOnMock invocation) throws Throwable {
+            model = (BaseModel)invocation.getArguments()[1];
+            return "";
+        }
+        
+        public BaseModel getModel(){
+            return model;
+        }
     }
 }

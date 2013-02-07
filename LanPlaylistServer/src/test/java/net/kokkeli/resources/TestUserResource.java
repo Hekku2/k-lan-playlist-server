@@ -14,9 +14,6 @@ import net.kokkeli.server.NotAuthenticatedException;
 import net.kokkeli.server.RenderException;
 
 import org.junit.Test;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-
 import com.sun.jersey.api.NotFoundException;
 
 import static org.mockito.Mockito.*;
@@ -216,25 +213,5 @@ public class TestUserResource extends ResourceTestsBase{
     private void assertRedirectAndError(Response response, String error){
         assertSessionError(error);
         Assert.assertEquals(REDIRECT, response.getStatus());
-    }
-    
-    /**
-     * Answer that holds Model
-     * @author Hekku2
-     *
-     */
-    private class ModelAnswer implements Answer<String>{
-        private BaseModel model;
-        
-        @Override
-        public String answer(InvocationOnMock invocation) throws Throwable {
-            model = (BaseModel)invocation.getArguments()[1];
-            return "";
-        }
-        
-        public BaseModel getModel(){
-            return model;
-        }
-        
     }
 }

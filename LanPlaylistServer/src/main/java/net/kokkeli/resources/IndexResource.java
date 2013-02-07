@@ -62,16 +62,13 @@ public class IndexResource extends BaseResource {
     @GET
     @Produces("text/html")
     @Access(Role.USER)
-    public Response index(@Context HttpServletRequest req) throws ServiceException, NotAuthenticatedException {
+    public Response index(@Context HttpServletRequest req) throws NotAuthenticatedException, ServiceException {
         try {
             
             BaseModel base = buildBaseModel(req);
-            
-            long currentPlaylist;
             try {
-                currentPlaylist = player.getCurrentPlaylistId();
+                long currentPlaylist = player.getCurrentPlaylistId();
                 PlayList playlist = playlistService.getPlaylist(currentPlaylist);
-                
                 ModelPlaylist modelPlayList = new ModelPlaylist(playlist.getId());
                 modelPlayList.setName(playlist.getName());
                 
@@ -82,17 +79,20 @@ public class IndexResource extends BaseResource {
                     
                     modelPlayList.getItems().add(model);
                 }
-                
                 base.setModel(modelPlayList);
+                
             } catch (NotPlaylistPlayingException e) {
                 // Suppress. If no playlist is playing, index page is still shown.
+            } catch (NotFoundInDatabase e) {
+                base.setError("For some reason, currently playing playlist was not found.");
+            } catch (ServiceException e) {
+                base.setError("For some reason, currently playing playlist can't be shown.");
             }
 
             return Response.ok(templates.process(INDEX_TEMPLATE, base)).build();
         } catch (RenderException e) {
+            // If index page can't be shown, there is nothing to be done.
             throw new ServiceException("There was problem with rendering.", e);
-        } catch (NotFoundInDatabase e) {
-            throw new ServiceException("Playing playlist Id did not exist in database.");
         }
     }
 }

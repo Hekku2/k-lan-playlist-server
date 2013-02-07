@@ -23,11 +23,7 @@ import org.junit.Test;
 import com.sun.jersey.api.NotFoundException;
 
 public class TestIndexResource extends ResourceTestsBase{
-    private static int RESPONSE_OK = 200;
-    
     private IPlaylistService mockPlaylistService;
-    
-    
     private IndexResource resource;
     
     public void before() throws NotFoundException, ServiceException, NotFoundInDatabase {
@@ -36,15 +32,12 @@ public class TestIndexResource extends ResourceTestsBase{
     }
     
     @Test
-    public void testIndexthrowsExceptionWhenPlaylistIsNotFound() throws NotFoundInDatabase, ServiceException, NotAuthenticatedException{
-        when(mockPlaylistService.getPlaylist(any(Long.class))).thenThrow(new NotFoundInDatabase("Not found."));
+    public void testIndexthrowsExceptionWhenPlaylistIsNotFound() throws RenderException, ServiceException, NotFoundInDatabase, NotAuthenticatedException {
+        ModelAnswer model = new ModelAnswer();
+        when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(model);
         
-        try {
-            resource.index(buildRequest());
-            Assert.fail("Rendering succeeded when there should have been exception.");
-        } catch (ServiceException e) {
-            Assert.assertEquals("Playing playlist Id did not exist in database.", e.getMessage());
-        }
+        when(mockPlaylistService.getPlaylist(any(Long.class))).thenThrow(new NotFoundInDatabase("Not found."));
+        assertModelResponse(resource.index(buildRequest()), model, "For some reason, currently playing playlist was not found.", null);
     }
     
     @Test
@@ -60,16 +53,12 @@ public class TestIndexResource extends ResourceTestsBase{
     }
     
     @Test
-    public void  testIndexThrowsServiceExceptionWhenPlaylistServiceThrowsServiceExeption() throws ServiceException, NotFoundInDatabase, NotAuthenticatedException{
-        final String message = "Explosion";
+    public void  testIndexThrowsServiceExceptionWhenPlaylistServiceThrowsServiceExeption() throws RenderException, ServiceException, NotFoundInDatabase, NotAuthenticatedException {
+        ModelAnswer model = new ModelAnswer();
+        when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(model);
         
-        when(mockPlaylistService.getPlaylist(any(Long.class))).thenThrow(new ServiceException(message));
+        when(mockPlaylistService.getPlaylist(any(Long.class))).thenThrow(new ServiceException("Any message."));
         
-        try {
-            resource.index(buildRequest());
-            Assert.fail("Exception should have been thrown.");
-        } catch (ServiceException e) {
-            Assert.assertEquals(message, e.getMessage());
-        }
+        assertModelResponse(resource.index(buildRequest()), model, "For some reason, currently playing playlist can't be shown.", null);
     }
 }
