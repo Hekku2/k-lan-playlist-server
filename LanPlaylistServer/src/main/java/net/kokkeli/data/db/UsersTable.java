@@ -25,6 +25,13 @@ public class UsersTable {
         this.databaseLocation = databaseLocation;
     }
     
+    /**
+     * Returns user from table.
+     * @param id Id to search
+     * @return User
+     * @throws DatabaseException Thrown if there is a problem with the database
+     * @throws NotFoundInDatabase Thrown if user is not found in database.
+     */
     public User get(long id) throws DatabaseException, NotFoundInDatabase {
         SQLiteConnection db = new SQLiteConnection(new File(databaseLocation));
         User user = null;
@@ -63,6 +70,11 @@ public class UsersTable {
         return user;
     }
     
+    /**
+     * Returns list of users. If no users exists, empty list is returned.
+     * @return List of users.
+     * @throws DatabaseException Thrown if there is a problem with the database
+     */
     public Collection<User> get() throws DatabaseException {
         SQLiteConnection db = new SQLiteConnection(new File(databaseLocation));
         ArrayList<User> users = new ArrayList<User>();
@@ -100,7 +112,13 @@ public class UsersTable {
         return users;
     }
 
-    public User add(User item) throws DatabaseException {
+    /**
+     * Inserts given user to database.
+     * @param item User to add.
+     * @return Inserted user, with id.
+     * @throws DatabaseException Thrown if there is a problem with the database
+     */
+    public User insert(User item) throws DatabaseException {
         if (equals(item.getUserName()))
             throw new DatabaseException("Username already exists.");
         
@@ -125,6 +143,12 @@ public class UsersTable {
         return item;
     }
     
+    /**
+     * Checks if user with username exists. exist.
+     * @param username Username
+     * @return True, if user with username exists.
+     * @throws DatabaseException Thrown if there is a problem with the database
+     */
     public boolean exists(String username) throws DatabaseException {
         SQLiteConnection db = new SQLiteConnection(new File(databaseLocation));
         
@@ -146,6 +170,11 @@ public class UsersTable {
         return false;
     }
     
+    /**
+     * Updates user to database.
+     * @param user User to update
+     * @throws DatabaseException Thrown if there is a problem with the database
+     */
     public void update(User user) throws DatabaseException {
         String update = String.format("UPDATE %s", TABLENAME);
         String set = String.format("SET %s, %s", format(COLUMN_USERNAME, user.getUserName()), format(COLUMN_ROLE, user.getRole().getId()+""));
