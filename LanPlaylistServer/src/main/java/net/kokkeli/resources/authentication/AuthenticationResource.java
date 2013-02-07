@@ -48,6 +48,11 @@ public class AuthenticationResource extends BaseResource {
         this.users = users;
     }
 
+    /**
+     * Shows Authenticaiton page
+     * @return Authentication page response
+     * @throws ServiceException Thrown if authentication page can't be shown.
+     */
     @GET
     @Produces("text/html")
     @Access(Role.NONE)
@@ -58,6 +63,7 @@ public class AuthenticationResource extends BaseResource {
         try {
             return Response.ok(templates.process(AUTHENTICATE_TEMPLATE, model)).build();
         } catch (RenderException e) {
+            //in this case, service exception can be thrown, because there is nothing to be done if authentication page can't be shown.
             throw new ServiceException("There was problem with rendering.");
         }
     }
@@ -68,22 +74,17 @@ public class AuthenticationResource extends BaseResource {
     @Access(Role.NONE)
     public Response authenticate(@Context HttpServletRequest req,
             @FormParam("user") String username,
-            @FormParam("pwd") String password) throws ServiceException {
+            @FormParam("pwd") String password) {
         log("User " + username + " trying to authenticate.", 1);
+        BaseModel model = buildBaseModel();
         
         User user;
         try {
             user = users.get(username, password);
         } catch (NotFoundInDatabase exception) {
-            //Shows error if username or password is wrong.
-            BaseModel model = buildBaseModel();
-            model.setUsername("");
-            model.setError("Wrong username or password.");
-            try {
-                return Response.ok(templates.process(AUTHENTICATE_TEMPLATE, model)).build();
-            } catch (RenderException e) {
-                throw new ServiceException("There was problem with rendering.");
-            }
+            return handleWrongUsernameOrPassword(model);
+        } catch (ServiceException e){
+            return handleServiceException(model);
         }
         
         Session session = sessions.createSession(user); 
@@ -125,5 +126,21 @@ public class AuthenticationResource extends BaseResource {
 
         return Response.seeOther(LanServer.getBaseURI()).cookie(modified)
                 .build();
+    }
+    
+    /**
+     * Handles case for wrong username or password. Returns authentication page response with error.
+     * @param model Basemodel
+     * @return Response with error
+     */
+    private Response handleWrongUsernameOrPassword(BaseModel model){
+        try {
+            //Shows error if username or password is wrong.
+            model.setUsername("");
+            model.setError("Wrong username or password.");
+            return Response.ok(templates.process(AUTHENTICATE_TEMPLATE, model)).build();
+        } catch (RenderException e) {
+            return handleRenderingError(model);
+        }
     }
 }
