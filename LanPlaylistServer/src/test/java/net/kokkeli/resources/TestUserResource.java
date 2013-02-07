@@ -100,7 +100,7 @@ public class TestUserResource extends ResourceTestsBase{
     }
     
     @Test
-    public void testPostEditWithInvalidUsernameThrowsBadRequest() throws ServiceException, RenderException, BadRequestException, NotAuthenticatedException{
+    public void testPostEditWithInvalidUsernameReturnsError() throws RenderException, BadRequestException, NotAuthenticatedException {
         final String newUsername = "editedUser<";
         final Role newRole = Role.ADMIN;
         ModelAnswer answer = new ModelAnswer();
