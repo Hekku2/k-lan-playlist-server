@@ -2,13 +2,13 @@
 <#assign tab = 1>
 
 <html>
-	<#include "common/_header.ftl">
+	<#include "/common/_header.ftl">
 	<body>
 		<div class="inner-body">
-			<#include "common/_topsection.ftl">
+			<#include "/common/_topsection.ftl">
 			<h1>${header}</h1>
 			<div class="content">
-				<#include "common/_info_error.ftl">
+				<#include "/common/_info_error.ftl">
 				<div class="value-fields">
 					<div class="field">
 						<div class="description">

@@ -40,10 +40,10 @@ import net.kokkeli.server.RenderException;
  */
 @Path("/users")
 public class UsersResource extends BaseResource {
-    private static final String USERS_TEMPLATE = "users.ftl";
-    private static final String USER_DETAILS_TEMPLATE = "user.ftl";
-    private static final String USER_EDIT_TEMPLATE = "user_edit.ftl";
-    private static final String USER_CREATE_TEMPLATE = "user_create.ftl";
+    private static final String USERS_TEMPLATE = "user/users.ftl";
+    private static final String USER_DETAILS_TEMPLATE = "user/user.ftl";
+    private static final String USER_EDIT_TEMPLATE = "user/user_edit.ftl";
+    private static final String USER_CREATE_TEMPLATE = "user/user_create.ftl";
     
     private static final String FORM_USERNAME = "username";
     private static final String FORM_ID = "id";

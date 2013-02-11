@@ -3,12 +3,20 @@ package net.kokkeli.server;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 
 import junit.framework.Assert;
 
 import net.kokkeli.ISettings;
+import net.kokkeli.data.Role;
 import net.kokkeli.resources.Field;
 import net.kokkeli.resources.models.BaseModel;
+import net.kokkeli.resources.models.ModelPlaylist;
+import net.kokkeli.resources.models.ModelPlaylists;
+import net.kokkeli.resources.models.ModelUser;
+import net.kokkeli.resources.models.ModelUsers;
 import net.kokkeli.resources.models.ViewModel;
 
 import org.junit.Before;
@@ -91,7 +99,6 @@ public class TestTemplates {
      public void testProcessingThrowCorrectExceptionIfModelHasInvalidFields(){
          BaseModel base = new BaseModel();
          
-         
          ViewModel invalidField = new ViewModel(){
              @Field
              public void getMake(String pekka){
@@ -108,10 +115,92 @@ public class TestTemplates {
         }
      }
      
+     @Test
+     public void testAllTemplatesCanBeRendered() throws RenderException{        
+         HashMap<String, Collection<BaseModel>> map = new HashMap<String, Collection<BaseModel>>();
+         authenticationViews(map);
+         userManagementViews(map);
+         playlistViews(map);
+         indexView(map);
+         
+         for (String key : map.keySet()) {
+            Collection<BaseModel> models = map.get(key);
+            
+            for (BaseModel baseModel : models) {
+                templateService.process(key, baseModel);
+            }
+        }
+     }
+     
      private static BaseModel correctBaseModel(){
          BaseModel model = new BaseModel();
          model.setNowPlaying("");
          model.setUsername("");
          return model;
+     }
+     
+     private static BaseModel correctBaseModelWithModel(ViewModel view){
+         BaseModel model = correctBaseModel();
+         model.setModel(view);
+         return model;
+     }
+     
+     private static void authenticationViews(HashMap<String, Collection<BaseModel>> map){
+         ArrayList<BaseModel> models = new ArrayList<BaseModel>();
+         models.add(correctBaseModel());
+         map.put("authenticate.ftl", models);
+     }
+     
+     private static void userManagementViews(HashMap<String, Collection<BaseModel>> map){
+         final String correctUsername = "jeah";
+         
+         ArrayList<BaseModel> listModels = new ArrayList<BaseModel>();
+         listModels.add(correctBaseModelWithModel(new ModelUsers()));
+         
+         ModelUsers listWithUsers = new ModelUsers();
+         listWithUsers.add(new ModelUser(54, correctUsername, Role.ADMIN));
+         listWithUsers.add(new ModelUser(14, correctUsername, Role.USER));
+         listModels.add(correctBaseModelWithModel(listWithUsers));
+         map.put("user/users.ftl", listModels);
+         
+         ArrayList<BaseModel> createModels = new ArrayList<BaseModel>();
+         createModels.add(correctBaseModel());
+         map.put("user/user_create.ftl", createModels);
+         
+         ArrayList<BaseModel> editModels = new ArrayList<BaseModel>();
+         editModels.add(correctBaseModelWithModel(new ModelUser(4131, correctUsername, Role.ADMIN)));
+         editModels.add(correctBaseModelWithModel(new ModelUser(431, correctUsername, Role.USER)));
+         map.put("user/user_edit.ftl", editModels);
+         
+         ArrayList<BaseModel> detailModels = new ArrayList<BaseModel>();
+         detailModels.add(correctBaseModelWithModel(new ModelUser(4131, correctUsername, Role.ADMIN)));
+         detailModels.add(correctBaseModelWithModel(new ModelUser(431, correctUsername, Role.USER)));
+         map.put("user/user.ftl", detailModels);
+     }
+     
+     private static void playlistViews(HashMap<String, Collection<BaseModel>> map){
+         ArrayList<BaseModel> listModels = new ArrayList<BaseModel>();
+         listModels.add(correctBaseModelWithModel(new ModelPlaylists()));
+         
+         ModelPlaylists listWithItems = new ModelPlaylists();
+         for (int i = 0; i < 5; i++) {
+            ModelPlaylist list = new ModelPlaylist(i);
+            list.setName("Name");
+            listWithItems.getItems().add(list);
+         }
+         listModels.add(correctBaseModelWithModel(listWithItems));
+         
+         map.put("playlist/playlists.ftl", listModels);
+         
+         ArrayList<BaseModel> models = new ArrayList<BaseModel>();
+         models.add(correctBaseModel());
+         map.put("playlist/add.ftl", models);
+     }
+     
+     private static void indexView(HashMap<String, Collection<BaseModel>> map){
+         ArrayList<BaseModel> models = new ArrayList<BaseModel>();
+         models.add(correctBaseModel());
+         
+         map.put("index.ftl", models);
      }
 }
