@@ -1,11 +1,7 @@
 package net.kokkeli.resources;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.file.FileAlreadyExistsException;
 import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,6 +33,7 @@ import net.kokkeli.player.IPlayer;
 import net.kokkeli.resources.models.BaseModel;
 import net.kokkeli.resources.models.ModelPlaylist;
 import net.kokkeli.resources.models.ModelPlaylists;
+import net.kokkeli.server.IFileSystem;
 import net.kokkeli.server.ITemplateService;
 import net.kokkeli.server.NotAuthenticatedException;
 import net.kokkeli.server.RenderException;
@@ -53,6 +50,7 @@ public class PlaylistsResource extends BaseResource {
     
     private final IPlaylistService playlistService;
     private final ISettings settings;
+    private final IFileSystem filesystem;
     
     /**
      * Creates resource
@@ -61,11 +59,18 @@ public class PlaylistsResource extends BaseResource {
      * @param player
      */
     @Inject
-    protected PlaylistsResource(ILogger logger, ITemplateService templateService, IPlayer player, ISessionService sessions, ISettings settings, IPlaylistService playlistService) {
+    protected PlaylistsResource(ILogger logger,
+            ITemplateService templateService,
+            IPlayer player,
+            ISessionService sessions,
+            ISettings settings,
+            IPlaylistService playlistService,
+            IFileSystem filesystem) {
         super(logger, templateService, player, sessions);
         
         this.playlistService = playlistService;
         this.settings = settings;
+        this.filesystem = filesystem;
     }
 
     /**
@@ -162,13 +167,13 @@ public class PlaylistsResource extends BaseResource {
             log("User trying to upload file: " + fileDetail.getFileName() + ", Filetype: " + fileDetail.getType(), 1);
             String filename = settings.getTracksFolder() + "/" + fileDetail.getFileName();
             
-            if (fileExists(filename)){
+            if (filesystem.fileExists(filename)){
                 model.setError("Similar file already exists. Remove existing file, or upload different.");
                 log("User tried to upload file with same name with file already in system. File: " + filename, 1);
                 return Response.ok(templates.process(PLAYLIST_TRACK_ADD_TEMPLATE, model)).build();
             }
             
-            writeToFile(uploadedInputStream, filename);
+            filesystem.writeToFile(uploadedInputStream, filename);
             log("Uploading succeeded.", 1);
 
             //TODO Validate that file is audio
@@ -192,37 +197,5 @@ public class PlaylistsResource extends BaseResource {
             log("There was a problem with IO:" + e.getMessage(), 5);
             throw new ServiceException("There was a problem with file uploading.", e);
         }
-    }
-    
-    /**
-     * Writes uploaded file to disk.
-     * @param uploadedInputStream Inputstream
-     * @param uploadedFileLocation Location of file
-     * @throws IOException thrown if there is problem with uploading.
-     */
-    private static void writeToFile(InputStream uploadedInputStream, String uploadedFileLocation) throws IOException {
-        int read = 0;
-        byte[] bytes = new byte[1024];
- 
-        File file = new File(uploadedFileLocation);
-        if (file.exists()){
-            throw new FileAlreadyExistsException("File already exists.");
-        }
-        
-        OutputStream out = new FileOutputStream(file);
-        while ((read = uploadedInputStream.read(bytes)) != -1) {
-            out.write(bytes, 0, read);
-        }
-        out.flush();
-        out.close();
-    }
-    
-    /**
-     * Checks if file exists.
-     * @param file File name
-     * @return True, if file exists.
-     */
-    private static boolean fileExists(String file){
-        return new File(file).exists();
     }
 }

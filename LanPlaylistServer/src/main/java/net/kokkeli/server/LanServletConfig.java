@@ -65,6 +65,7 @@ public class LanServletConfig extends GuiceServletContextListener {
                 bind(IPlayer.class).to(MockPlayer.class);
                 bind(IUserService.class).to(UserService.class);
                 bind(IPlaylistService.class).to(PlaylistService.class);
+                bind(IFileSystem.class).to(FileSystem.class);
 
                 //Resources
                 bind(StaticResources.class);
