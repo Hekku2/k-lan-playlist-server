@@ -14,7 +14,7 @@ import javax.ws.rs.core.StreamingOutput;
 import com.sun.jersey.api.NotFoundException;
 
 /**
- * Purpose of this class is to load css-files from resources when they are requested from server.
+ * Purpose of this class is to load static resources from filesystem.
  * 
  * @author Hekku2
  * @version 0.01
@@ -37,7 +37,7 @@ public class StaticResources {
     }
     
     /**
-     * Loads css-file with given name from resources.
+     * Loads image-file with given name from resources.
      * @param file Name of file.
      * @return Css-file
      */
