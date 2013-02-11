@@ -9,7 +9,7 @@
 			<#include "/common/_playing.ftl">
 			<h1>${header}</h1>
 			<div class="content">
-				<#include "common/_info_error.ftl">
+				<#include "/common/_info_error.ftl">
 				<form action="" enctype="multipart/form-data" method="post">
 					<div class="field">
 						<div class="description">
