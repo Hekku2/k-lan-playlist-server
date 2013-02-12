@@ -32,9 +32,11 @@ import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.player.IPlayer;
 import net.kokkeli.resources.models.BaseModel;
 import net.kokkeli.resources.models.ModelPlaylist;
+import net.kokkeli.resources.models.ModelPlaylistItem;
 import net.kokkeli.resources.models.ModelPlaylists;
 import net.kokkeli.server.IFileSystem;
 import net.kokkeli.server.ITemplateService;
+import net.kokkeli.server.LanServer;
 import net.kokkeli.server.NotAuthenticatedException;
 import net.kokkeli.server.RenderException;
 
@@ -47,6 +49,7 @@ import net.kokkeli.server.RenderException;
 public class PlaylistsResource extends BaseResource {
     private static final String PLAYLISTS_TEMPLATE = "playlist/playlists.ftl";
     private static final String PLAYLIST_TRACK_ADD_TEMPLATE ="playlist/add.ftl";
+    private static final String PLAYLIST_DETAILS_TEMPLATE = "playlist/details.ftl";
     
     private final IPlaylistService playlistService;
     private final ISettings settings;
@@ -116,6 +119,7 @@ public class PlaylistsResource extends BaseResource {
         try {
             return Response.ok(templates.process(PLAYLIST_TRACK_ADD_TEMPLATE, model)).build();
         } catch (RenderException e) {
+            log("There was a problem with rendering:" + e.getMessage(), 5);
             throw new ServiceException("There was a problem with rendering.");
         }
     }
@@ -196,6 +200,36 @@ public class PlaylistsResource extends BaseResource {
         } catch (IOException e) {
             log("There was a problem with IO:" + e.getMessage(), 5);
             throw new ServiceException("There was a problem with file uploading.", e);
+        }
+    }
+    
+    @GET
+    @Produces("text/html")
+    @Access(Role.USER)
+    @Path("/{playlistId: [0-9]*}")
+    public Response Details(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId) throws ServiceException, NotAuthenticatedException {
+        BaseModel baseModel = buildBaseModel(req);
+
+        try {
+            PlayList playlist = playlistService.getPlaylist(playlistId);
+            ModelPlaylist modelPlayList = new ModelPlaylist(playlist.getId());
+            modelPlayList.setName(playlist.getName());
+            
+            for (Track playListItem : playlist.getItems()) {
+                ModelPlaylistItem model = new ModelPlaylistItem();
+                model.setArtist(playListItem.getArtist());
+                model.setTrackName(playListItem.getTrackName());
+                
+                modelPlayList.getItems().add(model);
+            }
+            baseModel.setModel(modelPlayList);
+            return Response.ok(templates.process(PLAYLIST_DETAILS_TEMPLATE, baseModel)).build();
+        } catch (RenderException e) {
+            log("There was a problem with rendering:" + e.getMessage(), 5);
+            throw new ServiceException("There was a problem with rendering.");
+        } catch (NotFoundInDatabase e) {
+            sessions.setError(baseModel.getCurrentSession().getAuthId(), "Playlist not found.");
+            return Response.seeOther(LanServer.getURI("playlists")).build();
         }
     }
 }
