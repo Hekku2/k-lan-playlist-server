@@ -1,6 +1,8 @@
 <#if getInfo??>
-	<div> ${getInfo}</div>
+	<div class="info-box">
+		${getInfo}
+	</div>
 </#if>
 <#if getError??>
-	<div> ${getError}</div>
+	<div class="error-box"> ${getError}</div>
 </#if>
