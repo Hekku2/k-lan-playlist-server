@@ -6,8 +6,8 @@ import java.io.InputStream;
 import javax.ws.rs.core.Response;
 
 import net.kokkeli.ISettings;
+import net.kokkeli.data.PlayList;
 import net.kokkeli.data.db.NotFoundInDatabase;
-import net.kokkeli.data.db.PlayList;
 import net.kokkeli.data.services.IPlaylistService;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.resources.models.BaseModel;

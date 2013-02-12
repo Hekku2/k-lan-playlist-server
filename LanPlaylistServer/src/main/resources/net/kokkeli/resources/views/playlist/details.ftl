@@ -27,6 +27,9 @@
 						<div class="column-header">
 							Track
 						</div>
+						<div class="column-header">
+							Uploader
+						</div>
 					</div>
 					<div class="song-rows">
 						<#list getModel.getItems as item>
@@ -36,6 +39,9 @@
 								</div>
 								<div>
 									${item.getTrackName}
+								</div>
+								<div>
+									${item.getUploader}
 								</div>
 							</div>
 						</#list>

@@ -12,6 +12,7 @@ public class Track {
     private String artist;
     private long id;
     private String location;
+    private User uploader;
     
     /**
      * Creates track with id.
@@ -90,5 +91,21 @@ public class Track {
      */
     public void setLocation(String location) {
         this.location = location;
+    }
+    
+    /**
+     * Sets uploader for item
+     * @param uploader Name of uploader
+     */
+    public void setUploader(User uploader){
+        this.uploader = uploader;
+    }
+    
+    /**
+     * Getter for uploader
+     * @return Uploader
+     */
+    public User getUploader(){
+        return uploader;
     }
 }

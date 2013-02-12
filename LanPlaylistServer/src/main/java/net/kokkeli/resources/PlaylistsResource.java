@@ -22,10 +22,10 @@ import com.sun.jersey.multipart.FormDataParam;
 import net.kokkeli.ISettings;
 import net.kokkeli.ValidationUtils;
 import net.kokkeli.data.ILogger;
+import net.kokkeli.data.PlayList;
 import net.kokkeli.data.Role;
 import net.kokkeli.data.Track;
 import net.kokkeli.data.db.NotFoundInDatabase;
-import net.kokkeli.data.db.PlayList;
 import net.kokkeli.data.services.IPlaylistService;
 import net.kokkeli.data.services.ISessionService;
 import net.kokkeli.data.services.ServiceException;
@@ -219,6 +219,7 @@ public class PlaylistsResource extends BaseResource {
                 ModelPlaylistItem model = new ModelPlaylistItem();
                 model.setArtist(playListItem.getArtist());
                 model.setTrackName(playListItem.getTrackName());
+                model.setUploader(playListItem.getUploader().getUserName());
                 
                 modelPlayList.getItems().add(model);
             }

@@ -10,6 +10,7 @@ import net.kokkeli.resources.Field;
 public final class ModelPlaylistItem extends ViewModel{
     private String trackName;
     private String artist;
+    private String uploader;
     
     /**
      * Sets name of item
@@ -43,5 +44,22 @@ public final class ModelPlaylistItem extends ViewModel{
     @Field
     public String getArtist(){
         return artist;
+    }
+    
+    /**
+     * Sets uploader for item
+     * @param uploader Name of uploader
+     */
+    public void setUploader(String uploader){
+        this.uploader = uploader;
+    }
+    
+    /**
+     * Getter for uploader
+     * @return Uploader
+     */
+    @Field
+    public String getUploader(){
+        return uploader;
     }
 }

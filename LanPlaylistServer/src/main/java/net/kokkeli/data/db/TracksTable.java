@@ -6,7 +6,9 @@ import com.almworks.sqlite4java.SQLiteConnection;
 import com.almworks.sqlite4java.SQLiteException;
 import com.almworks.sqlite4java.SQLiteStatement;
 
+import net.kokkeli.data.Role;
 import net.kokkeli.data.Track;
+import net.kokkeli.data.User;
 
 public class TracksTable {
     private static final String TABLENAME = "tracks";
@@ -30,6 +32,7 @@ public class TracksTable {
 
     /**
      * Returns track with given id.
+     * NOTE: User only contains id, username and role are not set.
      * @param id Id of track
      * @return Track Fetched track.
      * @throws DatabaseException Thrown if there is problem with database.
@@ -48,6 +51,9 @@ public class TracksTable {
                     track.setTrackName(st.columnString(1));
                     track.setArtist(st.columnString(2));
                     track.setLocation(st.columnString(3));
+                    
+                    User uploader = new User(st.columnLong(4), null, Role.NONE);
+                    track.setUploader(uploader);
                 }
             } finally {
                 st.dispose();

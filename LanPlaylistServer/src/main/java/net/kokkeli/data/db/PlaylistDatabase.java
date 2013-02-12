@@ -4,12 +4,15 @@ import java.util.Collection;
 
 import com.google.inject.Inject;
 import net.kokkeli.ISettings;
+import net.kokkeli.data.PlayList;
 import net.kokkeli.data.Track;
+import net.kokkeli.data.User;
 
 public class PlaylistDatabase extends Database implements IPlaylistDatabase {
     private final PlaylistsTable playlistTable;
     private final TrackPlaylistTable trackPlaylistTable;
     private final TracksTable tracksTable;
+    private final UsersTable usersTable;
     
     @Inject
     public PlaylistDatabase(ISettings settings) throws DatabaseException {
@@ -17,6 +20,7 @@ public class PlaylistDatabase extends Database implements IPlaylistDatabase {
         playlistTable = new PlaylistsTable(getDatabaseLocation());
         trackPlaylistTable = new TrackPlaylistTable(getDatabaseLocation());
         tracksTable = new TracksTable(getDatabaseLocation());
+        usersTable = new UsersTable(getDatabaseLocation());
         
         CheckDatabaseFormat();
     }
@@ -35,8 +39,11 @@ public class PlaylistDatabase extends Database implements IPlaylistDatabase {
         Collection<Long> tracks = trackPlaylistTable.getTracks(playlist.getId());
         
         // Fetch tracks from database
-        for (Long item : tracks) {
-            playlist.getItems().add(tracksTable.get(item));
+        for (Long trackId : tracks) {
+            Track track = tracksTable.get(trackId);
+            User uploader = usersTable.get(track.getUploader().getId());
+            track.setUploader(uploader);
+            playlist.getItems().add(track);
         }
         
         return playlist;
@@ -51,7 +58,10 @@ public class PlaylistDatabase extends Database implements IPlaylistDatabase {
                 Collection<Long> trackIds = trackPlaylistTable.getTracks(playList.getId());
                 
                 for (Long trackId : trackIds) {
-                    playList.getItems().add(tracksTable.get(trackId));
+                    Track track = tracksTable.get(trackId);
+                    User uploader = usersTable.get(track.getUploader().getId());
+                    track.setUploader(uploader);
+                    playList.getItems().add(track);
                 }
             }
         } catch (NotFoundInDatabase e) {

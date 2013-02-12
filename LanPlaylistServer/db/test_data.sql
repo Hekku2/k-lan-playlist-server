@@ -2,9 +2,9 @@ INSERT INTO users (UserName, Role, PasswordHash) VALUES ('admin', 2, '4c971b7a59
 INSERT INTO users (UserName, Role, PasswordHash) VALUES ('user', 1, '4c971b7a598e1c1fb09e6fe1750c6fd3ed1e73ff');
 
 -- Tracks
-INSERT INTO tracks (Track, Artist, Location) VALUES ('Seitan is guud', 'Lucifer Virtanen', 'D:\Music\song.ogg');
-INSERT INTO tracks (Track, Artist, Location) VALUES ('March enemy hell matti', 'Lucifer Virtanen', 'D:\Music\song3.ogg');
-INSERT INTO tracks (Track, Artist, Location) VALUES ('Jarmonet', 'Raimo Belsebup', 'D:\Music\song2.ogg');
+INSERT INTO tracks (Track, Artist, Location, Uploader) VALUES ('Seitan is guud', 'Lucifer Virtanen', 'D:\Music\song.ogg',(SELECT Id FROM users WHERE UserName like 'admin'));
+INSERT INTO tracks (Track, Artist, Location, Uploader) VALUES ('March enemy hell matti', 'Lucifer Virtanen', 'D:\Music\song3.ogg',(SELECT Id FROM users WHERE UserName like 'admin'));
+INSERT INTO tracks (Track, Artist, Location, Uploader) VALUES ('Jarmonet', 'Raimo Belsebup', 'D:\Music\song2.ogg',(SELECT Id FROM users WHERE UserName like 'user'));
 
 -- Playlists
 INSERT INTO playlists (Name) VALUES ('Joululan 2014');

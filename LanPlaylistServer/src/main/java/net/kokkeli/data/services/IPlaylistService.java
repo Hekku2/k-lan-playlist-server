@@ -2,8 +2,8 @@ package net.kokkeli.data.services;
 
 import java.util.Collection;
 
+import net.kokkeli.data.PlayList;
 import net.kokkeli.data.db.NotFoundInDatabase;
-import net.kokkeli.data.db.PlayList;
 
 public interface IPlaylistService {
     PlayList getPlaylist(long currentPlaylist) throws ServiceException, NotFoundInDatabase;

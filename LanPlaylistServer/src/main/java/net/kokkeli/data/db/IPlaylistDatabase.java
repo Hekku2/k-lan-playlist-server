@@ -2,6 +2,8 @@ package net.kokkeli.data.db;
 
 import java.util.Collection;
 
+import net.kokkeli.data.PlayList;
+
 public interface IPlaylistDatabase extends IDatabase<PlayList>{
 
     /**

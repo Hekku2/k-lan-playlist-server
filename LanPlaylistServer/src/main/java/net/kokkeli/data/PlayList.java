@@ -1,8 +1,7 @@
-package net.kokkeli.data.db;
+package net.kokkeli.data;
 
 import java.util.ArrayList;
 
-import net.kokkeli.data.Track;
 
 public class PlayList {
     private ArrayList<Track> items = new ArrayList<Track>();

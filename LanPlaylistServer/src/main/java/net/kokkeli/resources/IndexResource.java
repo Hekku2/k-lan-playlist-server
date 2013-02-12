@@ -10,10 +10,10 @@ import javax.ws.rs.core.Response;
 import com.google.inject.Inject;
 
 import net.kokkeli.data.ILogger;
+import net.kokkeli.data.PlayList;
 import net.kokkeli.data.Track;
 import net.kokkeli.data.Role;
 import net.kokkeli.data.db.NotFoundInDatabase;
-import net.kokkeli.data.db.PlayList;
 import net.kokkeli.data.services.IPlaylistService;
 import net.kokkeli.data.services.ISessionService;
 import net.kokkeli.data.services.ServiceException;

@@ -9,7 +9,9 @@ CREATE TABLE tracks(
     Id INTEGER NOT NULL PRIMARY KEY,
     Track varchar(255),
     Artist varchar(255),
-    Location varchar(255)
+    Location varchar(255),
+    Uploader INTEGER NOT NULL,
+    FOREIGN KEY(Uploader) REFERENCES users(Id)
 );
 
 CREATE TABLE playlists(

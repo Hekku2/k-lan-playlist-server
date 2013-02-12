@@ -5,10 +5,10 @@ import java.util.Collection;
 import com.google.inject.Inject;
 
 import net.kokkeli.data.ILogger;
+import net.kokkeli.data.PlayList;
 import net.kokkeli.data.db.DatabaseException;
 import net.kokkeli.data.db.IPlaylistDatabase;
 import net.kokkeli.data.db.NotFoundInDatabase;
-import net.kokkeli.data.db.PlayList;
 
 /**
  * PlaylistService
