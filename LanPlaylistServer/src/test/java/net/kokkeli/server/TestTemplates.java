@@ -14,6 +14,7 @@ import net.kokkeli.data.Role;
 import net.kokkeli.resources.Field;
 import net.kokkeli.resources.models.BaseModel;
 import net.kokkeli.resources.models.ModelPlaylist;
+import net.kokkeli.resources.models.ModelPlaylistItem;
 import net.kokkeli.resources.models.ModelPlaylists;
 import net.kokkeli.resources.models.ModelUser;
 import net.kokkeli.resources.models.ModelUsers;
@@ -179,13 +180,16 @@ public class TestTemplates {
      }
      
      private static void playlistViews(HashMap<String, Collection<BaseModel>> map){
+         final long playlistId = 5;
+         final String playlistName = "Lan playlist";
+         
          ArrayList<BaseModel> listModels = new ArrayList<BaseModel>();
          listModels.add(correctBaseModelWithModel(new ModelPlaylists()));
          
          ModelPlaylists listWithItems = new ModelPlaylists();
          for (int i = 0; i < 5; i++) {
             ModelPlaylist list = new ModelPlaylist(i);
-            list.setName("Name");
+            list.setName(playlistName);
             listWithItems.getItems().add(list);
          }
          listModels.add(correctBaseModelWithModel(listWithItems));
@@ -195,6 +199,25 @@ public class TestTemplates {
          ArrayList<BaseModel> models = new ArrayList<BaseModel>();
          models.add(correctBaseModel());
          map.put("playlist/add.ftl", models);
+         
+         ArrayList<BaseModel> detailModels = new ArrayList<BaseModel>();
+         ModelPlaylist emptyList = new ModelPlaylist(playlistId);
+         emptyList.setName(playlistName);
+         
+         detailModels.add(correctBaseModelWithModel(emptyList));
+         
+         ModelPlaylist playlistWithItems = new ModelPlaylist(playlistId);
+         playlistWithItems.setName(playlistName);
+         for (int i = 0; i < 7; i++) {
+             ModelPlaylistItem item = new ModelPlaylistItem();
+             item.setArtist("Mockker " + i);
+             item.setTrackName("Murdockmardock " + i);
+             item.setUploader("username");
+             playlistWithItems.getItems().add(item);
+         }
+         detailModels.add(correctBaseModelWithModel(playlistWithItems));
+         
+         map.put("playlist/details.ftl", detailModels);
      }
      
      private static void indexView(HashMap<String, Collection<BaseModel>> map){
