@@ -7,10 +7,14 @@ import javax.ws.rs.core.Response;
 
 import net.kokkeli.ISettings;
 import net.kokkeli.data.PlayList;
+import net.kokkeli.data.Role;
+import net.kokkeli.data.Track;
+import net.kokkeli.data.User;
 import net.kokkeli.data.db.NotFoundInDatabase;
 import net.kokkeli.data.services.IPlaylistService;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.resources.models.BaseModel;
+import net.kokkeli.resources.models.ModelPlaylist;
 import net.kokkeli.server.IFileSystem;
 import net.kokkeli.server.NotAuthenticatedException;
 import net.kokkeli.server.RenderException;
@@ -23,17 +27,20 @@ import com.sun.jersey.core.header.FormDataContentDisposition;
 import static org.mockito.Mockito.*;
 
 public class TestPlaylistResource extends ResourceTestsBase {
+    private static final long EXISTING_PLAYLIST = 654;
+    private static final String UPLOADER_USERNAME = "user";
+    private static final String TRACKS_FOLDER = "trackfolder";
+    private static final String CORRECT_TRACKNAME = "Humppajuna 666";
+    private static final String CORRECT_ARTISTNAME = "Humppupumppu";
+    
     private IFileSystem mockFilesystem;
     private ISettings mockSettings;
     private IPlaylistService mockPlaylistService;
     
     private PlaylistsResource resource;
+    private PlayList existingList;
     
-    private final long EXISTING_PLAYLIST = 654;
-    private final String TRACKS_FOLDER = "trackfolder";
-    
-    private final String CORRECT_TRACKNAME = "Humppajuna 666";
-    private final String CORRECT_ARTISTNAME = "Humppupumppu";
+
     
     @Override
     public void before() throws Exception {
@@ -41,9 +48,10 @@ public class TestPlaylistResource extends ResourceTestsBase {
         mockSettings = mock(ISettings.class);
         mockPlaylistService = mock(IPlaylistService.class);
         
-        PlayList playlist = new PlayList(EXISTING_PLAYLIST);
+        existingList = new PlayList(EXISTING_PLAYLIST);
+        existingList.setName("Heiyah");
         
-        when(mockPlaylistService.getPlaylist(EXISTING_PLAYLIST)).thenReturn(playlist);
+        when(mockPlaylistService.getPlaylist(EXISTING_PLAYLIST)).thenReturn(existingList);
         when(mockSettings.getTracksFolder()).thenReturn(TRACKS_FOLDER);
         
         resource = new PlaylistsResource(getLogger(), getTemplateService(), getPlayer(), getSessionService(), mockSettings, mockPlaylistService, mockFilesystem);
@@ -77,5 +85,30 @@ public class TestPlaylistResource extends ResourceTestsBase {
         assertModelResponse(resource.add(buildRequest(),
                 EXISTING_PLAYLIST, CORRECT_ARTISTNAME, CORRECT_TRACKNAME, mockStream, mockDisposition), answer,
                 "Similar file already exists. Remove existing file, or upload different.", null);
+    }
+    
+    @Test
+    public void testDetailsGetWithExistingPLaylistWorks() throws RenderException, ServiceException, NotAuthenticatedException{
+        fillPlaylistWithTracks(existingList);
+        
+        ModelAnswer answer = new ModelAnswer();
+        when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(answer);
+        
+        assertModelResponse(RESPONSE_OK, resource.Details(buildRequest(), EXISTING_PLAYLIST), answer, null, null);
+        ModelPlaylist playlist = (ModelPlaylist) answer.getModel().getModel();
+        Assert.assertEquals(existingList.getName(), playlist.getName());
+        Assert.assertEquals(existingList.getItems().size(), playlist.getItems().size());
+    }
+
+    private static void fillPlaylistWithTracks(PlayList list) {
+        for (int i = 0; i < 43; i++) {
+            Track item = new Track(i);
+            item.setTrackName("Track "+ i);
+            item.setArtist("Artis");
+            item.setLocation("");
+            User uploader = new User(UPLOADER_USERNAME, Role.USER);
+            item.setUploader(uploader);
+            list.getItems().add(item);
+        }
     }
 }
