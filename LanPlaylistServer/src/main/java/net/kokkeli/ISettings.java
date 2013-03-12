@@ -30,4 +30,10 @@ public interface ISettings {
      * @return Salt
      */
     String getPasswordSalt();
+    
+    /**
+     * Returns location of VLC-player
+     * @return VLC location
+     */
+    String getVlcLocation();
 }

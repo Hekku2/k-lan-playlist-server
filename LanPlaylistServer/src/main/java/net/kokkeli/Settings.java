@@ -39,8 +39,15 @@ public class Settings implements ISettings {
         return "tracks";
     }
 
-    @Override
+    /**
+     * Returns password salt
+     * @return password salt
+     */
     public String getPasswordSalt() {
         return "hgdfskh4341%";
+    }
+    
+    public String getVlcLocation() {
+        return "D:\\vlc-2.0.5";
     }
 }
