@@ -1,0 +1,110 @@
+@CHARSET "ISO-8859-1";
+
+body{
+	background-color:gray;
+}
+
+h1{
+	width: 100%;
+	margin-left: 10px;
+}
+
+.inner-body{
+	background-color:white;
+	width: 800px;
+	min-height: 800px;
+	
+	margin-left: auto;
+    margin-right: auto;
+    
+    border-radius: 6px;
+    border-color: #282828;
+    
+    border-bottom-style: solid;
+    border-bottom-width: 5px;
+    
+    border-right-style: solid;
+    border-right-width: 5px;
+}
+
+.value-fields{
+	border-spacing: 8px;
+}
+
+.field{
+	display: table-row;
+	clear: both;
+	margin-left: 10px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+div.description{
+	display: table-cell;
+	text-align: right;
+	padding-right: 5px;
+	padding-left: 5px;
+}
+
+div.value{
+	display: table-cell;
+}
+
+div.submit-box{
+	margin-top: 10px;
+}
+
+div.content{
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.button{
+	-moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
+	-webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
+	box-shadow:inset 0px 1px 0px 0px #ffffff;
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #dfdfdf) );
+	background:-moz-linear-gradient( center top, #ededed 5%, #dfdfdf 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#dfdfdf');
+	background-color:#ededed;
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	border:2px solid #dcdcdc;
+	display:inline-block;
+	color:#777777;
+	font-family:arial;
+	font-size:15px;
+	font-weight:bold;
+	padding:6px 24px;
+	text-decoration:none;
+	text-shadow:1px 1px 0px #ffffff;
+}
+.button:hover {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #dfdfdf), color-stop(1, #ededed) );
+	background:-moz-linear-gradient( center top, #dfdfdf 5%, #ededed 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dfdfdf', endColorstr='#ededed');
+	background-color:#dfdfdf;
+}
+.button:active {
+	position:relative;
+	top:1px;
+}
+
+div.info-box{
+	border-style:solid;
+	border-radius: 6px;
+	padding: 4px;
+	background-color:#99FFEB;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+div.error-box{
+	border-style:solid;
+	border-radius: 6px;
+	padding: 4px;
+	background-color:#FFA3A3;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
