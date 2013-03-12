@@ -3,12 +3,12 @@ package net.kokkeli.resources.authentication;
 import java.lang.annotation.Annotation;
 import javax.servlet.http.Cookie;
 
-import junit.framework.Assert;
 import net.kokkeli.data.Role;
 import net.kokkeli.resources.Access;
 import net.kokkeli.resources.Field;
 import net.kokkeli.server.ServerException;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 /**

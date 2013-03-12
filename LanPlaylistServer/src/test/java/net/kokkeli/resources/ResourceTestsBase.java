@@ -10,7 +10,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response;
 
-import junit.framework.Assert;
+import static org.junit.Assert.assertEquals;
 
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Role;
@@ -82,9 +82,10 @@ public abstract class ResourceTestsBase {
      * @param info
      */
     public static void assertModelResponse(int statusCode, Response r, ModelAnswer model, String error, String info){
-        Assert.assertEquals(error, model.getModel().getError());
-        Assert.assertEquals(info, model.getModel().getInfo());
-        Assert.assertEquals(statusCode, r.getStatus());
+        
+        assertEquals(error, model.getModel().getError());
+        assertEquals(info, model.getModel().getInfo());
+        assertEquals(statusCode, r.getStatus());
     }
     
     public abstract void before() throws Exception;

@@ -3,7 +3,7 @@ package net.kokkeli.resources;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
-import junit.framework.Assert;
+import static org.junit.Assert.assertEquals;
 import net.kokkeli.data.Role;
 import net.kokkeli.data.User;
 import net.kokkeli.data.db.NotFoundInDatabase;
@@ -13,6 +13,7 @@ import net.kokkeli.resources.models.BaseModel;
 import net.kokkeli.server.NotAuthenticatedException;
 import net.kokkeli.server.RenderException;
 
+import org.junit.Assert;
 import org.junit.Test;
 import com.sun.jersey.api.NotFoundException;
 
@@ -64,8 +65,8 @@ public class TestUserResource extends ResourceTestsBase{
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenReturn(processedTemplate);
         
         Response r = userResource.userDetails(buildRequest(), EXISTING_USER_ID);
-        Assert.assertEquals(processedTemplate, r.getEntity().toString());
-        Assert.assertEquals(RESPONSE_OK, r.getStatus());
+        assertEquals(processedTemplate, r.getEntity().toString());
+        assertEquals(RESPONSE_OK, r.getStatus());
         verify(getTemplateService()).process(anyString(), isA(BaseModel.class));
     }
     
@@ -87,8 +88,8 @@ public class TestUserResource extends ResourceTestsBase{
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenReturn(processedTemplate);
         
         Response r = userResource.userEdit(buildRequest(), EXISTING_USER_ID);
-        Assert.assertEquals(processedTemplate, r.getEntity().toString());
-        Assert.assertEquals(RESPONSE_OK, r.getStatus());
+        assertEquals(processedTemplate, r.getEntity().toString());
+        assertEquals(RESPONSE_OK, r.getStatus());
         verify(getTemplateService()).process(anyString(), isA(BaseModel.class));
     }
     
@@ -100,7 +101,7 @@ public class TestUserResource extends ResourceTestsBase{
         
         Response r = userResource.userEdit(buildRequest(), editUserPost(EXISTING_USER_ID, newUsername, newRole));
         assertSessionInfo("User edited.");
-        Assert.assertEquals(REDIRECT, r.getStatus());
+        assertEquals(REDIRECT, r.getStatus());
         verify(mockUserService, times(1)).update(new User(EXISTING_USER_ID, newUsername, newRole));
     }
     
@@ -147,7 +148,7 @@ public class TestUserResource extends ResourceTestsBase{
         when(mockUserService.add(any(User.class))).thenReturn(mockUser);
         
         Response r = userResource.userCreate(buildRequest(), createUserPost(username, Role.ADMIN));
-        Assert.assertEquals(REDIRECT, r.getStatus());
+        assertEquals(REDIRECT, r.getStatus());
         assertSessionInfo("User created.");
         verify(mockUserService, times(1)).add(new User(username, role));
     }
@@ -160,7 +161,7 @@ public class TestUserResource extends ResourceTestsBase{
         
         Response r = userResource.userCreate(buildRequest());
         Assert.assertNotNull(r);
-        Assert.assertEquals(RESPONSE_OK, r.getStatus());
+        assertEquals(RESPONSE_OK, r.getStatus());
         
         Assert.assertNull(answer.getModel().getError());
         Assert.assertNull(answer.getModel().getInfo());
