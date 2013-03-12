@@ -28,7 +28,7 @@ public class Settings implements ISettings {
      * @return Location of templates
      */
     public String getTemplatesLocation() {
-        return "target\\classes\\net\\kokkeli\\resources\\views";
+        return "target/classes/net/kokkeli/resources/views";
     }
     
     /**
