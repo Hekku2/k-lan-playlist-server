@@ -28,7 +28,7 @@ import freemarker.template.TemplateModelException;
 import static org.mockito.Mockito.*;
 
 public class TestTemplates {
-    private static final String CORRECT_TEMPLATE_LOCATION = "target\\classes\\net\\kokkeli\\resources\\views";
+    private static final String CORRECT_TEMPLATE_LOCATION = "target/classes/net/kokkeli/resources/views";
     private static final String CORRECT_TEMPLATE = "index.ftl";
     
     private ITemplateService templateService;
