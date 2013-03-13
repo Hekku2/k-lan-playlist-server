@@ -5,6 +5,7 @@ import java.util.Collection;
 import com.google.inject.Inject;
 
 import net.kokkeli.data.ILogger;
+import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.PlayList;
 import net.kokkeli.data.db.DatabaseException;
 import net.kokkeli.data.db.IPlaylistDatabase;
@@ -42,10 +43,10 @@ public class PlaylistService implements IPlaylistService {
             
             return playlist;
         } catch (NotFoundInDatabase e) {
-            logger.log("No playlist found with given id.", 2);
+            logger.log("No playlist found with given id.", LogSeverity.DEBUG);
             throw e;
         } catch (DatabaseException e) {
-            logger.log("There was a database problem.", 5);
+            logger.log("There was a database problem.", LogSeverity.ERROR);
             throw new ServiceException("There was something wrong with the database.",  e);
         }
     }
@@ -55,7 +56,7 @@ public class PlaylistService implements IPlaylistService {
         try {
             return database.getOnlyIdAndName();
         } catch (DatabaseException e) {
-            logger.log("There was a database problem.", 5);
+            logger.log("There was a database problem.", LogSeverity.ERROR);
             throw new ServiceException("There was something wrong with the database.",  e);
         }
     }
@@ -65,7 +66,7 @@ public class PlaylistService implements IPlaylistService {
         try {
             database.update(playlist);
         } catch (DatabaseException e) {
-            logger.log("There was a database problem.", 5);
+            logger.log("There was a database problem.", LogSeverity.ERROR);
             throw new ServiceException("There was something wrong with the database.",  e);
         }
     }

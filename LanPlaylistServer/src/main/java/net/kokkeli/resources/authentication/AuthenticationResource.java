@@ -15,6 +15,7 @@ import javax.ws.rs.core.Response;
 import com.google.inject.Inject;
 
 import net.kokkeli.data.ILogger;
+import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.Role;
 import net.kokkeli.data.Session;
 import net.kokkeli.data.User;
@@ -90,7 +91,7 @@ public class AuthenticationResource extends BaseResource {
     public Response authenticate(@Context HttpServletRequest req,
             @FormParam("user") String username,
             @FormParam("pwd") String password) {
-        log("User " + username + " trying to authenticate.", 1);
+        log("User " + username + " trying to authenticate.", LogSeverity.TRACE);
         BaseModel model = buildBaseModel();
         
         User user;
@@ -105,7 +106,7 @@ public class AuthenticationResource extends BaseResource {
         Session session = sessions.createSession(user); 
         try {
             Cookie cook = AuthenticationUtils.extractLoginCookie(req.getCookies());
-            log("Old cookie found, modifying...", 0);
+            log("Old cookie found, modifying...", LogSeverity.TRACE);
             NewCookie modified = new NewCookie(cook.getName(), session.getAuthId(), "/",
                     cook.getDomain(), cook.getComment(), cook.getMaxAge(),
                     cook.getSecure());
@@ -114,7 +115,7 @@ public class AuthenticationResource extends BaseResource {
                     .build();
             
         } catch (AuthenticationCookieNotFound e) {
-            log("No old cookie found, creating new.", 0);
+            log("No old cookie found, creating new.", LogSeverity.TRACE);
             NewCookie auth = new NewCookie("auth", session.getAuthId());
             return Response.seeOther(LanServer.getBaseURI()).cookie(auth)
                     .build();
@@ -130,13 +131,13 @@ public class AuthenticationResource extends BaseResource {
     @GET
     @Path("/logout")
     public Response logout(@Context HttpServletRequest req) {
-        log("User logget out.", 1);
+        log("User logget out.", LogSeverity.TRACE);
 
         Cookie cook = null;
         try {
             cook = AuthenticationUtils.extractLoginCookie(req.getCookies());
         } catch (AuthenticationCookieNotFound e) {
-            log("No authentication found.", 1);
+            log("No authentication found.", LogSeverity.TRACE);
             return Response.seeOther(LanServer.getBaseURI()).build();
         }
 

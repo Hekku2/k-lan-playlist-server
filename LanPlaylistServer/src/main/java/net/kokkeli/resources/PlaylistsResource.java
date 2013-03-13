@@ -22,6 +22,7 @@ import com.sun.jersey.multipart.FormDataParam;
 import net.kokkeli.ISettings;
 import net.kokkeli.ValidationUtils;
 import net.kokkeli.data.ILogger;
+import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.PlayList;
 import net.kokkeli.data.Role;
 import net.kokkeli.data.Track;
@@ -119,7 +120,7 @@ public class PlaylistsResource extends BaseResource {
         try {
             return Response.ok(templates.process(PLAYLIST_TRACK_ADD_TEMPLATE, model)).build();
         } catch (RenderException e) {
-            log("There was a problem with rendering:" + e.getMessage(), 5);
+            log("There was a problem with rendering:" + e.getMessage(), LogSeverity.ERROR);
             throw new ServiceException("There was a problem with rendering.");
         }
     }
@@ -163,22 +164,22 @@ public class PlaylistsResource extends BaseResource {
             }
             
             if (ValidationUtils.isEmpty(fileDetail.getFileName())){
-                log("User tried to upload with no file.", 1);
+                log("User tried to upload with no file.", LogSeverity.TRACE);
                 model.setError("Select a file to upload.");
                 return Response.ok(templates.process(PLAYLIST_TRACK_ADD_TEMPLATE, model)).build();
             }
             
-            log("User trying to upload file: " + fileDetail.getFileName() + ", Filetype: " + fileDetail.getType(), 1);
+            log("User trying to upload file: " + fileDetail.getFileName() + ", Filetype: " + fileDetail.getType(), LogSeverity.TRACE);
             String filename = settings.getTracksFolder() + "/" + fileDetail.getFileName();
             
             if (filesystem.fileExists(filename)){
                 model.setError("Similar file already exists. Remove existing file, or upload different.");
-                log("User tried to upload file with same name with file already in system. File: " + filename, 1);
+                log("User tried to upload file with same name with file already in system. File: " + filename, LogSeverity.TRACE);
                 return Response.ok(templates.process(PLAYLIST_TRACK_ADD_TEMPLATE, model)).build();
             }
             
             filesystem.writeToFile(uploadedInputStream, filename);
-            log("Uploading succeeded.", 1);
+            log("Uploading succeeded.", LogSeverity.TRACE);
 
             //TODO Validate that file is audio
             //TODO Check that disk has space
@@ -195,10 +196,10 @@ public class PlaylistsResource extends BaseResource {
             
             return Response.ok(templates.process(PLAYLIST_TRACK_ADD_TEMPLATE, model)).build();
         } catch (RenderException e) {
-            log("There was a problem with rendering:" + e.getMessage(), 5);
+            log("There was a problem with rendering:" + e.getMessage(), LogSeverity.ERROR);
             throw new ServiceException("There was a problem with rendering.", e);
         } catch (IOException e) {
-            log("There was a problem with IO:" + e.getMessage(), 5);
+            log("There was a problem with IO:" + e.getMessage(), LogSeverity.ERROR);
             throw new ServiceException("There was a problem with file uploading.", e);
         }
     }
@@ -220,13 +221,14 @@ public class PlaylistsResource extends BaseResource {
                 model.setArtist(playListItem.getArtist());
                 model.setTrackName(playListItem.getTrackName());
                 model.setUploader(playListItem.getUploader().getUserName());
+                model.setId(playListItem.getId());
                 
                 modelPlayList.getItems().add(model);
             }
             baseModel.setModel(modelPlayList);
             return Response.ok(templates.process(PLAYLIST_DETAILS_TEMPLATE, baseModel)).build();
         } catch (RenderException e) {
-            log("There was a problem with rendering:" + e.getMessage(), 5);
+            log("There was a problem with rendering:" + e.getMessage(), LogSeverity.ERROR);
             throw new ServiceException("There was a problem with rendering.");
         } catch (NotFoundInDatabase e) {
             sessions.setError(baseModel.getCurrentSession().getAuthId(), "Playlist not found.");

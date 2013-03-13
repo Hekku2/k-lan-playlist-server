@@ -11,6 +11,7 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 
 import net.kokkeli.ISettings;
 import net.kokkeli.data.ILogger;
+import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.LoggingModule;
 
 import com.google.inject.Guice;
@@ -44,7 +45,7 @@ public class LanServer {
         File trackFolder = new File(settings.getTracksFolder());
 
         if (!trackFolder.exists()){
-              logger.log("creating directory: " + settings.getTracksFolder(), 1);
+              logger.log("creating directory: " + settings.getTracksFolder(), LogSeverity.TRACE);
               if(!trackFolder.mkdir())
                   throw new ServerException("Can't create folder.");
         }
@@ -63,7 +64,7 @@ public class LanServer {
         try {
             server.start();
             
-            logger.log("Server started at " + BASE_URI, 1);
+            logger.log("Server started at " + BASE_URI, LogSeverity.TRACE);
         } catch (InterruptedException e) {
             throw new ServerException("Unable to start server: " + e.getMessage());
         } catch (Exception e) {
@@ -77,11 +78,11 @@ public class LanServer {
      * @throws ServerException Thrown if service was not started.
      */
     public void stop() throws Exception {
-        logger.log("Shutting down server.", 1);
+        logger.log("Shutting down server.", LogSeverity.TRACE);
         if (server != null){
             server.stop();
         }
-        logger.log("Server shut down.", 1);
+        logger.log("Server shut down.", LogSeverity.TRACE);
     }
     
     /**

@@ -24,7 +24,7 @@ public class Logging implements ILogger {
      * @param message Message to write
      * @param severity Severity of message
      */
-    public void log(String message, int severity){
+    public void log(String message, LogSeverity severity){
         logger.logLines.add(severity + ": " + message);
         System.out.println(severity + ": " + message);
     }

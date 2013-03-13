@@ -6,6 +6,7 @@ import java.util.UUID;
 import com.google.inject.Inject;
 
 import net.kokkeli.data.ILogger;
+import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.Session;
 import net.kokkeli.data.User;
 import net.kokkeli.data.db.NotFoundInDatabase;
@@ -40,7 +41,7 @@ public class SessionService implements ISessionService{
             throw new NotFoundInDatabase("Auth not found in database.");
         
         Session session = sessions.get(authId);
-        logger.log("Session found for user: " + session.getUser().getId(), 1);
+        logger.log("Session found for user: " + session.getUser().getId(), LogSeverity.TRACE);
         return session;
     }
 

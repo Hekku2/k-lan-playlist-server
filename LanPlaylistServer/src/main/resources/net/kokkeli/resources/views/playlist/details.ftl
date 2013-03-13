@@ -30,6 +30,9 @@
 						<div class="column-header">
 							Uploader
 						</div>
+						<div class="column-header">
+							Man.
+						</div>
 					</div>
 					<div class="song-rows">
 						<#list getModel.getItems as item>
@@ -42,6 +45,10 @@
 								</div>
 								<div>
 									${item.getUploader}
+								</div>
+								<div>
+									<a href="/tracks/${item.getId}"><img src="/resource/images/details-icon-20x20.png"/></a>
+									<a href="/playlist/delete?trackId=${item.getId}?playlistId=${getModel.getId}">Del.</a>
 								</div>
 							</div>
 						</#list>

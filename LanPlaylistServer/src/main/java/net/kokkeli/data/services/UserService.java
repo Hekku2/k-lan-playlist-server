@@ -7,6 +7,7 @@ import java.util.Collection;
 
 import net.kokkeli.ISettings;
 import net.kokkeli.data.ILogger;
+import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.User;
 import net.kokkeli.data.db.DatabaseException;
 import net.kokkeli.data.db.IUserDatabase;
@@ -48,10 +49,10 @@ public class UserService implements IUserService {
     public User get(long id) throws ServiceException, NotFoundInDatabase {
         try {
             User user = userDatabase.get(id);
-            logger.log("User gotten with id: " + id, 1);
+            logger.log("User gotten with id: " + id, LogSeverity.TRACE);
             return user;
         } catch (NotFoundInDatabase e) {
-            logger.log("No user exists with id: " + id, 1);
+            logger.log("No user exists with id: " + id, LogSeverity.DEBUG);
             throw e;
         } catch (DatabaseException e) {
             throw new ServiceException("There was problem with database.", e);
@@ -62,10 +63,10 @@ public class UserService implements IUserService {
     public Collection<User> get() throws ServiceException {
         try {
             Collection<User> users = userDatabase.get();
-            logger.log("Users gotten.", 1);
+            logger.log("Users gotten.", LogSeverity.TRACE);
             return users;
         } catch (DatabaseException e) {
-            logger.log("Something went wrong.", 5);
+            logger.log("Something went wrong in database: " + e.getMessage(), LogSeverity.ERROR);
             throw new ServiceException("There was problem with database.", e);
         }
     }
@@ -81,12 +82,13 @@ public class UserService implements IUserService {
                 return;
             
             userDatabase.update(user);
-            logger.log(String.format("User (ID: %s) updated", user.getId()), 1);
+            logger.log(String.format("User (ID: %s) updated", user.getId()), LogSeverity.TRACE);
             
         } catch (NotFoundInDatabase e) {
-            logger.log("No user exists with id: " + user.getId(), 1);
+            logger.log("No user exists with id: " + user.getId(), LogSeverity.DEBUG);
             throw new NotFoundInDatabase(String.format("User with id %s not found.", user.getId()));
         } catch (DatabaseException e) {
+            logger.log("Something went wrong in database: " + e.getMessage(), LogSeverity.ERROR);
             throw new ServiceException("There was problem with database.", e);
         }
     }
@@ -98,6 +100,7 @@ public class UserService implements IUserService {
         try {
             return userDatabase.add(user);
         } catch (DatabaseException e) {
+            logger.log("Something went wrong in database: " + e.getMessage(), LogSeverity.ERROR);
             throw new ServiceException("There was problem with database.", e);
         }
     }
@@ -114,6 +117,7 @@ public class UserService implements IUserService {
             throw new NotFoundInDatabase(String.format("User with username %s not found.", username));
             
         } catch (DatabaseException e) {
+            logger.log("Something went wrong in database: " + e.getMessage(), LogSeverity.ERROR);
             throw new ServiceException("There is a problem with the database.", e);
         }
     }
@@ -124,6 +128,7 @@ public class UserService implements IUserService {
             get(username);
             return true;
         } catch (NotFoundInDatabase e) {
+            logger.log("Something went wrong in database: " + e.getMessage(), LogSeverity.ERROR);
             return false;
         }
     }

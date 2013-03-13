@@ -11,6 +11,7 @@ public final class ModelPlaylistItem extends ViewModel{
     private String trackName;
     private String artist;
     private String uploader;
+    private long id;
     
     /**
      * Sets name of item
@@ -61,5 +62,22 @@ public final class ModelPlaylistItem extends ViewModel{
     @Field
     public String getUploader(){
         return uploader;
+    }
+    
+    /**
+     * Getter for Id
+     * @return Id
+     */
+    @Field
+    public long getId(){
+        return id;
+    }
+    
+    /**
+     * Sets id for item
+     * @param id Id of track
+     */
+    public void setId(long id){
+        this.id = id;
     }
 }

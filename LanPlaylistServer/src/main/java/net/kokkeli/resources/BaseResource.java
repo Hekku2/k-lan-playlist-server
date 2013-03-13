@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response;
 
 import net.kokkeli.data.ILogger;
+import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.Session;
 import net.kokkeli.data.db.NotFoundInDatabase;
 import net.kokkeli.data.services.ISessionService;
@@ -42,7 +43,7 @@ public abstract class BaseResource {
      * @param message Message
      * @param severity Severity
      */
-    protected final void log(String message, int severity){
+    protected final void log(String message, LogSeverity severity){
         logger.log(message, severity);
     }
     

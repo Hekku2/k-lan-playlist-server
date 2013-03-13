@@ -16,6 +16,7 @@ import com.sun.jersey.api.NotFoundException;
 
 import net.kokkeli.ValidationUtils;
 import net.kokkeli.data.ILogger;
+import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.Role;
 import net.kokkeli.data.User;
 import net.kokkeli.data.db.NotFoundInDatabase;
@@ -251,7 +252,7 @@ public class UsersResource extends BaseResource {
             }
             
             long id = userService.add(new User(user.getUsername(),user.getRoleEnum())).getId();
-            log("User created.", 1);
+            log("User created.", LogSeverity.TRACE);
             
             sessions.setInfo(model.getCurrentSession().getAuthId(), "User created.");
             return Response.seeOther(LanServer.getURI(String.format("users/%s", id))).build();

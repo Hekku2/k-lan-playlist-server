@@ -4,7 +4,7 @@ public interface ILogger {
     /**
      * Logs given message with given severity
      * @param message Message
-     * @param severity Severity
+     * @param trace Severity
      */
-    public void log(String message, int severity);
+    public void log(String message, LogSeverity trace);
 }
