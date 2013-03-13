@@ -1,6 +1,16 @@
 package net.kokkeli;
 
+import java.io.IOException;
+
 public interface ISettings {
+    
+    /**
+     * Loads settings from file
+     * @param file File
+     * @throws IOException
+     */
+    void loadSettings(String file) throws IOException;
+    
     /**
      * Returns location of database
      * @return Location of database.

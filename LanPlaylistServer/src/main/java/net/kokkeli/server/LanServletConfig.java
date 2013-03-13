@@ -1,7 +1,6 @@
 package net.kokkeli.server;
 
 import net.kokkeli.ISettings;
-import net.kokkeli.Settings;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Logging;
 import net.kokkeli.data.db.IPlaylistDatabase;
@@ -40,13 +39,19 @@ import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
  * @version 15.11.2012
  */
 public class LanServletConfig extends GuiceServletContextListener {
+    private ISettings settings;
+    
+    public LanServletConfig(ISettings settings) {
+        this.settings = settings;
+    }
+
     @Override
     protected Injector getInjector() {
         return Guice.createInjector(new JerseyServletModule() {
             @Override
             protected void configureServlets() {
                 //Settings
-                bind(ISettings.class).to(Settings.class);
+                bind(ISettings.class).toInstance(settings);
                 
                 //Exceptions
                 bind(RenderExceptionMapper.class).asEagerSingleton();

@@ -13,8 +13,14 @@ public class Program {
 	public static void main(String[] args) throws Exception {    
 	    LanServer server = null;
 		try {
-		    System.out.println("Starting server.");
-		    server = new LanServer();
+		    String settingsFile = "settings/default.dat";
+		    
+		    if (args.length > 0){
+		        settingsFile = args[0];
+		    }
+		    
+		    System.out.println("Starting server with settings: " + settingsFile);
+		    server = new LanServer(settingsFile);
             server.start();
             System.in.read();
         } catch (ServerException e) {

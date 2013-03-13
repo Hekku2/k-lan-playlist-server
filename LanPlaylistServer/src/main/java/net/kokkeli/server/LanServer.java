@@ -1,6 +1,7 @@
 package net.kokkeli.server;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 
 import javax.ws.rs.core.UriBuilder;
@@ -10,6 +11,7 @@ import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 
 import net.kokkeli.ISettings;
+import net.kokkeli.Settings;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.LoggingModule;
@@ -36,11 +38,16 @@ public class LanServer {
      * Creates server 
      * @throws ServerException thrown if there is problem width server.
      */
-    public LanServer() throws ServerException{
+    public LanServer(String settingsFile) throws ServerException{
         Injector injector = Guice.createInjector(new LoggingModule());
         logger = injector.getInstance(ILogger.class);
         
-        settings = injector.getInstance(ISettings.class);
+        settings = new Settings();
+        try {
+            settings.loadSettings(settingsFile);
+        } catch (IOException e) {
+            throw new ServerException("Settings file " + settingsFile + " is missings!");
+        }
         
         File trackFolder = new File(settings.getTracksFolder());
 
@@ -58,7 +65,7 @@ public class LanServer {
     public void start() throws ServerException{
         server = new Server(PORT);
         ServletContextHandler sch = new ServletContextHandler(server, "/");
-        sch.addEventListener(new LanServletConfig());
+        sch.addEventListener(new LanServletConfig(settings));
         sch.addFilter(GuiceFilter.class, "/*", null);
         sch.addServlet(DefaultServlet.class, "/");  
         try {
