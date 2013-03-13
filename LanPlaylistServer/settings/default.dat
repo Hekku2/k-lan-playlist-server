@@ -1,5 +1,5 @@
 #Default settings file
-DatabaseLocation=db/database.db
+DatabaseLocation=db/testserver.db
 LibLocation=lib
 TemplatesLocation=target/classes/net/kokkeli/resources/views
 TracksFolder=tracks
