@@ -1,1 +1,1 @@
-screen -S server -X mvn exec:java -Dexec.mainClass=net.kokkeli.Program -Dexec.args=settings/testserver.dat
+screen -X hekku2/server mvn exec:java -Dexec.mainClass=net.kokkeli.Program -Dexec.args=settings/testserver.dat
