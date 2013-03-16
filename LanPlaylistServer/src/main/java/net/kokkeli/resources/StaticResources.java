@@ -21,8 +21,8 @@ import com.sun.jersey.api.NotFoundException;
  */
 @Path("/resource")
 public class StaticResources {
-    private static final String CSS_FOLDER = "target\\classes\\net\\kokkeli\\resources\\css\\";
-    private static final String IMAGES_FOLDER = "target\\classes\\net\\kokkeli\\resources\\images\\";
+    private static final String CSS_FOLDER = "target/classes/net/kokkeli/resources/css/";
+    private static final String IMAGES_FOLDER = "target/classes/net/kokkeli/resources/images/";
     
     /**
      * Loads css-file with given name from resources.
