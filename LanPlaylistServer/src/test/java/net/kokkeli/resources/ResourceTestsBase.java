@@ -12,6 +12,7 @@ import javax.ws.rs.core.Response;
 
 import static org.junit.Assert.assertEquals;
 
+import net.kokkeli.ISettings;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Role;
 import net.kokkeli.data.Session;
@@ -33,6 +34,7 @@ public abstract class ResourceTestsBase {
     private ITemplateService mockTemplateService;
     private IPlayer mockPlayer;
     private ISessionService mockSessionService;
+    private ISettings mockSettings;
     
     @Before
     public void setup() throws Exception{
@@ -40,6 +42,7 @@ public abstract class ResourceTestsBase {
         mockTemplateService = mock(ITemplateService.class);
         mockPlayer = mock(IPlayer.class);
         mockSessionService = mock(ISessionService.class);
+        mockSettings = mock(ISettings.class);
         
         User loggerUser = new User("LoggedUser", Role.ADMIN);
         Session session = new Session(loggerUser);
@@ -100,6 +103,10 @@ public abstract class ResourceTestsBase {
     
     public IPlayer getPlayer(){
         return mockPlayer;
+    }
+    
+    public ISettings getSettings(){
+        return mockSettings;
     }
     
     public ISessionService getSessionService(){

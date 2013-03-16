@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
+import net.kokkeli.ISettings;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.Logging;
@@ -12,7 +13,6 @@ import net.kokkeli.data.Role;
 import net.kokkeli.data.db.NotFoundInDatabase;
 import net.kokkeli.data.services.ISessionService;
 import net.kokkeli.resources.Access;
-import net.kokkeli.server.LanServer;
 import net.kokkeli.data.*;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
@@ -36,6 +36,12 @@ public class AuthenticationInceptor implements MethodInterceptor{
      */
     @Inject
     protected ISessionService sessions;
+    
+    /**
+     * ISettings. This is protected for injecting
+     */
+    @Inject
+    protected ISettings settings;
     
     /**
      * Creates authencation inceptor for catching Access-annotations
@@ -67,10 +73,10 @@ public class AuthenticationInceptor implements MethodInterceptor{
             return invocation.proceed();
         } catch (NotFoundInDatabase e) {
             logger.log("Old or invalid authentication." + e.getMessage(), LogSeverity.DEBUG);
-            return Response.seeOther(UriBuilder.fromUri(LanServer.getBaseURI()).path("/authentication").build()).build();
+            return Response.seeOther(UriBuilder.fromUri(settings.getBaseURI()).path("/authentication").build()).build();
         } catch (AuthenticationException e) {
             logger.log("There were no authenticaiton data: " + e.getMessage(), LogSeverity.DEBUG);
-            return Response.seeOther(UriBuilder.fromUri(LanServer.getBaseURI()).path("/authentication").build()).build();
+            return Response.seeOther(UriBuilder.fromUri(settings.getBaseURI()).path("/authentication").build()).build();
         }
 
         

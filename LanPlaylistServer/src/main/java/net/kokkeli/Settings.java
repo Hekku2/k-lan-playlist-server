@@ -5,6 +5,9 @@ import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URI;
+
+import javax.ws.rs.core.UriBuilder;
 
 /**
  * Class for settings
@@ -21,6 +24,8 @@ public class Settings implements ISettings {
     private String tracksFolder;
     private String passwordSalt;
     private String vlcLocation;
+    private String serverUri;
+    private int port;
     
     /**
      * Loads settings from file
@@ -104,8 +109,41 @@ public class Settings implements ISettings {
         return passwordSalt;
     }
     
+    /**
+     * Returns location of VLC
+     * @return location of vlc
+     */
     public String getVlcLocation() {
         return vlcLocation;
+    }
+    
+    /**
+     * Returns uri of server
+     * @return uri of server
+     */
+    public String getServerUri() {
+        return serverUri;
+    }
+    
+    public int getServerPort(){
+        return port;
+    }
+    
+    /**
+     * Build base uri for localhost.
+     * @return Base uri for localhost
+     */
+    public URI getBaseURI() {
+        return UriBuilder.fromUri(serverUri).port(port).build();
+    }
+    
+    /**
+     * Builds uri with base uri and end part.
+     * @param endPart End part
+     * @return Uri
+     */
+    public URI getURI(String endPart){
+        return UriBuilder.fromUri(serverUri + endPart).port(port).build();
     }
     
     private void loadSetting(String key, String value) throws IOException{
@@ -127,6 +165,12 @@ public class Settings implements ISettings {
             break;
         case "VlcLocation":
             vlcLocation = value;
+            break;
+        case "ServerUri":
+            serverUri = value;
+            break;
+        case "Port":
+            port = Integer.parseInt(value);
             break;
         default:
             throw new IOException("Invalid setting: " + key);

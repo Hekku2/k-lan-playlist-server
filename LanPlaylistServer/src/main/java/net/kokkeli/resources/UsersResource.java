@@ -14,6 +14,7 @@ import javax.ws.rs.core.Response;
 import com.google.inject.Inject;
 import com.sun.jersey.api.NotFoundException;
 
+import net.kokkeli.ISettings;
 import net.kokkeli.ValidationUtils;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.LogSeverity;
@@ -28,7 +29,6 @@ import net.kokkeli.resources.models.BaseModel;
 import net.kokkeli.resources.models.ModelUser;
 import net.kokkeli.resources.models.ModelUsers;
 import net.kokkeli.server.ITemplateService;
-import net.kokkeli.server.LanServer;
 import net.kokkeli.server.NotAuthenticatedException;
 import net.kokkeli.server.RenderException;
 
@@ -57,8 +57,8 @@ public class UsersResource extends BaseResource {
      * @param logger
      */
     @Inject
-    protected UsersResource(ILogger logger, ITemplateService templateService, IUserService userservice, IPlayer player, ISessionService sessions) {
-        super(logger, templateService, player, sessions);
+    protected UsersResource(ILogger logger, ITemplateService templateService, IUserService userservice, IPlayer player, ISessionService sessions, ISettings settings) {
+        super(logger, templateService, player, sessions, settings);
         this.userService = userservice;
     }
     
@@ -112,7 +112,7 @@ public class UsersResource extends BaseResource {
             return handleRenderingError(model);
         } catch (NotFoundInDatabase e){
             sessions.setError(model.getCurrentSession().getAuthId(), "User not found.");
-            return Response.seeOther(LanServer.getURI("users")).build();
+            return Response.seeOther(settings.getURI("users")).build();
         } catch (ServiceException e) {
             return handleServiceException(model);
         }
@@ -144,7 +144,7 @@ public class UsersResource extends BaseResource {
             return handleRenderingError(model);
         } catch (NotFoundInDatabase e) {
             sessions.setError(model.getCurrentSession().getAuthId(), "User not found.");
-            return Response.seeOther(LanServer.getURI("users")).build();
+            return Response.seeOther(settings.getURI("users")).build();
         } catch (ServiceException e) {
             return handleServiceException(model);
         }
@@ -190,10 +190,10 @@ public class UsersResource extends BaseResource {
             //TODO Field validation
             userService.update(new User(editedUser.getId(), editedUser.getUsername(), editedUser.getRoleEnum()));
             sessions.setInfo(model.getCurrentSession().getAuthId(), "User edited.");
-            return Response.seeOther(LanServer.getURI(String.format("users/%s", user.getId()))).build();
+            return Response.seeOther(settings.getURI(String.format("users/%s", user.getId()))).build();
         } catch (NotFoundInDatabase e) {
             sessions.setError(model.getCurrentSession().getAuthId(), "User not found.");
-            return Response.seeOther(LanServer.getURI("users")).build();
+            return Response.seeOther(settings.getURI("users")).build();
         } catch (ServiceException e) {
             return handleServiceException(model);
         }
@@ -255,7 +255,7 @@ public class UsersResource extends BaseResource {
             log("User created.", LogSeverity.TRACE);
             
             sessions.setInfo(model.getCurrentSession().getAuthId(), "User created.");
-            return Response.seeOther(LanServer.getURI(String.format("users/%s", id))).build();
+            return Response.seeOther(settings.getURI(String.format("users/%s", id))).build();
         } catch (RenderException e) {
             return handleRenderingError(model);
         } catch (ServiceException e){

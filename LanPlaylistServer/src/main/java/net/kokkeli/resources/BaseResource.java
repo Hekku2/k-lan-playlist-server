@@ -3,6 +3,7 @@ package net.kokkeli.resources;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response;
 
+import net.kokkeli.ISettings;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.Session;
@@ -13,7 +14,6 @@ import net.kokkeli.resources.authentication.AuthenticationCookieNotFound;
 import net.kokkeli.resources.authentication.AuthenticationUtils;
 import net.kokkeli.resources.models.BaseModel;
 import net.kokkeli.server.ITemplateService;
-import net.kokkeli.server.LanServer;
 import net.kokkeli.server.NotAuthenticatedException;
 
 /**
@@ -26,16 +26,18 @@ public abstract class BaseResource {
     protected final IPlayer player;
     protected final ITemplateService templates;
     protected final ISessionService sessions;
+    protected final ISettings settings;
     
     /**
      * Initializes class.
      * @param logger
      */
-    protected BaseResource(final ILogger logger, final ITemplateService templateService, final IPlayer player, final ISessionService sessions){
+    protected BaseResource(final ILogger logger, final ITemplateService templateService, final IPlayer player, final ISessionService sessions, final ISettings settings){
         this.logger = logger;
         this.templates = templateService;
         this.player = player;
         this.sessions = sessions;
+        this.settings = settings;
     }
     
     /**
@@ -95,7 +97,7 @@ public abstract class BaseResource {
      */
     protected final Response handleRenderingError(BaseModel model){
         sessions.setError(model.getCurrentSession().getAuthId(), "There was a problem with rendering the template.");
-        return Response.seeOther(LanServer.getURI("")).build();
+        return Response.seeOther(settings.getURI("")).build();
     }
     
     /**
@@ -105,6 +107,6 @@ public abstract class BaseResource {
      */
     protected final Response handleServiceException(BaseModel model){
         sessions.setError(model.getCurrentSession().getAuthId(), "Something went wrong with service.");
-        return Response.seeOther(LanServer.getURI("")).build();
+        return Response.seeOther(settings.getURI("")).build();
     }
 }

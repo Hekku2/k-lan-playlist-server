@@ -5,3 +5,5 @@ TemplatesLocation=target/classes/net/kokkeli/resources/views
 TracksFolder=tracks
 PasswordSalt=hgdfskh4341%
 VlcLocation=D:\\vlc-2.0.5
+ServerUri=http://localhost/
+Port=9998

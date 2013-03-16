@@ -28,7 +28,7 @@ public class TestIndexResource extends ResourceTestsBase{
     
     public void before() throws NotFoundException, ServiceException, NotFoundInDatabase {
         mockPlaylistService = mock(IPlaylistService.class);
-        resource = new IndexResource(getLogger(), getTemplateService(), getPlayer(), mockPlaylistService, getSessionService());
+        resource = new IndexResource(getLogger(), getTemplateService(), getPlayer(), mockPlaylistService, getSessionService(), getSettings());
     }
     
     @Test

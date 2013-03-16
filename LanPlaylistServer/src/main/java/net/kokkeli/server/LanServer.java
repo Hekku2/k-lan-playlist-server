@@ -2,10 +2,6 @@ package net.kokkeli.server;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-
-import javax.ws.rs.core.UriBuilder;
-
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -26,9 +22,7 @@ import com.google.inject.servlet.GuiceFilter;
  *
  */
 public class LanServer {
-    private static final String URL = "http://localhost/";
     private static final int PORT = 9998;
-    private static final URI BASE_URI = getBaseURI();
     private final ILogger logger;
     private final ISettings settings;
     
@@ -71,7 +65,7 @@ public class LanServer {
         try {
             server.start();
             
-            logger.log("Server started at " + BASE_URI, LogSeverity.TRACE);
+            logger.log("Server started at " + settings.getBaseURI(), LogSeverity.TRACE);
         } catch (InterruptedException e) {
             throw new ServerException("Unable to start server: " + e.getMessage());
         } catch (Exception e) {
@@ -90,22 +84,5 @@ public class LanServer {
             server.stop();
         }
         logger.log("Server shut down.", LogSeverity.TRACE);
-    }
-    
-    /**
-     * Build base uri for localhost.
-     * @return Base uri for localhost
-     */
-    public static URI getBaseURI() {
-        return UriBuilder.fromUri(URL).port(PORT).build();
-    }
-    
-    /**
-     * Builds uri with base uri and end part.
-     * @param endPart End part
-     * @return Uri
-     */
-    public static URI getURI(String endPart){
-        return UriBuilder.fromUri(URL + endPart).port(PORT).build();
     }
 }

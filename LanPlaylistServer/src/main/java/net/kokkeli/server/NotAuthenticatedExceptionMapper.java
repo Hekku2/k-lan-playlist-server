@@ -4,17 +4,25 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.ext.ExceptionMapper;
 
+import net.kokkeli.ISettings;
+
+import com.google.inject.Inject;
+
 /**
  * Maps not authenticated exception to redirect.
  * @author Hekku2
  *
  */
 public class NotAuthenticatedExceptionMapper implements ExceptionMapper<NotAuthenticatedException>{
+    
+    @Inject
+    protected ISettings settings;
+    
     /**
      * Creates response from NotAuthenticatedException
      * @param ex Exception
      */
     public Response toResponse(NotAuthenticatedException ex) {
-        return Response.seeOther(UriBuilder.fromUri(LanServer.getBaseURI()).path("/authentication").build()).build();
+        return Response.seeOther(UriBuilder.fromUri(settings.getBaseURI()).path("/authentication").build()).build();
     }
 }

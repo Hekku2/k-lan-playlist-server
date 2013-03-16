@@ -43,7 +43,7 @@ public class TestUserResource extends ResourceTestsBase{
         when(mockUserService.get(EXISTING_USER_ID)).thenReturn(existing);
         when(mockUserService.get(NONEXISTING_ID)).thenThrow(new NotFoundInDatabase("User not found"));
         
-        userResource = new UsersResource(getLogger(), getTemplateService(), mockUserService, getPlayer(), getSessionService());
+        userResource = new UsersResource(getLogger(), getTemplateService(), mockUserService, getPlayer(), getSessionService(), getSettings());
     }
     
     // USER DETAILS GET

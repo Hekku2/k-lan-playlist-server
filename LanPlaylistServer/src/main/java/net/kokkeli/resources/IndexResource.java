@@ -9,6 +9,7 @@ import javax.ws.rs.core.Response;
 
 import com.google.inject.Inject;
 
+import net.kokkeli.ISettings;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.PlayList;
 import net.kokkeli.data.Track;
@@ -47,8 +48,9 @@ public class IndexResource extends BaseResource {
      */
     @Inject
     protected IndexResource(ILogger logger, ITemplateService templateService,
-            IPlayer player, IPlaylistService playlistService, ISessionService sessions) {
-        super(logger, templateService, player, sessions);
+            IPlayer player, IPlaylistService playlistService, ISessionService sessions,
+            ISettings settings) {
+        super(logger, templateService, player, sessions, settings);
         
         this.playlistService = playlistService;
     }

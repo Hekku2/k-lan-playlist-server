@@ -1,6 +1,7 @@
 package net.kokkeli;
 
 import java.io.IOException;
+import java.net.URI;
 
 public interface ISettings {
     
@@ -46,4 +47,14 @@ public interface ISettings {
      * @return VLC location
      */
     String getVlcLocation();
+    
+    /**
+     * Returns uri of server
+     * @return URI of server
+     */
+    String getServerUri();
+    
+    URI getBaseURI();
+    
+    URI getURI(String endPart);
 }

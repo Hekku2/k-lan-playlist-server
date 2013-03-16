@@ -9,13 +9,13 @@ import javax.ws.rs.core.Response;
 
 import com.google.inject.Inject;
 
+import net.kokkeli.ISettings;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Role;
 import net.kokkeli.data.services.ISessionService;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.player.IPlayer;
 import net.kokkeli.server.ITemplateService;
-import net.kokkeli.server.LanServer;
 
 /**
  * Class for root resources.
@@ -32,8 +32,8 @@ public class RootResource extends BaseResource {
      * @param logger
      */
     @Inject
-    protected RootResource(ILogger logger, ITemplateService templateService, IPlayer player, ISessionService sessions) {
-        super(logger, templateService, player, sessions);
+    protected RootResource(ILogger logger, ITemplateService templateService, IPlayer player, ISessionService sessions, ISettings settings) {
+        super(logger, templateService, player, sessions, settings);
     }
    
     /**
@@ -45,6 +45,6 @@ public class RootResource extends BaseResource {
     @Produces("text/html")
     @Access(Role.USER)
     public Response redirect(@Context HttpServletRequest req) throws ServiceException {
-        return Response.seeOther(LanServer.getURI("index")).build();
+        return Response.seeOther(settings.getURI("index")).build();
     }
 }

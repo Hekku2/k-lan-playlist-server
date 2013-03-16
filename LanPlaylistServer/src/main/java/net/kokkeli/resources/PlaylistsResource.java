@@ -37,7 +37,6 @@ import net.kokkeli.resources.models.ModelPlaylistItem;
 import net.kokkeli.resources.models.ModelPlaylists;
 import net.kokkeli.server.IFileSystem;
 import net.kokkeli.server.ITemplateService;
-import net.kokkeli.server.LanServer;
 import net.kokkeli.server.NotAuthenticatedException;
 import net.kokkeli.server.RenderException;
 
@@ -70,7 +69,7 @@ public class PlaylistsResource extends BaseResource {
             ISettings settings,
             IPlaylistService playlistService,
             IFileSystem filesystem) {
-        super(logger, templateService, player, sessions);
+        super(logger, templateService, player, sessions, settings);
         
         this.playlistService = playlistService;
         this.settings = settings;
@@ -232,7 +231,7 @@ public class PlaylistsResource extends BaseResource {
             throw new ServiceException("There was a problem with rendering.");
         } catch (NotFoundInDatabase e) {
             sessions.setError(baseModel.getCurrentSession().getAuthId(), "Playlist not found.");
-            return Response.seeOther(LanServer.getURI("playlists")).build();
+            return Response.seeOther(settings.getURI("playlists")).build();
         }
     }
 }

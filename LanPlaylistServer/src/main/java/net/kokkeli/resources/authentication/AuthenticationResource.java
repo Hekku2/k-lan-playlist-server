@@ -12,8 +12,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 
-import com.google.inject.Inject;
-
+import net.kokkeli.ISettings;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.Role;
@@ -28,8 +27,9 @@ import net.kokkeli.resources.Access;
 import net.kokkeli.resources.BaseResource;
 import net.kokkeli.resources.models.BaseModel;
 import net.kokkeli.server.ITemplateService;
-import net.kokkeli.server.LanServer;
 import net.kokkeli.server.RenderException;
+
+import com.google.inject.Inject;
 
 /**
  * Authentication resource. This class doesn't need access control.
@@ -52,8 +52,8 @@ public class AuthenticationResource extends BaseResource {
      * @param users User service
      */
     @Inject
-    protected AuthenticationResource(ILogger logger, ITemplateService templateService, IPlayer player, ISessionService sessions, IUserService users) {
-        super(logger, templateService, player, sessions);
+    protected AuthenticationResource(ILogger logger, ITemplateService templateService, IPlayer player, ISessionService sessions, IUserService users, ISettings settings) {
+        super(logger, templateService, player, sessions, settings);
         this.users = users;
     }
 
@@ -111,13 +111,13 @@ public class AuthenticationResource extends BaseResource {
                     cook.getDomain(), cook.getComment(), cook.getMaxAge(),
                     cook.getSecure());
 
-            return Response.seeOther(LanServer.getBaseURI()).cookie(modified)
+            return Response.seeOther(settings.getBaseURI()).cookie(modified)
                     .build();
             
         } catch (AuthenticationCookieNotFound e) {
             log("No old cookie found, creating new.", LogSeverity.TRACE);
             NewCookie auth = new NewCookie("auth", session.getAuthId());
-            return Response.seeOther(LanServer.getBaseURI()).cookie(auth)
+            return Response.seeOther(settings.getBaseURI()).cookie(auth)
                     .build();
         }
 
@@ -138,14 +138,14 @@ public class AuthenticationResource extends BaseResource {
             cook = AuthenticationUtils.extractLoginCookie(req.getCookies());
         } catch (AuthenticationCookieNotFound e) {
             log("No authentication found.", LogSeverity.TRACE);
-            return Response.seeOther(LanServer.getBaseURI()).build();
+            return Response.seeOther(settings.getBaseURI()).build();
         }
 
         NewCookie modified = new NewCookie(cook.getName(), "", "/",
                 cook.getDomain(), cook.getComment(), cook.getMaxAge(),
                 cook.getSecure());
 
-        return Response.seeOther(LanServer.getBaseURI()).cookie(modified)
+        return Response.seeOther(settings.getBaseURI()).cookie(modified)
                 .build();
     }
     
