@@ -1,6 +1,6 @@
 #Default settings file
 DatabaseLocation=db/testserver.db
-LibLocation=/usr/lib
+LibLocation=/usr/lib/
 TemplatesLocation=target/classes/net/kokkeli/resources/views
 TracksFolder=tracks
 PasswordSalt=hgdfskh4341%
