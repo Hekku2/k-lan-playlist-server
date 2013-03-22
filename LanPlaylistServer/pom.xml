@@ -42,12 +42,6 @@
   		<version>0.282</version>
   	</dependency>
   	<dependency>
-  		<groupId>com.almworks.sqlite4java</groupId>
-  		<artifactId>sqlite4java-win32-x64</artifactId>
-  		<type>dll</type>
-  		<version>0.282</version>
-  	</dependency>
-  	<dependency>
   		<groupId>org.mockito</groupId>
   		<artifactId>mockito-core</artifactId>
   		<version>1.9.5-rc1</version>
