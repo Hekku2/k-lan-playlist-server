@@ -94,7 +94,7 @@ public class TestPlaylistResource extends ResourceTestsBase {
         ModelAnswer answer = new ModelAnswer();
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(answer);
         
-        assertModelResponse(RESPONSE_OK, resource.Details(buildRequest(), EXISTING_PLAYLIST), answer, null, null);
+        assertModelResponse(RESPONSE_OK, resource.details(buildRequest(), EXISTING_PLAYLIST), answer, null, null);
         ModelPlaylist playlist = (ModelPlaylist) answer.getModel().getModel();
         Assert.assertEquals(existingList.getName(), playlist.getName());
         Assert.assertEquals(existingList.getItems().size(), playlist.getItems().size());

@@ -50,6 +50,7 @@ public class PlaylistsResource extends BaseResource {
     private static final String PLAYLISTS_TEMPLATE = "playlist/playlists.ftl";
     private static final String PLAYLIST_TRACK_ADD_TEMPLATE ="playlist/add.ftl";
     private static final String PLAYLIST_DETAILS_TEMPLATE = "playlist/details.ftl";
+    private static final String PLAYLIST_CREATE_TEMPLATE = "playlist/create.ftl";
     
     private final IPlaylistService playlistService;
     private final ISettings settings;
@@ -207,7 +208,7 @@ public class PlaylistsResource extends BaseResource {
     @Produces("text/html")
     @Access(Role.USER)
     @Path("/{playlistId: [0-9]*}")
-    public Response Details(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId) throws ServiceException, NotAuthenticatedException {
+    public Response details(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId) throws ServiceException, NotAuthenticatedException {
         BaseModel baseModel = buildBaseModel(req);
 
         try {
@@ -233,5 +234,16 @@ public class PlaylistsResource extends BaseResource {
             sessions.setError(baseModel.getCurrentSession().getAuthId(), "Playlist not found.");
             return Response.seeOther(settings.getURI("playlists")).build();
         }
+    }
+    
+    public Response create(@Context HttpServletRequest req) throws NotAuthenticatedException, ServiceException{
+    	BaseModel baseModel = buildBaseModel(req);
+    	
+    	try {
+			return Response.ok(templates.process(PLAYLIST_CREATE_TEMPLATE, baseModel)).build();
+		} catch (RenderException e) {
+			log("There was a problem with rendering:" + e.getMessage(), LogSeverity.ERROR);
+			throw new ServiceException("There was a problem with rendering.");
+		}
     }
 }
