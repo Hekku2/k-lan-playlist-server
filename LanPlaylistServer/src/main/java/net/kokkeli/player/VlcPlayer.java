@@ -78,7 +78,6 @@ public class VlcPlayer implements IPlayer {
         
         @Override
         public void playing(MediaPlayer mediaPlayer) {
-            // TODO Auto-generated method stub
             super.playing(mediaPlayer);
             System.out.println("Playing");
         }

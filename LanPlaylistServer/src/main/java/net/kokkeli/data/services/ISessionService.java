@@ -27,27 +27,27 @@ public interface ISessionService {
     Session createSession(User user);
 
     /**
-     * Sets error for given session
+     * Sets error for given session. If sessions doesn't exist, doesn't do anything.
      * @param authId Auth id of session.
      * @param error Error to set
      */
     void setError(String authId, String error);
 
     /**
-     * Clears error for given session
+     * Clears error for given session. If sessions doesn't exist, doesn't do anything.
      * @param authId Auth id of session
      */
     void clearError(String authId);
 
     /**
-     * Sets info for given sessions
+     * Sets info for given session. If session doesn't exist, doesn't do anything.
      * @param authId Session id
      * @param info Info for session
      */
     void setInfo(String authId, String info);
 
     /**
-     * Clears info for given session
+     * Clears info for given session. If session doesn't exist, doesn't do anything.
      * @param authId Auth if of session
      */
     void clearInfo(String authId);
