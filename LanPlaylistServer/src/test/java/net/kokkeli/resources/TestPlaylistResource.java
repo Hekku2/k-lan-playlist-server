@@ -3,6 +3,7 @@ package net.kokkeli.resources;
 import java.io.IOException;
 import java.io.InputStream;
 
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
 import net.kokkeli.ISettings;
@@ -32,83 +33,145 @@ public class TestPlaylistResource extends ResourceTestsBase {
     private static final String TRACKS_FOLDER = "trackfolder";
     private static final String CORRECT_TRACKNAME = "Humppajuna 666";
     private static final String CORRECT_ARTISTNAME = "Humppupumppu";
-    
+    private static final String EXISTING_PLAYLIST_NAME = "Great list";
+    private static final String FORM_NAME = "name";
+
     private IFileSystem mockFilesystem;
     private ISettings mockSettings;
     private IPlaylistService mockPlaylistService;
-    
+
     private PlaylistsResource resource;
     private PlayList existingList;
-    
 
-    
     @Override
     public void before() throws Exception {
         mockFilesystem = mock(IFileSystem.class);
         mockSettings = mock(ISettings.class);
         mockPlaylistService = mock(IPlaylistService.class);
-        
+
         existingList = new PlayList(EXISTING_PLAYLIST);
         existingList.setName("Heiyah");
-        
-        when(mockPlaylistService.getPlaylist(EXISTING_PLAYLIST)).thenReturn(existingList);
+
+        when(mockPlaylistService.getPlaylist(EXISTING_PLAYLIST)).thenReturn(
+                existingList);
+        when(mockPlaylistService.nameExists(EXISTING_PLAYLIST_NAME))
+                .thenReturn(true);
         when(mockSettings.getTracksFolder()).thenReturn(TRACKS_FOLDER);
-        
-        resource = new PlaylistsResource(getLogger(), getTemplateService(), getPlayer(), getSessionService(), mockSettings, mockPlaylistService, mockFilesystem);
+
+        resource = new PlaylistsResource(getLogger(), getTemplateService(),
+                getPlayer(), getSessionService(), mockSettings,
+                mockPlaylistService, mockFilesystem);
     }
-    
+
     @Test
-    public void testAddPostWithProperValueTriesToWriteToFile() throws ServiceException, NotFoundInDatabase, NotAuthenticatedException, IOException{
+    public void testAddPostWithProperValueTriesToWriteToFile()
+            throws ServiceException, NotFoundInDatabase,
+            NotAuthenticatedException, IOException {
         final String filename = "filename";
-        
+
         InputStream mockStream = mock(InputStream.class);
         FormDataContentDisposition mockDisposition = mock(FormDataContentDisposition.class);
         when(mockDisposition.getFileName()).thenReturn(filename);
-        
-        Response r = resource.add(buildRequest(), EXISTING_PLAYLIST, CORRECT_ARTISTNAME, CORRECT_TRACKNAME, mockStream, mockDisposition);
+
+        Response r = resource.add(buildRequest(), EXISTING_PLAYLIST,
+                CORRECT_ARTISTNAME, CORRECT_TRACKNAME, mockStream,
+                mockDisposition);
         Assert.assertEquals(RESPONSE_OK, r.getStatus());
-        verify(mockFilesystem).writeToFile(any(InputStream.class), eq(TRACKS_FOLDER + "/" + filename));
+        verify(mockFilesystem).writeToFile(any(InputStream.class),
+                eq(TRACKS_FOLDER + "/" + filename));
         verify(mockFilesystem).fileExists(TRACKS_FOLDER + "/" + filename);
     }
-    
+
     @Test
-    public void testAddPostReturnsErrorWhenFileExists() throws ServiceException, NotFoundInDatabase, NotAuthenticatedException, RenderException{
+    public void testAddPostReturnsErrorWhenFileExists()
+            throws ServiceException, NotFoundInDatabase,
+            NotAuthenticatedException, RenderException {
         ModelAnswer answer = new ModelAnswer();
-        when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(answer);
-        
+        when(
+                getTemplateService().process(any(String.class),
+                        any(BaseModel.class))).thenAnswer(answer);
+
         final String filename = "filename";
         InputStream mockStream = mock(InputStream.class);
         FormDataContentDisposition mockDisposition = mock(FormDataContentDisposition.class);
         when(mockDisposition.getFileName()).thenReturn(filename);
         when(mockFilesystem.fileExists(any(String.class))).thenReturn(true);
-        
-        assertModelResponse(resource.add(buildRequest(),
-                EXISTING_PLAYLIST, CORRECT_ARTISTNAME, CORRECT_TRACKNAME, mockStream, mockDisposition), answer,
-                "Similar file already exists. Remove existing file, or upload different.", null);
+
+        assertModelResponse(
+                resource.add(buildRequest(), EXISTING_PLAYLIST,
+                        CORRECT_ARTISTNAME, CORRECT_TRACKNAME, mockStream,
+                        mockDisposition),
+                answer,
+                "Similar file already exists. Remove existing file, or upload different.",
+                null);
     }
-    
+
     @Test
-    public void testDetailsGetWithExistingPLaylistWorks() throws RenderException, ServiceException, NotAuthenticatedException{
-        fillPlaylistWithTracks(existingList);
-        
+    public void testCreateChecksForPlaylistNameValidity()
+            throws NotAuthenticatedException, ServiceException,
+            BadRequestException, RenderException {
         ModelAnswer answer = new ModelAnswer();
-        when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(answer);
-        
-        assertModelResponse(RESPONSE_OK, resource.details(buildRequest(), EXISTING_PLAYLIST), answer, null, null);
+        when(
+                getTemplateService().process(any(String.class),
+                        any(BaseModel.class))).thenAnswer(answer);
+
+        try {
+            String nullName = null;
+            resource.create(buildRequest(), createCreatePost(nullName));
+            Assert.fail("Request with null name should throw bad request.");
+        } catch (BadRequestException e) {
+            Assert.assertEquals("Form did not contain name.", e.getMessage());
+        }
+
+        String name = "";
+        assertModelResponse(
+                resource.create(buildRequest(), createCreatePost(name)),
+                answer, "Playlist did not have a name.", null);
+
+        assertModelResponse(resource.create(buildRequest(),
+                createCreatePost(EXISTING_PLAYLIST_NAME)), answer,
+                String.format("Playlist with name %s already exits.",
+                        EXISTING_PLAYLIST_NAME), null);
+    }
+
+    @Test
+    public void testDetailsGetWithExistingPLaylistWorks()
+            throws RenderException, ServiceException, NotAuthenticatedException {
+        fillPlaylistWithTracks(existingList);
+
+        ModelAnswer answer = new ModelAnswer();
+        when(
+                getTemplateService().process(any(String.class),
+                        any(BaseModel.class))).thenAnswer(answer);
+
+        assertModelResponse(RESPONSE_OK,
+                resource.details(buildRequest(), EXISTING_PLAYLIST), answer,
+                null, null);
         ModelPlaylist playlist = (ModelPlaylist) answer.getModel().getModel();
         Assert.assertEquals(existingList.getName(), playlist.getName());
-        Assert.assertEquals(existingList.getItems().size(), playlist.getItems().size());
+        Assert.assertEquals(existingList.getItems().size(), playlist.getItems()
+                .size());
     }
 
     private static void fillPlaylistWithTracks(PlayList list) {
         for (int i = 0; i < 43; i++) {
             Track item = new Track(i);
-            item.setTrackName("Track "+ i);
+            item.setTrackName("Track " + i);
             item.setArtist("Artis");
             item.setLocation("");
             User uploader = new User(UPLOADER_USERNAME, Role.USER);
             item.setUploader(uploader);
             list.getItems().add(item);
         }
+    }
+
+    private MultivaluedMap<String, String> createCreatePost(String name) {
+        @SuppressWarnings("unchecked")
+        MultivaluedMap<String, String> map = mock(MultivaluedMap.class);
+
+        when(map.containsKey(FORM_NAME)).thenReturn(true);
+
+        when(map.getFirst(FORM_NAME)).thenReturn(name);
+        return map;
     }
 }
