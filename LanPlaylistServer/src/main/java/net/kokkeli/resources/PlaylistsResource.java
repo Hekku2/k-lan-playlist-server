@@ -108,7 +108,7 @@ public class PlaylistsResource extends BaseResource {
         try {
             return Response.ok(templates.process(PLAYLISTS_TEMPLATE, model)).build();
         } catch (RenderException e) {
-            throw new ServiceException("There was a problem with rendering.");
+        	return handleRenderingError(model, e);
         }
     }
     
@@ -122,8 +122,7 @@ public class PlaylistsResource extends BaseResource {
         try {
             return Response.ok(templates.process(PLAYLIST_TRACK_ADD_TEMPLATE, model)).build();
         } catch (RenderException e) {
-            log("There was a problem with rendering:" + e.getMessage(), LogSeverity.ERROR);
-            throw new ServiceException("There was a problem with rendering.");
+            return handleRenderingError(model, e);
         }
     }
     
@@ -199,8 +198,7 @@ public class PlaylistsResource extends BaseResource {
             
             return Response.ok(templates.process(PLAYLIST_TRACK_ADD_TEMPLATE, model)).build();
         } catch (RenderException e) {
-            log("There was a problem with rendering:" + e.getMessage(), LogSeverity.ERROR);
-            throw new ServiceException("There was a problem with rendering.", e);
+            return handleRenderingError(model, e);
         } catch (IOException e) {
             log("There was a problem with IO:" + e.getMessage(), LogSeverity.ERROR);
             throw new ServiceException("There was a problem with file uploading.", e);
@@ -231,8 +229,7 @@ public class PlaylistsResource extends BaseResource {
             baseModel.setModel(modelPlayList);
             return Response.ok(templates.process(PLAYLIST_DETAILS_TEMPLATE, baseModel)).build();
         } catch (RenderException e) {
-            log("There was a problem with rendering:" + e.getMessage(), LogSeverity.ERROR);
-            throw new ServiceException("There was a problem with rendering.");
+            return handleRenderingError(baseModel, e);
         } catch (NotFoundInDatabase e) {
             sessions.setError(baseModel.getCurrentSession().getAuthId(), "Playlist not found.");
             return Response.seeOther(settings.getURI("playlists")).build();
@@ -249,8 +246,7 @@ public class PlaylistsResource extends BaseResource {
     	try {
 			return Response.ok(templates.process(PLAYLIST_CREATE_TEMPLATE, baseModel)).build();
 		} catch (RenderException e) {
-			log("There was a problem with rendering:" + e.getMessage(), LogSeverity.ERROR);
-			throw new ServiceException("There was a problem with rendering.");
+			return handleRenderingError(baseModel, e);
 		}
     }
     
@@ -266,6 +262,19 @@ public class PlaylistsResource extends BaseResource {
     	try {
         	ModelPlaylist item = createPlaylist(formParams);
         	
+        	if (item.getName() == null || item.getName().length() > 0){
+        		baseModel.setError("Playlist did not have a name.");
+        		baseModel.setModel(item);
+        		return Response.ok(templates.process(PLAYLIST_CREATE_TEMPLATE, baseModel)).build();
+        	}
+        	
+        	
+        	if (playlistService.nameExists(item.getName())){
+        		baseModel.setError(String.format("Playlist with name %s already exits.", item.getName()));
+        		baseModel.setModel(item);
+        		return Response.ok(templates.process(PLAYLIST_CREATE_TEMPLATE, baseModel)).build();
+        	}
+        	
         	PlayList playlist = new PlayList(item.getId());
         	playlist.setName(item.getName());
         	
@@ -273,8 +282,9 @@ public class PlaylistsResource extends BaseResource {
     		
     		return Response.seeOther(settings.getURI(String.format("playlists/%s", playlist.getId()))).build();
 		} catch (ServiceException e) {
-			log("There was a problem with the service:" + e.getMessage(), LogSeverity.ERROR);
-			return handleServiceException(baseModel);
+			return handleServiceException(baseModel, e);
+		} catch (RenderException e) {
+			return handleRenderingError(baseModel, e);
 		}
     }
     

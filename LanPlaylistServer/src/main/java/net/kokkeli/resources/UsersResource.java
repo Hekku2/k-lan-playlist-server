@@ -79,9 +79,9 @@ public class UsersResource extends BaseResource {
             model.setModel(createModelUsers());
             return Response.ok(templates.process(USERS_TEMPLATE, model)).build();
         } catch (RenderException e) {
-            return handleRenderingError(model);
+            return handleRenderingError(model, e);
         } catch (ServiceException e) {
-            return handleServiceException(model);
+            return handleServiceException(model, e);
         }
     }
     
@@ -109,12 +109,12 @@ public class UsersResource extends BaseResource {
             
             return Response.ok(templates.process(USER_DETAILS_TEMPLATE, model)).build();
         } catch (RenderException e) {
-            return handleRenderingError(model);
+            return handleRenderingError(model, e);
         } catch (NotFoundInDatabase e){
             sessions.setError(model.getCurrentSession().getAuthId(), "User not found.");
             return Response.seeOther(settings.getURI("users")).build();
         } catch (ServiceException e) {
-            return handleServiceException(model);
+            return handleServiceException(model, e);
         }
     }
     
@@ -141,12 +141,12 @@ public class UsersResource extends BaseResource {
             
             return Response.ok(templates.process(USER_EDIT_TEMPLATE, model)).build();
         } catch (RenderException e) {
-            return handleRenderingError(model);
+            return handleRenderingError(model, e);
         } catch (NotFoundInDatabase e) {
             sessions.setError(model.getCurrentSession().getAuthId(), "User not found.");
             return Response.seeOther(settings.getURI("users")).build();
         } catch (ServiceException e) {
-            return handleServiceException(model);
+            return handleServiceException(model, e);
         }
     }
     
@@ -195,7 +195,7 @@ public class UsersResource extends BaseResource {
             sessions.setError(model.getCurrentSession().getAuthId(), "User not found.");
             return Response.seeOther(settings.getURI("users")).build();
         } catch (ServiceException e) {
-            return handleServiceException(model);
+            return handleServiceException(model, e);
         }
     }
 
@@ -216,7 +216,7 @@ public class UsersResource extends BaseResource {
         try {
             return Response.ok(templates.process(USER_CREATE_TEMPLATE, model)).build();
         } catch (RenderException e) {
-            return handleRenderingError(model);
+            return handleRenderingError(model, e);
         }
     }
     
@@ -257,9 +257,9 @@ public class UsersResource extends BaseResource {
             sessions.setInfo(model.getCurrentSession().getAuthId(), "User created.");
             return Response.seeOther(settings.getURI(String.format("users/%s", id))).build();
         } catch (RenderException e) {
-            return handleRenderingError(model);
+            return handleRenderingError(model, e);
         } catch (ServiceException e){
-            return handleServiceException(model);
+            return handleServiceException(model, e);
         }
 
     }

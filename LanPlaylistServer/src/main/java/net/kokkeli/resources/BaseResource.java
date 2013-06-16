@@ -9,12 +9,14 @@ import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.Session;
 import net.kokkeli.data.db.NotFoundInDatabase;
 import net.kokkeli.data.services.ISessionService;
+import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.player.IPlayer;
 import net.kokkeli.resources.authentication.AuthenticationCookieNotFound;
 import net.kokkeli.resources.authentication.AuthenticationUtils;
 import net.kokkeli.resources.models.BaseModel;
 import net.kokkeli.server.ITemplateService;
 import net.kokkeli.server.NotAuthenticatedException;
+import net.kokkeli.server.RenderException;
 
 /**
  * Abstract class for basic resource
@@ -95,8 +97,9 @@ public abstract class BaseResource {
      * @param model BaseModel
      * @return Response
      */
-    protected final Response handleRenderingError(BaseModel model){
+    protected final Response handleRenderingError(BaseModel model, RenderException e){
         sessions.setError(model.getCurrentSession().getAuthId(), "There was a problem with rendering the template.");
+        log("There was a problem with rendering:" + e.getMessage(), LogSeverity.ERROR);
         return Response.seeOther(settings.getURI("")).build();
     }
     
@@ -105,8 +108,9 @@ public abstract class BaseResource {
      * @param model Basemodel
      * @return Response
      */
-    protected final Response handleServiceException(BaseModel model){
+    protected final Response handleServiceException(BaseModel model, ServiceException e){
         sessions.setError(model.getCurrentSession().getAuthId(), "Something went wrong with service.");
+        log("There was a problem with the service:" + e.getMessage(), LogSeverity.ERROR);
         return Response.seeOther(settings.getURI("")).build();
     }
 }

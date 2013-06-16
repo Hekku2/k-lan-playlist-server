@@ -30,4 +30,12 @@ public interface IPlaylistService {
      * @throws ServiceException Thrown if there is something wrong with service
      */
     PlayList add(PlayList playlist) throws ServiceException;
+
+    /**
+     * Checks if playlist with given name already exists
+     * @param name Name
+     * @return True, if name (trimmed) exists in database
+     * @throws ServiceException Thrown if there is a problem with the database.
+     */
+	boolean nameExists(String name) throws ServiceException;
 }

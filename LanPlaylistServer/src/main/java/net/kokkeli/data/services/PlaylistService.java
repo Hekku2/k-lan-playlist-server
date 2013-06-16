@@ -80,4 +80,22 @@ public class PlaylistService implements IPlaylistService {
             throw new ServiceException("There was problem with database.", e);
         }
 	}
+
+	@Override
+	public boolean nameExists(String name) throws ServiceException {
+		if (name == null || name.length() <= 0)
+			return false;
+		
+		try {
+			Collection<PlayList> playlists = database.getOnlyIdAndName();
+			for (PlayList playList : playlists) {
+				if (playList.getName().trim().equals(name.trim()))
+					return true;
+			}
+			return false;
+		} catch (DatabaseException e) {
+            logger.log("Something went wrong in database: " + e.getMessage(), LogSeverity.ERROR);
+            throw new ServiceException("There was problem with database.", e);
+		}
+	}
 }

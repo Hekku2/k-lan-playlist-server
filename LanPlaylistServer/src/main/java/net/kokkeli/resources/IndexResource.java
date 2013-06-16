@@ -66,7 +66,6 @@ public class IndexResource extends BaseResource {
     @Access(Role.USER)
     public Response index(@Context HttpServletRequest req) throws NotAuthenticatedException, ServiceException {
         try {
-            
             BaseModel base = buildBaseModel(req);
             try {
                 long currentPlaylist = player.getCurrentPlaylistId();

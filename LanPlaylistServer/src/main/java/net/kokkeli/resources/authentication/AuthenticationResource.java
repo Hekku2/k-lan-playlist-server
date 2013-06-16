@@ -100,7 +100,7 @@ public class AuthenticationResource extends BaseResource {
         } catch (NotFoundInDatabase exception) {
             return handleWrongUsernameOrPassword(model);
         } catch (ServiceException e){
-            return handleServiceException(model);
+            return handleServiceException(model, e);
         }
         
         Session session = sessions.createSession(user); 
@@ -161,7 +161,7 @@ public class AuthenticationResource extends BaseResource {
             model.setError("Wrong username or password.");
             return Response.ok(templates.process(AUTHENTICATE_TEMPLATE, model)).build();
         } catch (RenderException e) {
-            return handleRenderingError(model);
+            return handleRenderingError(model, e);
         }
     }
 }
