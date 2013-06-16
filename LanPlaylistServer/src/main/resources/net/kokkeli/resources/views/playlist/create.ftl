@@ -19,18 +19,11 @@
 							<input type="text" name="name"">
 						</div>
 					</div>
-					<div class="field">
-						<div class="description">
-							Playlist name: 
-						</div>
-						<div class=value>
-							<input type="text" name="name"">
-						</div>
+					<div class="navi">
+						<input class="button" type="submit" value="Create">
+						<a class="button" href="/playlists">Back</a>
 					</div>
 				</form>
-				<div class="navi">
-					<a class="button" href="/playlists">Back</a>
-				</div>
 			</div>
 		</div>
 	</body>

@@ -22,4 +22,10 @@ public interface IPlaylistDatabase extends IDatabase<PlayList>{
      */
     void update(PlayList playlist) throws DatabaseException, NotFoundInDatabase;
 
+    /**
+     * Adds playlist to database.
+     * Note: Id of added playlist is changed to a created one.
+     * @throws DatabaseException Thrown if thre is problem in database.
+     */
+    PlayList add(PlayList playlist) throws DatabaseException;
 }

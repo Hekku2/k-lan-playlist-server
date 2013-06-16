@@ -119,7 +119,7 @@ public class UsersTable {
      * @throws DatabaseException Thrown if there is a problem with the database
      */
     public User insert(User item) throws DatabaseException {
-        if (equals(item.getUserName()))
+        if (exists(item.getUserName()))
             throw new DatabaseException("Username already exists.");
         
         SQLiteConnection db = new SQLiteConnection(new File(databaseLocation));
@@ -225,7 +225,7 @@ public class UsersTable {
      * @return Query for selecting users with given username.
      */
     private static String getUserWithUsername(String username){
-        return ALLUSERS + " WHERE "+ COLUMN_USERNAME + " = " + username;
+        return ALLUSERS + " WHERE "+ COLUMN_USERNAME + " = '" + username + "'";
     }
     
     /**

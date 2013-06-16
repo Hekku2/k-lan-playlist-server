@@ -22,4 +22,12 @@ public interface IPlaylistService {
      * @throws ServiceException Thrown if there is something wrong with service.
      */
     void update(PlayList playlist) throws NotFoundInDatabase, ServiceException;
+    
+    /**
+     * Adds playlist returns id of added playlist.
+     * @param playlist Playlist
+     * @return Id of added playlist
+     * @throws ServiceException Thrown if there is something wrong with service
+     */
+    PlayList add(PlayList playlist) throws ServiceException;
 }

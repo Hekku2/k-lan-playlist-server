@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import net.kokkeli.data.PlayList;
-
 import com.almworks.sqlite4java.SQLiteConnection;
 import com.almworks.sqlite4java.SQLiteException;
 import com.almworks.sqlite4java.SQLiteStatement;
@@ -14,6 +13,8 @@ public class PlaylistsTable{
     private static final String TABLENAME = "playlists";
     private static final String ALLLISTS = "SELECT * FROM " + TABLENAME;
     private static final String COLUMN_ID = "Id";
+    private static final String COLUMN_NAME = "Name";
+    
     
     private final String databaseLocation;
     
@@ -103,5 +104,80 @@ public class PlaylistsTable{
      */
     public void update(PlayList playlist) throws DatabaseException {
         //TODO Update playlist
+    }
+    
+    /**
+     * Inserts the playlist. Doesn't update tracks.
+     * @param playlist Playlist
+     * @throws DatabaseException Thrown if there is problem with database
+     */
+    public PlayList insert(PlayList item) throws DatabaseException {
+        if (exists(item.getName()))
+            throw new DatabaseException("Playlist with given name already exists.");
+        
+        SQLiteConnection db = new SQLiteConnection(new File(databaseLocation));
+        long id;
+        try {
+            db.open(false);
+            SQLiteStatement st = db.prepare(createInsertString(item));
+            try {
+                st.stepThrough();
+            } finally {
+                st.dispose();
+            }
+            id = db.getLastInsertId();
+            
+            db.dispose();
+        } catch (SQLiteException e) {
+            throw new DatabaseException("There was problem with database", e);
+        }
+        
+        item.setId(id);
+        return item;
+    }
+    
+    /**
+     * Checks if user with username exists. exist.
+     * @param username Username
+     * @return True, if user with username exists.
+     * @throws DatabaseException Thrown if there is a problem with the database
+     */
+    public boolean exists(String username) throws DatabaseException {
+        SQLiteConnection db = new SQLiteConnection(new File(databaseLocation));
+        
+        try {
+            db.open(false);
+            SQLiteStatement st = db.prepare(getPlaylistWithName(username));
+            try {
+                while (st.step()) {
+                    return true;
+                }
+            } finally {
+                st.dispose();
+            }
+            
+            db.dispose();
+        } catch (SQLiteException e) {
+            throw new DatabaseException("Problem with database.", e);
+        }
+        return false;
+    }
+    
+    /**
+     * Creates insert statement for Playlist
+     * @param PlayList playlist
+     * @return Insert statement
+     */
+    private static String createInsertString(PlayList playlist){
+        return String.format("INSERT INTO %s (%s) VALUES ('%s')",TABLENAME, COLUMN_NAME, playlist.getName());
+    }
+    
+    /**
+     * Creates query selecting users with given username.
+     * @param username Username of user
+     * @return Query for selecting users with given username.
+     */
+    private static String getPlaylistWithName(String name){
+        return ALLLISTS + " WHERE "+ COLUMN_NAME + " = '" + name + "'";
     }
 }

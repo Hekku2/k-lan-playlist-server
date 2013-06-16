@@ -13,6 +13,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
 import com.google.inject.Inject;
@@ -51,6 +52,8 @@ public class PlaylistsResource extends BaseResource {
     private static final String PLAYLIST_TRACK_ADD_TEMPLATE ="playlist/add.ftl";
     private static final String PLAYLIST_DETAILS_TEMPLATE = "playlist/details.ftl";
     private static final String PLAYLIST_CREATE_TEMPLATE = "playlist/create.ftl";
+    
+    private static final String FORM_NAME = "name";
     
     private final IPlaylistService playlistService;
     private final ISettings settings;
@@ -235,7 +238,11 @@ public class PlaylistsResource extends BaseResource {
             return Response.seeOther(settings.getURI("playlists")).build();
         }
     }
-    
+
+    @GET
+    @Produces("text/html")
+    @Access(Role.USER)
+    @Path("/create")
     public Response create(@Context HttpServletRequest req) throws NotAuthenticatedException, ServiceException{
     	BaseModel baseModel = buildBaseModel(req);
     	
@@ -245,5 +252,44 @@ public class PlaylistsResource extends BaseResource {
 			log("There was a problem with rendering:" + e.getMessage(), LogSeverity.ERROR);
 			throw new ServiceException("There was a problem with rendering.");
 		}
+    }
+    
+    @POST
+    @Produces("text/html")
+    @Access(Role.USER)
+    @Path("/create")
+    public Response create(@Context HttpServletRequest req, MultivaluedMap<String, String> formParams) throws NotAuthenticatedException, ServiceException, BadRequestException{
+    	BaseModel baseModel = buildBaseModel(req);
+    	
+    	//TODO Check validity of name
+    	
+    	try {
+        	ModelPlaylist item = createPlaylist(formParams);
+        	
+        	PlayList playlist = new PlayList(item.getId());
+        	playlist.setName(item.getName());
+        	
+        	playlistService.add(playlist);
+    		
+    		return Response.seeOther(settings.getURI(String.format("playlists/%s", playlist.getId()))).build();
+		} catch (ServiceException e) {
+			log("There was a problem with the service:" + e.getMessage(), LogSeverity.ERROR);
+			return handleServiceException(baseModel);
+		}
+    }
+    
+    /**
+     * Creates new playlist for create from formParams. If values are missing, exception is thrown.
+     * @param formParams Parameters. Contains all needed field for ModelUser
+     * @return Created ModelUser
+     * @throws BadRequestException Thrown formParams contain illegal input.
+     */
+    private ModelPlaylist createPlaylist(MultivaluedMap<String, String> formParams) throws BadRequestException{       
+        String name = formParams.getFirst(FORM_NAME).trim();
+        
+        ModelPlaylist playlist = new ModelPlaylist(-1);
+        playlist.setName(name);     
+        
+        return playlist;
     }
 }

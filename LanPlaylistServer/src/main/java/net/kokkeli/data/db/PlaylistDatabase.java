@@ -73,7 +73,15 @@ public class PlaylistDatabase extends Database implements IPlaylistDatabase {
 
     @Override
     public PlayList add(PlayList item) throws DatabaseException {
-        throw new DatabaseException("Method not implemented.");
+    	PlayList playlist = playlistTable.insert(item);
+    	
+    	Collection<Track> tracks = item.getItems();
+    	
+    	for (Track track : tracks) {
+    		updateOrInsertTrack(track, playlist.getId());
+    	}
+    	
+    	return playlist;
     }
 
     @Override
@@ -99,15 +107,25 @@ public class PlaylistDatabase extends Database implements IPlaylistDatabase {
         // Adds new tracks to playlist. If track is not already in database, it is now added to database.
         for (Track newTrack : playlist.getItems()) {
             if (!contains(newTrack, old.getItems())){
-                try {
-                    tracksTable.get(newTrack.getId());
-                } catch (NotFoundInDatabase e) {
-                    newTrack.setId(tracksTable.insert(newTrack));
-                }
-                
-                trackPlaylistTable.insert(newTrack.getId(), old.getId());
+            	updateOrInsertTrack(newTrack, old.getId());
             }
         }
+    }
+    
+    /**
+     * Update or insert tracks
+     * @param track Track to be added 
+     * @param playlistId Id of playlist
+     * @throws DatabaseException Thrown if there is a problem with the database
+     */
+    private void updateOrInsertTrack(Track track, long playlistId) throws DatabaseException{
+        try {
+            tracksTable.get(track.getId());
+        } catch (NotFoundInDatabase e) {
+        	track.setId(tracksTable.insert(track));
+        }
+        
+        trackPlaylistTable.insert(track.getId(), playlistId);
     }
     
     /**

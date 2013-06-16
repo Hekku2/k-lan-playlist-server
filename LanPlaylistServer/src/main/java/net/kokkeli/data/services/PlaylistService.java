@@ -70,4 +70,14 @@ public class PlaylistService implements IPlaylistService {
             throw new ServiceException("There was something wrong with the database.",  e);
         }
     }
+
+	@Override
+	public PlayList add(PlayList playlist) throws ServiceException {
+        try {
+            return database.add(playlist);
+        } catch (DatabaseException e) {
+            logger.log("Something went wrong in database: " + e.getMessage(), LogSeverity.ERROR);
+            throw new ServiceException("There was problem with database.", e);
+        }
+	}
 }

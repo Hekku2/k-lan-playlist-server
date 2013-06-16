@@ -6,14 +6,14 @@ import java.util.ArrayList;
 public class PlayList {
     private ArrayList<Track> items = new ArrayList<Track>();
     private String name;
-    private final long id;
+    private long id;
     
     /**
      * Creates playlist with specific Id.
      * @param id Id
      */
     public PlayList(long id){
-        this.id = id;
+        this.setId(id);
     }
     
     /**
@@ -23,6 +23,14 @@ public class PlayList {
     public long getId(){
         return id;
     }
+    
+    /**
+     * Sets id for playlist
+     * @param id Id of playlist
+     */
+	public void setId(long id) {
+		this.id = id;
+	}
     
     /**
      * Returns name of playlist.
@@ -47,4 +55,6 @@ public class PlayList {
     public ArrayList<Track> getItems(){
         return items;
     }
+
+
 }
