@@ -83,7 +83,7 @@ public class PlaylistService implements IPlaylistService {
 
 	@Override
 	public boolean nameExists(String name) throws ServiceException {
-		if (name == null || name.length() <= 0)
+		if (name == null || name.trim().length() == 0)
 			return false;
 		
 		try {
