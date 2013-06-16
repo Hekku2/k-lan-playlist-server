@@ -26,9 +26,11 @@ import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.PlayList;
 import net.kokkeli.data.Role;
 import net.kokkeli.data.Track;
+import net.kokkeli.data.User;
 import net.kokkeli.data.db.NotFoundInDatabase;
 import net.kokkeli.data.services.IPlaylistService;
 import net.kokkeli.data.services.ISessionService;
+import net.kokkeli.data.services.IUserService;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.player.IPlayer;
 import net.kokkeli.resources.models.BaseModel;
@@ -55,6 +57,7 @@ public class PlaylistsResource extends BaseResource {
     private final IPlaylistService playlistService;
     private final ISettings settings;
     private final IFileSystem filesystem;
+    private final IUserService userService;
     
     /**
      * Creates resource
@@ -69,12 +72,14 @@ public class PlaylistsResource extends BaseResource {
             ISessionService sessions,
             ISettings settings,
             IPlaylistService playlistService,
-            IFileSystem filesystem) {
+            IFileSystem filesystem,
+            IUserService userService) {
         super(logger, templateService, player, sessions, settings);
         
         this.playlistService = playlistService;
         this.settings = settings;
         this.filesystem = filesystem;
+        this.userService = userService;
     }
 
     /**
@@ -187,10 +192,13 @@ public class PlaylistsResource extends BaseResource {
             PlayList playlist = playlistService.getPlaylist(playlistId);
             Track item = new Track();
             
+            User user = userService.get(model.getUsername());
+            
             item.setArtist(artist);
             item.setTrackName(track);
             item.setLocation(filename);
-
+            item.setUploader(user);
+            
             playlist.getItems().add(item);
             playlistService.update(playlist);
             

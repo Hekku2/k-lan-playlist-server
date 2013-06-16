@@ -17,8 +17,9 @@ public class TracksTable {
     private static final String COLUMN_TRACK = "Track";
     private static final String COLUMN_ARTIST = "Artist";
     private static final String COLUMN_LOCATION = "Location";
+    private static final String COLUMN_UPLOADER = "Uploader";
     
-    private static final String INSERT = "INSERT INTO "+ TABLENAME +" ("+ COLUMN_TRACK +","+ COLUMN_ARTIST+", "+ COLUMN_LOCATION +") VALUES ";
+    private static final String INSERT = "INSERT INTO "+ TABLENAME +" ("+ COLUMN_TRACK +","+ COLUMN_ARTIST+", "+ COLUMN_LOCATION +", "+ COLUMN_UPLOADER + ") VALUES ";
     
     private final String databaseLocation;
     
@@ -112,6 +113,6 @@ public class TracksTable {
      * @return Insert statement
      */
     private static String insertItemRow(Track track){
-        return INSERT + "('" + track.getTrackName() + "','" + track.getArtist() + "','" + track.getLocation() + "')";
+        return INSERT + "('" + track.getTrackName() + "','" + track.getArtist() + "','" + track.getLocation() + "',"+ track.getUploader().getId()+")";
     }
 }
