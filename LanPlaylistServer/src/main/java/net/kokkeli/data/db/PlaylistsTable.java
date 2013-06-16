@@ -60,15 +60,6 @@ public class PlaylistsTable{
     }
     
     /**
-     * Creates query selecting single user.
-     * @param id Id of wanted user
-     * @return Query for selecting single user.
-     */
-    private static String getSingleItemQuery(long id){
-        return ALLLISTS + " WHERE "+ COLUMN_ID+" = " + id;
-    }
-
-    /**
      * Returns collection of playlists. Doesn't contain tracks.
      * @return Collection of paylists
      * @throws DatabaseException thrown if there is problem with database.
@@ -161,6 +152,15 @@ public class PlaylistsTable{
             throw new DatabaseException("Problem with database.", e);
         }
         return false;
+    }
+    
+    /**
+     * Creates query selecting single user.
+     * @param id Id of wanted user
+     * @return Query for selecting single user.
+     */
+    private static String getSingleItemQuery(long id){
+        return ALLLISTS + " WHERE "+ COLUMN_ID+" = " + id;
     }
     
     /**
