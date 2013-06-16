@@ -308,8 +308,6 @@ public class PlaylistsResource extends BaseResource {
             BadRequestException {
         BaseModel baseModel = buildBaseModel(req);
 
-        // TODO Check validity of name
-
         try {
             ModelPlaylist item = createPlaylist(formParams);
 
