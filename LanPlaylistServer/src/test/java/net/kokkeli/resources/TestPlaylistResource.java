@@ -12,7 +12,6 @@ import net.kokkeli.data.Track;
 import net.kokkeli.data.User;
 import net.kokkeli.data.db.NotFoundInDatabase;
 import net.kokkeli.data.services.IPlaylistService;
-import net.kokkeli.data.services.IUserService;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.resources.models.BaseModel;
 import net.kokkeli.resources.models.ModelPlaylist;
@@ -37,7 +36,6 @@ public class TestPlaylistResource extends ResourceTestsBase {
     private IFileSystem mockFilesystem;
     private ISettings mockSettings;
     private IPlaylistService mockPlaylistService;
-    private IUserService mockUserService;
     
     private PlaylistsResource resource;
     private PlayList existingList;
@@ -49,7 +47,6 @@ public class TestPlaylistResource extends ResourceTestsBase {
         mockFilesystem = mock(IFileSystem.class);
         mockSettings = mock(ISettings.class);
         mockPlaylistService = mock(IPlaylistService.class);
-        mockUserService = mock(IUserService.class);
         
         existingList = new PlayList(EXISTING_PLAYLIST);
         existingList.setName("Heiyah");
@@ -57,7 +54,7 @@ public class TestPlaylistResource extends ResourceTestsBase {
         when(mockPlaylistService.getPlaylist(EXISTING_PLAYLIST)).thenReturn(existingList);
         when(mockSettings.getTracksFolder()).thenReturn(TRACKS_FOLDER);
         
-        resource = new PlaylistsResource(getLogger(), getTemplateService(), getPlayer(), getSessionService(), mockSettings, mockPlaylistService, mockFilesystem, mockUserService);
+        resource = new PlaylistsResource(getLogger(), getTemplateService(), getPlayer(), getSessionService(), mockSettings, mockPlaylistService, mockFilesystem);
     }
     
     @Test
