@@ -1,5 +1,8 @@
 package net.kokkeli.data.db;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.almworks.sqlite4java.SQLite;
 
 import net.kokkeli.ISettings;
@@ -20,6 +23,8 @@ public abstract class Database {
      */
     public Database(ISettings settings) throws DatabaseException{
         SQLite.setLibraryPath(settings.getLibLocation());
+        Logger.getLogger("com.almworks.sqlite4java").setLevel(Level.OFF);
+        
         databaseLocation = settings.getDatabaseLocation();
     }
     
