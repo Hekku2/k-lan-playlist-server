@@ -1,1 +1,2 @@
-screen -X hekku2/server mvn exec:java -Dexec.mainClass=net.kokkeli.Program -Dexec.args=settings/testserver.dat
+mv target/lanplaylistserver-0.0.1-SNAPSHOT.jar lanplaylist.jar
+nohup java -jar lanplaylist.jar settings/testserver.dat
