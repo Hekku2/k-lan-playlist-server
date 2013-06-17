@@ -125,6 +125,10 @@ public class Settings implements ISettings {
         return serverUri;
     }
     
+    /**
+     * Returns the port of the server
+     * @return Server port
+     */
     public int getServerPort(){
         return port;
     }
