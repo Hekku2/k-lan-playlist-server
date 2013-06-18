@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 
 import javax.servlet.http.HttpServletRequest;
 
+import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.db.NotFoundInDatabase;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.server.NotAuthenticatedException;
@@ -13,6 +14,8 @@ import net.kokkeli.server.NotAuthenticatedException;
 import org.junit.Assert;
 import org.junit.Test;
 import com.sun.jersey.api.NotFoundException;
+
+import static org.mockito.Mockito.*;
 
 public class TestBaseResource extends ResourceTestsBase{
     private BaseResource resource;
@@ -45,5 +48,18 @@ public class TestBaseResource extends ResourceTestsBase{
         } catch (NotAuthenticatedException e) {
             Assert.assertEquals("There was a problem with authentication.", e.getMessage());
         }
+    }
+    
+    @Test
+    public void testLogCallsLoggerService(){
+        String testMessage = "Log Message";
+        resource.log(testMessage, LogSeverity.DEBUG);
+        verify(getLogger()).log(testMessage, LogSeverity.DEBUG);
+        
+        resource.log(testMessage, LogSeverity.ERROR);
+        verify(getLogger()).log(testMessage, LogSeverity.ERROR);
+        
+        resource.log(testMessage, LogSeverity.TRACE);
+        verify(getLogger()).log(testMessage, LogSeverity.TRACE);
     }
 }
