@@ -16,6 +16,7 @@ import net.kokkeli.data.services.UserService;
 import net.kokkeli.player.IPlayer;
 import net.kokkeli.player.MockPlayer;
 import net.kokkeli.resources.Access;
+import net.kokkeli.resources.ManagementResource;
 import net.kokkeli.resources.StaticResources;
 import net.kokkeli.resources.IndexResource;
 import net.kokkeli.resources.PlaylistsResource;
@@ -79,6 +80,7 @@ public class LanServletConfig extends GuiceServletContextListener {
                 bind(AuthenticationResource.class);
                 bind(IndexResource.class);
                 bind(PlaylistsResource.class);
+                bind(ManagementResource.class);
                 
                 //Aspects
                 AuthenticationInceptor interceptor = new AuthenticationInceptor();
