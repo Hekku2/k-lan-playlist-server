@@ -68,7 +68,7 @@ public class AuthenticationInceptor implements MethodInterceptor{
             HttpServletRequest request = AuthenticationUtils.extractRequest(invocation.getArguments());
             Cookie authCookie = AuthenticationUtils.extractLoginCookie(request.getCookies());
             Session session = sessions.get(authCookie.getValue());
-            logger.log("User authenticated: " + session.getUser(), LogSeverity.TRACE);
+            logger.log("User authenticated: " + session.getUser().getUserName(), LogSeverity.TRACE);
             
             return invocation.proceed();
         } catch (NotFoundInDatabase e) {
