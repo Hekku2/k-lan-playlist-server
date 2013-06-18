@@ -23,6 +23,8 @@ import static org.mockito.Mockito.*;
 public class TestBaseResource extends ResourceTestsBase{
     private BaseResource resource;
     
+    private final int REDIRECT = 303;
+    
     public void before() throws NotFoundException, ServiceException, NotFoundInDatabase {
         resource = new BaseResource(getLogger(), getTemplateService(), getPlayer(), getSessionService(), getSettings()){
             
@@ -85,28 +87,25 @@ public class TestBaseResource extends ResourceTestsBase{
     public void testHandlingRenderErrorRedirectsToIndex() throws NotAuthenticatedException{
         String errorMessage = "There was a problem with rendering: Exception";
         BaseModel model = resource.buildBaseModel(buildRequest());
-        
         RenderException ex = new RenderException("Exception");
         
         Response response = resource.handleRenderingError(model, ex);
         verify(getLogger()).log(errorMessage, LogSeverity.ERROR);
         
-        
         assertSessionError("There was a problem with rendering the template.");
-        Assert.assertEquals(303, response.getStatus());
+        Assert.assertEquals(REDIRECT, response.getStatus());
     }
     
     @Test
     public void testHandlingServiceExceptionRedirectsToIndex() throws NotAuthenticatedException{
         String errorMessage = "There was a problem with the service: Exception";
         BaseModel model = resource.buildBaseModel(buildRequest());
-        
         ServiceException ex = new ServiceException("Exception");
         
         Response response = resource.handleServiceException(model, ex);
         verify(getLogger()).log(errorMessage, LogSeverity.ERROR);
         
         assertSessionError("Something went wrong with service.");
-        Assert.assertEquals(303, response.getStatus());
+        Assert.assertEquals(REDIRECT, response.getStatus());
     }
 }
