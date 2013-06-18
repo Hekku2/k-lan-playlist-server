@@ -94,27 +94,28 @@ public class PlaylistsResource extends BaseResource {
     @Produces("text/html")
     @Access(Role.ADMIN)
     public Response playlists(@Context HttpServletRequest req)
-            throws ServiceException, NotAuthenticatedException {
+            throws NotAuthenticatedException {
         BaseModel model = buildBaseModel(req);
-
-        Collection<PlayList> lists = playlistService.getIdNames();
-
-        ModelPlaylists playlists = new ModelPlaylists();
-
-        for (PlayList entry : lists) {
-            ModelPlaylist item = new ModelPlaylist(entry.getId());
-            item.setName(entry.getName());
-
-            playlists.getItems().add(item);
-        }
-
-        model.setModel(playlists);
-
         try {
+            Collection<PlayList> lists = playlistService.getIdNames();
+
+            ModelPlaylists playlists = new ModelPlaylists();
+
+            for (PlayList entry : lists) {
+                ModelPlaylist item = new ModelPlaylist(entry.getId());
+                item.setName(entry.getName());
+
+                playlists.getItems().add(item);
+            }
+
+            model.setModel(playlists);
+            
             return Response.ok(templates.process(PLAYLISTS_TEMPLATE, model))
                     .build();
         } catch (RenderException e) {
             return handleRenderingError(model, e);
+        } catch (ServiceException e) {
+            return handleServiceException(model, e);
         }
     }
 

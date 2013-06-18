@@ -2,6 +2,7 @@ package net.kokkeli.resources;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
@@ -15,6 +16,7 @@ import net.kokkeli.data.db.NotFoundInDatabase;
 import net.kokkeli.data.services.IPlaylistService;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.resources.models.BaseModel;
+import net.kokkeli.resources.models.ModelPlaylists;
 import net.kokkeli.resources.models.ModelPlaylist;
 import net.kokkeli.server.IFileSystem;
 import net.kokkeli.server.NotAuthenticatedException;
@@ -63,6 +65,35 @@ public class TestPlaylistResource extends ResourceTestsBase {
                 mockPlaylistService, mockFilesystem);
     }
 
+    @Test
+    public void testPlaylistsReturnModelWithPlaylists() throws RenderException, NotAuthenticatedException, ServiceException{
+        //Mock playlists for service
+        ArrayList<PlayList> playlists = new ArrayList<PlayList>();
+        PlayList mockList = new PlayList(0);
+        mockList.setName("Name 1");
+        playlists.add(mockList);
+        PlayList mockList2 = new PlayList(1);
+        mockList2.setName("Name 2");
+        playlists.add(mockList2);
+        when(mockPlaylistService.getIdNames()).thenReturn(playlists);
+        
+        ModelAnswer answer = new ModelAnswer();
+        when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(answer);
+        
+        resource.playlists(buildRequest());
+        
+        BaseModel base = answer.getModel();
+        
+        Assert.assertTrue(base.getModel() instanceof ModelPlaylists);
+        ModelPlaylists model = (ModelPlaylists)base.getModel();
+        
+        Assert.assertEquals(2, model.getItems().size());
+        Assert.assertEquals(mockList.getId(), model.getItems().get(0).getId());
+        Assert.assertEquals(mockList.getName(), model.getItems().get(0).getName());
+        Assert.assertEquals(mockList2.getId(), model.getItems().get(1).getId());
+        Assert.assertEquals(mockList2.getName(), model.getItems().get(1).getName());
+    }
+    
     @Test
     public void testAddPostWithProperValueTriesToWriteToFile()
             throws ServiceException, NotFoundInDatabase,
