@@ -83,7 +83,7 @@ public class TestUserResource extends ResourceTestsBase{
     }
     
     @Test
-    public void testGetEditPutsTemplateAndOkInResponso() throws RenderException, NotFoundException, ServiceException, NotAuthenticatedException{
+    public void testGetEditPutsTemplateAndOkInResponse() throws RenderException, NotFoundException, ServiceException, NotAuthenticatedException{
         final String processedTemplate = "Jeeah";
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenReturn(processedTemplate);
         

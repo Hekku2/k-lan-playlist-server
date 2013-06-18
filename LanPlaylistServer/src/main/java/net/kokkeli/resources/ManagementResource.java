@@ -20,6 +20,12 @@ import net.kokkeli.server.ITemplateService;
 import net.kokkeli.server.NotAuthenticatedException;
 import net.kokkeli.server.RenderException;
 
+/**
+ * Resources for Management
+ * 
+ * @author Hekku2
+ * 
+ */
 @Path("/management")
 public class ManagementResource extends BaseResource {
     private static final String INDEX_TEMPLATE = "management/index.ftl";
