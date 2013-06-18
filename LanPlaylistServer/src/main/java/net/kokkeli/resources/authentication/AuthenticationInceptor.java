@@ -75,7 +75,7 @@ public class AuthenticationInceptor implements MethodInterceptor{
             logger.log("Old or invalid authentication." + e.getMessage(), LogSeverity.DEBUG);
             return Response.seeOther(UriBuilder.fromUri(settings.getBaseURI()).path("/authentication").build()).build();
         } catch (AuthenticationException e) {
-            logger.log("There were no authenticaiton data: " + e.getMessage(), LogSeverity.DEBUG);
+            logger.log("There were no authentication data: " + e.getMessage(), LogSeverity.DEBUG);
             return Response.seeOther(UriBuilder.fromUri(settings.getBaseURI()).path("/authentication").build()).build();
         }
 
