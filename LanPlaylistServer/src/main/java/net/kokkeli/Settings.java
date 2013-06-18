@@ -150,6 +150,12 @@ public class Settings implements ISettings {
         return UriBuilder.fromUri(serverUri + endPart).port(port).build();
     }
     
+    /**
+     * Loads settings
+     * @param key Key
+     * @param value Value
+     * @throws IOException Thrown if there was no such key.
+     */
     private void loadSetting(String key, String value) throws IOException{
         switch (key) {
         case "DatabaseLocation":
