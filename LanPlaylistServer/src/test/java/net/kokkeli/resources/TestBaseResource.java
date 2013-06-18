@@ -5,12 +5,14 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Response;
 
 import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.db.NotFoundInDatabase;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.resources.models.BaseModel;
 import net.kokkeli.server.NotAuthenticatedException;
+import net.kokkeli.server.RenderException;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -77,5 +79,34 @@ public class TestBaseResource extends ResourceTestsBase{
         Assert.assertNull(model.getInfo());
         Assert.assertNull(model.getCurrentSession());
         Assert.assertNull(model.getModel());
+    }
+    
+    @Test
+    public void testHandlingRenderErrorRedirectsToIndex() throws NotAuthenticatedException{
+        String errorMessage = "There was a problem with rendering: Exception";
+        BaseModel model = resource.buildBaseModel(buildRequest());
+        
+        RenderException ex = new RenderException("Exception");
+        
+        Response response = resource.handleRenderingError(model, ex);
+        verify(getLogger()).log(errorMessage, LogSeverity.ERROR);
+        
+        
+        assertSessionError("There was a problem with rendering the template.");
+        Assert.assertEquals(303, response.getStatus());
+    }
+    
+    @Test
+    public void testHandlingServiceExceptionRedirectsToIndex() throws NotAuthenticatedException{
+        String errorMessage = "There was a problem with the service: Exception";
+        BaseModel model = resource.buildBaseModel(buildRequest());
+        
+        ServiceException ex = new ServiceException("Exception");
+        
+        Response response = resource.handleServiceException(model, ex);
+        verify(getLogger()).log(errorMessage, LogSeverity.ERROR);
+        
+        assertSessionError("Something went wrong with service.");
+        Assert.assertEquals(303, response.getStatus());
     }
 }

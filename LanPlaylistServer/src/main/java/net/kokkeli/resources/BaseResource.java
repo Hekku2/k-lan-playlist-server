@@ -99,7 +99,7 @@ public abstract class BaseResource {
      */
     protected final Response handleRenderingError(BaseModel model, RenderException e){
         sessions.setError(model.getCurrentSession().getAuthId(), "There was a problem with rendering the template.");
-        log("There was a problem with rendering:" + e.getMessage(), LogSeverity.ERROR);
+        log("There was a problem with rendering: " + e.getMessage(), LogSeverity.ERROR);
         return Response.seeOther(settings.getURI("")).build();
     }
     
@@ -110,7 +110,7 @@ public abstract class BaseResource {
      */
     protected final Response handleServiceException(BaseModel model, ServiceException e){
         sessions.setError(model.getCurrentSession().getAuthId(), "Something went wrong with service.");
-        log("There was a problem with the service:" + e.getMessage(), LogSeverity.ERROR);
+        log("There was a problem with the service: " + e.getMessage(), LogSeverity.ERROR);
         return Response.seeOther(settings.getURI("")).build();
     }
 }
