@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.db.NotFoundInDatabase;
 import net.kokkeli.data.services.ServiceException;
+import net.kokkeli.resources.models.BaseModel;
 import net.kokkeli.server.NotAuthenticatedException;
 
 import org.junit.Assert;
@@ -61,5 +62,20 @@ public class TestBaseResource extends ResourceTestsBase{
         
         resource.log(testMessage, LogSeverity.TRACE);
         verify(getLogger()).log(testMessage, LogSeverity.TRACE);
+    }
+    
+    @Test
+    public void testBaseModelWithoutArguments(){
+        String title = "Title";
+        
+        when(getPlayer().getTitle()).thenReturn(title);
+        
+        BaseModel model = resource.buildBaseModel();
+        Assert.assertEquals(title, model.getNowPlaying());
+        Assert.assertEquals("", model.getUsername());
+        Assert.assertNull(model.getError());
+        Assert.assertNull(model.getInfo());
+        Assert.assertNull(model.getCurrentSession());
+        Assert.assertNull(model.getModel());
     }
 }
