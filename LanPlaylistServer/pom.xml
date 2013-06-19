@@ -104,9 +104,17 @@
           <target>1.7</target>
         </configuration>
       </plugin>
-
     </plugins>
   </build>
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-pmd-plugin</artifactId>
+        <version>3.0.1</version>
+      </plugin>
+    </plugins>
+  </reporting>
   <properties>
   	<project.build.sourceEncoding>Cp1252</project.build.sourceEncoding>
   </properties>
