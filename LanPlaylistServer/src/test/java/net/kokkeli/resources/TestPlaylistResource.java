@@ -95,11 +95,18 @@ public class TestPlaylistResource extends ResourceTestsBase {
     }
     
     @Test
-    public void testPlaylistsRedirectsWhenServiceExceptionIsThrown() throws NotAuthenticatedException, ServiceException{
+    public void testPlaylistsRedirectsWhenServiceExceptionIsThrown() throws NotAuthenticatedException, ServiceException, RenderException{
         when(mockPlaylistService.getIdNames()).thenThrow(new ServiceException("Boom says database!"));
+
+        assertRedirectError(resource.playlists(buildRequest()), "Something went wrong with service.");
+    }
+    
+    @Test
+    public void testPlaylistsRedirectsWhenRenderExceptionIsThrown() throws RenderException, NotAuthenticatedException, ServiceException{
+        when(mockPlaylistService.getIdNames()).thenReturn(new ArrayList<PlayList>());
+        when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenThrow(new RenderException("Boom says database!"));
         
-        Response r = resource.playlists(buildRequest());
-        Assert.assertEquals(REDIRECT, r.getStatus());
+        assertRedirectError(resource.playlists(buildRequest()), "There was a problem with rendering the template.");
     }
     
     @Test
@@ -150,8 +157,7 @@ public class TestPlaylistResource extends ResourceTestsBase {
             throws NotAuthenticatedException, ServiceException,
             BadRequestException, RenderException {
         ModelAnswer answer = new ModelAnswer();
-        when(
-                getTemplateService().process(any(String.class),
+        when(getTemplateService().process(any(String.class),
                         any(BaseModel.class))).thenAnswer(answer);
 
         try {
@@ -174,7 +180,7 @@ public class TestPlaylistResource extends ResourceTestsBase {
     }
 
     @Test
-    public void testDetailsGetWithExistingPLaylistWorks()
+    public void testDetailsGetWithExistingPlaylistWorks()
             throws RenderException, ServiceException, NotAuthenticatedException {
         fillPlaylistWithTracks(existingList);
 

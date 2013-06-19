@@ -53,7 +53,7 @@ public class TestIndexResource extends ResourceTestsBase{
     }
     
     @Test
-    public void  testIndexThrowsServiceExceptionWhenPlaylistServiceThrowsServiceExeption() throws RenderException, ServiceException, NotFoundInDatabase, NotAuthenticatedException {
+    public void testIndexThrowsServiceExceptionWhenPlaylistServiceThrowsServiceExeption() throws RenderException, ServiceException, NotFoundInDatabase, NotAuthenticatedException {
         ModelAnswer model = new ModelAnswer();
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(model);
         

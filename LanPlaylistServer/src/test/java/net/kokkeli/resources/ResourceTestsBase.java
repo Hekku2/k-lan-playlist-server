@@ -91,6 +91,16 @@ public abstract class ResourceTestsBase {
         assertEquals(statusCode, r.getStatus());
     }
     
+    /**
+     * Asserts that Response contains redirect and error
+     * @param response
+     * @param error
+     */
+    public void assertRedirectError(Response response, String error){
+        assertEquals(REDIRECT, response.getStatus());
+        assertSessionError(error);
+    }
+    
     public abstract void before() throws Exception;
     
     public ILogger getLogger(){
