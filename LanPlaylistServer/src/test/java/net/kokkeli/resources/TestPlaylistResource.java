@@ -95,6 +95,14 @@ public class TestPlaylistResource extends ResourceTestsBase {
     }
     
     @Test
+    public void testPlaylistsRedirectsWhenServiceExceptionIsThrown() throws NotAuthenticatedException, ServiceException{
+        when(mockPlaylistService.getIdNames()).thenThrow(new ServiceException("Boom says database!"));
+        
+        Response r = resource.playlists(buildRequest());
+        Assert.assertEquals(REDIRECT, r.getStatus());
+    }
+    
+    @Test
     public void testAddPostWithProperValueTriesToWriteToFile()
             throws ServiceException, NotFoundInDatabase,
             NotAuthenticatedException, IOException {
