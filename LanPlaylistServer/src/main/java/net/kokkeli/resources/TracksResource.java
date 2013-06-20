@@ -58,9 +58,12 @@ public class TracksResource extends BaseResource {
                 ModelPlaylistItem item = new ModelPlaylistItem();
                 item.setArtist(track.getArtist());
                 item.setTrackName(track.getTrackName());
-                item.setUploader(track.getUploader().toString());
+                if (track.getUploader() != null){
+                    item.setUploader(track.getUploader().toString());
+                }
                 item.setExists(track.getExists());
                 item.setId(track.getId());
+                model.getItems().add(item);
             }
             
             baseModel.setModel(model);
