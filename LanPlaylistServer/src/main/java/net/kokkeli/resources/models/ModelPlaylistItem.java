@@ -12,6 +12,7 @@ public final class ModelPlaylistItem extends ViewModel{
     private String artist;
     private String uploader;
     private long id;
+    private boolean exists;
     
     /**
      * Sets name of item
@@ -79,5 +80,21 @@ public final class ModelPlaylistItem extends ViewModel{
      */
     public void setId(long id){
         this.id = id;
+    }
+    
+    /**
+     * Sets existance of this track
+     * @param exists If true, this track exists
+     */
+    public void setExists(boolean exists){
+        this.exists = exists;
+    }
+    
+    /**
+     * If true, this track exists
+     * @return If true, this track exists
+     */
+    public boolean getExists(){
+        return exists;
     }
 }

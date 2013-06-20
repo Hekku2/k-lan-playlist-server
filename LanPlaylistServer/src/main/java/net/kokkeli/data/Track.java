@@ -13,6 +13,7 @@ public class Track {
     private long id;
     private String location;
     private User uploader;
+    private boolean exists;
     
     /**
      * Creates track with id.
@@ -107,5 +108,21 @@ public class Track {
      */
     public User getUploader(){
         return uploader;
+    }
+
+    /**
+     * Sets exists for this item. Used when it is checked if track exists on filesystem.
+     * @param exists
+     */
+    public void setExists(boolean exists){
+        this.exists = exists;
+    }
+    
+    /**
+     * Getter for exists
+     * @return
+     */
+    public boolean getExists() {
+        return exists;
     }
 }

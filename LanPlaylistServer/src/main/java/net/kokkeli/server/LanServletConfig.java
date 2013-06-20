@@ -9,9 +9,11 @@ import net.kokkeli.data.db.PlaylistDatabase;
 import net.kokkeli.data.db.UserDatabase;
 import net.kokkeli.data.services.IPlaylistService;
 import net.kokkeli.data.services.ISessionService;
+import net.kokkeli.data.services.ITrackService;
 import net.kokkeli.data.services.IUserService;
 import net.kokkeli.data.services.PlaylistService;
 import net.kokkeli.data.services.SessionService;
+import net.kokkeli.data.services.TrackService;
 import net.kokkeli.data.services.UserService;
 import net.kokkeli.player.IPlayer;
 import net.kokkeli.player.MockPlayer;
@@ -23,6 +25,7 @@ import net.kokkeli.resources.PlaylistsResource;
 import net.kokkeli.resources.RenderExceptionMapper;
 import net.kokkeli.resources.RootResource;
 import net.kokkeli.resources.ServiceExceptionMapper;
+import net.kokkeli.resources.TracksResource;
 import net.kokkeli.resources.UsersResource;
 import net.kokkeli.resources.authentication.AuthenticationInceptor;
 import net.kokkeli.resources.authentication.AuthenticationResource;
@@ -72,6 +75,7 @@ public class LanServletConfig extends GuiceServletContextListener {
                 bind(IUserService.class).to(UserService.class);
                 bind(IPlaylistService.class).to(PlaylistService.class);
                 bind(IFileSystem.class).to(FileSystem.class);
+                bind(ITrackService.class).to(TrackService.class);
 
                 //Resources
                 bind(StaticResources.class);
@@ -81,6 +85,7 @@ public class LanServletConfig extends GuiceServletContextListener {
                 bind(IndexResource.class);
                 bind(PlaylistsResource.class);
                 bind(ManagementResource.class);
+                bind(TracksResource.class);
                 
                 //Aspects
                 AuthenticationInceptor interceptor = new AuthenticationInceptor();
