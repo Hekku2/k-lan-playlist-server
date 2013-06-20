@@ -8,7 +8,7 @@ import net.kokkeli.data.ILogger;
 import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.Track;
 import net.kokkeli.data.db.DatabaseException;
-import net.kokkeli.data.db.IDatabase;
+import net.kokkeli.data.db.ITrackDatabase;
 import net.kokkeli.server.IFileSystem;
 
 /**
@@ -17,7 +17,7 @@ import net.kokkeli.server.IFileSystem;
  *
  */
 public class TrackService implements ITrackService{
-    private final IDatabase<Track> trackDatabase;
+    private final ITrackDatabase trackDatabase;
     private final IFileSystem filesystem;
     private final ILogger logger;
     
@@ -28,7 +28,7 @@ public class TrackService implements ITrackService{
      * @param filesystem The filesystem
      */
     @Inject
-    public TrackService(ILogger logger, IDatabase<Track> trackDatabase, IFileSystem filesystem){
+    public TrackService(ILogger logger, ITrackDatabase trackDatabase, IFileSystem filesystem){
         this.logger = logger;
         this.trackDatabase = trackDatabase;
         this.filesystem = filesystem;

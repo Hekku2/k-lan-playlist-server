@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Track;
 import net.kokkeli.data.db.DatabaseException;
-import net.kokkeli.data.db.IDatabase;
+import net.kokkeli.data.db.ITrackDatabase;
 import net.kokkeli.data.db.NotFoundInDatabase;
 import net.kokkeli.server.IFileSystem;
 
@@ -17,16 +17,15 @@ import org.junit.Test;
 import static org.mockito.Mockito.*;
 
 public class TestTrackService {
-    private IDatabase<Track> mockDatabase;
+    private ITrackDatabase mockDatabase;
     private ILogger mockLogger;
     private IFileSystem mockFileSystem;
     
     private TrackService playlistService;
     
-    @SuppressWarnings("unchecked")
     @Before
     public void setup() throws NotFoundInDatabase, DatabaseException, ServiceException{
-        mockDatabase = mock(IDatabase.class);
+        mockDatabase = mock(ITrackDatabase.class);
         mockLogger = mock(ILogger.class);
         mockFileSystem = mock(IFileSystem.class);
         
