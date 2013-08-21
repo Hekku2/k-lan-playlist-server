@@ -1,7 +1,7 @@
 package net.kokkeli.data.db;
 
 import java.io.File;
-
+import java.util.ArrayList;
 import com.almworks.sqlite4java.SQLiteConnection;
 import com.almworks.sqlite4java.SQLiteException;
 import com.almworks.sqlite4java.SQLiteStatement;
@@ -10,6 +10,11 @@ import net.kokkeli.data.Role;
 import net.kokkeli.data.Track;
 import net.kokkeli.data.User;
 
+/**
+ * Class representing Tracks-table in database. Used for operating the specific table only.
+ * @author Hekku2
+ *
+ */
 public class TracksTable {
     private static final String TABLENAME = "tracks";
     private static final String ALLTRACKS = "SELECT * FROM " + TABLENAME;
@@ -70,6 +75,40 @@ public class TracksTable {
         return track;
     }
 
+    /**
+     * Returns all tracks from database. User only holds Id.
+     * @return Collection of tracks
+     * @throws DatabaseException Thrown if there is a problem with the database
+     */
+    public ArrayList<Track> get() throws DatabaseException {
+        SQLiteConnection db = new SQLiteConnection(new File(databaseLocation));
+        
+        ArrayList<Track> tracks = new ArrayList<Track>();
+        try {
+            db.open(false);
+            SQLiteStatement st = db.prepare(ALLTRACKS);
+            try {
+                while (st.step()) {
+                    Track track = new Track(st.columnLong(0));
+                    track.setTrackName(st.columnString(1));
+                    track.setArtist(st.columnString(2));
+                    track.setLocation(st.columnString(3));
+                    
+                    User uploader = new User(st.columnLong(4), null, Role.NONE);
+                    track.setUploader(uploader);
+                    tracks.add(track);
+                }
+            } finally {
+                st.dispose();
+            }
+            db.dispose();
+        } catch (SQLiteException e) {
+            throw new DatabaseException("Unabe to insert track to database.", e);
+        }
+        
+        return tracks;
+    }
+    
     /**
      * Inserts track to database.
      * @param newTrack Track to insert

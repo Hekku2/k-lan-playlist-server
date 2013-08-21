@@ -3,10 +3,20 @@ package net.kokkeli.data.db;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.google.inject.Inject;
+
+import net.kokkeli.ISettings;
 import net.kokkeli.data.Track;
 
-public class TrackDatabase implements ITrackDatabase{
-
+public class TrackDatabase extends Database implements ITrackDatabase{
+    private final TracksTable tracksTable;
+    
+    @Inject
+    public TrackDatabase(ISettings settings) throws DatabaseException{
+        super(settings);
+        tracksTable = new TracksTable(getDatabaseLocation());
+    }
+    
     @Override
     public void CheckDatabaseFormat() throws DatabaseException {
     }
@@ -19,16 +29,9 @@ public class TrackDatabase implements ITrackDatabase{
 
     @Override
     public Collection<Track> get() throws DatabaseException {
-        //TODO Proper implementation
-        ArrayList<Track> tracks = new ArrayList<Track>();
-        for (int i = 0; i < 3; i++) {
-            Track track = new Track();
-            track.setArtist("Artist! " + i);
-            track.setTrackName("TrackName" + i);
-            track.setLocation("Location"+i);
-            track.setId(i);
-            tracks.add(track);
-        }
+        ArrayList<Track> tracks = tracksTable.get();
+        
+        //TODO Add user
         return tracks;
     }
 
