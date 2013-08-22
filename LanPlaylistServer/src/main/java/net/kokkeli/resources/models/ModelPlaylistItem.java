@@ -94,6 +94,7 @@ public final class ModelPlaylistItem extends ViewModel{
      * If true, this track exists
      * @return If true, this track exists
      */
+    @Field
     public boolean getExists(){
         return exists;
     }

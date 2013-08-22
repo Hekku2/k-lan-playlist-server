@@ -22,6 +22,7 @@ import net.kokkeli.player.IPlayer;
 import net.kokkeli.resources.models.BaseModel;
 import net.kokkeli.resources.models.ModelPlaylistItem;
 import net.kokkeli.resources.models.ModelTracks;
+import net.kokkeli.server.IFileSystem;
 import net.kokkeli.server.ITemplateService;
 import net.kokkeli.server.NotAuthenticatedException;
 import net.kokkeli.server.RenderException;
@@ -31,6 +32,7 @@ public class TracksResource extends BaseResource {
     private static final String INDEX_TEMPLATE = "tracks/index.ftl";
     
     private final ITrackService trackService;
+    private final IFileSystem fileSystem;
     
     /**
      * Creates tracks resource.
@@ -38,10 +40,11 @@ public class TracksResource extends BaseResource {
      */
     @Inject
     protected TracksResource(ILogger logger, ITemplateService templateService,
-            IPlayer player, ISessionService sessions, ISettings settings, ITrackService trackService) {
+            IPlayer player, ISessionService sessions, ISettings settings, ITrackService trackService, IFileSystem fileSystem) {
         super(logger, templateService, player, sessions, settings);
         
         this.trackService = trackService;
+        this.fileSystem = fileSystem;
     }
 
     @GET
@@ -61,8 +64,9 @@ public class TracksResource extends BaseResource {
                 if (track.getUploader() != null){
                     item.setUploader(track.getUploader().toString());
                 }
-                item.setExists(track.getExists());
+                item.setExists(fileSystem.fileExists(track.getLocation()));
                 item.setId(track.getId());
+                
                 model.getItems().add(item);
             }
             
