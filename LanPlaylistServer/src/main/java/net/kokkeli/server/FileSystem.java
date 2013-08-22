@@ -35,7 +35,12 @@ public class FileSystem implements IFileSystem {
 
     @Override
     public boolean fileExists(String file) {
-        return new File(file).exists();
+        try {
+            return new File(file).exists();
+        } catch (SecurityException e) {
+            return false;
+        }
+        
     }
 
 }
