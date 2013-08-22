@@ -31,7 +31,7 @@ public class StaticResources {
      */
     @GET
     @Produces("text/css")
-    @Path("/css/{file}")
+    @Path("/css/{file: .*}")
     public StreamingOutput getCSS(@PathParam("file") final String file) {
         return getStream(CSS_FOLDER, file);
     }
@@ -43,7 +43,7 @@ public class StaticResources {
      */
     @GET
     @Produces("image/png")
-    @Path("/images/{file}")
+    @Path("/images/{file: .*}")
     public StreamingOutput getImage(@PathParam("file") final String file) {
         return getStream(IMAGES_FOLDER, file);
     }
