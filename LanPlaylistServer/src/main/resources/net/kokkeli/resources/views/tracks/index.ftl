@@ -11,13 +11,13 @@
 			<div class="content">
 				<#include "/common/_info_error.ftl">
 				<#if getModel.getItems??>
-					<table>
+					<table class="table table-striped">
 						<tr>
 							<th>Artist</th>
 							<th>Track</th>
 						</tr>
 						<#list getModel.getItems as item>
-							<tr>
+							<tr class="<#if item.getExists>success<#else>error</#if>">
 								<td>${item.getArtist}</td>
 								<td>${item.getTrackName}</td>
 							</tr>

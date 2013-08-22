@@ -12,7 +12,7 @@
 				<#include "/common/_info_error.ftl">
 				<a class="button" href="/playlists/create">Create a playlist</a>
 				<#if getModel?? && getModel.getItems??>
-					<table>
+					<table class="table table-striped">
 						<tr>
 							<th>Name</th>
 							<th>Man.<th>

@@ -1,6 +1,6 @@
 <div>
 	<p>Current playlist: ${getModel.getName}</p>
-	<table>
+	<table class="table table-striped">
 		<tr>
 			<th>Artist</th>
 			<th>Track</th>
