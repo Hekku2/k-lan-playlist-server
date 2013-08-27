@@ -28,4 +28,10 @@ public interface IPlayer {
      * @return Currently playing playlist id.
      */
     long getCurrentPlaylistId() throws NotPlaylistPlayingException;
+    
+    /**
+     * Adds file to playing queue
+     * @param file
+     */
+    void addToQueue(String file);
 }

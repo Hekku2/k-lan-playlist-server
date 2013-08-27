@@ -23,6 +23,7 @@ import com.sun.jersey.api.NotFoundException;
 public class StaticResources {
     private static final String CSS_FOLDER = "target/classes/net/kokkeli/resources/css/";
     private static final String IMAGES_FOLDER = "target/classes/net/kokkeli/resources/images/";
+    private static final String JS_FOLDER = "target/classes/net/kokkeli/resources/js/";
     
     /**
      * Loads css-file with given name from resources.
@@ -39,13 +40,25 @@ public class StaticResources {
     /**
      * Loads image-file with given name from resources.
      * @param file Name of file.
-     * @return Css-file
+     * @return Image-file
      */
     @GET
     @Produces("image/png")
     @Path("/images/{file: .*}")
     public StreamingOutput getImage(@PathParam("file") final String file) {
         return getStream(IMAGES_FOLDER, file);
+    }
+    
+    /**
+     * Loads js-file with given name from resources.
+     * @param file Name of file.
+     * @return Css-file
+     */
+    @GET
+    @Produces("text/javascript")
+    @Path("/js/{file: .*}")
+    public StreamingOutput getJs(@PathParam("file") final String file) {
+        return getStream(JS_FOLDER, file);
     }
     
     /**
