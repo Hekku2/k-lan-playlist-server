@@ -21,7 +21,7 @@ public class TestTrackService {
     private ILogger mockLogger;
     private IFileSystem mockFileSystem;
     
-    private TrackService playlistService;
+    private TrackService trackService;
     
     @Before
     public void setup() throws NotFoundInDatabase, DatabaseException, ServiceException{
@@ -29,7 +29,7 @@ public class TestTrackService {
         mockLogger = mock(ILogger.class);
         mockFileSystem = mock(IFileSystem.class);
         
-        playlistService = new TrackService(mockLogger, mockDatabase, mockFileSystem);
+        trackService = new TrackService(mockLogger, mockDatabase, mockFileSystem);
     }
     
     @Test
@@ -37,7 +37,7 @@ public class TestTrackService {
         when(mockDatabase.get()).thenThrow(new DatabaseException("Explosion."));
         
         try {
-            playlistService.getAndVerifyTracks();
+            trackService.getAndVerifyTracks();
         } catch (ServiceException e) {
             Assert.assertEquals("There was problem with database.", e.getMessage());
         }
@@ -59,7 +59,7 @@ public class TestTrackService {
         when(mockFileSystem.fileExists("Location1")).thenReturn(true);
         
         Track[] verified = new Track[3];
-        playlistService.getAndVerifyTracks().toArray(verified);
+        trackService.getAndVerifyTracks().toArray(verified);
         
         Assert.assertFalse(verified[0].getExists());
         Assert.assertTrue(verified[1].getExists());
@@ -71,6 +71,27 @@ public class TestTrackService {
             Assert.assertEquals(verified[i].getUploader(), tracks.get(i).getUploader());
             Assert.assertEquals(verified[i].getId(), tracks.get(i).getId());
             Assert.assertEquals(verified[i].getLocation(), tracks.get(i).getLocation());
+        }
+    }
+    
+    @Test
+    public void testGetReturnsCorrectTrack() throws DatabaseException, NotFoundInDatabase, ServiceException {
+        Track track = new Track();
+        track.setId(5);
+        
+        when(mockDatabase.get(track.getId())).thenReturn(track);
+        
+        Track gotten = trackService.get(track.getId());
+        Assert.assertEquals(track.getId(), gotten.getId());
+    }
+    
+    @Test
+    public void testGetThrowsServiceExceptionWhenDatabaseThrowsException() throws DatabaseException, NotFoundInDatabase{
+        when(mockDatabase.get(anyLong())).thenThrow(new DatabaseException("Räjähti!"));
+        try {
+            trackService.get(5);
+        } catch (ServiceException e) {
+            Assert.assertEquals("There was problem with database.", e.getMessage());
         }
     }
 }

@@ -23,8 +23,9 @@ public class TrackDatabase extends Database implements ITrackDatabase{
 
     @Override
     public Track get(long id) throws DatabaseException, NotFoundInDatabase {
-        // TODO Auto-generated method stub
-        return null;
+        //TODO Add user
+        
+        return tracksTable.get(id);
     }
 
     @Override

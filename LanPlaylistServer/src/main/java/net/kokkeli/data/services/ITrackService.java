@@ -3,6 +3,7 @@ package net.kokkeli.data.services;
 import java.util.Collection;
 
 import net.kokkeli.data.Track;
+import net.kokkeli.data.db.NotFoundInDatabase;
 
 /**
  * Interface defining track service
@@ -22,7 +23,9 @@ public interface ITrackService {
      * Returns single track with given id
      * @param id Id of track
      * @return Track matching the id
+     * @throws NotFoundInDatabase Thrown if track is not in database
+     * @throws ServiceException Thrown if there is a problem with the database
      */
-    Track get(long id);
+    Track get(long id) throws NotFoundInDatabase, ServiceException;
 
 }

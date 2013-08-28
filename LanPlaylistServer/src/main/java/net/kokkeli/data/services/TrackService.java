@@ -9,6 +9,7 @@ import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.Track;
 import net.kokkeli.data.db.DatabaseException;
 import net.kokkeli.data.db.ITrackDatabase;
+import net.kokkeli.data.db.NotFoundInDatabase;
 import net.kokkeli.server.IFileSystem;
 
 /**
@@ -48,5 +49,16 @@ public class TrackService implements ITrackService{
             logger.log("Something went wrong in database: " + e.getMessage(), LogSeverity.ERROR);
             throw new ServiceException("There was problem with database.", e);
         }
+    }
+
+    @Override
+    public Track get(long id) throws NotFoundInDatabase, ServiceException {
+        try {
+            return trackDatabase.get(id);
+        } catch (DatabaseException e) {
+            logger.log("Something went wrong in database: " + e.getMessage(), LogSeverity.ERROR);
+            throw new ServiceException("There was problem with database.", e);
+        }
+        
     }
 }
