@@ -32,12 +32,12 @@ public class TestIndexResource extends ResourceTestsBase{
     }
     
     @Test
-    public void testIndexthrowsExceptionWhenPlaylistIsNotFound() throws RenderException, ServiceException, NotFoundInDatabase, NotAuthenticatedException {
+    public void testIndexDoesntThrowExceptionWhenPlaylistIsNotSelected() throws RenderException, ServiceException, NotFoundInDatabase, NotAuthenticatedException {
         ModelAnswer model = new ModelAnswer();
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(model);
         
         when(mockPlaylistService.getPlaylist(any(Long.class))).thenThrow(new NotFoundInDatabase("Not found."));
-        assertModelResponse(resource.index(buildRequest()), model, "For some reason, currently playing playlist was not found.", null);
+        assertModelResponse(resource.index(buildRequest()), model, null, null);
     }
     
     @Test
@@ -57,6 +57,7 @@ public class TestIndexResource extends ResourceTestsBase{
         ModelAnswer model = new ModelAnswer();
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(model);
         
+        when(getPlayer().playlistPlaying()).thenReturn(true);
         when(mockPlaylistService.getPlaylist(any(Long.class))).thenThrow(new ServiceException("Any message."));
         
         assertModelResponse(resource.index(buildRequest()), model, "For some reason, currently playing playlist can't be shown.", null);

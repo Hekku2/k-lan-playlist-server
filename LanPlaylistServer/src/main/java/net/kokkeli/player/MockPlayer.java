@@ -19,4 +19,17 @@ public class MockPlayer implements IPlayer {
     public long getCurrentPlaylistId() {
         return 1;
     }
+
+    @Override
+    public void addToQueue(String file) {
+    }
+
+    @Override
+    public boolean playlistPlaying() {
+        return true;
+    }
+
+    @Override
+    public void selectPlaylist(long id) {
+    }
 }

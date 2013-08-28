@@ -1,5 +1,8 @@
 package net.kokkeli.player;
 
+import net.kokkeli.data.db.NotFoundInDatabase;
+import net.kokkeli.data.services.ServiceException;
+
 /**
  * Interface for player
  * @author Hekku2
@@ -9,8 +12,9 @@ public interface IPlayer {
     
     /**
      * Continues playing current 
+     * @throws ServiceException 
      */
-    void play();
+    void play() throws ServiceException;
     
     /**
      * Pauses playing current track
@@ -34,4 +38,18 @@ public interface IPlayer {
      * @param file
      */
     void addToQueue(String file);
+
+    /**
+     * Returns true if player has playlist selected for playing
+     * @return If true, playlist is selected for playing
+     */
+    boolean playlistPlaying();
+
+    /**
+     * Selects new playlist for playing
+     * @param id If of the playlist
+     * @throws NotFoundInDatabase Thrown if playlist is not found in database
+     * @throws ServiceException Thrown if there is a problem with the database
+     */
+    void selectPlaylist(long id) throws NotFoundInDatabase, ServiceException;
 }

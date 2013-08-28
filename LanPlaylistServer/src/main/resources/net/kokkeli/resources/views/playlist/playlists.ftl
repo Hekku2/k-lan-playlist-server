@@ -3,6 +3,7 @@
 
 <html>
 	<#include "/common/_header.ftl">
+	<script type="text/javascript" src="/resource/js/playlists.js"></script>
 	<body>
 		<div class="inner-body">
 			<#include "/common/_topsection.ftl">
@@ -20,7 +21,10 @@
 						<#list getModel.getItems as item>
 							<tr>
 								<td>${item.getName}</td>
-								<td><a href="/playlists/${item.getId}">Details</a></td>
+								<td>
+									<a href="/playlists/${item.getId}"><img src="/resource/images/details-icon-20x20.png"/></a>
+									<button class="btn select-playlist" id="${item.getId}">Play</button>
+								</td>
 							</tr>
 						</#list>
 					</table>

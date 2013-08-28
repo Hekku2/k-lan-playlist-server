@@ -18,7 +18,7 @@ import net.kokkeli.data.services.SessionService;
 import net.kokkeli.data.services.TrackService;
 import net.kokkeli.data.services.UserService;
 import net.kokkeli.player.IPlayer;
-import net.kokkeli.player.MockPlayer;
+import net.kokkeli.player.VlcPlayer;
 import net.kokkeli.resources.Access;
 import net.kokkeli.resources.ManagementResource;
 import net.kokkeli.resources.StaticResources;
@@ -74,7 +74,7 @@ public class LanServletConfig extends GuiceServletContextListener {
                 //Services
                 bind(ISessionService.class).to(SessionService.class).asEagerSingleton();
                 bind(ITemplateService.class).to(Templates.class);
-                bind(IPlayer.class).to(MockPlayer.class);
+                bind(IPlayer.class).to(VlcPlayer.class).asEagerSingleton();;
                 bind(IUserService.class).to(UserService.class);
                 bind(IPlaylistService.class).to(PlaylistService.class);
                 bind(IFileSystem.class).to(FileSystem.class);

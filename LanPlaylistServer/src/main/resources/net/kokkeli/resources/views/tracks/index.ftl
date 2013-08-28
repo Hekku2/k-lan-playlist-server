@@ -3,6 +3,9 @@
 
 <html>
 	<#include "/common/_header.ftl">
+	
+	<script type="text/javascript" src="/resource/js/tracks.js"></script>
+	
 	<body>
 		<div class="inner-body">
 			<#include "/common/_topsection.ftl">
@@ -15,11 +18,13 @@
 						<tr>
 							<th>Artist</th>
 							<th>Track</th>
+							<th></th>
 						</tr>
 						<#list getModel.getItems as item>
 							<tr class="<#if item.getExists>success<#else>error</#if>">
 								<td>${item.getArtist}</td>
 								<td>${item.getTrackName}</td>
+								<td><button class="add-track btn" id="${item.getId}">+</button></td>
 							</tr>
 						</#list>
 					</table>

@@ -1,7 +1,7 @@
 $(document).ready(function(){
-	$("button[class*='add-track']").click(function () {
+	$("#play").click(function () {
 		
-		$.post('/play', { "id": 1 });
+		$.post('/play', {"jee": 2});
 		
 	});
 });

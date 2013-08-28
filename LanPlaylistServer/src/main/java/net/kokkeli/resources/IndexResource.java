@@ -68,20 +68,21 @@ public class IndexResource extends BaseResource {
         try {
             BaseModel base = buildBaseModel(req);
             try {
-                long currentPlaylist = player.getCurrentPlaylistId();
-                PlayList playlist = playlistService.getPlaylist(currentPlaylist);
-                ModelPlaylist modelPlayList = new ModelPlaylist(playlist.getId());
-                modelPlayList.setName(playlist.getName());
-                
-                for (Track playListItem : playlist.getItems()) {
-                    ModelPlaylistItem model = new ModelPlaylistItem();
-                    model.setArtist(playListItem.getArtist());
-                    model.setTrackName(playListItem.getTrackName());
+                if (player.playlistPlaying()){
+                    long currentPlaylist = player.getCurrentPlaylistId();
+                    PlayList playlist = playlistService.getPlaylist(currentPlaylist);
+                    ModelPlaylist modelPlayList = new ModelPlaylist(playlist.getId());
+                    modelPlayList.setName(playlist.getName());
                     
-                    modelPlayList.getItems().add(model);
+                    for (Track playListItem : playlist.getItems()) {
+                        ModelPlaylistItem model = new ModelPlaylistItem();
+                        model.setArtist(playListItem.getArtist());
+                        model.setTrackName(playListItem.getTrackName());
+                        
+                        modelPlayList.getItems().add(model);
+                    }
+                    base.setModel(modelPlayList);
                 }
-                base.setModel(modelPlayList);
-                
             } catch (NotPlaylistPlayingException e) {
                 // Suppress. If no playlist is playing, index page is still shown.
             } catch (NotFoundInDatabase e) {
