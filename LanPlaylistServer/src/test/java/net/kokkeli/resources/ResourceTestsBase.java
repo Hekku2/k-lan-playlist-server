@@ -29,6 +29,7 @@ import org.mockito.stubbing.Answer;
 public abstract class ResourceTestsBase {
     protected static final int RESPONSE_OK = 200;
     protected static final int REDIRECT = 303;
+    protected static final int NOT_FOUND = 404;
     
     private ILogger mockLogger;
     private ITemplateService mockTemplateService;
