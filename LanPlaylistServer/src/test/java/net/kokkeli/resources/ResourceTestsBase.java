@@ -30,6 +30,7 @@ public abstract class ResourceTestsBase {
     protected static final int RESPONSE_OK = 200;
     protected static final int REDIRECT = 303;
     protected static final int NOT_FOUND = 404;
+    protected static final int INTERNAL_SERVER_ERROR = 500;
     
     private ILogger mockLogger;
     private ITemplateService mockTemplateService;

@@ -116,13 +116,11 @@ public class RootResource extends BaseResource {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Access(Role.ADMIN)
     @Path("/play")
-    public Response play(@Context HttpServletRequest req) throws BadRequestException{
+    public Response play(@Context HttpServletRequest req){
         try {
             player.play();
             log("Playing started.", LogSeverity.TRACE);
             return Response.ok().build();
-        } catch (NumberFormatException e) {
-            throw new BadRequestException("Id was not in correct format.", e);
         } catch (ServiceException e) {
             return Response.status(Status.INTERNAL_SERVER_ERROR).build();
         }
