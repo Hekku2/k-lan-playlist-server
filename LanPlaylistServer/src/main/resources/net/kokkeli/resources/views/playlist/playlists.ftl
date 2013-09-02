@@ -22,7 +22,7 @@
 							<tr>
 								<td>${item.getName}</td>
 								<td>
-									<a href="/playlists/${item.getId}"><img src="/resource/images/details-icon-20x20.png"/></a>
+									<a href="/playlists/${item.getId}"><i class="icon-edit"></i></a>
 									<button class="btn select-playlist" id="${item.getId}">Play</button>
 								</td>
 							</tr>

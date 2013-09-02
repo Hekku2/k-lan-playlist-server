@@ -38,8 +38,8 @@
 									${item.getUploader}
 								</td>
 								<td>
-									<a href="/tracks/${item.getId}"><img src="/resource/images/details-icon-20x20.png"/></a>
-									<a class="btn delete" id="${item.getId}" href="/playlists/delete/${getModel.getId}">Delete</a>
+									<a title="Edit" href="/tracks/${item.getId}"><i class="icon-edit"></i></a>
+									<a title="Delete" class="delete" id="${item.getId}" href="/playlists/delete/${getModel.getId}"><i class="icon-remove"></i></a>
 								</td>
 							</tr>
 						</#list>

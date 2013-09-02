@@ -22,7 +22,7 @@
 							<tr>
 								<td>${item.getUsername}</td>
 								<td>${item.getRole}</td>
-								<td><a href="/users/${item.getId}"><img src="/resource/images/details-icon-20x20.png"/></a></td>
+								<td><a href="/users/${item.getId}"><i class="icon-edit"></i></a></td>
 							</tr>
 						</#list>
 					</table>
