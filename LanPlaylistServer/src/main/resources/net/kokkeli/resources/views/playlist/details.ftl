@@ -4,6 +4,7 @@
 <html>
 	<#include "/common/_header.ftl">
 	<link rel="stylesheet" type="text/css" href="/resource/css/Playlist.css">
+	<script type="text/javascript" src="/resource/js/playlist.js"></script>
 	<body>
 		<div class="inner-body">
 			<#include "/common/_topsection.ftl">
@@ -48,7 +49,7 @@
 								</div>
 								<div>
 									<a href="/tracks/${item.getId}"><img src="/resource/images/details-icon-20x20.png"/></a>
-									<a href="/playlist/delete?trackId=${item.getId}?playlistId=${getModel.getId}">Del.</a>
+									<a class="btn delete" id="${item.getId}" href="/playlists/delete/${getModel.getId}">Delete</a>
 								</div>
 							</div>
 						</#list>

@@ -3,7 +3,6 @@ package net.kokkeli.resources;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -15,6 +14,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import com.google.inject.Inject;
 import com.sun.jersey.core.header.FormDataContentDisposition;
@@ -55,6 +55,7 @@ public class PlaylistsResource extends BaseResource {
     private static final String PLAYLIST_CREATE_TEMPLATE = "playlist/create.ftl";
 
     private static final String FORM_NAME = "name";
+    private static final String FORM_ID = "id";
 
     private final IPlaylistService playlistService;
     private final ISettings settings;
@@ -346,6 +347,37 @@ public class PlaylistsResource extends BaseResource {
         }
     }
 
+    @POST
+    @Produces("text/html")
+    @Access(Role.USER)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Path("/delete/{playlistId: [0-9]*}")
+    public Response delete(@Context HttpServletRequest req,  @PathParam("playlistId") long playlistId, MultivaluedMap<String, String> formParams) throws BadRequestException{
+        try {
+            long trackId = Long.parseLong(formParams.getFirst(FORM_ID));
+            
+            PlayList list = playlistService.getPlaylist(playlistId);
+            for (Track track : list.getItems()) {
+                if (track.getId() == trackId){
+                    list.getItems().remove(track);
+                    playlistService.update(list);
+                    log(String.format("Removed track #%s from playlist #%s.", trackId, playlistId), LogSeverity.TRACE);
+                    return Response.ok().build();
+                }
+            }
+            
+            //If track is not found in playlist, return 404
+            return Response.status(Status.NOT_FOUND).build();
+        } catch (NumberFormatException e) {
+            throw new BadRequestException("Id was not in correct format.", e);
+        } catch (ServiceException e) {
+            return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+        } catch (NotFoundInDatabase e) {
+            return Response.status(Status.NOT_FOUND).build();
+        }
+        
+    }
+    
     /**
      * Creates new playlist for create from formParams. If values are missing,
      * exception is thrown.
