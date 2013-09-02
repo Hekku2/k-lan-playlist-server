@@ -11,49 +11,39 @@
 			<h1>${header}</h1>
 			<div class="content">
 				<#include "/common/_info_error.ftl">
-				<div class="field">
-					<div class="description">
-						Name: 
-					</div>
-					<div class="value">
+				<div class="playlist-info">
+					<strong>Name:</strong>
 						${getModel.getName}
-					</div>
 				</div>
 				<div class="playlist-values">			
 					<#if getModel.getItems??>
-					<div class="playlist-header">
-						<div class="column-header">
-							Artist 
-						</div>
-						<div class="column-header">
-							Track
-						</div>
-						<div class="column-header">
-							Uploader
-						</div>
-						<div class="column-header">
-							Man.
-						</div>
-					</div>
-					<div class="song-rows">
+					<table class="table table-bordered table-striped">
+						<thead>
+							<tr>
+								<th>Artist</th>
+								<th>Track</th>
+								<th>Uploader</th>
+								<th>Man.</th>
+							</tr>
+						</thead>
 						<#list getModel.getItems as item>
-							<div class="song-row">
-								<div>
+							<tr>
+								<td>
 									${item.getArtist}
-								</div>
-								<div>
+								</td>
+								<td>
 									${item.getTrackName}
-								</div>
-								<div>
+								</td>
+								<td>
 									${item.getUploader}
-								</div>
-								<div>
+								</td>
+								<td>
 									<a href="/tracks/${item.getId}"><img src="/resource/images/details-icon-20x20.png"/></a>
 									<a class="btn delete" id="${item.getId}" href="/playlists/delete/${getModel.getId}">Delete</a>
-								</div>
-							</div>
+								</td>
+							</tr>
 						</#list>
-					</div>
+					</table>
 					<#else>
 						No tracks found.
 					</#if>
