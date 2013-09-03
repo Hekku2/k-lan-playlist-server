@@ -6,6 +6,6 @@
 	<button id="pause" class="btn"><i class="icon-pause"></i></button>
 	<button id="play" class="btn"><i class="icon-play"></i></button>
 	<span class="now-playing-bar-song-name">
-		<#if getNowPlaying??> Currently playing: ${getNowPlaying} <#else>Nothing playing. </#if>
+		<#if getNowPlaying??> <strong>${getNowPlaying}</strong> <#else>Nothing playing. </#if>
 	</span>
 </div>

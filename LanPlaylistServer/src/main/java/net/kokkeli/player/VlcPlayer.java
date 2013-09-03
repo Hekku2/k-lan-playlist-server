@@ -19,6 +19,7 @@ import com.sun.jna.NativeLibrary;
 
 import uk.co.caprica.vlcj.binding.LibVlc;
 import uk.co.caprica.vlcj.component.AudioMediaPlayerComponent;
+import uk.co.caprica.vlcj.player.MediaMeta;
 import uk.co.caprica.vlcj.player.MediaPlayer;
 import uk.co.caprica.vlcj.runtime.RuntimeUtil;
 
@@ -61,7 +62,7 @@ public class VlcPlayer implements IPlayer {
 
     @Override
     public String getTitle() {
-        return null;
+        return player.currentTitle();
     }
 
     @Override
@@ -92,6 +93,10 @@ public class VlcPlayer implements IPlayer {
         currentPlaylistId = id;
     }
     
+    /**
+     * Extended AudioMediaPlayerComponent to match needs of this system.
+     * @author Hekku2
+     */
     private class PlayerComponent extends AudioMediaPlayerComponent{
         private final ILogger logger;
         private int trackPointer = 0;
@@ -168,6 +173,20 @@ public class VlcPlayer implements IPlayer {
             } catch (ServiceException e) {
                 logger.log("Unable to choose item for playing.", LogSeverity.ERROR);
                 //TODO implement somekind of callback so error is shown to user.
+            }
+        }
+        
+        /**
+         * Returns current title, or null if there is nothing playing
+         * @return
+         */
+        public String currentTitle(){
+            try {
+                //TODO Take this from variable or something.
+                MediaMeta meta = getMediaPlayer().getMediaMeta();
+                return meta.getArtist() + " - " + meta.getTitle();
+            } catch (IllegalStateException e) {
+                return null;
             }
         }
     }
