@@ -1,16 +1,16 @@
 <div>
-	<p>Current playlist: ${getModel.getName}</p>
+	<p><strong>Current playlist: ${getModel.getName}</strong></p>
 	<table class="table table-striped">
 		<tr>
 			<th>Artist</th>
 			<th>Track</th>
-			<th>Edit</th>
+			<th></th>
 		</tr>
 		<#list getModel.getItems as item>
 			<tr>
 	  			<td>${item.getArtist}</td>
 	  			<td>${item.getTrackName}</td>
-	  			<td>edit</td>
+	  			<td><a class="btn" href="/tracks/${item.getId}"><i class="icon-edit"></i></a></td>
 	  		</tr>
 		</#list>
 		
