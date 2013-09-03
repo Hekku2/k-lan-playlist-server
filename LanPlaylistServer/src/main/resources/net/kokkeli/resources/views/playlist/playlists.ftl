@@ -16,14 +16,14 @@
 					<table class="table table-striped">
 						<tr>
 							<th>Name</th>
-							<th>Man.<th>
+							<th></th>
 						</tr>
 						<#list getModel.getItems as item>
 							<tr>
 								<td>${item.getName}</td>
 								<td>
-									<a href="/playlists/${item.getId}"><i class="icon-edit"></i></a>
-									<button class="btn select-playlist" id="${item.getId}">Play</button>
+									<a class="btn" href="/playlists/${item.getId}"><i class="icon-edit"></i></a>
+									<button class="btn select-playlist" id="${item.getId}"><i class="icon-play"></i></button>
 								</td>
 							</tr>
 						</#list>

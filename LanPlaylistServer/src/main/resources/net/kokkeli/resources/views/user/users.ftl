@@ -16,13 +16,13 @@
 						<tr>
 							<th>Username</th>
 							<th>Role</th>
-							<th>Man.<th>
+							<th></th>
 						</tr>
 						<#list getModel.getUsers as item>
 							<tr>
 								<td>${item.getUsername}</td>
 								<td>${item.getRole}</td>
-								<td><a href="/users/${item.getId}"><i class="icon-edit"></i></a></td>
+								<td><a class="btn" href="/users/${item.getId}"><i class="icon-edit"></i></a></td>
 							</tr>
 						</#list>
 					</table>

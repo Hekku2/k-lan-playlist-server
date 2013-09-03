@@ -2,11 +2,10 @@
 <script type="text/javascript" src="/resource/js/play-controls.js"></script>
 
 <div class="now-playing-bar">
-	<button id="play" class="btn pull-right">Play</button>
-
-	<#if getNowPlaying??>
-		<p class="now-playing-bar-song-name"> Currently playing: ${getNowPlaying} </p>
-	<#else>
-		<p class="now-playing-bar-song-name"> Nothing playing. </p>
-	</#if>
+	<button id="stop" class="btn"><i class="icon-stop"></i></button>
+	<button id="pause" class="btn"><i class="icon-pause"></i></button>
+	<button id="play" class="btn"><i class="icon-play"></i></button>
+	<span class="now-playing-bar-song-name">
+		<#if getNowPlaying??> Currently playing: ${getNowPlaying} <#else>Nothing playing. </#if>
+	</span>
 </div>

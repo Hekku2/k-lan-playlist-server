@@ -24,7 +24,7 @@
 							<tr class="<#if item.getExists>success<#else>error</#if>">
 								<td>${item.getArtist}</td>
 								<td>${item.getTrackName}</td>
-								<td><button class="add-track btn" id="${item.getId}">+</button></td>
+								<td><button class="btn"><i class="icon-plus-sign" id="${item.getId}"></i></button></td>
 							</tr>
 						</#list>
 					</table>
