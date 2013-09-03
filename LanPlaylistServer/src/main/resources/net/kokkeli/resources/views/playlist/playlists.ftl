@@ -23,7 +23,7 @@
 								<td>${item.getName}</td>
 								<td>
 									<a class="btn" href="/playlists/${item.getId}"><i class="icon-edit"></i></a>
-									<button class="btn select-playlist" id="${item.getId}"><i class="icon-play"></i></button>
+									<button class="btn select-playlist" id="${item.getId}"><i id="${item.getId}" class="icon-play"></i></button>
 								</td>
 							</tr>
 						</#list>
