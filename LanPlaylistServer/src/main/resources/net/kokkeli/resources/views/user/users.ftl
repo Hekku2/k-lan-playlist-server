@@ -22,7 +22,7 @@
 							<tr>
 								<td>${item.getUsername}</td>
 								<td>${item.getRole}</td>
-								<td><a class="btn" href="/users/${item.getId}"><i class="icon-edit"></i></a></td>
+								<td><a title="Edit" class="btn" href="/users/${item.getId}"><i class="icon-edit"></i></a></td>
 							</tr>
 						</#list>
 					</table>
