@@ -117,7 +117,7 @@ public class VlcPlayer implements IPlayer {
                         return;
                     }
                     
-                    if (tracks.size() < trackPointer){
+                    if (tracks.size() <= trackPointer){
                         trackPointer = 0;
                     }
                     
