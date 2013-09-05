@@ -3,7 +3,6 @@ package net.kokkeli.data.services;
 import java.util.Collection;
 
 import com.google.inject.Inject;
-
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.Track;

@@ -78,7 +78,7 @@ public class IndexResource extends BaseResource {
                         ModelPlaylistItem model = new ModelPlaylistItem();
                         model.setArtist(playListItem.getArtist());
                         model.setTrackName(playListItem.getTrackName());
-                        
+                        model.setId(playListItem.getId());
                         modelPlayList.getItems().add(model);
                     }
                     base.setModel(modelPlayList);

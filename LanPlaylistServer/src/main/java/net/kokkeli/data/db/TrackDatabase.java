@@ -10,11 +10,13 @@ import net.kokkeli.data.Track;
 
 public class TrackDatabase extends Database implements ITrackDatabase{
     private final TracksTable tracksTable;
+    private final UsersTable usersTable;
     
     @Inject
     public TrackDatabase(ISettings settings) throws DatabaseException{
         super(settings);
         tracksTable = new TracksTable(getDatabaseLocation());
+        usersTable = new UsersTable(getDatabaseLocation());
     }
     
     @Override
@@ -23,16 +25,23 @@ public class TrackDatabase extends Database implements ITrackDatabase{
 
     @Override
     public Track get(long id) throws DatabaseException, NotFoundInDatabase {
-        //TODO Add user
+        Track track = tracksTable.get(id);
+        track.setUploader(usersTable.get(track.getUploader().getId()));
         
-        return tracksTable.get(id);
+        return track;
     }
 
     @Override
     public Collection<Track> get() throws DatabaseException {
         ArrayList<Track> tracks = tracksTable.get();
-        
-        //TODO Add user
+        try {
+            for (Track track : tracks) {
+                track.setUploader(usersTable.get(track.getUploader().getId()));
+            }
+        } catch (NotFoundInDatabase e) {
+            throw new DatabaseException("There was an uploader that did not match any user.", e);
+        }
+
         return tracks;
     }
 

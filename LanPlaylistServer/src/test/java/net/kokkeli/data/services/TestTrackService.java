@@ -33,7 +33,7 @@ public class TestTrackService {
     }
     
     @Test
-    public void testGetAndVerifyTrackThrowsServiceExceptionWhenDatabaseExceptionIsThrown() throws DatabaseException {
+    public void testGetAndVerifyTrackThrowsServiceExceptionWhenDatabaseExceptionIsThrown() throws DatabaseException, NotFoundInDatabase {
         when(mockDatabase.get()).thenThrow(new DatabaseException("Explosion."));
         
         try {
@@ -44,7 +44,7 @@ public class TestTrackService {
     }
     
     @Test
-    public void testGetAndVerifyVerifiesTracks() throws DatabaseException, ServiceException{
+    public void testGetAndVerifyVerifiesTracks() throws DatabaseException, ServiceException, NotFoundInDatabase{
         ArrayList<Track> tracks = new ArrayList<Track>();
         for (int i = 0; i < 3; i++) {
             Track track = new Track();

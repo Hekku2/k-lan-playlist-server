@@ -75,7 +75,7 @@ public class TestUserService {
     }
     
     @Test
-    public void testUserServiceGetReturnsAllUsers() throws DatabaseException, ServiceException{
+    public void testUserServiceGetReturnsAllUsers() throws DatabaseException, ServiceException, NotFoundInDatabase{
         ArrayList<User> users = new ArrayList<User>();
         users.add(new User("Name1", Role.ADMIN));
         users.add(new User("Name2", Role.USER));
@@ -89,7 +89,7 @@ public class TestUserService {
     }
     
     @Test
-    public void testUserServiceGetUsernamePasswordWrongPasswordThrowsException() throws DatabaseException, ServiceException{
+    public void testUserServiceGetUsernamePasswordWrongPasswordThrowsException() throws DatabaseException, ServiceException, NotFoundInDatabase{
         User user = new User("jarmoke", Role.ADMIN);
         user.setPasswordHash("wrong hash...");
         
