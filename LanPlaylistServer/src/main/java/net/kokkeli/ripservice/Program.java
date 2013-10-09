@@ -1,9 +1,17 @@
 package net.kokkeli.ripservice;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import net.kokkeli.ISettings;
 import net.kokkeli.Settings;
+import net.kokkeli.data.ILogger;
+import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.Logging;
+import net.kokkeli.data.db.DatabaseException;
+import net.kokkeli.data.db.FetchRequestDatabase;
+import net.kokkeli.data.db.IFetchRequestDatabase;
 
 /**
  * Program running rippers
@@ -14,9 +22,12 @@ public class Program {
 
     /**
      * @param args
+     * @throws InterruptedException 
+     * @throws IOException 
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException, IOException {
         String settingsFile = "settings/default.dat";
+        ILogger logger = new Logging();
         
         if (args.length > 0){
             settingsFile = args[0];
@@ -30,8 +41,32 @@ public class Program {
             System.out.println(e.toString());
         }
         
-        YouTubeRipper ripper = new YouTubeRipper(settings, new Logging());
-        ripper.fetch("http://www.youtube.com/watch?v=gOTyD6ZYcP0", "test.ogg");
+        IFetchRequestDatabase fetcherDatabase;
+        try {
+            fetcherDatabase = buildFetchRequestDatabase(settings);
+        } catch (DatabaseException e) {
+            logger.log("Unable to create database.", LogSeverity.ERROR);
+            return;
+        }
+        
+        IFetcher ripper = new YouTubeRipper(settings, logger);
+        ExecutorService executor = Executors.newFixedThreadPool(5);
+        Runnable worker = new FetcherRunner(logger, ripper, fetcherDatabase);
+        executor.execute(worker);
+
+        System.in.read();
+        
+        executor.shutdown();
+        //Wait until all are handled.
+        while (!executor.isTerminated()) {
+            //TODO Handling for hangups
+        }
+        logger.log("Stopped fetch request handlers.", LogSeverity.TRACE);
+    }
+    
+    public static IFetchRequestDatabase buildFetchRequestDatabase(ISettings settings) throws DatabaseException{
+        IFetchRequestDatabase database = new FetchRequestDatabase(settings);
+        return database;
     }
 
 }
