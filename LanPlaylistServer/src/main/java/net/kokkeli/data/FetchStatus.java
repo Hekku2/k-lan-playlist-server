@@ -1,5 +1,10 @@
 package net.kokkeli.data;
 
+/**
+ * Fetch status enum
+ * @author Hekku2
+ *
+ */
 public enum FetchStatus {
     WAITING(0),
     HANDLING(1),
@@ -9,7 +14,7 @@ public enum FetchStatus {
     private final int status;
     
     /**
-     * Creates role with given id.
+     * Creates fetch status with given id.
      * @param id
      */
     private FetchStatus(int status){
@@ -17,8 +22,8 @@ public enum FetchStatus {
     }
     
     /**
-     * Id of Role
-     * @return
+     * Id of status
+     * @return id
      */
     public int getStatus(){
         return status;
