@@ -103,7 +103,7 @@ public class TracksTable {
             }
             db.dispose();
         } catch (SQLiteException e) {
-            throw new DatabaseException("Unabe to insert track to database.", e);
+            throw new DatabaseException("Unabe to get tracks from database.", e);
         }
         
         return tracks;
