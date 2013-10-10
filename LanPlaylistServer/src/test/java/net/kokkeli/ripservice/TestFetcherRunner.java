@@ -4,6 +4,7 @@ import static org.mockito.Mockito.mock;
 import net.kokkeli.data.FetchRequest;
 import net.kokkeli.data.FetchStatus;
 import net.kokkeli.data.ILogger;
+import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.db.DatabaseException;
 import net.kokkeli.data.db.IFetchRequestDatabase;
 import net.kokkeli.data.db.NotFoundInDatabase;
@@ -46,5 +47,13 @@ public class TestFetcherRunner {
         verify(mockDatabase).updateRequest(request.getId(), FetchStatus.HANDLING);
         verify(mockFetcher).fetch(request);
         verify(mockDatabase).updateRequest(request.getId(), FetchStatus.HANDLED);
+    }
+    
+    @Test
+    public void testRunHandlesDatabaseException() throws DatabaseException{
+        when(mockDatabase.oldestUnhandledFetchRequestOrNull(mockType)).thenThrow(new DatabaseException("Kaboom!"));
+        
+        fetcherRunner.run();
+        verify(mockLogger).log("Something went wrong with the database while processing fetch items. Kaboom!", LogSeverity.ERROR);
     }
 }

@@ -7,9 +7,12 @@ import net.kokkeli.data.FetchRequest;
 import net.kokkeli.data.FetchStatus;
 
 public class FetchRequestDatabase extends Database implements IFetchRequestDatabase {
+    private final FetchRequestsTable table;
     
     public FetchRequestDatabase(ISettings settings) throws DatabaseException {
         super(settings);
+        
+        table = new FetchRequestsTable(settings.getDatabaseLocation());
     }
 
     @Override
@@ -20,7 +23,7 @@ public class FetchRequestDatabase extends Database implements IFetchRequestDatab
 
     @Override
     public Collection<FetchRequest> get() throws DatabaseException {
-        return null;
+        return table.get();
     }
 
     @Override
