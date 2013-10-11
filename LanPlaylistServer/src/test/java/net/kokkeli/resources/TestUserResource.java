@@ -53,7 +53,7 @@ public class TestUserResource extends ResourceTestsBase{
     }
     
     @Test
-    public void testGetDetailsServiceExceptionIsThrownWhenTemplateCantBeProcessed() throws RenderException, NotFoundException, NotAuthenticatedException{
+    public void testGetDetailsRedirectWhenTemplateCantBeProcessed() throws RenderException, NotFoundException, NotAuthenticatedException{
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenThrow(new RenderException("Rendering failed"));
         assertRedirectAndError(userResource.userDetails(buildRequest(), EXISTING_USER_ID), "There was a problem with rendering the template.");
     }
