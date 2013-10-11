@@ -14,6 +14,7 @@ public class FetchRequest {
     private Date lastUpdated;
     private FetchStatus status;
     private long id;
+    private Track track;
     
     /**
      * Sets location of the fetch request
@@ -109,5 +110,21 @@ public class FetchRequest {
      */
     public long getId(){
         return id;
+    }
+
+    /**
+     * Gets the track
+     * @return Track
+     */
+    public Track getTrack() {
+        return track;
+    }
+
+    /**
+     * Sets the track
+     * @param track Track
+     */
+    public void setTrack(Track track) {
+        this.track = track;
     }
 }

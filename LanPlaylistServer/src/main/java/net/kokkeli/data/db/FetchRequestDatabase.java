@@ -1,6 +1,9 @@
 package net.kokkeli.data.db;
 
+import java.util.ArrayList;
 import java.util.Collection;
+
+import com.google.inject.Inject;
 
 import net.kokkeli.ISettings;
 import net.kokkeli.data.FetchRequest;
@@ -8,10 +11,17 @@ import net.kokkeli.data.FetchStatus;
 
 public class FetchRequestDatabase extends Database implements IFetchRequestDatabase {
     private final FetchRequestsTable table;
+    private final TracksTable tracks;
     
-    public FetchRequestDatabase(ISettings settings) throws DatabaseException {
+    /**
+     * Creates fetch request database
+     * @param settings Settings
+     */
+    @Inject
+    public FetchRequestDatabase(ISettings settings) {
         super(settings);
         
+        tracks = new TracksTable(settings.getDatabaseLocation());
         table = new FetchRequestsTable(settings.getDatabaseLocation());
     }
 
@@ -23,7 +33,16 @@ public class FetchRequestDatabase extends Database implements IFetchRequestDatab
 
     @Override
     public Collection<FetchRequest> get() throws DatabaseException {
-        return table.get();
+        ArrayList<FetchRequest> requests = table.get();
+        try {
+            for (FetchRequest fetchRequest : requests) {
+                fetchRequest.setTrack(tracks.get(fetchRequest.getTrack().getId()));
+            }
+        } catch (NotFoundInDatabase e) {
+            throw new DatabaseException("For some reason, track was not in database. This should not happen!", e);
+        }
+        
+        return requests;
     }
 
     @Override

@@ -21,7 +21,7 @@ public abstract class Database {
      * @param settings
      * @throws DatabaseException
      */
-    public Database(ISettings settings) throws DatabaseException{
+    public Database(ISettings settings) {
         SQLite.setLibraryPath(settings.getLibLocation());
         Logger.getLogger("com.almworks.sqlite4java").setLevel(Level.OFF);
         

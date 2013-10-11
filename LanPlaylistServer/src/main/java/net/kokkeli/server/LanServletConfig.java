@@ -3,12 +3,16 @@ package net.kokkeli.server;
 import net.kokkeli.ISettings;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Logging;
+import net.kokkeli.data.db.FetchRequestDatabase;
+import net.kokkeli.data.db.IFetchRequestDatabase;
 import net.kokkeli.data.db.IPlaylistDatabase;
 import net.kokkeli.data.db.ITrackDatabase;
 import net.kokkeli.data.db.IUserDatabase;
 import net.kokkeli.data.db.PlaylistDatabase;
 import net.kokkeli.data.db.TrackDatabase;
 import net.kokkeli.data.db.UserDatabase;
+import net.kokkeli.data.services.FetchRequestService;
+import net.kokkeli.data.services.IFetchRequestService;
 import net.kokkeli.data.services.IPlaylistService;
 import net.kokkeli.data.services.ISessionService;
 import net.kokkeli.data.services.ITrackService;
@@ -71,6 +75,7 @@ public class LanServletConfig extends GuiceServletContextListener {
                 bind(IPlaylistDatabase.class).to(PlaylistDatabase.class).asEagerSingleton();
                 bind(IUserDatabase.class).to(UserDatabase.class).asEagerSingleton();
                 bind(ITrackDatabase.class).to(TrackDatabase.class).asEagerSingleton();
+                bind(IFetchRequestDatabase.class).to(FetchRequestDatabase.class).asEagerSingleton();
                 
                 //Services
                 bind(ISessionService.class).to(SessionService.class).asEagerSingleton();
@@ -80,6 +85,8 @@ public class LanServletConfig extends GuiceServletContextListener {
                 bind(IPlaylistService.class).to(PlaylistService.class);
                 bind(IFileSystem.class).to(FileSystem.class);
                 bind(ITrackService.class).to(TrackService.class);
+                bind(IFetchRequestService.class).to(FetchRequestService.class);
+                
 
                 //Resources
                 bind(StaticResources.class);

@@ -10,6 +10,7 @@ import com.almworks.sqlite4java.SQLiteStatement;
 
 import net.kokkeli.data.FetchRequest;
 import net.kokkeli.data.FetchStatus;
+import net.kokkeli.data.Track;
 
 /**
  * Table representing fetch_requests table in database
@@ -28,6 +29,7 @@ public class FetchRequestsTable {
     private static final int DESTINATIONFILECOLUMN = 3;
     private static final int LASTUPDATEDCOLUMN = 4;
     private static final int STATUSCOLUMN = 5;
+    private static final int TRACKCOLUMN = 6;
     
     /**
      * Database location
@@ -38,7 +40,8 @@ public class FetchRequestsTable {
     }
 
     /**
-     * Fetches all fetch requests from database
+     * Fetches all fetch requests from database.
+     * Note: Only track id is included
      * @return
      * @throws DatabaseException
      */
@@ -60,6 +63,7 @@ public class FetchRequestsTable {
                     
                     request.setLastUpdated(formatter.parse(st.columnString(LASTUPDATEDCOLUMN)));
                     request.setStatus(getStatus(st.columnInt(STATUSCOLUMN)));
+                    request.setTrack(new Track(st.columnLong(TRACKCOLUMN)));
                     
                     requests.add(request);
                 }
@@ -72,7 +76,6 @@ public class FetchRequestsTable {
         } catch (SQLiteException e) {
             throw new DatabaseException("Unabe to get requests from database.", e);
         }
-        
         return requests;
     }
     
