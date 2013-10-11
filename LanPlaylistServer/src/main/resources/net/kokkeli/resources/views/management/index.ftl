@@ -11,6 +11,7 @@
 			<div class="content">
 				<#include "/common/_info_error.ftl">
 				<a class="button" href="/tracks">Verify track database</a>
+				<a class="button" href="/fetchers">View fetch requests</a>
 			</div>
 		</div>
 	</body>
