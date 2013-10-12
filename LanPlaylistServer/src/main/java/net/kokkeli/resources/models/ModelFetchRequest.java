@@ -99,4 +99,13 @@ public class ModelFetchRequest extends ViewModel{
     public void setTrack(Track track) {
         this.track = track;
     }
+    
+    /**
+     * Gets the id of the track
+     * @return Track id
+     */
+    @Field
+    public long getTrackId(){
+        return track.getId();
+    }
 }

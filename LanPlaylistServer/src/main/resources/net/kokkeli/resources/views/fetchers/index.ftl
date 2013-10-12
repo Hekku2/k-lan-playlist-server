@@ -1,5 +1,5 @@
 <#assign header = "Fetch requests">
-<#assign tab = 0>
+<#assign tab = 3>
 
 <html>
 	<#include "/common/_header.ftl">
@@ -10,6 +10,7 @@
 			<h1>${header}</h1>
 			<div class="content">
 				<#include "/common/_info_error.ftl">
+				<a class="button" href="fetchers/createRequest">Create</a>
 				<#if getModel.getItems??>
 					<table class="table table-striped">
 						<tr>
@@ -22,7 +23,7 @@
 						<#list getModel.getItems as item>
 							<tr>
 								<td>${item.getHandler}</td>
-								<td>${item.getTrack}</td>
+								<td><a title="${item.getTrack}" href="/tracks/${item.getTrackId}">${item.getTrack}</a></td>
 								<td>${item.getLocation}</td>
 								<td>${item.getDestination}</td>
 								<td>${item.getStatus}</td>
