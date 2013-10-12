@@ -92,7 +92,7 @@ public class PlaylistsResource extends BaseResource {
      *             Thrown if there is problem with rendering template
      */
     @GET
-    @Produces("text/html")
+    @Produces("text/html; charset=utf-8")
     @Access(Role.ADMIN)
     public Response playlists(@Context HttpServletRequest req)
             throws NotAuthenticatedException {
@@ -120,13 +120,19 @@ public class PlaylistsResource extends BaseResource {
         }
     }
 
+    /**
+     * Playlist add get.
+     * @param req Request
+     * @param playlistId Playlist id
+     * @return Response
+     * @throws NotAuthenticatedException Thrown if user is not authenticated
+     */
     @GET
     @Produces("text/html")
     @Access(Role.USER)
     @Path("/add/{playlistId: [0-9]*}")
     public Response add(@Context HttpServletRequest req,
-            @PathParam("playlistId") long playlistId) throws ServiceException,
-            NotAuthenticatedException {
+            @PathParam("playlistId") long playlistId) throws NotAuthenticatedException {
         BaseModel model = buildBaseModel(req);
 
         try {
