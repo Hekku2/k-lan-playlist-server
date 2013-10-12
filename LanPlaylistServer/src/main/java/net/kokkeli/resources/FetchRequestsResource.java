@@ -37,6 +37,7 @@ import net.kokkeli.server.RenderException;
 @Path("/fetchers")
 public class FetchRequestsResource extends BaseResource{
     private static final String INDEX_TEMPLATE = "fetchers/index.ftl";
+    private static final String REQUEST_CREATE_TEMPLATE = "fetchers/createRequest.ftl";
     
     private final IFetchRequestService fetchRequestService;
     
@@ -71,6 +72,20 @@ public class FetchRequestsResource extends BaseResource{
             return handleRenderingError(model, e);
         } catch (ServiceException e) {
             return handleServiceException(model, e);
+        }
+    }
+    
+    @GET
+    @Produces("text/html")
+    @Access(Role.USER)
+    @Path("/createRequest")
+    public Response createRequest(@Context HttpServletRequest req) throws NotAuthenticatedException {
+        BaseModel model = buildBaseModel(req);
+        try {
+            
+            return Response.ok(templates.process(REQUEST_CREATE_TEMPLATE, model)).build();
+        } catch (RenderException e) {
+            return handleRenderingError(model, e);
         }
     }
     
