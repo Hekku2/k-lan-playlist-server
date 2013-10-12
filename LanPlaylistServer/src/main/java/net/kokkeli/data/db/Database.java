@@ -36,5 +36,9 @@ public abstract class Database {
         return databaseLocation;
     }
     
+    /**
+     * This method should check that database is formatted correctly (All objects can be constructed)
+     * @throws DatabaseException
+     */
     public abstract void CheckDatabaseFormat() throws DatabaseException;
 }
