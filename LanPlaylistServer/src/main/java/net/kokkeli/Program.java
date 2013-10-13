@@ -13,6 +13,8 @@ public class Program {
 	public static void main(String[] args) throws Exception {    
 	    LanServer server = null;
 		try {
+		    System.setProperty("SQLite.encoding", "utf-8");
+		    
 		    String settingsFile = "settings/default.dat";
 		    
 		    if (args.length > 0){

@@ -3,7 +3,6 @@ package net.kokkeli.resources.models;
 import java.util.ArrayList;
 
 import net.kokkeli.resources.ModelCollection;
-import net.kokkeli.resources.Field;
 import net.kokkeli.resources.Model;
 
 /**
@@ -12,30 +11,15 @@ import net.kokkeli.resources.Model;
  *
  */
 @Model
-public class ModelPlaylist extends ViewModel{
+public class ModelPlaylist extends ModelPlaylistListItem{
     private ArrayList<ModelPlaylistItem> items = new ArrayList<ModelPlaylistItem>();
-    private String name;
-    private long id;
     
     /**
      * Create object with given id.
      * @param id Id
      */
     public ModelPlaylist(long id){
-        this.id = id;
-    }
-    
-    @Field
-    public String getName(){
-        return name;
-    }
-    
-    /**
-     * Setter for name
-     * @param name Playlist name
-     */
-    public void setName(String name){
-        this.name = name;
+        super(id);
     }
     
     @ModelCollection
@@ -43,8 +27,5 @@ public class ModelPlaylist extends ViewModel{
         return items;
     }
     
-    @Field
-    public long getId(){
-        return id;
-    }
+
 }

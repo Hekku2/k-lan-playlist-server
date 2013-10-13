@@ -19,7 +19,7 @@ public class TestFetchRequestsResource extends ResourceTestsBase {
     public void before() throws Exception {
         mockFetchRequestService = mock(IFetchRequestService.class);
         
-        resource = new FetchRequestsResource(getLogger(), getTemplateService(), getPlayer(), getSessionService(), getSettings(), mockFetchRequestService);
+        resource = new FetchRequestsResource(getLogger(), getTemplateService(), getPlayer(), getSessionService(), getSettings(), mockFetchRequestService, null);
     }
     
     @Test

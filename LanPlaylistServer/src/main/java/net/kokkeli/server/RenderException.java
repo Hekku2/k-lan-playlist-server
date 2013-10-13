@@ -13,6 +13,14 @@ public class RenderException extends Exception {
      * Creates new server exception with given message
      * @param message Message
      */
+    public RenderException(String message, Exception inner){
+        super(message, inner);
+    }
+    
+    /**
+     * Creates new server exception with given message
+     * @param message Message
+     */
     public RenderException(String message){
         super(message);
     }

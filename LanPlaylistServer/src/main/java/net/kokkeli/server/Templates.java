@@ -64,9 +64,9 @@ public class Templates implements ITemplateService {
         try {
             temp = cfg.getTemplate(template);
         } catch (IOException e) {
-            throw new RenderException(String.format("Template with name: %s was not found", template));
+            throw new RenderException(String.format("Template with name: %s was not found", template), e);
         } catch (IllegalArgumentException e){
-            throw new RenderException("Template name cant be null.");
+            throw new RenderException("Template name cant be null.", e);
         }
         
         Map<String,Object> map = createMap(model);
@@ -74,7 +74,7 @@ public class Templates implements ITemplateService {
         try {
             temp.process(map, out);
         } catch (TemplateException | IOException e) {
-            throw new RenderException("Template could be processed with given model:" + e.toString());
+            throw new RenderException("Template could be processed with given model:" + e.toString(), e);
         }
         return out.toString();
     }
@@ -91,9 +91,9 @@ public class Templates implements ITemplateService {
         try {
             temp = cfg.getTemplate(template);
         } catch (IOException e) {
-            throw new RenderException(String.format("Template with name: %s was not found", template));
+            throw new RenderException(String.format("Template with name: %s was not found", template), e);
         } catch (IllegalArgumentException e){
-            throw new RenderException("Template name cant be null.");
+            throw new RenderException("Template name cant be null.", e);
         }
         Map<String,String> map = new HashMap<String, String>();
         
@@ -101,7 +101,7 @@ public class Templates implements ITemplateService {
         try {
             temp.process(map, out);
         } catch (TemplateException | IOException e) {
-            throw new RenderException("Template could be processed with given model:" + e.toString());
+            throw new RenderException("Template could be processed with given model:" + e.toString(), e);
         }
         return out.toString();
     }
@@ -130,13 +130,13 @@ public class Templates implements ITemplateService {
                     }
                 }
             } catch (NullPointerException e){
-                throw new RenderException("Method " + method.getName() + " can't be invoked with no arguments.");
+                throw new RenderException("Method " + method.getName() + " can't be invoked with no arguments.", e);
             } catch (IllegalAccessException e) {
-                throw new RenderException("Provided viewmodel contained Field-annotations with wrong access modifiers.");
+                throw new RenderException("Provided viewmodel contained Field-annotations with wrong access modifiers.", e);
             } catch (IllegalArgumentException e) {
-                throw new RenderException("Provided viewmodel contained Field-annotations with arguments.");
+                throw new RenderException("Provided viewmodel contained Field-annotations with arguments.", e);
             } catch (InvocationTargetException e) {
-                throw new RenderException("Something went wrong while getting values from model.");
+                throw new RenderException("Something went wrong while getting values from model. " + e.toString(), e);
             }
         }
         return map;
@@ -163,7 +163,7 @@ public class Templates implements ITemplateService {
             }
             return transformed;
         } catch (ClassCastException e) {
-            throw new RenderException("Provided viewmodel contained ModelCollection-annotations with wrong access modifiers.");
+            throw new RenderException("Provided viewmodel contained ModelCollection-annotations with wrong access modifiers.", e);
         }
     }
 }

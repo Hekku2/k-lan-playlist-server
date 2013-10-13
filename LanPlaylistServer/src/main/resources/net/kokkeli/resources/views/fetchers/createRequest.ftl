@@ -51,9 +51,23 @@
 							<input type="text" name="trackname">
 						</div>
 					</div>
+					<div class="field">
+						<div class="description">
+							Playlist:
+						</div>
+						<div class="value">
+							<select>
+								<#list getModel.getItems as item>
+									<option value="${item.getId}">${item.getName}</option>
+								</#list>
+							</select>
+						</div>
+					</div>
+					
+
 					<div class="submit-box">
 						<input class="button" type="submit" value="Create">
-						<a class="button" href="/users">Cancel</a>
+						<a class="button" href="/fetchers">Cancel</a>
 					</div>
 				</form>
 			</div>
