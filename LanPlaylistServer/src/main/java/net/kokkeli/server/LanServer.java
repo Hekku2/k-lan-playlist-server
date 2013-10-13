@@ -25,6 +25,7 @@ public class LanServer {
     private static final int PORT = 9998;
     private final ILogger logger;
     private final ISettings settings;
+    private final IFileSystem filesystem;
     
     private Server server;
     
@@ -35,12 +36,17 @@ public class LanServer {
     public LanServer(String settingsFile) throws ServerException{
         Injector injector = Guice.createInjector(new LoggingModule());
         logger = injector.getInstance(ILogger.class);
+        filesystem = new FileSystem();
         
         settings = new Settings();
         try {
             settings.loadSettings(settingsFile);
         } catch (IOException e) {
             throw new ServerException("Settings file " + settingsFile + " is missings!");
+        }
+        
+        if (!filesystem.fileExists(settings.getDatabaseLocation())){
+            throw new ServerException(String.format("Databasefile did not exist: %s", settings.getDatabaseLocation()));
         }
         
         File trackFolder = new File(settings.getTracksFolder());
