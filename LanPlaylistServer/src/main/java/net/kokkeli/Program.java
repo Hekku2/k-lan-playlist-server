@@ -20,7 +20,6 @@ public class Program {
 		    if (args.length > 0){
 		        settingsFile = args[0];
 		    }
-		    //TODO Better error message if database doesnt exist!
 		    
 		    System.out.println("Starting server with settings: " + settingsFile);
 		    server = new LanServer(settingsFile);
