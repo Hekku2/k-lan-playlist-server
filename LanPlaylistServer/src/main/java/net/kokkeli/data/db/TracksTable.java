@@ -115,7 +115,7 @@ public class TracksTable {
      * @return Database id of added track.
      * @throws DatabaseException thrown if there is problem with the database.
      */
-    public long insert(Track newTrack) throws DatabaseException {
+    public Track insert(Track newTrack) throws DatabaseException {
         SQLiteConnection db = new SQLiteConnection(new File(databaseLocation));
         
         long id;
@@ -133,8 +133,8 @@ public class TracksTable {
         } catch (SQLiteException e) {
             throw new DatabaseException("Unabe to insert track to database.", e);
         }
-        
-        return id;
+        newTrack.setId(id);
+        return newTrack;
     }
     
     /**

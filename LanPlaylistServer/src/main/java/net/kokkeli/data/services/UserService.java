@@ -128,7 +128,6 @@ public class UserService implements IUserService {
             get(username);
             return true;
         } catch (NotFoundInDatabase e) {
-            logger.log("Something went wrong in database: " + e.getMessage(), LogSeverity.ERROR);
             return false;
         }
     }

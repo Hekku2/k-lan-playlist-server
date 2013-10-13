@@ -13,4 +13,11 @@ public interface IFetchRequestService {
      */
     Collection<FetchRequest> get() throws ServiceException;
 
+    /**
+     * Adds fetch request to database
+     * @param request Request to be added
+     * @throws ServiceException Thrown if there is a problem with the database
+     */
+    void add(FetchRequest request) throws ServiceException;
+
 }

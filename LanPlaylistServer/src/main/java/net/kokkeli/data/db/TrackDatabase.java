@@ -21,6 +21,7 @@ public class TrackDatabase extends Database implements ITrackDatabase{
     
     @Override
     public void CheckDatabaseFormat() throws DatabaseException {
+        tracksTable.get();
     }
 
     @Override
@@ -47,7 +48,17 @@ public class TrackDatabase extends Database implements ITrackDatabase{
 
     @Override
     public Track add(Track item) throws DatabaseException {
-        return null;
+        return tracksTable.insert(item);
+    }
+
+    @Override
+    public boolean exists(Track track) throws DatabaseException {
+        try {
+            tracksTable.get(track.getId());
+            return true;
+        } catch (NotFoundInDatabase e) {
+            return false;
+        }
     }
 
 }

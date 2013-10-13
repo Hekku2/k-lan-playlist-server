@@ -79,8 +79,40 @@ public class FetchRequestsTable {
         return requests;
     }
     
+    public FetchRequest insert(FetchRequest item) throws DatabaseException {
+        SQLiteConnection db = new SQLiteConnection(new File(databaseLocation));
+        long id;
+        try {
+            db.open(false);
+            String statement = createInsertString(item);
+            SQLiteStatement st = db.prepare(statement);
+            try {
+                st.stepThrough();
+            } finally {
+                st.dispose();
+            }
+            id = db.getLastInsertId();
+            db.dispose();
+        } catch (SQLiteException e) {
+            throw new DatabaseException("Unabe to get requests from database.", e);
+        }
+        item.setId(id);
+        return item;
+    }
+    
+    private String createInsertString(FetchRequest item) {
+        return String.format("INSERT INTO %s(Location, Handler, DestinationFile, LastUpdated, FetchStatus, Track) VALUES ('%s', '%s', '%s', '%s', %s, %s); ",
+                TABLENAME,
+                item.getLocation(),
+                item.getHandler(),
+                item.getDestinationFile(),
+                formatter.format(item.getLastUpdated()),
+                item.getStatus().getStatus(),
+                item.getTrack().getId());
+    }
+
     /**
-     * Returns FectchStatus with given id
+     * Returns FectchStatus with given id);
      * @param id Id of status
      * @return FectchStatus with given id.
      * @throws IndexOutOfBoundsException Thrown if the is no such status

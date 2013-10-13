@@ -122,7 +122,7 @@ public class PlaylistDatabase extends Database implements IPlaylistDatabase {
         try {
             tracksTable.get(track.getId());
         } catch (NotFoundInDatabase e) {
-        	track.setId(tracksTable.insert(track));
+        	track.setId(tracksTable.insert(track).getId());
         }
         
         trackPlaylistTable.insert(track.getId(), playlistId);

@@ -47,7 +47,7 @@ public class FetchRequestDatabase extends Database implements IFetchRequestDatab
 
     @Override
     public FetchRequest add(FetchRequest item) throws DatabaseException {
-        return null;
+        return table.insert(item);
     }
 
     @Override

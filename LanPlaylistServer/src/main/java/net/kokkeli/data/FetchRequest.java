@@ -15,6 +15,7 @@ public class FetchRequest {
     private FetchStatus status;
     private long id;
     private Track track;
+    private PlayList playlist;
     
     /**
      * Sets location of the fetch request
@@ -126,5 +127,21 @@ public class FetchRequest {
      */
     public void setTrack(Track track) {
         this.track = track;
+    }
+
+    /**
+     * Gets the playlist
+     * @return Playlist
+     */
+    public PlayList getPlaylist() {
+        return playlist;
+    }
+
+    /**
+     * Sets the playlist
+     * @param playlist Playlist
+     */
+    public void setPlaylist(PlayList playlist) {
+        this.playlist = playlist;
     }
 }

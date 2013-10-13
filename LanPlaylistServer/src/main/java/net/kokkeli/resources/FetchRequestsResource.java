@@ -15,9 +15,11 @@ import com.google.inject.Inject;
 
 import net.kokkeli.ISettings;
 import net.kokkeli.data.FetchRequest;
+import net.kokkeli.data.FetchStatus;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.PlayList;
 import net.kokkeli.data.Role;
+import net.kokkeli.data.Track;
 import net.kokkeli.data.services.IFetchRequestService;
 import net.kokkeli.data.services.IPlaylistService;
 import net.kokkeli.data.services.ISessionService;
@@ -44,6 +46,12 @@ import net.kokkeli.server.RenderException;
 public class FetchRequestsResource extends BaseResource{
     private static final String INDEX_TEMPLATE = "fetchers/index.ftl";
     private static final String REQUEST_CREATE_TEMPLATE = "fetchers/createRequest.ftl";
+    private static final String FORM_HANDLER = "handler";
+    private static final String FORM_DESTINATION = "destination";
+    private static final String FORM_LOCATION = "location";
+    private static final String FORM_ARTIST = "artist";
+    private static final String FORM_TRACK = "trackname";
+    private static final String FORM_SELECTED_PLAYLIST = "playlist";
     
     private final IFetchRequestService fetchRequestService;
     private final IPlaylistService playlistService;
@@ -116,11 +124,52 @@ public class FetchRequestsResource extends BaseResource{
     @Path("/createRequest")
     public Response createRequest(@Context HttpServletRequest req, MultivaluedMap<String, String> formParams) throws NotAuthenticatedException {
         BaseModel model = buildBaseModel(req);
-        sessions.setInfo(model.getCurrentSession().getAuthId(), "Fetch request created..");
-        return Response.seeOther(settings.getURI("fetchers")).build();
+        
+        try {
+            ModelFetchRequestCreate createModel = createModel(formParams);
+            
+            FetchRequest newRequest = new FetchRequest();
+            newRequest.setDestinationFile(createModel.getDestination());
+            newRequest.setHandler(createModel.getHandler());
+            newRequest.setLocation(createModel.getLocation());
+            newRequest.setStatus(FetchStatus.WAITING);
+            PlayList playlist = new PlayList(createModel.getSelectedPlaylistId());
+            newRequest.setPlaylist(playlist);
+            Track track = new Track();
+            track.setArtist(createModel.getArtist());
+            track.setTrackName(createModel.getTrack());
+            track.setUploader(model.getCurrentSession().getUser());
+            track.setLocation(createModel.getLocation());
+            newRequest.setTrack(track);
+            
+            fetchRequestService.add(newRequest);
+            
+            sessions.setInfo(model.getCurrentSession().getAuthId(), "Fetch request created.");
+            return Response.seeOther(settings.getURI("fetchers")).build();
+        } catch (ServiceException e) {
+            return handleServiceException(model, e);
+        }
+
 
     }
     
+    /**
+     * Craete model fetch request from form.
+     * @param formParams Form Params
+     * @return Created model
+     */
+    private ModelFetchRequestCreate createModel(MultivaluedMap<String, String> formParams) {
+        ModelFetchRequestCreate model = new ModelFetchRequestCreate();
+        model.setHandler(formParams.getFirst(FORM_HANDLER).trim());
+        model.setDestination(formParams.getFirst(FORM_DESTINATION).trim());
+        model.setLocation(formParams.getFirst(FORM_LOCATION).trim());
+        model.setArtist(formParams.getFirst(FORM_ARTIST).trim());
+        model.setTrack(formParams.getFirst(FORM_TRACK).trim());
+        model.setSelectedPlaylistId(Long.parseLong(formParams.getFirst(FORM_SELECTED_PLAYLIST)));
+        
+        return model;
+    }
+
     /**
      * Creates list model from fetch requests
      * @return Fetch request list model
@@ -138,7 +187,7 @@ public class FetchRequestsResource extends BaseResource{
             modelRequest.setStatus(fetchRequest.getStatus());
             modelRequest.setDestination(fetchRequest.getDestinationFile());
             modelRequest.setTrack(fetchRequest.getTrack());
-            
+
             model.getItems().add(modelRequest);
         }
         
