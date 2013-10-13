@@ -70,10 +70,10 @@ public abstract class ResourceTestsBase {
     
     /**
      * Asserts that model contains correct response and modelanswer contains correct error and info.
-     * @param r
-     * @param model
-     * @param error
-     * @param info
+     * @param r Response
+     * @param model Model
+     * @param error Error-text
+     * @param info Info-text
      */
     public static void assertModelResponse(Response r, ModelAnswer model, String error, String info){
         assertModelResponse(RESPONSE_OK, r, model, error, info);
@@ -87,7 +87,6 @@ public abstract class ResourceTestsBase {
      * @param info
      */
     public static void assertModelResponse(int statusCode, Response r, ModelAnswer model, String error, String info){
-        
         assertEquals(error, model.getModel().getError());
         assertEquals(info, model.getModel().getInfo());
         assertEquals(statusCode, r.getStatus());
