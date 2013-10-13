@@ -84,8 +84,7 @@ public class FetchRequestsTable {
         long id;
         try {
             db.open(false);
-            String statement = createInsertString(item);
-            SQLiteStatement st = db.prepare(statement);
+            SQLiteStatement st = db.prepare(createInsertString(item));
             try {
                 st.stepThrough();
             } finally {
@@ -100,6 +99,11 @@ public class FetchRequestsTable {
         return item;
     }
     
+    /**
+     * Creates insert string for fetch request
+     * @param item Fetch request to insert
+     * @return Insert String
+     */
     private String createInsertString(FetchRequest item) {
         return String.format("INSERT INTO %s(Location, Handler, DestinationFile, LastUpdated, FetchStatus, Track) VALUES ('%s', '%s', '%s', '%s', %s, %s); ",
                 TABLENAME,
