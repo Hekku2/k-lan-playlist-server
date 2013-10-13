@@ -7,10 +7,8 @@ import javax.ws.rs.core.Response;
 import net.kokkeli.data.FetchRequest;
 import net.kokkeli.data.services.IFetchRequestService;
 import net.kokkeli.data.services.ServiceException;
-import net.kokkeli.resources.ResourceTestsBase.ModelAnswer;
 import net.kokkeli.resources.models.BaseModel;
 import net.kokkeli.resources.models.ModelFetchRequests;
-import net.kokkeli.resources.models.ModelPlaylists;
 import net.kokkeli.server.NotAuthenticatedException;
 import net.kokkeli.server.RenderException;
 
