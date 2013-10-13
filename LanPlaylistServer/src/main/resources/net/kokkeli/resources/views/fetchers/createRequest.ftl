@@ -10,7 +10,7 @@
 			<h1>${header}</h1>
 			<div class="content">
 				<#include "/common/_info_error.ftl">
-				<form method="POST" class="value-fields">
+				<form method="POST" class="value-fields" id="form">
 					<div class="field">
 						<div class="description">
 							Handler: 
@@ -56,15 +56,13 @@
 							Playlist:
 						</div>
 						<div class="value">
-							<select>
+							<select name="playlist" form="form">
 								<#list getModel.getItems as item>
 									<option value="${item.getId}">${item.getName}</option>
 								</#list>
 							</select>
 						</div>
 					</div>
-					
-
 					<div class="submit-box">
 						<input class="button" type="submit" value="Create">
 						<a class="button" href="/fetchers">Cancel</a>

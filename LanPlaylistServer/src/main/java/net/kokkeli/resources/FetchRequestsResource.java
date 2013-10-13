@@ -4,9 +4,11 @@ import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
 import com.google.inject.Inject;
@@ -85,7 +87,7 @@ public class FetchRequestsResource extends BaseResource{
     
     @GET
     @Produces("text/html")
-    @Access(Role.USER)
+    @Access(Role.ADMIN)
     @Path("/createRequest")
     public Response createRequest(@Context HttpServletRequest req) throws NotAuthenticatedException {
         BaseModel model = buildBaseModel(req);
@@ -106,6 +108,17 @@ public class FetchRequestsResource extends BaseResource{
         } catch (ServiceException e) {
             return handleServiceException(model, e);
         }
+    }
+    
+    @POST
+    @Produces("text/html")
+    @Access(Role.ADMIN)
+    @Path("/createRequest")
+    public Response createRequest(@Context HttpServletRequest req, MultivaluedMap<String, String> formParams) throws NotAuthenticatedException {
+        BaseModel model = buildBaseModel(req);
+        sessions.setInfo(model.getCurrentSession().getAuthId(), "Fetch request created..");
+        return Response.seeOther(settings.getURI("fetchers")).build();
+
     }
     
     /**
