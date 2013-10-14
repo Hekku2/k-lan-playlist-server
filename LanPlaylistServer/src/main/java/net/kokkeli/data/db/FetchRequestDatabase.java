@@ -51,18 +51,18 @@ public class FetchRequestDatabase extends Database implements IFetchRequestDatab
     }
 
     @Override
-    public void updateRequest(long id, FetchStatus status) {
-        
+    public void updateRequest(long id, FetchStatus status) throws DatabaseException {
+        table.update(id, status);
     }
 
     @Override
-    public FetchRequest oldestUnhandledFetchRequestOrNull(String handler){
-        return null;
+    public FetchRequest oldestUnhandledFetchRequestOrNull(String handler) throws DatabaseException{
+        return table.oldestUnhandledfetchRequest(handler);
     }
     
     @Override
     public void CheckDatabaseFormat() throws DatabaseException {
-        
+        get();
     }
 
 }

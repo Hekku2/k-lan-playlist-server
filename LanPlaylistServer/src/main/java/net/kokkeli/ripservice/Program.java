@@ -50,10 +50,11 @@ public class Program {
         }
         
         IFetcher ripper = new YouTubeRipper(settings, logger);
-        ExecutorService executor = Executors.newFixedThreadPool(5);
+        ExecutorService executor = Executors.newFixedThreadPool(1);
         Runnable worker = new FetcherRunner(logger, ripper, fetcherDatabase);
         executor.execute(worker);
 
+        System.out.println("Started to handle requests.");
         System.in.read();
         
         executor.shutdown();

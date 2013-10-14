@@ -36,8 +36,10 @@ public class FetcherRunner implements Runnable {
      */
     public void run() {
         try {
-            handleItems();
-            Thread.sleep(DEFAULT_SLEEP);
+            while(true){
+                handleItems();
+                Thread.sleep(DEFAULT_SLEEP);
+            }
         } catch (InterruptedException e) {
             logger.log("Thread interrupted", LogSeverity.ERROR);
         }
@@ -62,6 +64,7 @@ public class FetcherRunner implements Runnable {
             
             // Mark it as being ready
             fetchRequestDatabase.updateRequest(request.getId(), FetchStatus.HANDLED);
+            logger.log(String.format("Request handled with id %s", request.getId()), LogSeverity.TRACE);
         } catch (DatabaseException e) {
             logger.log("Something went wrong with the database while processing fetch items. " + e.getMessage(), LogSeverity.ERROR);
         }

@@ -139,7 +139,7 @@ public class FetchRequestsResource extends BaseResource{
             track.setArtist(createModel.getArtist());
             track.setTrackName(createModel.getTrack());
             track.setUploader(model.getCurrentSession().getUser());
-            track.setLocation(createModel.getLocation());
+            track.setLocation(createModel.getDestination());
             newRequest.setTrack(track);
             
             fetchRequestService.add(newRequest);
