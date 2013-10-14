@@ -27,6 +27,7 @@ public class YouTubeRipper implements IFetcher{
                     request.getDestinationFile());
             Process p = Runtime.getRuntime().exec(command);
             p.waitFor();
+            //TODO Somehow removing item if it was not found. If not possible with vlc-command, just check for 0-bytes.
         }catch (Exception e) {
             logger.log("Shit hit the fan. " + e.getMessage(), LogSeverity.ERROR);
             //TODO Error handling

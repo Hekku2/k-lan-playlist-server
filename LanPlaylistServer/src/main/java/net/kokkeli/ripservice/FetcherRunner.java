@@ -62,6 +62,8 @@ public class FetcherRunner implements Runnable {
             // Fetch it
             fetcher.fetch(request);
             
+            //TODO Verify that fetched file exists on hard drive
+            
             // Mark it as being ready
             fetchRequestDatabase.updateRequest(request.getId(), FetchStatus.HANDLED);
             logger.log(String.format("Request handled with id %s", request.getId()), LogSeverity.TRACE);

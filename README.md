@@ -10,3 +10,4 @@ Implement joins to make database usage more efficient.
 Add sessions to database
 Implement after login redirect to wanted site
 UTF-8 fix
+Concurreny handling in database
