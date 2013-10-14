@@ -24,4 +24,10 @@ public interface IFetchRequestDatabase extends IDatabase<FetchRequest>{
      * @throws DatabaseException Thrown if there is a problem with the database
      */
     FetchRequest oldestUnhandledFetchRequestOrNull(String handler) throws DatabaseException;
+
+    /**
+     * Removes handled fetch requests from database
+     * @throws DatabaseException Thrown if there is a problem with the database
+     */
+    void removeHandled() throws DatabaseException;
 }

@@ -4,6 +4,11 @@ import java.util.Collection;
 
 import net.kokkeli.data.FetchRequest;
 
+/**
+ * Interface for fetch request service
+ * @author Hekku2
+ *
+ */
 public interface IFetchRequestService {
 
     /**
@@ -19,5 +24,11 @@ public interface IFetchRequestService {
      * @throws ServiceException Thrown if there is a problem with the database
      */
     void add(FetchRequest request) throws ServiceException;
+
+    /**
+     * Removes handled fetch requests from database
+     * @throws ServiceException Thrown if there is a problem with the database
+     */
+    void removeHandled() throws ServiceException;
 
 }

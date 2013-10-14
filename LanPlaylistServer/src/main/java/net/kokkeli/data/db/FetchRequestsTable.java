@@ -169,6 +169,36 @@ public class FetchRequestsTable {
     }
     
     /**
+     * Removes fetch requests with given status
+     * @param status Status
+     * @throws DatabaseException Thrown if there is a problem with the database
+     */
+    public void removeWithStatus(FetchStatus status) throws DatabaseException {
+        SQLiteConnection db = new SQLiteConnection(new File(databaseLocation));
+        try {
+            db.open(false);
+            SQLiteStatement st = db.prepare(createStatusRemove(status));
+            try {
+                st.stepThrough();
+            } finally {
+                st.dispose();
+            }
+            db.dispose();
+        } catch (SQLiteException e) {
+            throw new DatabaseException(String.format("Unable to remove fetch requests with status %s.", status.getStatus()), e);
+        }
+    }
+    
+    /**
+     * Creates command that removes all requests with given status
+     * @param status Status
+     * @return Created string
+     */
+    private String createStatusRemove(FetchStatus status) {
+        return String.format("DELETE FROM %s WHERE FetchStatus=%s;", TABLENAME, status.getStatus());
+    }
+
+    /**
      * Creates update string for fetch status
      * @param id Id to update
      * @param status New status

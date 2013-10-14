@@ -85,4 +85,14 @@ public class FetchRequestService implements IFetchRequestService {
         }
     }
 
+    @Override
+    public void removeHandled() throws ServiceException {
+        try {
+            fetchRequestDatabase.removeHandled();
+        } catch (DatabaseException e) {
+            logger.log("Something went wrong with the service while removing handled fetch requests.", LogSeverity.ERROR);
+            throw new ServiceException("Something went wrong with the service while removing handled fetch requests.", e);
+        }
+    }
+
 }

@@ -149,8 +149,24 @@ public class FetchRequestsResource extends BaseResource{
         } catch (ServiceException e) {
             return handleServiceException(model, e);
         }
-
-
+    }
+    
+    /**
+     * Ajax remove for handled requests
+     * @param req Request
+     * @return Ok, if everything went fine, otherwise something else
+     * @throws NotAuthenticatedException Thrown if user is not authenticated
+     * @throws ServiceException Thrown if something went wronf with the service
+     */
+    @POST
+    @Produces("text/html")
+    @Access(Role.ADMIN)
+    @Path("/removeHandled")
+    public Response removeHandler(@Context HttpServletRequest req) throws NotAuthenticatedException, ServiceException {
+        buildBaseModel(req);
+        fetchRequestService.removeHandled();
+        
+        return Response.ok().build();
     }
     
     /**
@@ -187,6 +203,7 @@ public class FetchRequestsResource extends BaseResource{
             modelRequest.setStatus(fetchRequest.getStatus());
             modelRequest.setDestination(fetchRequest.getDestinationFile());
             modelRequest.setTrack(fetchRequest.getTrack());
+            modelRequest.setId(fetchRequest.getId());
 
             model.getItems().add(modelRequest);
         }

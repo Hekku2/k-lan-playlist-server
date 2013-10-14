@@ -9,6 +9,11 @@ import net.kokkeli.ISettings;
 import net.kokkeli.data.FetchRequest;
 import net.kokkeli.data.FetchStatus;
 
+/**
+ * Fetch request database
+ * @author Hekku2
+ *
+ */
 public class FetchRequestDatabase extends Database implements IFetchRequestDatabase {
     private final FetchRequestsTable table;
     private final TracksTable tracks;
@@ -63,6 +68,11 @@ public class FetchRequestDatabase extends Database implements IFetchRequestDatab
     @Override
     public void CheckDatabaseFormat() throws DatabaseException {
         get();
+    }
+
+    @Override
+    public void removeHandled() throws DatabaseException {
+        table.removeWithStatus(FetchStatus.HANDLED);
     }
 
 }
