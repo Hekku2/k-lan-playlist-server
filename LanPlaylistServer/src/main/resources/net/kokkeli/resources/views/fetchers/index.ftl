@@ -3,6 +3,7 @@
 
 <html>
 	<#include "/common/_header.ftl">
+	<script type="text/javascript" src="/resource/js/fetchers.js"></script>
 	<body>
 		<div class="inner-body">
 			<#include "/common/_topsection.ftl">
@@ -11,6 +12,7 @@
 			<div class="content">
 				<#include "/common/_info_error.ftl">
 				<a class="button" href="fetchers/createRequest">Create</a>
+				<a class="button" id="remove-handled" href="fetchers/removeHandled">Remove handled</a>
 				<#if getModel.getItems??>
 					<table class="table table-striped">
 						<tr>
@@ -19,6 +21,7 @@
 							<th>Location</th>
 							<th>Destination</th>
 							<th>Status</th>
+							<th></th>
 						</tr>
 						<#list getModel.getItems as item>
 							<tr>
@@ -27,6 +30,7 @@
 								<td>${item.getLocation}</td>
 								<td>${item.getDestination}</td>
 								<td>${item.getStatus}</td>
+								<td><a title="Remove" class="btn" id="${item.getId}"><i class="icon-remove"></i></a></td>
 							</tr>
 						</#list>
 					</table>

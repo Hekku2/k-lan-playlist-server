@@ -11,6 +11,7 @@ import net.kokkeli.resources.Field;
 public class ModelFetchRequest extends FetchRequestBase{
     private FetchStatus status;
     private Track track;
+    private long id;
 
     /**
      * Setter for status
@@ -53,5 +54,22 @@ public class ModelFetchRequest extends FetchRequestBase{
     @Field
     public long getTrackId(){
         return track == null ? 0 : track.getId();
+    }
+
+    /**
+     * Sets the id
+     * @param id Id
+     */
+    public void setId(long id) {
+        this.id = id;
+    }
+    
+    /**
+     * Gets the id
+     * @return Id
+     */
+    @Field
+    public long getId(){
+        return id;
     }
 }
