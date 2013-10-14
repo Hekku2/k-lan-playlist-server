@@ -30,4 +30,11 @@ public interface IFetchRequestDatabase extends IDatabase<FetchRequest>{
      * @throws DatabaseException Thrown if there is a problem with the database
      */
     void removeHandled() throws DatabaseException;
+
+    /**
+     * Removes request with given id
+     * @param requestId Request id
+     * @throws DatabaseException Thrown if there is a problem with the database
+     */
+    void remove(long requestId) throws DatabaseException;
 }

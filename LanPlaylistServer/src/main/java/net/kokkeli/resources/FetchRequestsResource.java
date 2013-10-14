@@ -52,6 +52,7 @@ public class FetchRequestsResource extends BaseResource{
     private static final String FORM_ARTIST = "artist";
     private static final String FORM_TRACK = "trackname";
     private static final String FORM_SELECTED_PLAYLIST = "playlist";
+    private static final String FORM_ID = "id";
     
     private final IFetchRequestService fetchRequestService;
     private final IPlaylistService playlistService;
@@ -167,6 +168,32 @@ public class FetchRequestsResource extends BaseResource{
         fetchRequestService.removeHandled();
         
         return Response.ok().build();
+    }
+    
+    /**
+     * Ajax remove for request
+     * @param req Request
+     * @param formParams Parameters containing request id
+     * @return Ok, if everything went fine, otherwise something else
+     * @throws NotAuthenticatedException Thrown if user is not authenticated
+     * @throws ServiceException Thrown if something went wronf with the service
+     * @throws BadRequestException Thrown if request did not contain needed information
+     */
+    @POST
+    @Produces("text/html")
+    @Access(Role.ADMIN)
+    @Path("/removeRequest")
+    public Response removeHandler(@Context HttpServletRequest req, MultivaluedMap<String, String> formParams) throws NotAuthenticatedException, ServiceException, BadRequestException {
+        buildBaseModel(req);
+        try {
+            long id = Long.parseLong(formParams.getFirst(FORM_ID));
+            fetchRequestService.remove(id);
+            
+            return Response.ok().build();
+        } catch (NumberFormatException e) {
+            throw new BadRequestException("Bad request.");
+        }
+
     }
     
     /**

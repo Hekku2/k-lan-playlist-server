@@ -95,4 +95,15 @@ public class FetchRequestService implements IFetchRequestService {
         }
     }
 
+    @Override
+    public void remove(long requestId) throws ServiceException {
+        try {
+            fetchRequestDatabase.remove(requestId);
+        } catch (DatabaseException e) {
+            String error = String.format("Something went wrong with the service while removing fetch request with id %s.", requestId);
+            logger.log(error, LogSeverity.ERROR);
+            throw new ServiceException(error, e);
+        }
+    }
+
 }

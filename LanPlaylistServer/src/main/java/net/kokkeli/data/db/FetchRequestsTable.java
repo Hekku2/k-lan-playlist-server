@@ -189,6 +189,31 @@ public class FetchRequestsTable {
         }
     }
     
+    public void remove(long requestId) throws DatabaseException {
+        SQLiteConnection db = new SQLiteConnection(new File(databaseLocation));
+        try {
+            db.open(false);
+            SQLiteStatement st = db.prepare(createRemove(requestId));
+            try {
+                st.stepThrough();
+            } finally {
+                st.dispose();
+            }
+            db.dispose();
+        } catch (SQLiteException e) {
+            throw new DatabaseException(String.format("Unable to remove fetch requests with id %s.", requestId), e);
+        }
+    }
+    
+    /**
+     * Create remove command that removes request with given id
+     * @param requestId Request id
+     * @return Create String
+     */
+    private String createRemove(long requestId) {
+        return String.format("DELETE FROM %s WHERE Id=%s;", TABLENAME, requestId);
+    }
+
     /**
      * Creates command that removes all requests with given status
      * @param status Status

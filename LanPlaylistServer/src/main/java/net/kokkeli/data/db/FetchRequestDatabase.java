@@ -75,4 +75,9 @@ public class FetchRequestDatabase extends Database implements IFetchRequestDatab
         table.removeWithStatus(FetchStatus.HANDLED);
     }
 
+    @Override
+    public void remove(long requestId) throws DatabaseException {
+        table.remove(requestId);
+    }
+
 }

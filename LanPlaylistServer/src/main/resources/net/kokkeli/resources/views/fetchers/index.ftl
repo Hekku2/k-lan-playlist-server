@@ -30,7 +30,7 @@
 								<td>${item.getLocation}</td>
 								<td>${item.getDestination}</td>
 								<td>${item.getStatus}</td>
-								<td><a title="Remove" class="btn" id="${item.getId}"><i class="icon-remove"></i></a></td>
+								<td><a title="Remove" class="btn delete" id="${item.getId}"><i class="icon-remove"></i></a></td>
 							</tr>
 						</#list>
 					</table>

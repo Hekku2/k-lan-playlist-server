@@ -31,4 +31,11 @@ public interface IFetchRequestService {
      */
     void removeHandled() throws ServiceException;
 
+    /**
+     * Removes fetch request with given id from database
+     * @param requestId Request id
+     * @throws ServiceException Thrown if there is a problem with the database
+     */
+    void remove(long requestId) throws ServiceException;
+
 }
