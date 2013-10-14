@@ -18,10 +18,9 @@ public class YouTubeRipper implements IFetcher{
     
     public void fetch(FetchRequest request){
         try {
-            String command = String.format("%s\\vlc.exe %s --sout=#transcode{acodec=ogg,channels=2}:standard{access=file,mux=raw,dst=%s\\%s} vlc://quit",
+            String command = String.format("%s\\vlc.exe \"%s\" --sout=#transcode{acodec=vorb,channels=2}:standard{access=file,mux=ogg,dst=\"%s\"} vlc://quit",
                     settings.getVlcLocation(),
                     request.getLocation(),
-                    settings.getTracksFolder(),
                     request.getDestinationFile());
             Process p = Runtime.getRuntime().exec(command);
             p.waitFor();
