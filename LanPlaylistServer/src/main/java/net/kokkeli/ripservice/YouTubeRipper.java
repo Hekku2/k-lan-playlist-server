@@ -11,6 +11,8 @@ public class YouTubeRipper implements IFetcher{
     
     private final static String TYPE = "youtube";
     
+    private final static String START_MINIMIZED = "--qt-start-minimized";
+    
     public YouTubeRipper(ISettings setting, ILogger logger){
         this.settings = setting;
         this.logger = logger;
@@ -18,9 +20,10 @@ public class YouTubeRipper implements IFetcher{
     
     public void fetch(FetchRequest request){
         try {
-            String command = String.format("%s\\vlc.exe \"%s\" --sout=#transcode{acodec=vorb,channels=2}:standard{access=file,mux=ogg,dst=\"%s\"} vlc://quit",
+            String command = String.format("%s\\vlc.exe \"%s\" %s --sout=#transcode{acodec=vorb,channels=2}:standard{access=file,mux=ogg,dst=\"%s\"} vlc://quit",
                     settings.getVlcLocation(),
                     request.getLocation(),
+                    START_MINIMIZED,
                     request.getDestinationFile());
             Process p = Runtime.getRuntime().exec(command);
             p.waitFor();
