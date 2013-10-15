@@ -1,5 +1,11 @@
 package net.kokkeli.server;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
+import org.codehaus.jackson.map.ObjectMapper;
+
 import net.kokkeli.ISettings;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Logging;
@@ -39,6 +45,7 @@ import net.kokkeli.resources.authentication.AuthenticationResource;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Singleton;
 import com.google.inject.matcher.Matchers;
 import com.google.inject.servlet.GuiceServletContextListener;
 import com.sun.jersey.guice.JerseyServletModule;
@@ -80,7 +87,7 @@ public class LanServletConfig extends GuiceServletContextListener {
                 //Services
                 bind(ISessionService.class).to(SessionService.class).asEagerSingleton();
                 bind(ITemplateService.class).to(Templates.class);
-                bind(IPlayer.class).to(VlcPlayer.class).asEagerSingleton();;
+                bind(IPlayer.class).to(VlcPlayer.class).asEagerSingleton();
                 bind(IUserService.class).to(UserService.class);
                 bind(IPlaylistService.class).to(PlaylistService.class);
                 bind(IFileSystem.class).to(FileSystem.class);
@@ -106,9 +113,16 @@ public class LanServletConfig extends GuiceServletContextListener {
                 bindInterceptor(Matchers.any(), 
                     Matchers.annotatedWith(Access.class), interceptor);
              
+                Map<String, String> initParams = new HashMap<String, String>();
+                initParams.put("com.sun.jersey.config.feature.Trace", "true");
+                initParams.put("com.sun.jersey.api.json.POJOMappingFeature", "true");
+                
+                //JSON mapping
+                bind(ObjectMapper.class).toProvider(ObjectMapperProvider.class).in(Singleton.class);
+                bind(JacksonJsonProvider.class).toProvider(JacksonJsonProviderProvider.class).in(Singleton.class);
                 
                 // Route all requests through GuiceContainer
-                serve("/*").with(GuiceContainer.class);
+                serve("/*").with(GuiceContainer.class, initParams);
             }
         });
     }

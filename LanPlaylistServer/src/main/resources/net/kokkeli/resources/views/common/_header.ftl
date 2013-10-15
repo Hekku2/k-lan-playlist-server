@@ -6,6 +6,7 @@
 	
 	<script type="text/javascript" src="/resource/js/jquery/jquery-2.0.3.js"></script>
 	<script type="text/javascript" src="/resource/js/bootstrap/bootstrap.js"></script>
+	<script type="text/javascript" src="/resource/js/nano/nano.js"></script>
 	
 	<title>${header}</title>
 </head>

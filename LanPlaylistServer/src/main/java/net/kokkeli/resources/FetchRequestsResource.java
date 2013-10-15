@@ -8,6 +8,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
@@ -30,7 +31,6 @@ import net.kokkeli.resources.models.ModelFetchRequest;
 import net.kokkeli.resources.models.ModelFetchRequestCreate;
 import net.kokkeli.resources.models.ModelFetchRequests;
 import net.kokkeli.resources.models.ModelPlaylistListItem;
-import net.kokkeli.resources.models.ViewModel;
 import net.kokkeli.server.ITemplateService;
 import net.kokkeli.server.NotAuthenticatedException;
 import net.kokkeli.server.RenderException;
@@ -196,6 +196,15 @@ public class FetchRequestsResource extends BaseResource{
 
     }
     
+    @GET
+    @Path("/requests")
+    @Produces(MediaType.APPLICATION_JSON)
+    public ModelFetchRequests requests(@Context HttpServletRequest req) throws NotAuthenticatedException, ServiceException{
+        buildBaseModel(req);
+        
+        return createRequestsModel();
+    }
+    
     /**
      * Craete model fetch request from form.
      * @param formParams Form Params
@@ -218,7 +227,7 @@ public class FetchRequestsResource extends BaseResource{
      * @return Fetch request list model
      * @throws ServiceException Thrown if service fails
      */
-    private ViewModel createRequestsModel() throws ServiceException{
+    private ModelFetchRequests createRequestsModel() throws ServiceException{
         Collection<FetchRequest> requests = fetchRequestService.get();
         
         ModelFetchRequests model = new ModelFetchRequests();
