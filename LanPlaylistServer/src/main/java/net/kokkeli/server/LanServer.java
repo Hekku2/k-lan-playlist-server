@@ -67,7 +67,7 @@ public class LanServer {
         ServletContextHandler sch = new ServletContextHandler(server, "/");
         sch.addEventListener(new LanServletConfig(settings));
         sch.addFilter(GuiceFilter.class, "/*", null);
-        sch.addServlet(DefaultServlet.class, "/");  
+        sch.addServlet(DefaultServlet.class, "/");
         try {
             server.start();
             
