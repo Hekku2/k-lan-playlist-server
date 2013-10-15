@@ -123,9 +123,11 @@
             <artifactId>maven-pmd-plugin</artifactId>
             <version>3.34</version>
         </plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>emma-maven-plugin</artifactId>
-        <version>0.5</version>
+		<plugin>
+		    <groupId>org.codehaus.mojo</groupId>
+			<artifactId>emma-maven-plugin</artifactId>
+			<version>0.5</version>
+		</plugin
     </plugins>
   </reporting>
   <properties>
