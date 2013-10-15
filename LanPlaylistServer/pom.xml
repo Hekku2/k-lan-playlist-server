@@ -127,7 +127,7 @@
 		    <groupId>org.codehaus.mojo</groupId>
 			<artifactId>emma-maven-plugin</artifactId>
 			<version>0.5</version>
-		</plugin
+		</plugin>
     </plugins>
   </reporting>
   <properties>
