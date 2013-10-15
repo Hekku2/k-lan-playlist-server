@@ -36,13 +36,16 @@ public class TestFetcherRunner {
     }
     
     @Test
-    public void testRunCallsCorrectServices() throws DatabaseException{
+    public void testRunCallsCorrectServices() throws DatabaseException, InterruptedException{
         FetchRequest request = new FetchRequest();
         request.setId(666);
         
         when(mockDatabase.oldestUnhandledFetchRequestOrNull(mockType)).thenReturn(request);
         
-        fetcherRunner.run();
+        Thread t = new Thread(fetcherRunner);
+        t.start();
+        Thread.sleep(500);
+        t.interrupt();
         
         verify(mockDatabase).updateRequest(request.getId(), FetchStatus.HANDLING);
         verify(mockFetcher).fetch(request);
@@ -50,10 +53,14 @@ public class TestFetcherRunner {
     }
     
     @Test
-    public void testRunHandlesDatabaseException() throws DatabaseException{
+    public void testRunHandlesDatabaseException() throws DatabaseException, InterruptedException{
         when(mockDatabase.oldestUnhandledFetchRequestOrNull(mockType)).thenThrow(new DatabaseException("Kaboom!"));
         
-        fetcherRunner.run();
+        Thread t = new Thread(fetcherRunner);
+        t.start();
+        Thread.sleep(500);
+        t.interrupt();
+        
         verify(mockLogger).log("Something went wrong with the database while processing fetch items. Kaboom!", LogSeverity.ERROR);
     }
 }
