@@ -263,20 +263,7 @@ public class PlaylistsResource extends BaseResource {
         BaseModel baseModel = buildBaseModel(req);
 
         try {
-            PlayList playlist = playlistService.getPlaylist(playlistId);
-            ModelPlaylist modelPlayList = new ModelPlaylist(playlist.getId());
-            modelPlayList.setName(playlist.getName());
-
-            for (Track playListItem : playlist.getItems()) {
-                ModelPlaylistItem model = new ModelPlaylistItem();
-                model.setArtist(playListItem.getArtist());
-                model.setTrackName(playListItem.getTrackName());
-                model.setUploader(playListItem.getUploader().getUserName());
-                model.setId(playListItem.getId());
-
-                modelPlayList.getItems().add(model);
-            }
-            baseModel.setModel(modelPlayList);
+            baseModel.setModel(createPlaylistDetailsModel(playlistId));
             return Response.ok(
                     templates.process(PLAYLIST_DETAILS_TEMPLATE, baseModel))
                     .build();
@@ -288,7 +275,7 @@ public class PlaylistsResource extends BaseResource {
             return Response.seeOther(settings.getURI("playlists")).build();
         }
     }
-
+    
     @GET
     @Produces("text/html")
     @Access(Role.USER)
@@ -382,6 +369,30 @@ public class PlaylistsResource extends BaseResource {
             return Response.status(Status.NOT_FOUND).build();
         }
         
+    }
+    
+    /**
+     * Creates details model from playlist. Model contains tracks.
+     * @param playlistId Id of playlist
+     * @return ModelPlaylist
+     * @throws ServiceException Thrown if there is something wrong with the service
+     * @throws NotFoundInDatabase Thrown if item is not found in database
+     */
+    private ModelPlaylist createPlaylistDetailsModel(long playlistId) throws ServiceException, NotFoundInDatabase{
+        PlayList playlist = playlistService.getPlaylist(playlistId);
+        ModelPlaylist modelPlayList = new ModelPlaylist(playlist.getId());
+        modelPlayList.setName(playlist.getName());
+
+        for (Track playListItem : playlist.getItems()) {
+            ModelPlaylistItem model = new ModelPlaylistItem();
+            model.setArtist(playListItem.getArtist());
+            model.setTrackName(playListItem.getTrackName());
+            model.setUploader(playListItem.getUploader().getUserName());
+            model.setId(playListItem.getId());
+
+            modelPlayList.getItems().add(model);
+        }
+        return modelPlayList;
     }
     
     /**
