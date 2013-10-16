@@ -3,6 +3,22 @@
 
 <html>
 	<#include "/common/_header.ftl">
+	<script type="html" id="row-template">
+		<tr>
+			<td>{handler}</td>
+			<td>
+				<a title="{track}" href="/tracks/{trackId}">{track}</a>
+			</td>
+			<td>{location}</td>
+			<td>{destination}</td>
+			<td>{status}</td>
+			<td>
+				<a title="Remove" class="btn delete" id="{id}"><i class="icon-remove"></i>
+				</a>
+			</td>
+		</tr>
+	</script>
+	
 	<script type="text/javascript" src="/resource/js/fetchers.js"></script>
 	<body>
 		<div class="inner-body">

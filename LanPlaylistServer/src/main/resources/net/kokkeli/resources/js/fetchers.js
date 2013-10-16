@@ -1,6 +1,6 @@
-var rowTemplate = "<tr><td>{handler}</td><td><a title=\"{track}\" href=\"/tracks/{trackId}\">{track}</a></td><td>{location}</td><td>{destination}</td><td>{status}</td><td><a title=\"Remove\" class=\"btn delete\" id=\"{id}\"><i class=\"icon-remove\"></i></a></td></tr>"
-//TODO Find proper place for template.
 //TODO Add timer for updating.
+var rowTemplate;
+
 $(document).ready(function(){
 	$("#remove-handled").click(function (event) {
 		var element = $(event.currentTarget);
@@ -18,6 +18,7 @@ $(document).ready(function(){
 		return false;
 	});
 	
+	rowTemplate = $("#row-template").text();
 	updateRequests();
 });
 
