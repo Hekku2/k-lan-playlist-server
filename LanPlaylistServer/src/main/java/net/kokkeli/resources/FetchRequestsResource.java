@@ -196,6 +196,13 @@ public class FetchRequestsResource extends BaseResource{
 
     }
     
+    /**
+     * JSON Getter for list of fetch requests
+     * @param req Request
+     * @return Fetched requests
+     * @throws NotAuthenticatedException Thrown if user is not authenticated
+     * @throws ServiceException Thrown if there is a problem with the service
+     */
     @GET
     @Path("/requests")
     @Produces(MediaType.APPLICATION_JSON)
