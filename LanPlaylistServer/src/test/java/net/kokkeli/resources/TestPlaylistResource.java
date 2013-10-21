@@ -122,7 +122,7 @@ public class TestPlaylistResource extends ResourceTestsBase {
         Response r = resource.addUpload(buildRequest(), EXISTING_PLAYLIST,
                 CORRECT_ARTISTNAME, CORRECT_TRACKNAME, mockStream,
                 mockDisposition);
-        Assert.assertEquals(RESPONSE_OK, r.getStatus());
+        Assert.assertEquals(REDIRECT, r.getStatus());
         verify(mockFilesystem).writeToFile(any(InputStream.class),
                 eq(TRACKS_FOLDER + "/" + filename));
         verify(mockFilesystem).fileExists(TRACKS_FOLDER + "/" + filename);

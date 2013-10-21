@@ -140,8 +140,17 @@ public class TestTemplates {
          return model;
      }
      
+     private static BaseModel uploadModel(){
+         BaseModel model = correctBaseModel();
+         ModelPlaylistItem item = new ModelPlaylistItem();
+         item.setPlaylistId(0);
+         model.setModel(item);
+         return model;
+     }
+     
      private static BaseModel correctBaseModelWithModel(ViewModel view){
          BaseModel model = correctBaseModel();
+         
          model.setModel(view);
          return model;
      }
@@ -197,7 +206,8 @@ public class TestTemplates {
          map.put("playlist/playlists.ftl", listModels);
          
          ArrayList<BaseModel> models = new ArrayList<BaseModel>();
-         models.add(correctBaseModel());
+         
+         models.add(uploadModel());
          map.put("playlist/add.ftl", models);
          
          ArrayList<BaseModel> detailModels = new ArrayList<BaseModel>();
