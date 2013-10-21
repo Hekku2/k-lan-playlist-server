@@ -53,6 +53,7 @@ public class PlaylistsResource extends BaseResource {
     private static final String PLAYLIST_TRACK_ADD_TEMPLATE = "playlist/add.ftl";
     private static final String PLAYLIST_DETAILS_TEMPLATE = "playlist/details.ftl";
     private static final String PLAYLIST_CREATE_TEMPLATE = "playlist/create.ftl";
+    private static final String PLAYLIST_TRACK_ADD_YOUTUBE_TEMPLATE = "playlist/addYoutube.ftl";
 
     private static final String FORM_NAME = "name";
     private static final String FORM_ID = "id";
@@ -121,7 +122,7 @@ public class PlaylistsResource extends BaseResource {
     }
 
     /**
-     * Playlist add get.
+     * Playlist add upload get.
      * @param req Request
      * @param playlistId Playlist id
      * @return Response
@@ -130,11 +131,15 @@ public class PlaylistsResource extends BaseResource {
     @GET
     @Produces("text/html")
     @Access(Role.USER)
-    @Path("/add/{playlistId: [0-9]*}")
-    public Response add(@Context HttpServletRequest req,
+    @Path("/add/upload/{playlistId: [0-9]*}")
+    public Response addUpload(@Context HttpServletRequest req,
             @PathParam("playlistId") long playlistId) throws NotAuthenticatedException {
         BaseModel model = buildBaseModel(req);
 
+        ModelPlaylistItem item = new ModelPlaylistItem();
+        item.setPlaylistId(playlistId);
+        model.setModel(item);
+        
         try {
             return Response.ok(
                     templates.process(PLAYLIST_TRACK_ADD_TEMPLATE, model))
@@ -144,6 +149,34 @@ public class PlaylistsResource extends BaseResource {
         }
     }
 
+    /**
+     * Playlist youtube add get.
+     * @param req Request
+     * @param playlistId Playlist id
+     * @return Response
+     * @throws NotAuthenticatedException Thrown if user is not authenticated
+     */
+    @GET
+    @Produces("text/html")
+    @Access(Role.USER)
+    @Path("/add/youtube/{playlistId: [0-9]*}")
+    public Response addYoutube(@Context HttpServletRequest req,
+            @PathParam("playlistId") long playlistId) throws NotAuthenticatedException {
+        BaseModel model = buildBaseModel(req);
+        
+        ModelPlaylistItem item = new ModelPlaylistItem();
+        item.setPlaylistId(playlistId);
+        model.setModel(item);
+        
+        try {
+            return Response.ok(
+                    templates.process(PLAYLIST_TRACK_ADD_YOUTUBE_TEMPLATE, model))
+                    .build();
+        } catch (RenderException e) {
+            return handleRenderingError(model, e);
+        }
+    }
+    
     /**
      * POST for add. Adds track to playlist.
      * 
@@ -170,9 +203,9 @@ public class PlaylistsResource extends BaseResource {
     @POST
     @Produces("text/html")
     @Access(Role.USER)
-    @Path("/add/{playlistId: [0-9]*}")
+    @Path("/add/upload/{playlistId: [0-9]*}")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public Response add(@Context HttpServletRequest req,
+    public Response addUpload(@Context HttpServletRequest req,
             @PathParam("playlistId") long playlistId,
             @FormDataParam("artist") String artist,
             @FormDataParam("track") String track,
@@ -239,10 +272,9 @@ public class PlaylistsResource extends BaseResource {
 
             playlist.getItems().add(item);
             playlistService.update(playlist);
-
-            return Response.ok(
-                    templates.process(PLAYLIST_TRACK_ADD_TEMPLATE, model))
-                    .build();
+            return Response.seeOther(
+                    settings.getURI(String.format("playlists/%s",
+                            playlist.getId()))).build();
         } catch (RenderException e) {
             return handleRenderingError(model, e);
         } catch (IOException e) {

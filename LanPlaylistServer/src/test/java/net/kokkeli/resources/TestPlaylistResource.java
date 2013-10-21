@@ -119,7 +119,7 @@ public class TestPlaylistResource extends ResourceTestsBase {
         FormDataContentDisposition mockDisposition = mock(FormDataContentDisposition.class);
         when(mockDisposition.getFileName()).thenReturn(filename);
 
-        Response r = resource.add(buildRequest(), EXISTING_PLAYLIST,
+        Response r = resource.addUpload(buildRequest(), EXISTING_PLAYLIST,
                 CORRECT_ARTISTNAME, CORRECT_TRACKNAME, mockStream,
                 mockDisposition);
         Assert.assertEquals(RESPONSE_OK, r.getStatus());
@@ -144,7 +144,7 @@ public class TestPlaylistResource extends ResourceTestsBase {
         when(mockFilesystem.fileExists(any(String.class))).thenReturn(true);
 
         assertModelResponse(
-                resource.add(buildRequest(), EXISTING_PLAYLIST,
+                resource.addUpload(buildRequest(), EXISTING_PLAYLIST,
                         CORRECT_ARTISTNAME, CORRECT_TRACKNAME, mockStream,
                         mockDisposition),
                 answer,

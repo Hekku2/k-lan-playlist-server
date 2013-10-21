@@ -2,6 +2,10 @@ package net.kokkeli.resources.models;
 
 import net.kokkeli.resources.Field;
 
+/**
+ * Model for track
+ * @author Hekku2
+ */
 public class ModelTrack extends ViewModel {
     private String trackName;
     private String artist;

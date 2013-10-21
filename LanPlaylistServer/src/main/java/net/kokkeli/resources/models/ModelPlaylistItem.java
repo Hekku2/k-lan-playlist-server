@@ -13,6 +13,7 @@ public final class ModelPlaylistItem extends ViewModel{
     private String uploader;
     private long id;
     private boolean exists;
+    private long playlistId;
     
     /**
      * Sets name of item
@@ -97,5 +98,22 @@ public final class ModelPlaylistItem extends ViewModel{
     @Field
     public boolean getExists(){
         return exists;
+    }
+    
+    /**
+     * Gets the id 
+     * @return Playlist if
+     */
+    @Field
+    public long getPlaylistId(){
+        return playlistId;
+    }
+    
+    /**
+     * Setter for playlist id
+     * @param playlistId Playlist id
+     */
+    public void setPlaylistId(long playlistId){
+        this.playlistId = playlistId;
     }
 }
