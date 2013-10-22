@@ -13,6 +13,7 @@ import net.kokkeli.data.Role;
 import net.kokkeli.data.Track;
 import net.kokkeli.data.User;
 import net.kokkeli.data.db.NotFoundInDatabase;
+import net.kokkeli.data.services.IFetchRequestService;
 import net.kokkeli.data.services.IPlaylistService;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.resources.models.BaseModel;
@@ -41,7 +42,8 @@ public class TestPlaylistResource extends ResourceTestsBase {
     private IFileSystem mockFilesystem;
     private ISettings mockSettings;
     private IPlaylistService mockPlaylistService;
-
+    private IFetchRequestService mockFetchRequestService;
+    
     private PlaylistsResource resource;
     private PlayList existingList;
 
@@ -50,7 +52,8 @@ public class TestPlaylistResource extends ResourceTestsBase {
         mockFilesystem = mock(IFileSystem.class);
         mockSettings = mock(ISettings.class);
         mockPlaylistService = mock(IPlaylistService.class);
-
+        mockFetchRequestService = mock(IFetchRequestService.class);
+        
         existingList = new PlayList(EXISTING_PLAYLIST);
         existingList.setName("Heiyah");
 
@@ -62,7 +65,7 @@ public class TestPlaylistResource extends ResourceTestsBase {
 
         resource = new PlaylistsResource(getLogger(), getTemplateService(),
                 getPlayer(), getSessionService(), mockSettings,
-                mockPlaylistService, mockFilesystem);
+                mockPlaylistService, mockFilesystem, mockFetchRequestService);
     }
 
     @Test
