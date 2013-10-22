@@ -1,11 +1,12 @@
 package net.kokkeli.resources;
 
 import java.util.ArrayList;
-
 import javax.ws.rs.core.Response;
 
 import net.kokkeli.data.FetchRequest;
+import net.kokkeli.data.PlayList;
 import net.kokkeli.data.services.IFetchRequestService;
+import net.kokkeli.data.services.IPlaylistService;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.resources.models.BaseModel;
 import net.kokkeli.resources.models.ModelFetchRequests;
@@ -21,12 +22,14 @@ import static org.mockito.Mockito.*;
 public class TestFetchRequestsResource extends ResourceTestsBase {
     private FetchRequestsResource resource;
     private IFetchRequestService mockFetchRequestService;
-
+    private IPlaylistService mockPlaylistService; 
+    
     @Override
     public void before() throws Exception {
         mockFetchRequestService = mock(IFetchRequestService.class);
+        mockPlaylistService = mock(IPlaylistService.class);
         
-        resource = new FetchRequestsResource(getLogger(), getTemplateService(), getPlayer(), getSessionService(), getSettings(), mockFetchRequestService, null);
+        resource = new FetchRequestsResource(getLogger(), getTemplateService(), getPlayer(), getSessionService(), getSettings(), mockFetchRequestService, mockPlaylistService);
     }
     
     @Test
@@ -48,6 +51,7 @@ public class TestFetchRequestsResource extends ResourceTestsBase {
         basicRequest.setDestinationFile("Test destination");
         basicRequest.setHandler("test handler");
         basicRequest.setLocation("Test location");
+        requests.add(basicRequest);
         
         when(mockFetchRequestService.get()).thenReturn(requests);
         
@@ -59,5 +63,24 @@ public class TestFetchRequestsResource extends ResourceTestsBase {
         
         BaseModel base = answer.getModel();
         Assert.assertTrue(base.getModel() instanceof ModelFetchRequests);
+    }
+    
+    @Test
+    public void testCreateRequestGet() throws NotAuthenticatedException, RenderException, ServiceException{
+        ModelAnswer answer = new ModelAnswer();
+        when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(answer);
+        
+        ArrayList<PlayList> playlists = new ArrayList<>();
+        
+        for (int i = 0; i < 7; i++) {
+            PlayList list = new PlayList(i);
+            list.setName("Name " + i);
+            playlists.add(list);
+        }
+        
+        when(mockPlaylistService.getIdNames()).thenReturn(playlists);
+        
+        Response response = resource.createRequest(buildRequest());
+        assertModelResponse(response, answer, null, null);
     }
 }
