@@ -18,22 +18,10 @@
 						<div class="description">
 							Artist: 
 						</div>
-						<div class=value>
+						<div class="value">
 							<input type="text" name="artist">
 						</div>
 					</div>
-					<div class="field">
-						<div class="description">
-							Track: 
-						</div>
-						<div class=value>
-							<input type="text" name="track">
-						</div>
-					</div>
-					<p>
-						Please specify a file, or a set of files:<br>
-						<input type="file" name="file" size="40">
-					</p>
 					<div>
 						<input type="submit" value="Send">
 					</div>

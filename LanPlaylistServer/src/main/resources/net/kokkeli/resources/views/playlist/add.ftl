@@ -18,7 +18,7 @@
 						<div class="description">
 							Artist: 
 						</div>
-						<div class=value>
+						<div class="value">
 							<input type="text" name="artist">
 						</div>
 					</div>
@@ -26,7 +26,7 @@
 						<div class="description">
 							Track: 
 						</div>
-						<div class=value>
+						<div class="value">
 							<input type="text" name="track">
 						</div>
 					</div>
