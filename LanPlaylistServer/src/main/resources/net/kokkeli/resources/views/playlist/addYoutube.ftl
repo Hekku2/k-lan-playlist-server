@@ -14,10 +14,15 @@
 				<#include "/common/_info_error.ftl">
 				<#include "/playlist/_method.ftl">
 				<form action="" enctype="multipart/form-data" method="post" class="form-horizontal">
-					<@valueField label="Url" name="url" />
-					<div class="controls">
-						<input type="submit" value="Send" class="btn btn-primary">
-					</div>
+					<fieldset>
+						<legend>Track data:</legend>
+						<@valueField label="Track" name="track" />
+						<@valueField label="Artist" name="artist" />
+						<@valueField label="Url" name="url" />
+						<div class="controls">
+							<input type="submit" value="Send" class="btn btn-primary">
+						</div>
+					</fieldset>
 				</form>
 			</div>
 		</div>

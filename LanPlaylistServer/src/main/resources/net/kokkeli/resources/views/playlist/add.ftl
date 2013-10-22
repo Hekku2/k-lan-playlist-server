@@ -14,15 +14,18 @@
 				<#include "/common/_info_error.ftl">
 				<#include "/playlist/_method.ftl">
 				<form action="" enctype="multipart/form-data" method="post" class="form-horizontal">
-					<@valueField label="Artist" name="artist" />
-					<@valueField label="Track" name="track" />
-					<div class="controls">
-						Please specify a file, or a set of files:<br>
-						<input type="file" name="file" size="40">
-					</div>
-					<div class="controls">
-						<input type="submit" value="Send" class="btn btn-primary">
-					</div>
+					<fieldset>
+						<legend>Track data:</legend>
+						<@valueField label="Artist" name="artist" />
+						<@valueField label="Track" name="track" />
+						<div class="controls">
+							Please specify a file, or a set of files:<br>
+							<input type="file" name="file" size="40">
+						</div>
+						<div class="controls">
+							<input type="submit" value="Send" class="btn btn-primary">
+						</div>
+					</fieldset>
 				</form>
 			</div>
 		</div>
