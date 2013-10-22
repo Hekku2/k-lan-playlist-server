@@ -1,4 +1,4 @@
-<#assign header = "User details">
+<#assign header = "Track details">
 <#assign tab = 1>
 
 <#macro valueField label value>
