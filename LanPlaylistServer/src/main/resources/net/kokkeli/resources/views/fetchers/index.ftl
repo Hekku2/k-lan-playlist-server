@@ -3,14 +3,21 @@
 
 <html>
 	<#include "/common/_header.ftl">
+	<link rel="stylesheet" type="text/css" href="/resource/css/FetchRequests.css">
 	<script type="html" id="row-template">
 		<tr>
 			<td>{handler}</td>
 			<td>
 				<a title="{track}" href="/tracks/{trackId}">{track}</a>
 			</td>
-			<td>{location}</td>
-			<td>{destination}</td>
+			<td class="location-column" title="{location}">
+				<div>{location}</div>
+			</td>
+			<td title="{destination}">
+				<div >
+					{destination}
+				</div>
+			</td>
 			<td>{status}</td>
 			<td>
 				<a title="Remove" class="btn delete" id="{id}"><i class="icon-remove"></i>
