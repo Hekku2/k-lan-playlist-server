@@ -184,7 +184,7 @@ public class VlcPlayer implements IPlayer {
             try {
                 //TODO Take this from variable or something.
                 MediaMeta meta = getMediaPlayer().getMediaMeta();
-                return meta.getArtist() + " - " + meta.getTitle();
+                return meta.getTitle();
             } catch (IllegalStateException e) {
                 return null;
             }
