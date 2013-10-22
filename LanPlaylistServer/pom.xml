@@ -151,7 +151,7 @@
 									<limit>
 									<counter>COMPLEXITY</counter>
 									<value>COVEREDRATIO</value>
-									<minimum>0.60</minimum>
+									<minimum>0.10</minimum>
 									</limit>
 								</limits>
 							</rule>
@@ -169,11 +169,6 @@
             <artifactId>maven-pmd-plugin</artifactId>
             <version>3.34</version>
         </plugin>
-		<plugin>
-		    <groupId>org.codehaus.mojo</groupId>
-			<artifactId>emma-maven-plugin</artifactId>
-			<version>0.1</version>
-		</plugin>
     </plugins>
   </reporting>
   <properties>
