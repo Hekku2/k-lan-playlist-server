@@ -1,3 +1,21 @@
+<#macro uneditableValueField label value>
+	<div class="control-group">
+		<div class="control-label">${label}</div>
+		<div class="controls">
+			<span class="input-xlarge uneditable-input">${value}</span>
+		</div>
+	</div>
+</#macro>
+
+<#macro valueField label name>
+	<div class="control-group">
+		<div class="control-label">${label}</div>
+		<div class="controls">
+			<input class="input-xlarge" name="${name}"/>
+		</div>
+	</div>
+</#macro>
+
 <head>
 	<link rel="stylesheet" type="text/css" href="/resource/css/bootstrap/bootstrap.css">
 	<link rel="stylesheet" type="text/css" href="/resource/css/bootstrap/bootstrap-responsive.css">

@@ -1,8 +1,9 @@
-<div class="upload-selection-row">
-	<a class="btn <#if selectedMethod?? && selectedMethod == 0>selected-method</#if>" href="/playlists/add/upload/${getModel.getPlaylistId}">
-		Upload
-	</a>
-	<a class="btn <#if selectedMethod?? && selectedMethod == 1>selected-method</#if>" href="/playlists/add/youtube/${getModel.getPlaylistId}">
-		Youtube
-	</a>
+<div class="navbar">
+  <div class="navbar-inner">
+    <a class="brand" href="#">Selected method:</a>
+    <ul class="nav">
+      <li <#if selectedMethod?? && selectedMethod == 0>class="active"</#if>><a href="/playlists/add/upload/${getModel.getPlaylistId}">Upload</a></li>
+      <li <#if selectedMethod?? && selectedMethod == 1>class="active"</#if>><a href="/playlists/add/youtube/${getModel.getPlaylistId}">Youtube</a></li>
+    </ul>
+  </div>
 </div>

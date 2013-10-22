@@ -13,17 +13,10 @@
 			<div class="content">
 				<#include "/common/_info_error.ftl">
 				<#include "/playlist/_method.ftl">
-				<form action="" enctype="multipart/form-data" method="post">
-					<div class="field">
-						<div class="description">
-							Artist: 
-						</div>
-						<div class="value">
-							<input type="text" name="artist">
-						</div>
-					</div>
-					<div>
-						<input type="submit" value="Send">
+				<form action="" enctype="multipart/form-data" method="post" class="form-horizontal">
+					<@valueField label="Url" name="url" />
+					<div class="controls">
+						<input type="submit" value="Send" class="btn btn-primary">
 					</div>
 				</form>
 			</div>

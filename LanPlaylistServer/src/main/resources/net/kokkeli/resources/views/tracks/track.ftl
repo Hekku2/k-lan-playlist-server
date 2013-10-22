@@ -1,15 +1,6 @@
 <#assign header = "Track details">
 <#assign tab = 1>
 
-<#macro valueField label value>
-	<div class="control-group">
-		<div class="control-label">${label}</div>
-		<div class="controls">
-			<span class="input-xlarge uneditable-input">${value}</span>
-		</div>
-	</div>
-</#macro>
-
 <html>
 	<#include "/common/_header.ftl">
 	<body>
@@ -19,10 +10,10 @@
 			<div class="content">
 				<#include "/common/_info_error.ftl">
 				<div class="form-horizontal">
-					<@valueField label="Track" value=getModel.getTrackName />
-					<@valueField label="Artist" value=getModel.getArtist />
-					<@valueField label="Uploader" value=getModel.getUploader />
-					<@valueField label="Location" value=getModel.getLocation />
+					<@uneditableValueField label="Track" value=getModel.getTrackName />
+					<@uneditableValueField label="Artist" value=getModel.getArtist />
+					<@uneditableValueField label="Uploader" value=getModel.getUploader />
+					<@uneditableValueField label="Location" value=getModel.getLocation />
 				</div>
 				<div class="navi">
 					<a class="button" href="/tracks/edit/${getModel.getId}">Edit</a>

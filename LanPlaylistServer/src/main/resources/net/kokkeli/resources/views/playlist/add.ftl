@@ -13,29 +13,15 @@
 			<div class="content">
 				<#include "/common/_info_error.ftl">
 				<#include "/playlist/_method.ftl">
-				<form action="" enctype="multipart/form-data" method="post">
-					<div class="field">
-						<div class="description">
-							Artist: 
-						</div>
-						<div class="value">
-							<input type="text" name="artist">
-						</div>
-					</div>
-					<div class="field">
-						<div class="description">
-							Track: 
-						</div>
-						<div class="value">
-							<input type="text" name="track">
-						</div>
-					</div>
-					<p>
+				<form action="" enctype="multipart/form-data" method="post" class="form-horizontal">
+					<@valueField label="Artist" name="artist" />
+					<@valueField label="Track" name="track" />
+					<div class="controls">
 						Please specify a file, or a set of files:<br>
 						<input type="file" name="file" size="40">
-					</p>
-					<div>
-						<input type="submit" value="Send">
+					</div>
+					<div class="controls">
+						<input type="submit" value="Send" class="btn btn-primary">
 					</div>
 				</form>
 			</div>
