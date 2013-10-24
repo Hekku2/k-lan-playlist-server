@@ -75,7 +75,7 @@ public class RootResource extends BaseResource {
             
             if (track.getLocation() == null){
                 log(String.format("Track #%s did not have a location.", track.getId()), LogSeverity.TRACE);
-                return Response.ok().build();
+                return Response.status(Status.INTERNAL_SERVER_ERROR).build();
             }
             
             player.addToQueue(track.getLocation());

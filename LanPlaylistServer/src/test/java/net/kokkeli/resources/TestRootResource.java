@@ -48,6 +48,38 @@ public class TestRootResource extends ResourceTestsBase{
     }
     
     @Test
+    public void testPostAddToQueueReturnsServerErrorIfTrackDoesntHaveLocation() throws NotFoundInDatabase, ServiceException, BadRequestException{
+        long existingId = 23;
+        Track track = new Track(existingId);
+        track.setLocation(null);
+        
+        when(mockTrackService.get(existingId)).thenReturn(track);
+        Response r = resource.addToQueue(buildRequest(), createIdPost(existingId));
+        assertEquals(INTERNAL_SERVER_ERROR, r.getStatus());
+    }
+    
+    @Test
+    public void testPostAddToQueueThrowsBadRequestExceptionIfThereisNoId(){
+        try {
+            resource.addToQueue(buildRequest(), createIdPost(""));
+        } catch (BadRequestException e) {
+            // This should happen
+        }
+    }
+    
+    @Test
+    public void testPostAddQueueReturnsInternalServerErrorWhenServiceDoesntWork() throws BadRequestException, NotFoundInDatabase, ServiceException{
+        long existingId = 23;
+        Track track = new Track(existingId);
+        track.setLocation("Marsi666//");
+        
+        when(mockTrackService.get(existingId)).thenThrow(new ServiceException("Lolexception"));
+        
+        Response r = resource.addToQueue(buildRequest(), createIdPost(existingId));
+        assertEquals(INTERNAL_SERVER_ERROR, r.getStatus());
+    }
+    
+    @Test
     public void testSelectPlaylistSelectsPlaylist() throws BadRequestException, NotFoundInDatabase, ServiceException{
         long existingId = 23;
         Response r = resource.selectPlaylist(buildRequest(), createIdPost(existingId));
@@ -74,6 +106,16 @@ public class TestRootResource extends ResourceTestsBase{
     }
     
     @Test
+    public void testSelectPlaylistReturnsBadRequestWhenThereIsNoId(){
+        try {
+            resource.selectPlaylist(buildRequest(), createIdPost(""));
+        } catch (BadRequestException e) {
+            // This should happen
+        }
+        
+    }
+    
+    @Test
     public void testPlayCallsPlay() throws BadRequestException, ServiceException{
         Response r = resource.play(buildRequest());
         assertEquals(RESPONSE_OK, r.getStatus());
@@ -85,5 +127,11 @@ public class TestRootResource extends ResourceTestsBase{
         Mockito.doThrow(new ServiceException("Boom!")).when(getPlayer()).play();
         Response r = resource.play(buildRequest());
         assertEquals(INTERNAL_SERVER_ERROR, r.getStatus());
+    }
+    
+    @Test
+    public void testRedirect() throws ServiceException{
+        Response r = resource.redirect(buildRequest());
+        assertEquals(REDIRECT, r.getStatus());
     }
 }

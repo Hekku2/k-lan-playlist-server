@@ -33,6 +33,7 @@ public abstract class ResourceTestsBase {
     protected static final int REDIRECT = 303;
     protected static final int NOT_FOUND = 404;
     protected static final int INTERNAL_SERVER_ERROR = 500;
+    protected static final int BAD_REQUEST = 400;
     
     //General form fields
     private static final String FORM_ID = "id";
