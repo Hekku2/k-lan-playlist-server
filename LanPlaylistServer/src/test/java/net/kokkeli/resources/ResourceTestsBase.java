@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
 import static org.junit.Assert.assertEquals;
@@ -27,10 +28,14 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 public abstract class ResourceTestsBase {
+    //General response codes
     protected static final int RESPONSE_OK = 200;
     protected static final int REDIRECT = 303;
     protected static final int NOT_FOUND = 404;
     protected static final int INTERNAL_SERVER_ERROR = 500;
+    
+    //General form fields
+    private static final String FORM_ID = "id";
     
     private ILogger mockLogger;
     private ITemplateService mockTemplateService;
@@ -129,6 +134,30 @@ public abstract class ResourceTestsBase {
         cookies[0] = new Cookie("auth", "");
         
         return cookies;
+    }
+    
+    /**
+     * Mocks MultivaluedMap for post containin id
+     * @param id Id of post
+     * @return Map containing id
+     */
+    protected static MultivaluedMap<String, String> createIdPost(String id){
+        @SuppressWarnings("unchecked")
+        MultivaluedMap<String, String> map = mock(MultivaluedMap.class);
+        
+        when(map.containsKey(FORM_ID)).thenReturn(true);
+        
+        when(map.getFirst(FORM_ID)).thenReturn(id);
+        return map;
+    }
+    
+    /**
+     * Mocks MultivaluedMap for post containin id
+     * @param id Id of post
+     * @return Map containing id
+     */
+    protected static MultivaluedMap<String, String> createIdPost(long id){
+        return createIdPost(id + "");
     }
     
     /**

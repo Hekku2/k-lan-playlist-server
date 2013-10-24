@@ -5,7 +5,6 @@ import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
-import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
 import org.junit.Test;
@@ -17,8 +16,6 @@ import net.kokkeli.data.services.ITrackService;
 import net.kokkeli.data.services.ServiceException;
 
 public class TestRootResource extends ResourceTestsBase{
-    private static final String FORM_ID = "id";
-    
     private ITrackService mockTrackService;
     private RootResource resource;
     
@@ -88,20 +85,5 @@ public class TestRootResource extends ResourceTestsBase{
         Mockito.doThrow(new ServiceException("Boom!")).when(getPlayer()).play();
         Response r = resource.play(buildRequest());
         assertEquals(INTERNAL_SERVER_ERROR, r.getStatus());
-    }
-    
-    /**
-     * Mocks MultivaluedMap for id creation posts.
-     * @param id
-     * @return Multivalued map
-     */
-    private static MultivaluedMap<String, String> createIdPost(long id){
-        @SuppressWarnings("unchecked")
-        MultivaluedMap<String, String> map = mock(MultivaluedMap.class);
-        
-        when(map.containsKey(FORM_ID)).thenReturn(true);
-        
-        when(map.getFirst(FORM_ID)).thenReturn(id + "");
-        return map;
     }
 }

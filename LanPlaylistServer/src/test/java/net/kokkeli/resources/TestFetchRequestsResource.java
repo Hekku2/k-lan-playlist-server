@@ -1,6 +1,8 @@
 package net.kokkeli.resources;
 
 import java.util.ArrayList;
+
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
 import net.kokkeli.data.FetchRequest;
@@ -82,5 +84,44 @@ public class TestFetchRequestsResource extends ResourceTestsBase {
         
         Response response = resource.createRequest(buildRequest());
         assertModelResponse(response, answer, null, null);
+    }
+    
+    @Test
+    public void testRemoveHandledCallsService() throws NotAuthenticatedException, ServiceException{
+        resource.removeHandled(buildRequest());
+        
+        verify(mockFetchRequestService).removeHandled();
+    }
+    
+    @Test
+    public void testRemoveRequestCallsService() throws NotAuthenticatedException, ServiceException, BadRequestException{
+        long id = 343;
+        
+        resource.removeRequest(buildRequest(), createIdPost(id));
+        
+        verify(mockFetchRequestService).remove(id);
+    }
+    
+    @Test
+    public void testRemoveRequestThrowsBadRequestExceptionWhenIdCantBeParsed() throws NotAuthenticatedException, ServiceException{
+        @SuppressWarnings("unchecked")
+        MultivaluedMap<String, String> map = mock(MultivaluedMap.class);
+        when(map.getFirst(anyString())).thenReturn(null);
+        when(map.containsKey(any())).thenReturn(false);
+        
+        try {
+            resource.removeRequest(buildRequest(), map);
+            Assert.fail("There should have been an exception when there is no id");
+        } catch (BadRequestException e) {
+            // This should happen.
+        }
+        
+        try {
+            resource.removeRequest(buildRequest(), createIdPost("invalid id"));
+            Assert.fail("There should have been an exception when there is no id");
+        } catch (BadRequestException e) {
+            // This should happen.
+        }
+        
     }
 }
