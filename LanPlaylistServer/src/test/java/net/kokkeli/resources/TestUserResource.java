@@ -194,7 +194,7 @@ public class TestUserResource extends ResourceTestsBase{
     }
     
     /**
-     * Mocks MultivaluedMap var user dit posts.
+     * Mocks MultivaluedMap for user edit posts.
      * @param username
      * @param role
      * @return
