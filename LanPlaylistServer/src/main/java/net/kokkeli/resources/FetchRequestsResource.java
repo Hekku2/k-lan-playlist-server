@@ -163,7 +163,7 @@ public class FetchRequestsResource extends BaseResource{
     @Produces("text/html")
     @Access(Role.ADMIN)
     @Path("/removeHandled")
-    public Response removeHandler(@Context HttpServletRequest req) throws NotAuthenticatedException, ServiceException {
+    public Response removeHandled(@Context HttpServletRequest req) throws NotAuthenticatedException, ServiceException {
         buildBaseModel(req);
         fetchRequestService.removeHandled();
         
@@ -183,7 +183,7 @@ public class FetchRequestsResource extends BaseResource{
     @Produces("text/html")
     @Access(Role.ADMIN)
     @Path("/removeRequest")
-    public Response removeHandler(@Context HttpServletRequest req, MultivaluedMap<String, String> formParams) throws NotAuthenticatedException, ServiceException, BadRequestException {
+    public Response removeRequest(@Context HttpServletRequest req, MultivaluedMap<String, String> formParams) throws NotAuthenticatedException, ServiceException, BadRequestException {
         buildBaseModel(req);
         try {
             long id = Long.parseLong(formParams.getFirst(FORM_ID));
