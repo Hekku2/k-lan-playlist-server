@@ -7,6 +7,7 @@ import javax.ws.rs.core.Response;
 
 import net.kokkeli.data.FetchRequest;
 import net.kokkeli.data.PlayList;
+import net.kokkeli.data.Track;
 import net.kokkeli.data.services.IFetchRequestService;
 import net.kokkeli.data.services.IPlaylistService;
 import net.kokkeli.data.services.ServiceException;
@@ -122,6 +123,26 @@ public class TestFetchRequestsResource extends ResourceTestsBase {
         } catch (BadRequestException e) {
             // This should happen.
         }
+    }
+    
+    @Test
+    public void testRequestsReturnsCorrectRequests() throws NotAuthenticatedException, ServiceException{
+        ArrayList<FetchRequest> requests = new ArrayList<FetchRequest>();
         
+        for (int i = 0; i < 3; i++) {
+            FetchRequest r = new FetchRequest();
+            r.setDestinationFile("Destination " + i);
+            r.setHandler("Handler " + i);
+            r.setId(i);
+            r.setLocation("Location " + i);
+            r.setTrack(new Track());
+            r.setPlaylist(new PlayList(i));
+            requests.add(r);
+        }
+        
+        when(mockFetchRequestService.get()).thenReturn(requests);
+        
+        ModelFetchRequests model = resource.requests(buildRequest());
+        Assert.assertEquals(3, model.getItems().size());
     }
 }
