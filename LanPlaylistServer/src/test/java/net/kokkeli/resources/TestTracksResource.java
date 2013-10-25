@@ -42,7 +42,7 @@ public class TestTracksResource extends ResourceTestsBase{
     }
     
     @Test
-    public void testTrackDetailsReturnsRedirectWhenUserDoesntExist() throws NotFoundInDatabase, ServiceException, NotAuthenticatedException {
+    public void testTrackDetailsReturnsRedirectWhenTrackDoesntExist() throws NotFoundInDatabase, ServiceException, NotAuthenticatedException {
         long notFoundId = 666;
         
         when(trackService.get(notFoundId)).thenThrow(new NotFoundInDatabase("Eijooole"));
@@ -61,6 +61,16 @@ public class TestTracksResource extends ResourceTestsBase{
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenThrow(new RenderException("Calcutta."));
         
         Response r = resource.trackDetails(buildRequest(), existingTrack.getId());
+        Assert.assertEquals(REDIRECT, r.getStatus());
+    }
+    
+    @Test
+    public void testTrackDetailsHandlesServiceException() throws NotFoundInDatabase, ServiceException, NotAuthenticatedException{
+        long anyId = 312;
+        
+        when(trackService.get(anyLong())).thenThrow(new ServiceException("Error pärrör"));
+        
+        Response r = resource.trackDetails(buildRequest(), anyId);
         Assert.assertEquals(REDIRECT, r.getStatus());
     }
 }
