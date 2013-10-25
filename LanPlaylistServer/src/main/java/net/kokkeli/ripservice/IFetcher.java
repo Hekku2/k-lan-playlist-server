@@ -11,8 +11,9 @@ public interface IFetcher {
     /**
      * Fetches the request
      * @param request Request
+     * @throws FetchFailedException Thrown if fetching fails for some reason
      */
-    void fetch(FetchRequest request);
+    void fetch(FetchRequest request) throws FetchFailedException;
     
     /**
      * Returns type this fetcher handles

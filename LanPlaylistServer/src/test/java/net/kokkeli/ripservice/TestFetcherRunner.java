@@ -36,7 +36,7 @@ public class TestFetcherRunner {
     }
     
     @Test
-    public void testRunCallsCorrectServices() throws DatabaseException, InterruptedException{
+    public void testRunCallsCorrectServices() throws DatabaseException, InterruptedException, FetchFailedException{
         FetchRequest request = new FetchRequest();
         request.setId(666);
         
@@ -50,6 +50,23 @@ public class TestFetcherRunner {
         verify(mockDatabase).updateRequest(request.getId(), FetchStatus.HANDLING);
         verify(mockFetcher).fetch(request);
         verify(mockDatabase).updateRequest(request.getId(), FetchStatus.HANDLED);
+    }
+    
+    @Test
+    public void testRunHandlesFetchRequestException() throws InterruptedException, DatabaseException, FetchFailedException{
+        FetchRequest request = new FetchRequest();
+        request.setId(666);
+        
+        when(mockDatabase.oldestUnhandledFetchRequestOrNull(mockType)).thenReturn(request);
+        doThrow(new FetchFailedException("Fail")).when(mockFetcher).fetch(request);
+        
+        Thread t = new Thread(fetcherRunner);
+        t.start();
+        Thread.sleep(500);
+        t.interrupt();
+        verify(mockDatabase).updateRequest(request.getId(), FetchStatus.HANDLING);
+        verify(mockFetcher).fetch(request);
+        verify(mockDatabase).updateRequest(request.getId(), FetchStatus.ERROR);
     }
     
     @Test

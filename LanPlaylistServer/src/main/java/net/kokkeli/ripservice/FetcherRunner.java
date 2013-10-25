@@ -60,7 +60,12 @@ public class FetcherRunner implements Runnable {
             fetchRequestDatabase.updateRequest(request.getId(), FetchStatus.HANDLING);
             
             // Fetch it
-            fetcher.fetch(request);
+            try {
+                fetcher.fetch(request);
+            } catch (FetchFailedException e) {
+                fetchRequestDatabase.updateRequest(request.getId(), FetchStatus.ERROR);
+                return;
+            }
             
             //TODO Verify that fetched file exists on hard drive
             
