@@ -73,7 +73,7 @@ public class TestFetchRequestsResource extends ResourceTestsBase {
         ModelAnswer answer = new ModelAnswer();
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(answer);
         
-        ArrayList<PlayList> playlists = new ArrayList<>();
+        ArrayList<PlayList> playlists = new ArrayList<PlayList>();
         
         for (int i = 0; i < 7; i++) {
             PlayList list = new PlayList(i);
