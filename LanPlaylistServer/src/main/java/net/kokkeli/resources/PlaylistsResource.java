@@ -279,7 +279,7 @@ public class PlaylistsResource extends BaseResource {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response addYoutube(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId,
             @FormDataParam("artist") String artist, @FormDataParam("track") String track,
-            @FormDataParam("url") String url) throws ServiceException, NotFoundInDatabase, NotAuthenticatedException {
+            @FormDataParam("url") String url) throws ServiceException, NotAuthenticatedException {
         BaseModel model = buildBaseModel(req);
 
         try {
@@ -342,7 +342,7 @@ public class PlaylistsResource extends BaseResource {
     @Produces("text/html")
     @Access(Role.USER)
     @Path("/create")
-    public Response create(@Context HttpServletRequest req) throws NotAuthenticatedException, ServiceException {
+    public Response create(@Context HttpServletRequest req) throws NotAuthenticatedException {
         BaseModel baseModel = buildBaseModel(req);
 
         try {
@@ -357,7 +357,7 @@ public class PlaylistsResource extends BaseResource {
     @Access(Role.USER)
     @Path("/create")
     public Response create(@Context HttpServletRequest req, MultivaluedMap<String, String> formParams)
-            throws NotAuthenticatedException, ServiceException, BadRequestException {
+            throws NotAuthenticatedException, BadRequestException {
         BaseModel baseModel = buildBaseModel(req);
 
         try {

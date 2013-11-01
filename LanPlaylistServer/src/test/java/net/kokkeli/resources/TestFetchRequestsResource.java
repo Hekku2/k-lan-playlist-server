@@ -36,13 +36,13 @@ public class TestFetchRequestsResource extends ResourceTestsBase {
     }
     
     @Test
-    public void testIndexRedirectWhenRenderingExceptionIsThrown() throws NotAuthenticatedException, ServiceException, RenderException{
+    public void testIndexRedirectWhenRenderingExceptionIsThrown() throws NotAuthenticatedException, RenderException{
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenThrow(new RenderException("Boom says database!"));
         assertRedirectError(resource.index(buildRequest()), "There was a problem with rendering the template.");
     }
     
     @Test
-    public void testIndexRedirectWhenServiceExceptionIsThrown() throws NotAuthenticatedException, ServiceException, RenderException{
+    public void testIndexRedirectWhenServiceExceptionIsThrown() throws NotAuthenticatedException, ServiceException{
         when(mockFetchRequestService.get()).thenThrow(new ServiceException("Boom says database!"));
         assertRedirectError(resource.index(buildRequest()), "Something went wrong with service.");
     }

@@ -7,8 +7,6 @@ import net.kokkeli.data.ILogger;
 import net.kokkeli.data.PlayList;
 import net.kokkeli.data.db.DatabaseException;
 import net.kokkeli.data.db.IPlaylistDatabase;
-import net.kokkeli.data.db.NotFoundInDatabase;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,7 +22,7 @@ public class TestPlaylistService {
     private final static String EXISTING_PLAYLIST_NAME = "Jarmo";
     
     @Before
-    public void setup() throws NotFoundInDatabase, DatabaseException, ServiceException{
+    public void setup() throws DatabaseException{
         mockDatabase = mock(IPlaylistDatabase.class);
         mockLogger = mock(ILogger.class);
         
@@ -40,7 +38,7 @@ public class TestPlaylistService {
     }
     
     @Test
-    public void testNameExistsReturnsFalseForEmptyName() throws NotFoundInDatabase, DatabaseException, ServiceException{
+    public void testNameExistsReturnsFalseForEmptyName() throws ServiceException{
         Assert.assertFalse(playlistService.nameExists(null));
         Assert.assertFalse(playlistService.nameExists(""));
         Assert.assertFalse(playlistService.nameExists("   "));

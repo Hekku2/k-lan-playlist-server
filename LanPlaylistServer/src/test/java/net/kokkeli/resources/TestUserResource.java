@@ -48,7 +48,7 @@ public class TestUserResource extends ResourceTestsBase{
     
     // USER DETAILS GET
     @Test
-    public void testGetDetailsRedirectsWhenUserIsNotFound() throws RenderException, ServiceException, NotAuthenticatedException{
+    public void testGetDetailsRedirectsWhenUserIsNotFound() throws NotAuthenticatedException{
         assertRedirectAndError(userResource.userDetails(buildRequest(), NONEXISTING_ID), "User not found.");
     }
     
@@ -59,7 +59,7 @@ public class TestUserResource extends ResourceTestsBase{
     }
     
     @Test
-    public void testGetDetailsPutsTemplateAndOkInResponse() throws NotFoundException, ServiceException, RenderException, NotAuthenticatedException {
+    public void testGetDetailsPutsTemplateAndOkInResponse() throws NotFoundException, RenderException, NotAuthenticatedException {
         final String processedTemplate = "Jeeah";
         
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenReturn(processedTemplate);
@@ -72,7 +72,7 @@ public class TestUserResource extends ResourceTestsBase{
     
     //EDIT GET
     @Test
-    public void testGetEditThrowsNotFoundException() throws ServiceException, NotAuthenticatedException{
+    public void testGetEditThrowsNotFoundException() throws NotAuthenticatedException{
         assertRedirectAndError(userResource.userEdit(buildRequest(), NONEXISTING_ID), "User not found.");
     }
     
@@ -83,7 +83,7 @@ public class TestUserResource extends ResourceTestsBase{
     }
     
     @Test
-    public void testGetEditPutsTemplateAndOkInResponse() throws RenderException, NotFoundException, ServiceException, NotAuthenticatedException{
+    public void testGetEditPutsTemplateAndOkInResponse() throws RenderException, NotFoundException, NotAuthenticatedException{
         final String processedTemplate = "Jeeah";
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenReturn(processedTemplate);
         
@@ -129,7 +129,7 @@ public class TestUserResource extends ResourceTestsBase{
     
     //CREATE POST
     @Test
-    public void testCreatePostWithWrongUsernameReturnsError() throws RenderException, BadRequestException, ServiceException, NotAuthenticatedException{
+    public void testCreatePostWithWrongUsernameReturnsError() throws RenderException, BadRequestException, NotAuthenticatedException{
         ModelAnswer answer = new ModelAnswer();
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(answer);
         
@@ -138,7 +138,7 @@ public class TestUserResource extends ResourceTestsBase{
     }
     
     @Test
-    public void testCreatePostWithCorrectUsernameSucceeds() throws RenderException, BadRequestException, ServiceException, NotAuthenticatedException{
+    public void testCreatePostWithCorrectUsernameSucceeds() throws BadRequestException, ServiceException, NotAuthenticatedException{
         final String username = "fdsfsd";
         final Role role = Role.ADMIN;
         final long anyId = 434;

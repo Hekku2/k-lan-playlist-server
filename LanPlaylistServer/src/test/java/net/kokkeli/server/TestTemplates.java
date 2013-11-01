@@ -23,8 +23,6 @@ import net.kokkeli.resources.models.ViewModel;
 import org.junit.Before;
 import org.junit.Test;
 
-import freemarker.template.TemplateModelException;
-
 import static org.mockito.Mockito.*;
 
 public class TestTemplates {
@@ -42,7 +40,7 @@ public class TestTemplates {
     }
 
     @Test
-    public void testProcessingModelThrowsExceptionWithWrongParameters() throws IOException, TemplateModelException {
+    public void testProcessingModelThrowsExceptionWithWrongParameters() {
         try {
             templateService.process("", new BaseModel());
             fail("Processing should have thrown a rendering exception.");
@@ -66,7 +64,7 @@ public class TestTemplates {
     }
     
     @Test
-    public void testInitializingThrowsExceptionWithWrongParameters() throws TemplateModelException{
+    public void testInitializingThrowsExceptionWithWrongParameters(){
         final String nonExistingTemplate = "asdf";
         
         try {
@@ -89,7 +87,7 @@ public class TestTemplates {
     }
     
     @Test
-    public void testProcessingWithCorrectValuesDoesntThrowException() throws IOException, RenderException, TemplateModelException{
+    public void testProcessingWithCorrectValuesDoesntThrowException() throws RenderException{
         String result = templateService.process(CORRECT_TEMPLATE, correctBaseModel());
         
         Assert.assertNotNull("Result should have value.", result);

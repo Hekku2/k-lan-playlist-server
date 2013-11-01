@@ -21,7 +21,7 @@ public class TestManagementResource extends ResourceTestsBase{
     }
     
     @Test
-    public void testIndexReturnsResponse() throws RenderException, ServiceException, NotFoundInDatabase, NotAuthenticatedException {
+    public void testIndexReturnsResponse() throws RenderException, NotAuthenticatedException {
         ModelAnswer model = new ModelAnswer();
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(model);
         
@@ -29,7 +29,7 @@ public class TestManagementResource extends ResourceTestsBase{
     }
     
     @Test
-    public void testIndexRedirectsWhenRenderingExceptionsIsThrown() throws RenderException, NotAuthenticatedException, ServiceException{
+    public void testIndexRedirectsWhenRenderingExceptionsIsThrown() throws RenderException, NotAuthenticatedException{
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenThrow(new RenderException("Boom says database!"));
         
         assertRedirectError(resource.index(buildRequest()), "There was a problem with rendering the template.");

@@ -24,7 +24,7 @@ public class TestTrackService {
     private TrackService trackService;
     
     @Before
-    public void setup() throws NotFoundInDatabase, DatabaseException, ServiceException{
+    public void setup(){
         mockDatabase = mock(ITrackDatabase.class);
         mockLogger = mock(ILogger.class);
         mockFileSystem = mock(IFileSystem.class);
@@ -33,7 +33,7 @@ public class TestTrackService {
     }
     
     @Test
-    public void testGetAndVerifyTrackThrowsServiceExceptionWhenDatabaseExceptionIsThrown() throws DatabaseException, NotFoundInDatabase {
+    public void testGetAndVerifyTrackThrowsServiceExceptionWhenDatabaseExceptionIsThrown() throws DatabaseException {
         when(mockDatabase.get()).thenThrow(new DatabaseException("Explosion."));
         
         try {
@@ -44,7 +44,7 @@ public class TestTrackService {
     }
     
     @Test
-    public void testGetAndVerifyVerifiesTracks() throws DatabaseException, ServiceException, NotFoundInDatabase{
+    public void testGetAndVerifyVerifiesTracks() throws DatabaseException, ServiceException{
         ArrayList<Track> tracks = new ArrayList<Track>();
         for (int i = 0; i < 3; i++) {
             Track track = new Track();

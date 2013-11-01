@@ -98,7 +98,7 @@ public class TestPlaylistResource extends ResourceTestsBase {
     }
     
     @Test
-    public void testPlaylistsRedirectsWhenServiceExceptionIsThrown() throws NotAuthenticatedException, ServiceException, RenderException{
+    public void testPlaylistsRedirectsWhenServiceExceptionIsThrown() throws NotAuthenticatedException, ServiceException{
         when(mockPlaylistService.getIdNames()).thenThrow(new ServiceException("Boom says database!"));
 
         assertRedirectError(resource.playlists(buildRequest()), "Something went wrong with service.");
@@ -157,8 +157,7 @@ public class TestPlaylistResource extends ResourceTestsBase {
 
     @Test
     public void testCreateChecksForPlaylistNameValidity()
-            throws NotAuthenticatedException, ServiceException,
-            BadRequestException, RenderException {
+            throws NotAuthenticatedException, BadRequestException, RenderException {
         ModelAnswer answer = new ModelAnswer();
         when(getTemplateService().process(any(String.class),
                         any(BaseModel.class))).thenAnswer(answer);

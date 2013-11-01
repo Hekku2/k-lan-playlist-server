@@ -13,7 +13,7 @@ public class TrackDatabase extends Database implements ITrackDatabase{
     private final UsersTable usersTable;
     
     @Inject
-    public TrackDatabase(ISettings settings) throws DatabaseException{
+    public TrackDatabase(ISettings settings){
         super(settings);
         tracksTable = new TracksTable(getDatabaseLocation());
         usersTable = new UsersTable(getDatabaseLocation());

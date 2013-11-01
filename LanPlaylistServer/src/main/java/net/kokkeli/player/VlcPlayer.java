@@ -47,7 +47,7 @@ public class VlcPlayer implements IPlayer {
         this.playlistService = playlistService;
     }
     
-    public void playFile(String file) throws InterruptedException{
+    public void playFile(String file){
         player.getMediaPlayer().playMedia(file);
     }
 

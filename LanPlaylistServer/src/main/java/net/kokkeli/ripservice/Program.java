@@ -9,7 +9,6 @@ import net.kokkeli.Settings;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.Logging;
-import net.kokkeli.data.db.DatabaseException;
 import net.kokkeli.data.db.FetchRequestDatabase;
 import net.kokkeli.data.db.IFetchRequestDatabase;
 
@@ -41,13 +40,7 @@ public class Program {
             System.out.println(e.toString());
         }
         
-        IFetchRequestDatabase fetcherDatabase;
-        try {
-            fetcherDatabase = buildFetchRequestDatabase(settings);
-        } catch (DatabaseException e) {
-            logger.log("Unable to create database.", LogSeverity.ERROR);
-            return;
-        }
+        IFetchRequestDatabase fetcherDatabase = new FetchRequestDatabase(settings);
         
         IFetcher ripper = new YouTubeRipper(settings, logger);
         ExecutorService executor = Executors.newFixedThreadPool(1);
@@ -64,10 +57,4 @@ public class Program {
         }
         logger.log("Stopped fetch request handlers.", LogSeverity.TRACE);
     }
-    
-    public static IFetchRequestDatabase buildFetchRequestDatabase(ISettings settings) throws DatabaseException{
-        IFetchRequestDatabase database = new FetchRequestDatabase(settings);
-        return database;
-    }
-
 }

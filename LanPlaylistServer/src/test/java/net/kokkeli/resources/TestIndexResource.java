@@ -66,7 +66,7 @@ public class TestIndexResource extends ResourceTestsBase{
     }
     
     @Test
-    public void testIndexDoesntThrowExceptionWhenPlaylistIsNotSelected() throws RenderException, ServiceException, NotFoundInDatabase, NotAuthenticatedException {
+    public void testIndexDoesntThrowExceptionWhenPlaylistIsNotSelected() throws RenderException, ServiceException, NotAuthenticatedException {
         ModelAnswer model = new ModelAnswer();
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(model);
         

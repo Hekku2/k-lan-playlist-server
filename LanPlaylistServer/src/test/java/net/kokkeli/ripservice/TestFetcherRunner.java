@@ -7,9 +7,6 @@ import net.kokkeli.data.ILogger;
 import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.db.DatabaseException;
 import net.kokkeli.data.db.IFetchRequestDatabase;
-import net.kokkeli.data.db.NotFoundInDatabase;
-import net.kokkeli.data.services.ServiceException;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -25,7 +22,7 @@ public class TestFetcherRunner {
     private FetcherRunner fetcherRunner;
     
     @Before
-    public void setup() throws NotFoundInDatabase, DatabaseException, ServiceException{
+    public void setup(){
         mockDatabase = mock(IFetchRequestDatabase.class);
         mockLogger = mock(ILogger.class);
         mockFetcher = mock(IFetcher.class);
