@@ -57,4 +57,10 @@ public interface ISettings {
     URI getBaseURI();
     
     URI getURI(String endPart);
+
+    /**
+     * Returns folder of resources
+     * @return Folder of resources
+     */
+    String getResourcesFolder();
 }

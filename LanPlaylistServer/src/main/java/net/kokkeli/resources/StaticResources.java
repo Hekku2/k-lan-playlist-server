@@ -11,6 +11,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.StreamingOutput;
 
+import net.kokkeli.ISettings;
+
+import com.google.inject.Inject;
 import com.sun.jersey.api.NotFoundException;
 
 /**
@@ -21,9 +24,20 @@ import com.sun.jersey.api.NotFoundException;
  */
 @Path("/resource")
 public class StaticResources {
-    private static final String CSS_FOLDER = "target/classes/net/kokkeli/resources/css/";
-    private static final String IMAGES_FOLDER = "target/classes/net/kokkeli/resources/images/";
-    private static final String JS_FOLDER = "target/classes/net/kokkeli/resources/js/";
+    private final String CSS_FOLDER;
+    private final String IMAGES_FOLDER;
+    private final String JS_FOLDER;
+    
+    /**
+     * Creates static resources.
+     * @param settings Settings
+     */
+    @Inject
+    public StaticResources(ISettings settings){
+        CSS_FOLDER = settings.getResourcesFolder() + "css/";
+        IMAGES_FOLDER = settings.getResourcesFolder() + "images/";
+        JS_FOLDER = settings.getResourcesFolder() + "js/";
+    }
     
     /**
      * Loads css-file with given name from resources.
@@ -68,7 +82,7 @@ public class StaticResources {
      * @param file File name
      * @return Streaming output
      */
-    private StreamingOutput getStream(final String source, final String file) {
+    private static StreamingOutput getStream(final String source, final String file) {
         return new StreamingOutput() {
             /**
              * Writes file to output-stream.

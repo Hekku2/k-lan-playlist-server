@@ -7,3 +7,4 @@ PasswordSalt=hgdfskh4341%
 VlcLocation=F:\\vlc-2.0.5
 ServerUri=http://localhost/
 Port=9998
+ResourcesFolder=target/classes/net/kokkeli/resources/

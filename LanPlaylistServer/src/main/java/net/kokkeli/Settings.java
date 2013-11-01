@@ -25,6 +25,7 @@ public class Settings implements ISettings {
     private String passwordSalt;
     private String vlcLocation;
     private String serverUri;
+    private String resourcesFolder;
     private int port;
     
     /**
@@ -150,6 +151,11 @@ public class Settings implements ISettings {
         return UriBuilder.fromUri(serverUri + endPart).port(port).build();
     }
     
+    @Override
+    public String getResourcesFolder() {
+        return resourcesFolder;
+    }
+    
     /**
      * Loads settings
      * @param key Key
@@ -181,6 +187,9 @@ public class Settings implements ISettings {
             break;
         case "Port":
             port = Integer.parseInt(value);
+            break;
+        case "ResourcesFolder":
+            resourcesFolder = value;
             break;
         default:
             throw new IOException("Invalid setting: " + key);
