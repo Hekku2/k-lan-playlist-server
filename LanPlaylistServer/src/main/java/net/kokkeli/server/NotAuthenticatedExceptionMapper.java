@@ -22,6 +22,7 @@ public class NotAuthenticatedExceptionMapper implements ExceptionMapper<NotAuthe
      * Creates response from NotAuthenticatedException
      * @param ex Exception
      */
+    @Override
     public Response toResponse(NotAuthenticatedException ex) {
         return Response.seeOther(UriBuilder.fromUri(settings.getBaseURI()).path("/authentication").build()).build();
     }

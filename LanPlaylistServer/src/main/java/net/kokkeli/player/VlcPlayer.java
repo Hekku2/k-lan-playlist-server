@@ -146,6 +146,7 @@ public class VlcPlayer implements IPlayer {
             logger.log("Media stopped.", LogSeverity.TRACE);
         }
         
+        @Override
         public void finished(MediaPlayer player){
             logger.log("Track finished.", LogSeverity.TRACE);
             if (playListPlaying || !trackQueue.isEmpty()){

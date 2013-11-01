@@ -23,6 +23,7 @@ import static org.mockito.Mockito.*;
 public class TestBaseResource extends ResourceTestsBase{
     private BaseResource resource;
     
+    @Override
     public void before() throws NotFoundException, ServiceException, NotFoundInDatabase {
         resource = new BaseResource(getLogger(), getTemplateService(), getPlayer(), getSessionService(), getSettings()){
             

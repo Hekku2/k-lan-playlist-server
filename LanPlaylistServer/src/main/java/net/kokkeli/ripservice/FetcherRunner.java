@@ -34,6 +34,7 @@ public class FetcherRunner implements Runnable {
     /**
      * Runs handling and sleeps.
      */
+    @Override
     public void run() {
         try {
             while(true){

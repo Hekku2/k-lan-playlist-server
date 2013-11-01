@@ -35,6 +35,7 @@ public class TestUserResource extends ResourceTestsBase{
     
     private UsersResource userResource;
 
+    @Override
     public void before() throws NotFoundInDatabase, ServiceException {
         mockUserService = mock(IUserService.class);
         

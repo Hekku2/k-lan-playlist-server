@@ -18,6 +18,7 @@ public class ServiceExceptionMapper implements ExceptionMapper<ServiceException>
      * Creates response fro render Exception
      * @param ex Exception
      */
+    @Override
     public Response toResponse(ServiceException ex) {
         return Response.status(500).
             entity(ex.getMessage()).

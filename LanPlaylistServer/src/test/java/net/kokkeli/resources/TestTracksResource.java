@@ -27,6 +27,7 @@ public class TestTracksResource extends ResourceTestsBase{
     private ITrackService trackService;
     private IFileSystem fileSystem;
     
+    @Override
     public void before() throws NotFoundInDatabase, ServiceException {
         trackService = mock(ITrackService.class);
         fileSystem = mock(IFileSystem.class);

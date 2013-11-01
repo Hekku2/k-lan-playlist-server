@@ -20,6 +20,7 @@ public class YouTubeRipper implements IFetcher{
         this.logger = logger;
     }
     
+    @Override
     public void fetch(FetchRequest request) throws FetchFailedException{
         try {
             String command = String.format("%s\\vlc.exe \"%s\" %s --sout=#transcode{acodec=vorb,channels=2}:standard{access=file,mux=ogg,dst=\"%s\"} vlc://quit",

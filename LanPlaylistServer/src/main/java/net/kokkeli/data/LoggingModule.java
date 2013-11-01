@@ -11,6 +11,7 @@ public class LoggingModule extends AbstractModule {
     /**
      * Configures annotation for logging module.
      */
+    @Override
     protected void configure() {
         bind(ILogger.class).to(Logging.class);
     }

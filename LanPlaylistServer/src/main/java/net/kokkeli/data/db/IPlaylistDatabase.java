@@ -27,5 +27,6 @@ public interface IPlaylistDatabase extends IDatabase<PlayList>{
      * Note: Id of added playlist is changed to a created one.
      * @throws DatabaseException Thrown if thre is problem in database.
      */
+    @Override
     PlayList add(PlayList playlist) throws DatabaseException;
 }

@@ -13,6 +13,7 @@ public class RenderExceptionMapper implements ExceptionMapper<RenderException> {
      * Creates response fro render Exception
      * @param ex Exception
      */
+    @Override
     public Response toResponse(RenderException ex) {
         return Response.status(500).
             entity(ex.getMessage()).

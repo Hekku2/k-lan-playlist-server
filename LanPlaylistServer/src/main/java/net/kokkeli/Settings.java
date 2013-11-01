@@ -33,6 +33,7 @@ public class Settings implements ISettings {
      * @param file File
      * @throws IOException
      */
+    @Override
     public void loadSettings(String file) throws IOException{
         DataInputStream in = null;
         BufferedReader br = null;
@@ -74,6 +75,7 @@ public class Settings implements ISettings {
      * Location of database.
      * @return Location of database.
      */
+    @Override
     public String getDatabaseLocation(){
         return databaseLocation;
     }
@@ -82,6 +84,7 @@ public class Settings implements ISettings {
      * Returns location of library
      * @return Location of library
      */
+    @Override
     public String getLibLocation(){
         return libLocation;
     }
@@ -90,6 +93,7 @@ public class Settings implements ISettings {
      * Returns location of templates
      * @return Location of templates
      */
+    @Override
     public String getTemplatesLocation() {
         return templatesLocation;
     }
@@ -98,6 +102,7 @@ public class Settings implements ISettings {
      * Returns location of tracks
      * @return location of tracks.
      */
+    @Override
     public String getTracksFolder() {
         return tracksFolder;
     }
@@ -106,6 +111,7 @@ public class Settings implements ISettings {
      * Returns password salt
      * @return password salt
      */
+    @Override
     public String getPasswordSalt() {
         return passwordSalt;
     }
@@ -114,6 +120,7 @@ public class Settings implements ISettings {
      * Returns location of VLC
      * @return location of vlc
      */
+    @Override
     public String getVlcLocation() {
         return vlcLocation;
     }
@@ -122,6 +129,7 @@ public class Settings implements ISettings {
      * Returns uri of server
      * @return uri of server
      */
+    @Override
     public String getServerUri() {
         return serverUri;
     }
@@ -138,6 +146,7 @@ public class Settings implements ISettings {
      * Build base uri for localhost.
      * @return Base uri for localhost
      */
+    @Override
     public URI getBaseURI() {
         return UriBuilder.fromUri(serverUri).port(port).build();
     }
@@ -147,6 +156,7 @@ public class Settings implements ISettings {
      * @param endPart End part
      * @return Uri
      */
+    @Override
     public URI getURI(String endPart){
         return UriBuilder.fromUri(serverUri + endPart).port(port).build();
     }

@@ -89,6 +89,7 @@ public class User {
      * @param object Compared object
      * @return True, if objects are same
      */
+    @Override
     public boolean equals(Object object){
         if (object == null || object.getClass() != this.getClass())
             return false;

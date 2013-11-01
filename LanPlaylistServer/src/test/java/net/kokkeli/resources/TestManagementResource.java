@@ -16,6 +16,7 @@ import com.sun.jersey.api.NotFoundException;
 public class TestManagementResource extends ResourceTestsBase{
     private ManagementResource resource;
     
+    @Override
     public void before() throws NotFoundException, ServiceException, NotFoundInDatabase {
         resource = new ManagementResource(getLogger(), getTemplateService(), getPlayer(), getSessionService(), getSettings());
     }

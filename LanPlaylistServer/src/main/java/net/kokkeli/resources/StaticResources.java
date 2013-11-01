@@ -90,6 +90,7 @@ public class StaticResources {
              * @exception<IOException> Thrown if there is unknown problem with input.
              * @exception<NotFoundException> Thrown if given file was not found
              */
+            @Override
             public void write(OutputStream output) throws IOException, NotFoundException {
                 try {
                     FileInputStream fis = new FileInputStream(source + file);

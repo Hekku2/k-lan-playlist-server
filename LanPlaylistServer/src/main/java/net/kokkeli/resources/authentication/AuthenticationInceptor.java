@@ -44,14 +44,9 @@ public class AuthenticationInceptor implements MethodInterceptor{
     protected ISettings settings;
     
     /**
-     * Creates authencation inceptor for catching Access-annotations
-     */
-    public AuthenticationInceptor(){
-    }
-    
-    /**
      * This is invoked before method with Access-annotation is invoked.
      */
+    @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
         try {
             ILogger logger = new Logging();

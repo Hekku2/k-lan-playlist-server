@@ -36,6 +36,7 @@ public class SessionService implements ISessionService{
      * @param authId Authentication id of session
      * @throws NotFoundInDatabase thrown if there is no session with given authentication.
      */
+    @Override
     public Session get(String authId) throws NotFoundInDatabase{
         if (!sessions.containsKey(authId))
             throw new NotFoundInDatabase("Auth not found in database.");

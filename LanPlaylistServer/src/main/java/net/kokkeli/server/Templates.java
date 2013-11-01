@@ -55,6 +55,7 @@ public class Templates implements ITemplateService {
      * @return Template processed with model.
      * @throws RenderException Thrown if there is exception with rendering.
      */
+    @Override
     public final String process(String template, BaseModel model) throws RenderException {
         if (model == null){
             throw new RenderException("Model can't be null.");
