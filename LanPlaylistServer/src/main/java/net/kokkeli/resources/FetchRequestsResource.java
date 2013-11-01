@@ -217,7 +217,7 @@ public class FetchRequestsResource extends BaseResource{
      * @param formParams Form Params
      * @return Created model
      */
-    private ModelFetchRequestCreate createModel(MultivaluedMap<String, String> formParams) {
+    private static ModelFetchRequestCreate createModel(MultivaluedMap<String, String> formParams) {
         ModelFetchRequestCreate model = new ModelFetchRequestCreate();
         model.setHandler(formParams.getFirst(FORM_HANDLER).trim());
         model.setDestination(formParams.getFirst(FORM_DESTINATION).trim());

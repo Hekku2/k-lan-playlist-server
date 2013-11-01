@@ -85,7 +85,7 @@ public class Templates implements ITemplateService {
      * @return Processed template.
      * @throws RenderException Thrown if there is exception with rendering.
      */
-    public final String process(String template) throws RenderException{
+    public final static String process(String template) throws RenderException{
         
         Template temp;
         try {

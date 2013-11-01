@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class TestUser {
+    @SuppressWarnings("static-method")
     @Test
     public void testUserEquals(){
         final String username = "taisto";

@@ -7,14 +7,15 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class TestServiceExceptionMapper {
-
+    private ServiceExceptionMapper mapper;
+    
     @Test
     public void testToResponseBuildsCorrectMessage(){
         String message = "olo";
         
-        ServiceExceptionMapper m = new ServiceExceptionMapper();
+        mapper = new ServiceExceptionMapper();
 
-        Response r = m.toResponse(new ServiceException(message));
+        Response r = mapper.toResponse(new ServiceException(message));
         Assert.assertEquals(message, r.getEntity().toString());
         Assert.assertEquals(500, r.getStatus());
     }

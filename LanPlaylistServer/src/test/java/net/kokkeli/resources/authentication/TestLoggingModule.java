@@ -14,11 +14,12 @@ import com.google.inject.Provider;
  * @author Hekku2
  */
 public class TestLoggingModule {
-   
+    private Provider<ILogger> testLogger;
+    
     @Test
     public void testLoggingModuleCreation() throws Throwable {
         Injector injector = Guice.createInjector(new LoggingModule());
-        Provider<ILogger> testLogger = injector.getProvider(ILogger.class);
+        testLogger = injector.getProvider(ILogger.class);
         
         testLogger.get();
     }

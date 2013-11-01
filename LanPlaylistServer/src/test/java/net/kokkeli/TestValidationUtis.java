@@ -6,6 +6,7 @@ import org.junit.Test;
 
 public class TestValidationUtis {
     
+    @SuppressWarnings("static-method")
     @Test
     public void testContainsOnlyNumbersAndLettersAndWhitespace(){
         Assert.assertTrue(ValidationUtils.containsOnlyNumbersAndLettersAndWhiteSpace(""));
@@ -24,6 +25,7 @@ public class TestValidationUtis {
         Assert.assertFalse(ValidationUtils.containsOnlyNumbersAndLettersAndWhiteSpace("("));
     }
     
+    @SuppressWarnings("static-method")
     @Test
     public void testIsEmptyWorks(){
         Assert.assertTrue(ValidationUtils.isEmpty(""));
@@ -37,6 +39,7 @@ public class TestValidationUtis {
         Assert.assertFalse(ValidationUtils.isEmpty("       \tH"));
     }
     
+    @SuppressWarnings("static-method")
     @Test
     public void testIsValidUsername(){
         Assert.assertTrue(ValidationUtils.isValidUsername("ghjjk"));

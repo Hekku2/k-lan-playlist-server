@@ -59,7 +59,7 @@ public abstract class ResourceTestsBase {
         before();
     }
     
-    public HttpServletRequest buildRequest(){
+    public static HttpServletRequest buildRequest(){
         HttpServletRequest req = mock(HttpServletRequest.class);
         when(req.getCookies()).thenReturn(buildAuthenticationCookies());
         
@@ -130,7 +130,7 @@ public abstract class ResourceTestsBase {
         return mockSessionService;
     }
     
-    private Cookie[] buildAuthenticationCookies(){
+    private static Cookie[] buildAuthenticationCookies(){
         Cookie[] cookies = new Cookie[1];
         cookies[0] = new Cookie("auth", "");
         

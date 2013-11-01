@@ -284,7 +284,7 @@ public class UsersResource extends BaseResource {
      * @param formParams
      * @throws BadRequestException
      */
-    private void containsNeededFieldsForEdit(MultivaluedMap<String, String> formParams) throws BadRequestException{
+    private static void containsNeededFieldsForEdit(MultivaluedMap<String, String> formParams) throws BadRequestException{
         if (!formParams.containsKey(FORM_ID)){
             throw new BadRequestException("User edit post did not contain needed fields.");
         }
@@ -297,7 +297,7 @@ public class UsersResource extends BaseResource {
      * @param formParams
      * @throws BadRequestException
      */
-    private void containsNeededFieldsForCreate(MultivaluedMap<String, String> formParams) throws BadRequestException{
+    private static void containsNeededFieldsForCreate(MultivaluedMap<String, String> formParams) throws BadRequestException{
         if (!formParams.containsKey(FORM_USERNAME) || !formParams.containsKey(FORM_ROLE)){
             throw new BadRequestException("User edit post did not contain needed fields.");
         }
@@ -309,7 +309,7 @@ public class UsersResource extends BaseResource {
      * @return Created ModelUser
      * @throws BadRequestException Thrown formParams contain illegal input.
      */
-    private ModelUser createEditUser(MultivaluedMap<String, String> formParams) throws BadRequestException{
+    private static ModelUser createEditUser(MultivaluedMap<String, String> formParams) throws BadRequestException{
         long id;
         
         try {
@@ -336,7 +336,7 @@ public class UsersResource extends BaseResource {
      * @return
      * @throws BadRequestException
      */
-    private ModelUser createUser(MultivaluedMap<String, String> formParams) throws BadRequestException{
+    private static ModelUser createUser(MultivaluedMap<String, String> formParams) throws BadRequestException{
         String username = formParams.getFirst(FORM_USERNAME).trim();
         
         Role role;

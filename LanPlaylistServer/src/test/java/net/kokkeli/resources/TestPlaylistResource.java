@@ -213,7 +213,7 @@ public class TestPlaylistResource extends ResourceTestsBase {
         }
     }
 
-    private MultivaluedMap<String, String> createCreatePost(String name) {
+    private static MultivaluedMap<String, String> createCreatePost(String name) {
         @SuppressWarnings("unchecked")
         MultivaluedMap<String, String> map = mock(MultivaluedMap.class);
 

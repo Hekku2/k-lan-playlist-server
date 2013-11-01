@@ -458,7 +458,7 @@ public class PlaylistsResource extends BaseResource {
      * @throws BadRequestException
      *             Thrown formParams contain illegal input.
      */
-    private ModelPlaylist createPlaylist(MultivaluedMap<String, String> formParams) throws BadRequestException {
+    private static ModelPlaylist createPlaylist(MultivaluedMap<String, String> formParams) throws BadRequestException {
         String name = formParams.getFirst(FORM_NAME);
 
         if (name == null) {

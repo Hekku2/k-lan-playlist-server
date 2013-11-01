@@ -181,7 +181,7 @@ public class TestUserResource extends ResourceTestsBase{
      * @param role
      * @return
      */
-    private MultivaluedMap<String, String> createUserPost(String username, Role role){
+    private static MultivaluedMap<String, String> createUserPost(String username, Role role){
         @SuppressWarnings("unchecked")
         MultivaluedMap<String, String> map = mock(MultivaluedMap.class);
         
@@ -199,7 +199,7 @@ public class TestUserResource extends ResourceTestsBase{
      * @param role
      * @return
      */
-    private MultivaluedMap<String, String> editUserPost(long id, String username, Role role){
+    private static MultivaluedMap<String, String> editUserPost(long id, String username, Role role){
         MultivaluedMap<String, String> map = createUserPost(username, role);
         
         when(map.containsKey(FORM_ID)).thenReturn(true);

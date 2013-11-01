@@ -210,7 +210,7 @@ public class FetchRequestsTable {
      * @param requestId Request id
      * @return Create String
      */
-    private String createRemove(long requestId) {
+    private static String createRemove(long requestId) {
         return String.format("DELETE FROM %s WHERE Id=%s;", TABLENAME, requestId);
     }
 
@@ -219,7 +219,7 @@ public class FetchRequestsTable {
      * @param status Status
      * @return Created string
      */
-    private String createStatusRemove(FetchStatus status) {
+    private static String createStatusRemove(FetchStatus status) {
         return String.format("DELETE FROM %s WHERE FetchStatus=%s;", TABLENAME, status.getStatus());
     }
 
@@ -229,7 +229,7 @@ public class FetchRequestsTable {
      * @param status New status
      * @return Created string
      */
-    private String createStatusUpdateString(long id, FetchStatus status) {
+    private static String createStatusUpdateString(long id, FetchStatus status) {
         return String.format("UPDATE %s SET FetchStatus=%s WHERE Id=%s;",TABLENAME, status.getStatus(), id);
     }
 
@@ -238,7 +238,7 @@ public class FetchRequestsTable {
      * @param item Fetch request to insert
      * @return Insert String
      */
-    private String createInsertString(FetchRequest item) {
+    private static String createInsertString(FetchRequest item) {
         return String.format("INSERT INTO %s(Location, Handler, DestinationFile, LastUpdated, FetchStatus, Track) VALUES ('%s', '%s', '%s', '%s', %s, %s); ",
                 TABLENAME,
                 item.getLocation(),

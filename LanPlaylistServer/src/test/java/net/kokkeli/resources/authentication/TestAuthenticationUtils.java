@@ -18,6 +18,7 @@ import org.junit.Test;
 public class TestAuthenticationUtils {
     private static String AUTH = "auth";
     
+    @SuppressWarnings("static-method")
     @Test
     public void testExtractingCookieLoginThrowsException() {
         try {
@@ -35,6 +36,7 @@ public class TestAuthenticationUtils {
         }
     }
     
+    @SuppressWarnings("static-method")
     @Test
     public void testExtractingLoginCookieFindsCookie() throws AuthenticationCookieNotFound{
         Cookie[] cookies = new Cookie[]{
@@ -46,6 +48,7 @@ public class TestAuthenticationUtils {
         Assert.assertEquals("test", cook.getValue());
     }
     
+    @SuppressWarnings("static-method")
     @Test
     public void testExtractingAccessAnnotationThrowsException(){
         try {
@@ -63,6 +66,7 @@ public class TestAuthenticationUtils {
         }
     }
     
+    @SuppressWarnings("static-method")
     @Test
     public void testExtractingAccessAnnotationWorks() throws ServerException{
         Annotation[] testAnnotations = new Annotation[]{

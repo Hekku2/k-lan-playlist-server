@@ -73,7 +73,7 @@ public class TestTemplates {
             ISettings mockSettings = mock(ISettings.class);
             when(mockSettings.getTemplatesLocation()).thenReturn("");
             
-            new Templates(mockSettings);
+            templateService = new Templates(mockSettings);
         } catch (IOException e) {
             Assert.assertEquals("", e.getMessage());
         }
