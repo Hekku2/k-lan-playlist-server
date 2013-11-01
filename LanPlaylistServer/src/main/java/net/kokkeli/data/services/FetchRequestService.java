@@ -68,7 +68,7 @@ public class FetchRequestService implements IFetchRequestService {
             
             //If playlist is set, add this track to it.
             if (request.getPlaylist() != null){
-                PlayList playlist = playlists.get(request.getPlaylist().getId());;
+                PlayList playlist = playlists.get(request.getPlaylist().getId());
                 playlist.getItems().add(track);
                 
                 playlists.update(playlist);

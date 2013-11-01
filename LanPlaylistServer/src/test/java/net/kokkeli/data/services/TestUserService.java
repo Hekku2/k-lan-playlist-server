@@ -62,7 +62,7 @@ public class TestUserService {
         } catch (ServiceException e) {
             Assert.assertEquals("There was problem with database.", e.getMessage());
         }
-    };
+    }
     
     @Test
     public void testUserServiceIdGetReturnsCorrectUser() throws NotFoundInDatabase, ServiceException{

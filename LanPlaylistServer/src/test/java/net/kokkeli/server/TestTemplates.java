@@ -82,7 +82,7 @@ public class TestTemplates {
             ISettings mockSettings = mock(ISettings.class);
             when(mockSettings.getTemplatesLocation()).thenReturn(nonExistingTemplate);
             
-            new Templates(mockSettings);
+            templateService = new Templates(mockSettings);
         } catch (IOException e) {
             Assert.assertEquals(nonExistingTemplate +" does not exist.", e.getMessage());
         }
