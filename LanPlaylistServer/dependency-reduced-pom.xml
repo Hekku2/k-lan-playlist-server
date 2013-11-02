@@ -5,7 +5,39 @@
   <artifactId>lanplaylistserver</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.eclipse.m2e</groupId>
+          <artifactId>lifecycle-mapping</artifactId>
+          <version>1.0.0</version>
+          <configuration>
+            <lifecycleMappingMetadata>
+              <pluginExecutions>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <versionRange>[0.6.3.201306030806,)</versionRange>
+                    <goals>
+                      <goal>prepare-agent</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore />
+                  </action>
+                </pluginExecution>
+              </pluginExecutions>
+            </lifecycleMappingMetadata>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
     <plugins>
+      <plugin>
+        <artifactId>maven-pmd-plugin</artifactId>
+        <version>3.34</version>
+      </plugin>
       <plugin>
         <artifactId>maven-shade-plugin</artifactId>
         <version>2.0</version>
@@ -44,6 +76,46 @@
           <target>1.7</target>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>0.6.3.201306030806</version>
+        <executions>
+          <execution>
+            <id>prepare-agent</id>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>report</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>check</id>
+            <goals>
+              <goal>check</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <rule>
+                  <element>BUNDLE</element>
+                  <limits>
+                    <limit>
+                      <counter>COMPLEXITY</counter>
+                      <value>COVEREDRATIO</value>
+                      <minimum>0.10</minimum>
+                    </limit>
+                  </limits>
+                </rule>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
   <repositories>
@@ -53,6 +125,14 @@
       <url>http://www.capricasoftware.co.uk/repo</url>
     </repository>
   </repositories>
+  <reporting>
+    <plugins>
+      <plugin>
+        <artifactId>maven-pmd-plugin</artifactId>
+        <version>3.34</version>
+      </plugin>
+    </plugins>
+  </reporting>
   <properties>
     <project.build.sourceEncoding>Cp1252</project.build.sourceEncoding>
   </properties>

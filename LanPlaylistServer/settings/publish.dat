@@ -1,0 +1,10 @@
+#Default settings file
+DatabaseLocation=db/database.db
+LibLocation=lib
+TemplatesLocation=resources/views
+TracksFolder=tracks
+PasswordSalt=hgdfskh4341%
+VlcLocation=F:\\vlc-2.0.5
+ServerUri=http://localhost/
+Port=9998
+ResourcesFolder=resources/

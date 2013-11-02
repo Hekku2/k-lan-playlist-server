@@ -1,0 +1,1 @@
+java -jar lanplayer.jar settings\publish.dat

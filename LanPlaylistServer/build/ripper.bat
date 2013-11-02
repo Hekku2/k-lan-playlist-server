@@ -1,0 +1,1 @@
+java -cp lanplayer.jar net.kokkeli.ripservice.Program

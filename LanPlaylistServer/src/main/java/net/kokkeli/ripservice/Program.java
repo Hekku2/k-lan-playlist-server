@@ -40,6 +40,8 @@ public class Program {
             System.out.println(e.toString());
         }
         
+       //TODO Check vlc existance, so user gets better errormessage...
+        
         IFetchRequestDatabase fetcherDatabase = new FetchRequestDatabase(settings);
         
         IFetcher ripper = new YouTubeRipper(settings, logger);
