@@ -1,1 +1,1 @@
-java -cp lanplayer.jar net.kokkeli.ripservice.Program
+java -cp lanplayer.jar net.kokkeli.ripservice.Program settings\publish.dat
