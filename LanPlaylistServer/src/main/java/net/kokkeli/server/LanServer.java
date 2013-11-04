@@ -34,8 +34,6 @@ public class LanServer {
      * @throws ServerException thrown if there is problem width server.
      */
     public LanServer(String settingsFile) throws ServerException{
-        Injector injector = Guice.createInjector(new LoggingModule());
-        logger = injector.getInstance(ILogger.class);
         filesystem = new FileSystem();
         
         settings = new Settings();
@@ -44,6 +42,8 @@ public class LanServer {
         } catch (IOException e) {
             throw new ServerException("Settings file " + settingsFile + " is missings!");
         }
+        Injector injector = Guice.createInjector(new LoggingModule(settings));
+        logger = injector.getInstance(ILogger.class);
         
         if (!filesystem.fileExists(settings.getDatabaseLocation())){
             throw new ServerException(String.format("Databasefile did not exist: %s", settings.getDatabaseLocation()));

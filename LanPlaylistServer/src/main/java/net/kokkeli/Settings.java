@@ -9,6 +9,8 @@ import java.net.URI;
 
 import javax.ws.rs.core.UriBuilder;
 
+import net.kokkeli.data.LogSeverity;
+
 /**
  * Class for settings
  * @author Hekku2
@@ -26,6 +28,7 @@ public class Settings implements ISettings {
     private String vlcLocation;
     private String serverUri;
     private String resourcesFolder;
+    private LogSeverity logSeverity = LogSeverity.TRACE;
     private int port;
     
     /**
@@ -164,6 +167,11 @@ public class Settings implements ISettings {
     @Override
     public String getResourcesFolder() {
         return resourcesFolder;
+    }
+    
+    @Override
+    public LogSeverity getLogSeverity() {
+        return logSeverity;
     }
     
     /**

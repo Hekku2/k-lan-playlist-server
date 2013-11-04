@@ -7,7 +7,7 @@ public class Program {
 
 	/**
 	 * Starting point of program.
-	 * @param args Not used.
+	 * @param args Used for settings file
 	 * @throws Exception 
 	 */
 	public static void main(String[] args) throws Exception {    

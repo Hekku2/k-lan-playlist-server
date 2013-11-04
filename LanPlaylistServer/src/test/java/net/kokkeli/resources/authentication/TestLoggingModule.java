@@ -18,7 +18,7 @@ public class TestLoggingModule {
     
     @Test
     public void testLoggingModuleCreation() throws Throwable {
-        Injector injector = Guice.createInjector(new LoggingModule());
+        Injector injector = Guice.createInjector(new LoggingModule(null));
         testLogger = injector.getProvider(ILogger.class);
         
         testLogger.get();

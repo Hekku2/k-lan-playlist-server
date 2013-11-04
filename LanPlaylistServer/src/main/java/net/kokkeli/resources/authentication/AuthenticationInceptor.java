@@ -8,7 +8,6 @@ import javax.ws.rs.core.UriBuilder;
 import net.kokkeli.ISettings;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.LogSeverity;
-import net.kokkeli.data.Logging;
 import net.kokkeli.data.Role;
 import net.kokkeli.data.db.NotFoundInDatabase;
 import net.kokkeli.data.services.ISessionService;
@@ -49,7 +48,6 @@ public class AuthenticationInceptor implements MethodInterceptor{
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
         try {
-            ILogger logger = new Logging();
             
             logger.log("Checking if all can access...", LogSeverity.TRACE);
             Access access = AuthenticationUtils.extractRoleAnnotation(invocation.getMethod().getAnnotations());

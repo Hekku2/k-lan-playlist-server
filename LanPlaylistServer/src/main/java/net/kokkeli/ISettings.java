@@ -3,6 +3,8 @@ package net.kokkeli;
 import java.io.IOException;
 import java.net.URI;
 
+import net.kokkeli.data.LogSeverity;
+
 public interface ISettings {
     
     /**
@@ -54,8 +56,17 @@ public interface ISettings {
      */
     String getServerUri();
     
+    /**
+     * Returns base uri
+     * @returnBase uri
+     */
     URI getBaseURI();
     
+    /**
+     * Uri of server
+     * @param endPart
+     * @return
+     */
     URI getURI(String endPart);
 
     /**
@@ -63,4 +74,10 @@ public interface ISettings {
      * @return Folder of resources
      */
     String getResourcesFolder();
+
+    /**
+     * Returns log severity.
+     * @return Log severity
+     */
+    LogSeverity getLogSeverity();
 }

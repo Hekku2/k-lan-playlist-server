@@ -11,6 +11,7 @@ import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.Logging;
 import net.kokkeli.data.db.FetchRequestDatabase;
 import net.kokkeli.data.db.IFetchRequestDatabase;
+import net.kokkeli.data.db.LogDatabase;
 
 /**
  * Program running rippers
@@ -26,7 +27,7 @@ public class Program {
      */
     public static void main(String[] args) throws InterruptedException, IOException {
         String settingsFile = "settings/default.dat";
-        ILogger logger = new Logging();
+        
         
         if (args.length > 0){
             settingsFile = args[0];
@@ -37,8 +38,9 @@ public class Program {
             settings.loadSettings(settingsFile);
         } catch (IOException e) {
             System.out.println("Unable to load settings from file " + settingsFile);
-            System.out.println(e.toString());
         }
+        
+        ILogger logger = new Logging("Ripper", settings, new LogDatabase(settings));
         
        //TODO Check vlc existance, so user gets better errormessage...
         

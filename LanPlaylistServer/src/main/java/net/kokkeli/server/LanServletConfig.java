@@ -11,9 +11,11 @@ import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Logging;
 import net.kokkeli.data.db.FetchRequestDatabase;
 import net.kokkeli.data.db.IFetchRequestDatabase;
+import net.kokkeli.data.db.ILogDatabase;
 import net.kokkeli.data.db.IPlaylistDatabase;
 import net.kokkeli.data.db.ITrackDatabase;
 import net.kokkeli.data.db.IUserDatabase;
+import net.kokkeli.data.db.LogDatabase;
 import net.kokkeli.data.db.PlaylistDatabase;
 import net.kokkeli.data.db.TrackDatabase;
 import net.kokkeli.data.db.UserDatabase;
@@ -83,6 +85,7 @@ public class LanServletConfig extends GuiceServletContextListener {
                 bind(IUserDatabase.class).to(UserDatabase.class).asEagerSingleton();
                 bind(ITrackDatabase.class).to(TrackDatabase.class).asEagerSingleton();
                 bind(IFetchRequestDatabase.class).to(FetchRequestDatabase.class).asEagerSingleton();
+                bind(ILogDatabase.class).to(LogDatabase.class).asEagerSingleton();
                 
                 //Services
                 bind(ISessionService.class).to(SessionService.class).asEagerSingleton();

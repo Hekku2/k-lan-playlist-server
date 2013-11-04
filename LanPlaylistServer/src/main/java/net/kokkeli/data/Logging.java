@@ -1,6 +1,12 @@
 package net.kokkeli.data;
 
-import java.util.ArrayList;
+import java.util.Date;
+
+import com.google.inject.Inject;
+
+import net.kokkeli.ISettings;
+import net.kokkeli.data.db.DatabaseException;
+import net.kokkeli.data.db.ILogDatabase;
 
 /**
  * Logging class.
@@ -8,9 +14,21 @@ import java.util.ArrayList;
  *
  */
 public class Logging implements ILogger {
-    private static Logging logger = new Logging();
+    private final ILogDatabase logDatabase;
+    private final ISettings settings;
+    private final String source;
     
-    private ArrayList<String> logLines = new ArrayList<String>();
+    /**
+     * Creates logging
+     * @param settings
+     * @param logDatabase
+     */
+    @Inject
+    public Logging(String source, ISettings settings, ILogDatabase logDatabase){
+        this.logDatabase = logDatabase;
+        this.settings = settings;
+        this.source = source;
+    }
     
     /**
      * Writes given message to log.
@@ -19,7 +37,23 @@ public class Logging implements ILogger {
      */
     @Override
     public void log(String message, LogSeverity severity){
-        logger.logLines.add(severity + ": " + message);
+        if (severity.getSeverity() < settings.getLogSeverity().getSeverity())
+            return;
+        
+        //TODO Log severity check
+        LogRow row = new LogRow();
+        row.setMessage(message);
+        row.setSeverity(severity);
+        row.setSource(source);
+        row.setTimestamp(new Date());
         System.out.println(severity + ": " + message);
+        try {
+            logDatabase.add(row);
+        } catch (DatabaseException e) {
+            System.out.println("Logging failed: ");
+            e.printStackTrace();
+        }
+        
+        
     }
 }

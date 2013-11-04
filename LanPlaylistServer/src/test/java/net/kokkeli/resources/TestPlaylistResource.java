@@ -118,6 +118,7 @@ public class TestPlaylistResource extends ResourceTestsBase {
             NotAuthenticatedException, IOException {
         final String filename = "filename";
 
+        @SuppressWarnings("resource")
         InputStream mockStream = mock(InputStream.class);
         FormDataContentDisposition mockDisposition = mock(FormDataContentDisposition.class);
         when(mockDisposition.getFileName()).thenReturn(filename);
@@ -141,6 +142,7 @@ public class TestPlaylistResource extends ResourceTestsBase {
                         any(BaseModel.class))).thenAnswer(answer);
 
         final String filename = "filename";
+        @SuppressWarnings("resource")
         InputStream mockStream = mock(InputStream.class);
         FormDataContentDisposition mockDisposition = mock(FormDataContentDisposition.class);
         when(mockDisposition.getFileName()).thenReturn(filename);

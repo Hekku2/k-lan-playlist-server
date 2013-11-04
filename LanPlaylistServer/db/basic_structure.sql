@@ -36,3 +36,11 @@ CREATE TABLE fetch_requests(
 	Track INTEGER NOT NULL,
 	FOREIGN KEY(Track) REFERENCES tracks(Id)
 );
+
+CREATE TABLE logs(
+	Id INTEGER NOT NULL PRIMARY KEY,
+	Timestamp TEXT NOT NULL,
+	Severity INTEGER NOT NULL,
+	Message TEXT NOT NULL,
+	Source TEXT NOT NULL
+);
