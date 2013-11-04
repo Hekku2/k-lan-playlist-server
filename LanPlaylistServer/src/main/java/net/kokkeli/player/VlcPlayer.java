@@ -38,7 +38,6 @@ public class VlcPlayer implements IPlayer {
      */
     @Inject
     public VlcPlayer(ISettings setting, ILogger logger, IPlaylistService playlistService){
-        
         String vlcLibName = RuntimeUtil.getLibVlcLibraryName();
         NativeLibrary.addSearchPath(vlcLibName, setting.getVlcLocation());
         Native.loadLibrary(vlcLibName, LibVlc.class);
