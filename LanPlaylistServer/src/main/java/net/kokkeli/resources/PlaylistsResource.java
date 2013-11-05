@@ -56,7 +56,7 @@ public class PlaylistsResource extends BaseResource {
     private static final String PLAYLIST_TRACK_ADD_TEMPLATE = "playlist/add.ftl";
     private static final String PLAYLIST_DETAILS_TEMPLATE = "playlist/details.ftl";
     private static final String PLAYLIST_CREATE_TEMPLATE = "playlist/create.ftl";
-    private static final String PLAYLIST_TRACK_ADD_YOUTUBE_TEMPLATE = "playlist/addYoutube.ftl";
+    private static final String PLAYLIST_TRACK_ADD_VLC_TEMPLATE = "playlist/addVlc.ftl";
 
     private static final String FORM_NAME = "name";
     private static final String FORM_ID = "id";
@@ -154,7 +154,7 @@ public class PlaylistsResource extends BaseResource {
     }
 
     /**
-     * Playlist youtube add get.
+     * Playlist vlc add get.
      * 
      * @param req
      *            Request
@@ -167,8 +167,8 @@ public class PlaylistsResource extends BaseResource {
     @GET
     @Produces("text/html")
     @Access(Role.USER)
-    @Path("/add/youtube/{playlistId: [0-9]*}")
-    public Response addYoutube(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId)
+    @Path("/add/vlc/{playlistId: [0-9]*}")
+    public Response addVlc(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId)
             throws NotAuthenticatedException {
         BaseModel model = buildBaseModel(req);
 
@@ -177,7 +177,7 @@ public class PlaylistsResource extends BaseResource {
         model.setModel(item);
 
         try {
-            return Response.ok(templates.process(PLAYLIST_TRACK_ADD_YOUTUBE_TEMPLATE, model)).build();
+            return Response.ok(templates.process(PLAYLIST_TRACK_ADD_VLC_TEMPLATE, model)).build();
         } catch (RenderException e) {
             return handleRenderingError(model, e);
         }
@@ -275,9 +275,9 @@ public class PlaylistsResource extends BaseResource {
     @POST
     @Produces("text/html")
     @Access(Role.USER)
-    @Path("/add/youtube/{playlistId: [0-9]*}")
+    @Path("/add/vlc/{playlistId: [0-9]*}")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public Response addYoutube(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId,
+    public Response addVlc(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId,
             @FormDataParam("artist") String artist, @FormDataParam("track") String track,
             @FormDataParam("url") String url) throws ServiceException, NotAuthenticatedException {
         BaseModel model = buildBaseModel(req);
@@ -299,7 +299,7 @@ public class PlaylistsResource extends BaseResource {
             
             FetchRequest newRequest = new FetchRequest();
             newRequest.setDestinationFile(destination);
-            newRequest.setHandler("youtube");
+            newRequest.setHandler("vlc");
             newRequest.setLocation(url);
             newRequest.setStatus(FetchStatus.WAITING);
             PlayList playlist = new PlayList(playlistId);

@@ -46,7 +46,7 @@ public class Program {
         
         IFetchRequestDatabase fetcherDatabase = new FetchRequestDatabase(settings);
         
-        IFetcher ripper = new YouTubeRipper(settings, logger);
+        IFetcher ripper = new VlcRipper(settings, logger);
         ExecutorService executor = Executors.newFixedThreadPool(1);
         Runnable worker = new FetcherRunner(logger, ripper, fetcherDatabase);
         executor.execute(worker);

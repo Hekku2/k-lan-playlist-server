@@ -7,15 +7,15 @@ import net.kokkeli.data.FetchRequest;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.LogSeverity;
 
-public class YouTubeRipper implements IFetcher{
+public class VlcRipper implements IFetcher{
     private final ISettings settings;
     private final ILogger logger;
     
-    private final static String TYPE = "youtube";
+    private final static String TYPE = "vlc";
     
     private final static String START_MINIMIZED = "--qt-start-minimized";
     
-    public YouTubeRipper(ISettings setting, ILogger logger){
+    public VlcRipper(ISettings setting, ILogger logger){
         this.settings = setting;
         this.logger = logger;
     }
