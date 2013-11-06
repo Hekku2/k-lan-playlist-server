@@ -7,15 +7,14 @@
 	</div>
 </#macro>
 
-<#macro valueField label name>
+<#macro valueField label name value="">
 	<div class="control-group">
-		<div class="control-label">${label}</div>
+		<label class="control-label" for="${name}">${label}</label>
 		<div class="controls">
-			<input class="input-xlarge" name="${name}"/>
+			<input type="text" class="input-xlarge" name="${name}" value="${value}"/>
 		</div>
 	</div>
 </#macro>
-
 <head>
 	<link rel="stylesheet" type="text/css" href="/resource/css/bootstrap/bootstrap.css">
 	<link rel="stylesheet" type="text/css" href="/resource/css/bootstrap/bootstrap-responsive.css">
