@@ -4,15 +4,18 @@ import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
 import com.google.inject.Inject;
 
 import net.kokkeli.ISettings;
+import net.kokkeli.ValidationUtils;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Role;
 import net.kokkeli.data.Track;
@@ -35,6 +38,10 @@ public class TracksResource extends BaseResource {
     private static final String INDEX_TEMPLATE = "tracks/index.ftl";
     private static final String TRACK_DETAILS_TEMPLATE = "tracks/track.ftl";
     private static final String TRACK_EDIT_TEMPLATE = "tracks/edit.ftl";
+    
+    private static final String FORM_TRACK = "track";
+    private static final String FORM_ARTIST = "artis";
+    private static final String FORM_LOCATION = "location";
     
     private final ITrackService trackService;
     private final IFileSystem fileSystem;
@@ -145,5 +152,40 @@ public class TracksResource extends BaseResource {
         } catch (ServiceException e) {
             return handleServiceException(baseModel, e);
         }
+    }
+    
+    @POST
+    @Path("edit/{id: [0-9]*}")
+    @Produces("text/html")
+    @Access(Role.ADMIN)
+    public Response editTrack(@Context HttpServletRequest req, MultivaluedMap<String, String> formParams) throws NotAuthenticatedException{
+        BaseModel model = buildBaseModel(req);
+        
+        try {
+            ModelTrack trackModel = createEditTrack(formParams);
+            
+            if (ValidationUtils.isEmpty(trackModel.getArtist()) ||
+                ValidationUtils.isEmpty(trackModel.getLocation()) ||
+                ValidationUtils.isEmpty(trackModel.getTrackName())){
+                model.setError("Artist, track name and location are required..");
+                return Response.ok(templates.process(TRACK_EDIT_TEMPLATE, model)).build();
+            }
+            
+            
+            sessions.setInfo(model.getCurrentSession().getAuthId(), "Track edited.");
+            return Response.seeOther(settings.getURI(String.format("users/%s", 2))).build();
+        } catch (RenderException e) {
+            handleRenderingError(model, e);
+        }
+    }
+
+    private static ModelTrack createEditTrack(MultivaluedMap<String, String> formParams) {
+        ModelTrack track = new ModelTrack();
+        
+        track.setLocation(formParams.getFirst(FORM_LOCATION).trim());
+        track.setArtist(formParams.getFirst(FORM_ARTIST).trim());
+        track.setTrackName(formParams.getFirst(FORM_TRACK).trim());
+        
+        return track;
     }
 }
