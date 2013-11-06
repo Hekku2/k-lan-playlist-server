@@ -1,5 +1,6 @@
 <#assign header = "Tracks">
 <#assign tab = 0>
+<!DOCTYPE HTML>
 
 <html>
 	<#include "/common/_header.ftl">

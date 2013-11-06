@@ -1,5 +1,6 @@
 <#assign header = "Management">
 <#assign tab = 3>
+<!DOCTYPE HTML>
 
 <html>
 	<#include "/common/_header.ftl">

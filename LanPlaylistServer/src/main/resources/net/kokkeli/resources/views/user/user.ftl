@@ -1,5 +1,6 @@
 <#assign header = "User details">
 <#assign tab = 1>
+<!DOCTYPE HTML>
 
 <html>
 	<#include "/common/_header.ftl">

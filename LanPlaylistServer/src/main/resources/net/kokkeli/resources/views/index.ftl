@@ -1,5 +1,6 @@
 <#assign header = "Main page">
 <#assign tab = 0>
+<!DOCTYPE HTML>
 
 <html>
 	<#include "common/_header.ftl">

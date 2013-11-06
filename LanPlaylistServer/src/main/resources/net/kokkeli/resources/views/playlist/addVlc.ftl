@@ -1,6 +1,7 @@
 <#assign header = "Add to playlist">
 <#assign tab = 2>
 <#assign selectedMethod = 1>
+<!DOCTYPE HTML>
 
 <html>
 	<#include "/common/_header.ftl">

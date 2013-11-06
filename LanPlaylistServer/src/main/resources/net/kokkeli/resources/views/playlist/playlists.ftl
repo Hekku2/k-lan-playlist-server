@@ -1,5 +1,6 @@
 <#assign header = "Playlists">
 <#assign tab = 2>
+<!DOCTYPE HTML>
 
 <html>
 	<#include "/common/_header.ftl">

@@ -1,4 +1,6 @@
 <#assign header = "Authentication">
+<!DOCTYPE HTML>
+
 <link rel="stylesheet" type="text/css" href="/resource/css/Authentication.css">
 
 <html>
