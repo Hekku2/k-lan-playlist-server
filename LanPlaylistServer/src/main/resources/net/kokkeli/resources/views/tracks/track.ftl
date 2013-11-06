@@ -1,5 +1,6 @@
 <#assign header = "Track details">
 <#assign tab = 1>
+<!DOCTYPE HTML>
 
 <html>
 	<#include "/common/_header.ftl">
@@ -9,16 +10,18 @@
 			<h1>${header}</h1>
 			<div class="content">
 				<#include "/common/_info_error.ftl">
-				<div class="form-horizontal">
-					<@uneditableValueField label="Track" value=getModel.getTrackName />
-					<@uneditableValueField label="Artist" value=getModel.getArtist />
-					<@uneditableValueField label="Uploader" value=getModel.getUploader />
-					<@uneditableValueField label="Location" value=getModel.getLocation />
-				</div>
-				<div class="navi">
-					<a class="button" href="/tracks/edit/${getModel.getId}">Edit</a>
-					<a class="button" href="/tracks">Back</a>
-				</div>
+				<form class="form-horizontal">
+					<div class="form-horizontal">
+						<@uneditableValueField label="Track" value=getModel.getTrackName />
+						<@uneditableValueField label="Artist" value=getModel.getArtist />
+						<@uneditableValueField label="Location" value=getModel.getLocation />
+						<@uneditableValueField label="Uploader" value=getModel.getUploader />
+					</div>
+					<div class="controls">
+						<a class="btn" href="/tracks">Back</a>
+						<a class="btn" href="/tracks/edit/${getModel.getId}">Edit</a>
+					</div>
+				<form>
 			</div>
 		</div>
 	</body>
