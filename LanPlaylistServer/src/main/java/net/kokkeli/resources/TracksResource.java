@@ -34,6 +34,7 @@ import net.kokkeli.server.RenderException;
 public class TracksResource extends BaseResource {
     private static final String INDEX_TEMPLATE = "tracks/index.ftl";
     private static final String TRACK_DETAILS_TEMPLATE = "tracks/track.ftl";
+    private static final String TRACK_EDIT_TEMPLATE = "tracks/edit.ftl";
     
     private final ITrackService trackService;
     private final IFileSystem fileSystem;
@@ -110,6 +111,37 @@ public class TracksResource extends BaseResource {
             return Response.ok(templates.process(INDEX_TEMPLATE, baseModel)).build();
         } catch (RenderException e) {
             return handleRenderingError(baseModel, e);
+        } catch (ServiceException e) {
+            return handleServiceException(baseModel, e);
+        }
+    }
+    
+    @GET
+    @Path("edit/{id: [0-9]*}")
+    @Produces("text/html")
+    @Access(Role.ADMIN)
+    public Response editTrack(@Context HttpServletRequest req, @PathParam("id") long id) throws NotAuthenticatedException{
+        BaseModel baseModel = buildBaseModel(req);
+        try {
+            Track track = trackService.get(id);
+            
+            ModelTrack trackModel = new ModelTrack();
+            trackModel.setId(track.getId());
+            trackModel.setArtist(track.getArtist());
+            trackModel.setLocation(track.getLocation());
+            trackModel.setTrackName(track.getTrackName());
+            trackModel.setExists(track.getExists());
+            trackModel.setUploader(track.getUploader().getUserName());
+            
+            baseModel.setModel(trackModel);
+            
+            
+            return Response.ok(templates.process(TRACK_EDIT_TEMPLATE, baseModel)).build();
+        } catch (RenderException e) {
+            return handleRenderingError(baseModel, e);
+        } catch (NotFoundInDatabase e) {
+            sessions.setError(baseModel.getCurrentSession().getAuthId(), "Track not found.");
+            return Response.seeOther(settings.getURI("tracks")).build();
         } catch (ServiceException e) {
             return handleServiceException(baseModel, e);
         }
