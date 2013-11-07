@@ -181,7 +181,7 @@ public class TracksResource extends BaseResource {
             trackService.update(track);
             
             sessions.setInfo(model.getCurrentSession().getAuthId(), "Track edited.");
-            return Response.seeOther(settings.getURI(String.format("users/%s", 2))).build();
+            return Response.seeOther(settings.getURI(String.format("tracks/%s", id))).build();
         } catch (RenderException e) {
             return handleRenderingError(model, e);
         } catch (NotFoundInDatabase e) {
