@@ -43,7 +43,7 @@ public class TestPlaylistResource extends ResourceTestsBase {
     private ISettings mockSettings;
     private IPlaylistService mockPlaylistService;
     private IFetchRequestService mockFetchRequestService;
-    
+
     private PlaylistsResource resource;
     private PlayList existingList;
 
@@ -53,24 +53,22 @@ public class TestPlaylistResource extends ResourceTestsBase {
         mockSettings = mock(ISettings.class);
         mockPlaylistService = mock(IPlaylistService.class);
         mockFetchRequestService = mock(IFetchRequestService.class);
-        
+
         existingList = new PlayList(EXISTING_PLAYLIST);
         existingList.setName("Heiyah");
 
-        when(mockPlaylistService.getPlaylist(EXISTING_PLAYLIST)).thenReturn(
-                existingList);
-        when(mockPlaylistService.nameExists(EXISTING_PLAYLIST_NAME))
-                .thenReturn(true);
+        when(mockPlaylistService.getPlaylist(EXISTING_PLAYLIST)).thenReturn(existingList);
+        when(mockPlaylistService.nameExists(EXISTING_PLAYLIST_NAME)).thenReturn(true);
         when(mockSettings.getTracksFolder()).thenReturn(TRACKS_FOLDER);
 
-        resource = new PlaylistsResource(getLogger(), getTemplateService(),
-                getPlayer(), getSessionService(), mockSettings,
-                mockPlaylistService, mockFilesystem, mockFetchRequestService);
+        resource = new PlaylistsResource(getLogger(), getTemplateService(), getPlayer(), getSessionService(),
+                mockSettings, mockPlaylistService, mockFilesystem, mockFetchRequestService);
     }
 
     @Test
-    public void testPlaylistsReturnModelWithPlaylists() throws RenderException, NotAuthenticatedException, ServiceException{
-        //Mock playlists for service
+    public void testPlaylistsReturnModelWithPlaylists() throws RenderException, NotAuthenticatedException,
+            ServiceException {
+        // Mock playlists for service
         ArrayList<PlayList> playlists = new ArrayList<PlayList>();
         PlayList mockList = new PlayList(0);
         mockList.setName("Name 1");
@@ -79,42 +77,43 @@ public class TestPlaylistResource extends ResourceTestsBase {
         mockList2.setName("Name 2");
         playlists.add(mockList2);
         when(mockPlaylistService.getIdNames()).thenReturn(playlists);
-        
+
         ModelAnswer answer = new ModelAnswer();
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(answer);
-        
+
         resource.playlists(buildRequest());
-        
+
         BaseModel base = answer.getModel();
-        
+
         Assert.assertTrue(base.getModel() instanceof ModelPlaylists);
-        ModelPlaylists model = (ModelPlaylists)base.getModel();
-        
+        ModelPlaylists model = (ModelPlaylists) base.getModel();
+
         Assert.assertEquals(2, model.getItems().size());
         Assert.assertEquals(mockList.getId(), model.getItems().get(0).getId());
         Assert.assertEquals(mockList.getName(), model.getItems().get(0).getName());
         Assert.assertEquals(mockList2.getId(), model.getItems().get(1).getId());
         Assert.assertEquals(mockList2.getName(), model.getItems().get(1).getName());
     }
-    
+
     @Test
-    public void testPlaylistsRedirectsWhenServiceExceptionIsThrown() throws NotAuthenticatedException, ServiceException{
+    public void testPlaylistsRedirectsWhenServiceExceptionIsThrown() throws NotAuthenticatedException, ServiceException {
         when(mockPlaylistService.getIdNames()).thenThrow(new ServiceException("Boom says database!"));
 
         assertRedirectError(resource.playlists(buildRequest()), "Something went wrong with service.");
     }
-    
+
     @Test
-    public void testPlaylistsRedirectsWhenRenderExceptionIsThrown() throws RenderException, NotAuthenticatedException, ServiceException{
+    public void testPlaylistsRedirectsWhenRenderExceptionIsThrown() throws RenderException, NotAuthenticatedException,
+            ServiceException {
         when(mockPlaylistService.getIdNames()).thenReturn(new ArrayList<PlayList>());
-        when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenThrow(new RenderException("Boom says database!"));
-        
+        when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenThrow(
+                new RenderException("Boom says database!"));
+
         assertRedirectError(resource.playlists(buildRequest()), "There was a problem with rendering the template.");
     }
-    
+
     @Test
-    public void testAddPostWithProperValueTriesToWriteToFile()
-            throws ServiceException, NotFoundInDatabase,
+    public void testAddPostWithProperValueTriesToWriteToFile() throws ServiceException, NotFoundInDatabase,
             NotAuthenticatedException, IOException {
         final String filename = "filename";
 
@@ -123,23 +122,18 @@ public class TestPlaylistResource extends ResourceTestsBase {
         FormDataContentDisposition mockDisposition = mock(FormDataContentDisposition.class);
         when(mockDisposition.getFileName()).thenReturn(filename);
 
-        Response r = resource.addUpload(buildRequest(), EXISTING_PLAYLIST,
-                CORRECT_ARTISTNAME, CORRECT_TRACKNAME, mockStream,
-                mockDisposition);
+        Response r = resource.addUpload(buildRequest(), EXISTING_PLAYLIST, CORRECT_ARTISTNAME, CORRECT_TRACKNAME,
+                mockStream, mockDisposition);
         Assert.assertEquals(REDIRECT, r.getStatus());
-        verify(mockFilesystem).writeToFile(any(InputStream.class),
-                eq(TRACKS_FOLDER + "/" + filename));
+        verify(mockFilesystem).writeToFile(any(InputStream.class), eq(TRACKS_FOLDER + "/" + filename));
         verify(mockFilesystem).fileExists(TRACKS_FOLDER + "/" + filename);
     }
 
     @Test
-    public void testAddPostReturnsErrorWhenFileExists()
-            throws ServiceException, NotFoundInDatabase,
+    public void testAddPostReturnsErrorWhenFileExists() throws ServiceException, NotFoundInDatabase,
             NotAuthenticatedException, RenderException {
         ModelAnswer answer = new ModelAnswer();
-        when(
-                getTemplateService().process(any(String.class),
-                        any(BaseModel.class))).thenAnswer(answer);
+        when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(answer);
 
         final String filename = "filename";
         @SuppressWarnings("resource")
@@ -148,21 +142,16 @@ public class TestPlaylistResource extends ResourceTestsBase {
         when(mockDisposition.getFileName()).thenReturn(filename);
         when(mockFilesystem.fileExists(any(String.class))).thenReturn(true);
 
-        assertModelResponse(
-                resource.addUpload(buildRequest(), EXISTING_PLAYLIST,
-                        CORRECT_ARTISTNAME, CORRECT_TRACKNAME, mockStream,
-                        mockDisposition),
-                answer,
-                "Similar file already exists. Remove existing file, or upload different.",
-                null);
+        assertModelResponse(resource.addUpload(buildRequest(), EXISTING_PLAYLIST, CORRECT_ARTISTNAME,
+                CORRECT_TRACKNAME, mockStream, mockDisposition), answer,
+                "Similar file already exists. Remove existing file, or upload different.", null);
     }
 
     @Test
-    public void testCreateChecksForPlaylistNameValidity()
-            throws NotAuthenticatedException, BadRequestException, RenderException {
+    public void testCreateChecksForPlaylistNameValidity() throws NotAuthenticatedException, BadRequestException,
+            RenderException {
         ModelAnswer answer = new ModelAnswer();
-        when(getTemplateService().process(any(String.class),
-                        any(BaseModel.class))).thenAnswer(answer);
+        when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(answer);
 
         try {
             String nullName = null;
@@ -173,33 +162,25 @@ public class TestPlaylistResource extends ResourceTestsBase {
         }
 
         String name = "";
-        assertModelResponse(
-                resource.create(buildRequest(), createCreatePost(name)),
-                answer, "Playlist did not have a name.", null);
+        assertModelResponse(resource.create(buildRequest(), createCreatePost(name)), answer,
+                "Playlist did not have a name.", null);
 
-        assertModelResponse(resource.create(buildRequest(),
-                createCreatePost(EXISTING_PLAYLIST_NAME)), answer,
-                String.format("Playlist with name %s already exits.",
-                        EXISTING_PLAYLIST_NAME), null);
+        assertModelResponse(resource.create(buildRequest(), createCreatePost(EXISTING_PLAYLIST_NAME)), answer,
+                String.format("Playlist with name %s already exits.", EXISTING_PLAYLIST_NAME), null);
     }
 
     @Test
-    public void testDetailsGetWithExistingPlaylistWorks()
-            throws RenderException, ServiceException, NotAuthenticatedException {
+    public void testDetailsGetWithExistingPlaylistWorks() throws RenderException, ServiceException,
+            NotAuthenticatedException {
         fillPlaylistWithTracks(existingList);
 
         ModelAnswer answer = new ModelAnswer();
-        when(
-                getTemplateService().process(any(String.class),
-                        any(BaseModel.class))).thenAnswer(answer);
+        when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(answer);
 
-        assertModelResponse(RESPONSE_OK,
-                resource.details(buildRequest(), EXISTING_PLAYLIST), answer,
-                null, null);
+        assertModelResponse(RESPONSE_OK, resource.details(buildRequest(), EXISTING_PLAYLIST), answer, null, null);
         ModelPlaylist playlist = (ModelPlaylist) answer.getModel().getModel();
         Assert.assertEquals(existingList.getName(), playlist.getName());
-        Assert.assertEquals(existingList.getItems().size(), playlist.getItems()
-                .size());
+        Assert.assertEquals(existingList.getItems().size(), playlist.getItems().size());
     }
 
     private static void fillPlaylistWithTracks(PlayList list) {
