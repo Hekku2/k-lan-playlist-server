@@ -1,5 +1,5 @@
 <#assign header = "Track details">
-<#assign tab = 1>
+<#assign tab = 3>
 <!DOCTYPE HTML>
 
 <html>

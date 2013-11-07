@@ -1,4 +1,4 @@
-<#assign header = "Track details">
+<#assign header = "Track edit">
 <#assign tab = 3>
 <!DOCTYPE HTML>
 
