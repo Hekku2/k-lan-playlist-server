@@ -175,10 +175,15 @@ public class TracksResource extends BaseResource {
             sessions.setInfo(model.getCurrentSession().getAuthId(), "Track edited.");
             return Response.seeOther(settings.getURI(String.format("users/%s", 2))).build();
         } catch (RenderException e) {
-            handleRenderingError(model, e);
+            return handleRenderingError(model, e);
         }
     }
 
+    /**
+     * Creates model track from form
+     * @param formParams
+     * @return
+     */
     private static ModelTrack createEditTrack(MultivaluedMap<String, String> formParams) {
         ModelTrack track = new ModelTrack();
         
