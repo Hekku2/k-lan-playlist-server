@@ -61,4 +61,13 @@ public class TrackDatabase extends Database implements ITrackDatabase{
         }
     }
 
+    @Override
+    public void update(Track track) throws NotFoundInDatabase, DatabaseException  {
+        if (!exists(track)){
+            throw new NotFoundInDatabase(String.format("Track with id %s not found", track.getId()));
+        }
+        
+        tracksTable.update(track);
+    }
+
 }

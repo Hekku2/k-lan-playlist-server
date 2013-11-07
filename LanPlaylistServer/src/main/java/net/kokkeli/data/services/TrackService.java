@@ -60,4 +60,14 @@ public class TrackService implements ITrackService{
         }
         
     }
+
+    @Override
+    public void update(Track track) throws NotFoundInDatabase, ServiceException {
+        try {
+            trackDatabase.update(track);
+        } catch (DatabaseException e) {
+            logger.log("Something went wrong in database: " + e.getMessage(), LogSeverity.ERROR);
+            throw new ServiceException("There was problem with database.", e);
+        }
+    }
 }

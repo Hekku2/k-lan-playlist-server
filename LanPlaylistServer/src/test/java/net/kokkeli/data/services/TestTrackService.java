@@ -90,8 +90,37 @@ public class TestTrackService {
         when(mockDatabase.get(anyLong())).thenThrow(new DatabaseException("Räjähti!"));
         try {
             trackService.get(5);
+            Assert.fail();
         } catch (ServiceException e) {
             Assert.assertEquals("There was problem with database.", e.getMessage());
         }
+    }
+    
+    @Test
+    public void testUpdateThrowsServiceExceptionWhenDatabaseThrowsException() throws NotFoundInDatabase, DatabaseException{
+        doThrow(new DatabaseException("Räjähti!")).when(mockDatabase).update(any(Track.class));
+        try {
+            trackService.update(new Track());
+            Assert.fail();
+        } catch (ServiceException e) {
+            Assert.assertEquals("There was problem with database.", e.getMessage());
+        }
+    }
+    
+    @Test
+    public void testUpdateThrowsNotFoundExceptionWhenItemIsNotFound() throws DatabaseException, ServiceException, NotFoundInDatabase{
+        doThrow(new NotFoundInDatabase("Räjähti!")).when(mockDatabase).update(any(Track.class));
+        try {
+            trackService.update(new Track());
+            Assert.fail();
+        } catch (NotFoundInDatabase e) {
+            Assert.assertEquals("Räjähti!", e.getMessage());
+        }
+    }
+    
+    @Test
+    public void testUpdateCallsService() throws NotFoundInDatabase, ServiceException, DatabaseException {
+        trackService.update(new Track());
+        verify(mockDatabase).update(any(Track.class));
     }
 }

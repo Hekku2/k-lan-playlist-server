@@ -138,6 +138,29 @@ public class TracksTable {
     }
     
     /**
+     * Updates track
+     * @param track Track
+     * @throws DatabaseException Thrown if there is a problem with the database
+     */
+    public void update(Track track) throws DatabaseException {
+        SQLiteConnection db = new SQLiteConnection(new File(databaseLocation));
+
+        try {
+            db.open(false);
+            SQLiteStatement st = db.prepare(updateItemRow(track));
+            try {
+                st.stepThrough();
+            } finally {
+                st.dispose();
+            }
+            
+            db.dispose();
+        } catch (SQLiteException e) {
+            throw new DatabaseException("Unabe to update track.", e);
+        }
+    }
+    
+    /**
      * Creates query selecting single user.
      * @param id Id of wanted user
      * @return Query for selecting single user.
@@ -153,5 +176,14 @@ public class TracksTable {
      */
     private static String insertItemRow(Track track){
         return INSERT + "('" + track.getTrackName() + "','" + track.getArtist() + "','" + track.getLocation() + "',"+ track.getUploader().getId()+")";
+    }
+
+    private static String updateItemRow(Track track){
+        /*
+        UPDATE table_name
+        SET column1=value1,column2=value2,...
+        WHERE some_column=some_value;
+        */
+        return String.format("UPDATE %s SET %s='%s', %s='%s', %s='%s' WHERE Id = %s", TABLENAME, COLUMN_TRACK, track.getTrackName(), COLUMN_ARTIST, track.getArtist(), COLUMN_LOCATION, track.getLocation(), track.getId());
     }
 }

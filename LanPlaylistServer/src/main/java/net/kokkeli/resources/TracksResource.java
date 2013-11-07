@@ -40,7 +40,7 @@ public class TracksResource extends BaseResource {
     private static final String TRACK_EDIT_TEMPLATE = "tracks/edit.ftl";
     
     private static final String FORM_TRACK = "track";
-    private static final String FORM_ARTIST = "artis";
+    private static final String FORM_ARTIST = "artist";
     private static final String FORM_LOCATION = "location";
     
     private final ITrackService trackService;
@@ -158,8 +158,10 @@ public class TracksResource extends BaseResource {
     @Path("edit/{id: [0-9]*}")
     @Produces("text/html")
     @Access(Role.ADMIN)
-    public Response editTrack(@Context HttpServletRequest req, MultivaluedMap<String, String> formParams) throws NotAuthenticatedException{
+    public Response editTrack(@Context HttpServletRequest req, @PathParam("id") long id, MultivaluedMap<String, String> formParams) throws NotAuthenticatedException, BadRequestException{
         BaseModel model = buildBaseModel(req);
+        
+        validateEditForm(formParams);
         
         try {
             ModelTrack trackModel = createEditTrack(formParams);
@@ -171,11 +173,35 @@ public class TracksResource extends BaseResource {
                 return Response.ok(templates.process(TRACK_EDIT_TEMPLATE, model)).build();
             }
             
+            Track track = trackService.get(id);
+            track.setArtist(trackModel.getArtist());
+            track.setLocation(trackModel.getLocation());
+            track.setTrackName(trackModel.getTrackName());
+            
+            trackService.update(track);
             
             sessions.setInfo(model.getCurrentSession().getAuthId(), "Track edited.");
             return Response.seeOther(settings.getURI(String.format("users/%s", 2))).build();
         } catch (RenderException e) {
             return handleRenderingError(model, e);
+        } catch (NotFoundInDatabase e) {
+            sessions.setError(model.getCurrentSession().getAuthId(), "Track not found.");
+            return Response.seeOther(settings.getURI("tracks")).build();
+        } catch (ServiceException e) {
+            return handleServiceException(model, e);
+        }
+    }
+
+    /**
+     * Checks that form contains correct values
+     * @param formParams 
+     * @throws BadRequestException
+     */
+    private static void validateEditForm(MultivaluedMap<String, String> formParams) throws BadRequestException{
+        if (!formParams.containsKey(FORM_LOCATION) ||
+            !formParams.containsKey(FORM_ARTIST) ||
+            !formParams.containsKey(FORM_TRACK)){
+            throw new BadRequestException("Form doesnt have needed values.");
         }
     }
 

@@ -28,4 +28,9 @@ public interface ITrackService {
      */
     Track get(long id) throws NotFoundInDatabase, ServiceException;
 
+    /**
+     * Updates track
+     * @param track Track to update
+     */
+    void update(Track track) throws NotFoundInDatabase, ServiceException;
 }
