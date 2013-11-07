@@ -40,6 +40,7 @@ public class Logging implements ILogger {
         if (severity.getSeverity() < settings.getLogSeverity().getSeverity())
             return;
         
+        //TODO Make async, so logging doesnt slow down usage so much.
         //TODO Log severity check
         LogRow row = new LogRow();
         row.setMessage(message);

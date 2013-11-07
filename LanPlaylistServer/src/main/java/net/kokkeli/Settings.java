@@ -37,7 +37,7 @@ public class Settings implements ISettings {
      * @throws IOException
      */
     @Override
-    public void loadSettings(String file) throws IOException{
+    public void loadSettings(String file) throws IOException, IllegalArgumentException{
         DataInputStream in = null;
         BufferedReader br = null;
         
@@ -208,6 +208,10 @@ public class Settings implements ISettings {
             break;
         case "ResourcesFolder":
             resourcesFolder = value;
+            break;
+        case "LogSeverity":
+            int parsed = Integer.parseInt(value);
+            logSeverity = LogSeverity.getSeverity(parsed);
             break;
         default:
             throw new IOException("Invalid setting: " + key);

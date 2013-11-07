@@ -12,7 +12,6 @@ import net.kokkeli.data.LogRow;
 
 public class LogTable {
     private static final String TABLENAME = "logs";
-    private static final String ALL = "SELECT * FROM " + TABLENAME;
     private static final String COLUMN_TIMESTAMP = "Timestamp";
     private static final String COLUMN_SEVERITY = "Severity";
     private static final String COLUMN_MESSAGE = "Message";

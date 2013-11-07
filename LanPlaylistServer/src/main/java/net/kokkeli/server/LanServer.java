@@ -39,8 +39,9 @@ public class LanServer {
         settings = new Settings();
         try {
             settings.loadSettings(settingsFile);
-        } catch (IOException e) {
-            throw new ServerException("Settings file " + settingsFile + " is missings!");
+        } catch (IOException | IllegalArgumentException e) {
+            System.out.println(e.toString());
+            throw new ServerException("Settings file " + settingsFile + " is missings or invalid format!");
         }
         Injector injector = Guice.createInjector(new LoggingModule(settings));
         logger = injector.getInstance(ILogger.class);

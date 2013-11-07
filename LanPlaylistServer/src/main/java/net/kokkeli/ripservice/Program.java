@@ -36,7 +36,7 @@ public class Program {
         ISettings settings = new Settings();
         try {
             settings.loadSettings(settingsFile);
-        } catch (IOException e) {
+        } catch (IOException | IllegalArgumentException e) {
             System.out.println("Unable to load settings from file " + settingsFile);
         }
         

@@ -22,4 +22,20 @@ public enum LogSeverity {
     public int getSeverity(){
         return severity;
     }
+    
+    /**
+     * Creates log severity from id
+     * @param id
+     * @return
+     * @throws IllegalArgumentException Thrown if value can't be parsed to log severity
+     */
+    public static LogSeverity getSeverity(int value){
+        
+        for (LogSeverity severity : LogSeverity.values()) {
+            if (severity.getSeverity() == value){
+                return severity;
+            }
+        }
+        throw new IllegalArgumentException("There was no severity with value: " + value);
+    }
 }
