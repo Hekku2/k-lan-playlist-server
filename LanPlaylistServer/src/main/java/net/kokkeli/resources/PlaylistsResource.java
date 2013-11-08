@@ -135,7 +135,7 @@ public class PlaylistsResource extends BaseResource {
      *             Thrown if user is not authenticated
      */
     @GET
-    @Produces("text/html")
+    @Produces("text/html; charset=utf-8")
     @Access(Role.USER)
     @Path("/add/upload/{playlistId: [0-9]*}")
     public Response addUpload(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId)
@@ -165,7 +165,7 @@ public class PlaylistsResource extends BaseResource {
      *             Thrown if user is not authenticated
      */
     @GET
-    @Produces("text/html")
+    @Produces("text/html; charset=utf-8")
     @Access(Role.USER)
     @Path("/add/vlc/{playlistId: [0-9]*}")
     public Response addVlc(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId)
@@ -207,7 +207,7 @@ public class PlaylistsResource extends BaseResource {
      *             Thrown if there is problem with session.
      */
     @POST
-    @Produces("text/html")
+    @Produces("text/html; charset=utf-8")
     @Access(Role.USER)
     @Path("/add/upload/{playlistId: [0-9]*}")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -219,20 +219,26 @@ public class PlaylistsResource extends BaseResource {
         BaseModel model = buildBaseModel(req);
 
         try {
+            ModelPlaylistItem failModel = new ModelPlaylistItem();
+            failModel.setPlaylistId(playlistId);
+            
             if (ValidationUtils.isEmpty(track) || ValidationUtils.isEmpty(artist)) {
                 model.setError("Track must have name and artist.");
+                model.setModel(failModel);
                 return Response.ok(templates.process(PLAYLIST_TRACK_ADD_TEMPLATE, model)).build();
             }
 
             if (!ValidationUtils.containsOnlyNumbersAndLettersAndWhiteSpace(track)
                     || !ValidationUtils.containsOnlyNumbersAndLettersAndWhiteSpace(artist)) {
                 model.setError("Track or artist contained invalid charachters.");
+                model.setModel(failModel);
                 return Response.ok(templates.process(PLAYLIST_TRACK_ADD_TEMPLATE, model)).build();
             }
 
             if (ValidationUtils.isEmpty(fileDetail.getFileName())) {
                 log("User tried to upload with no file.", LogSeverity.TRACE);
                 model.setError("Select a file to upload.");
+                model.setModel(failModel);
                 return Response.ok(templates.process(PLAYLIST_TRACK_ADD_TEMPLATE, model)).build();
             }
 
@@ -273,7 +279,7 @@ public class PlaylistsResource extends BaseResource {
     }
 
     @POST
-    @Produces("text/html")
+    @Produces("text/html; charset=utf-8")
     @Access(Role.USER)
     @Path("/add/vlc/{playlistId: [0-9]*}")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -283,15 +289,19 @@ public class PlaylistsResource extends BaseResource {
         BaseModel model = buildBaseModel(req);
 
         try {
+            ModelPlaylistItem item = new ModelPlaylistItem();
+            item.setPlaylistId(playlistId);
+            model.setModel(item);
+            
             if (ValidationUtils.isEmpty(track) || ValidationUtils.isEmpty(artist)) {
                 model.setError("Track must have name and artist.");
-                return Response.ok(templates.process(PLAYLIST_TRACK_ADD_TEMPLATE, model)).build();
+                return Response.ok(templates.process(PLAYLIST_TRACK_ADD_VLC_TEMPLATE, model)).build();
             }
 
             if (!ValidationUtils.containsOnlyNumbersAndLettersAndWhiteSpace(track)
                     || !ValidationUtils.containsOnlyNumbersAndLettersAndWhiteSpace(artist)) {
                 model.setError("Track or artist contained invalid characters.");
-                return Response.ok(templates.process(PLAYLIST_TRACK_ADD_TEMPLATE, model)).build();
+                return Response.ok(templates.process(PLAYLIST_TRACK_ADD_VLC_TEMPLATE, model)).build();
             }
 
             //TODO Proper generation for destination file and extension.
@@ -320,7 +330,7 @@ public class PlaylistsResource extends BaseResource {
     }
 
     @GET
-    @Produces("text/html")
+    @Produces("text/html; charset=utf-8")
     @Access(Role.USER)
     @Path("/{playlistId: [0-9]*}")
     public Response details(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId)
@@ -353,7 +363,7 @@ public class PlaylistsResource extends BaseResource {
     }
 
     @POST
-    @Produces("text/html")
+    @Produces("text/html; charset=utf-8")
     @Access(Role.USER)
     @Path("/create")
     public Response create(@Context HttpServletRequest req, MultivaluedMap<String, String> formParams)
@@ -389,7 +399,7 @@ public class PlaylistsResource extends BaseResource {
     }
 
     @POST
-    @Produces("text/html")
+    @Produces("text/html; charset=utf-8")
     @Access(Role.USER)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Path("/delete/{playlistId: [0-9]*}")
