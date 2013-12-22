@@ -21,10 +21,12 @@ import net.kokkeli.data.db.TrackDatabase;
 import net.kokkeli.data.db.UserDatabase;
 import net.kokkeli.data.services.FetchRequestService;
 import net.kokkeli.data.services.IFetchRequestService;
+import net.kokkeli.data.services.ILogService;
 import net.kokkeli.data.services.IPlaylistService;
 import net.kokkeli.data.services.ISessionService;
 import net.kokkeli.data.services.ITrackService;
 import net.kokkeli.data.services.IUserService;
+import net.kokkeli.data.services.LogService;
 import net.kokkeli.data.services.PlaylistService;
 import net.kokkeli.data.services.SessionService;
 import net.kokkeli.data.services.TrackService;
@@ -33,6 +35,7 @@ import net.kokkeli.player.IPlayer;
 import net.kokkeli.player.VlcPlayer;
 import net.kokkeli.resources.Access;
 import net.kokkeli.resources.FetchRequestsResource;
+import net.kokkeli.resources.LogResource;
 import net.kokkeli.resources.ManagementResource;
 import net.kokkeli.resources.StaticResources;
 import net.kokkeli.resources.IndexResource;
@@ -96,8 +99,8 @@ public class LanServletConfig extends GuiceServletContextListener {
                 bind(IFileSystem.class).to(FileSystem.class);
                 bind(ITrackService.class).to(TrackService.class);
                 bind(IFetchRequestService.class).to(FetchRequestService.class);
+                bind(ILogService.class).to(LogService.class);
                 
-
                 //Resources
                 bind(StaticResources.class);
                 bind(RootResource.class);
@@ -108,6 +111,7 @@ public class LanServletConfig extends GuiceServletContextListener {
                 bind(ManagementResource.class);
                 bind(TracksResource.class);
                 bind(FetchRequestsResource.class);
+                bind(LogResource.class);
                 
                 //Aspects
                 AuthenticationInceptor interceptor = new AuthenticationInceptor();

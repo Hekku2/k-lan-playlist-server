@@ -2,13 +2,16 @@ package net.kokkeli.data.db;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 
 import com.almworks.sqlite4java.SQLiteConnection;
 import com.almworks.sqlite4java.SQLiteException;
 import com.almworks.sqlite4java.SQLiteStatement;
 
 import net.kokkeli.data.LogRow;
+import net.kokkeli.data.LogSeverity;
 
 public class LogTable {
     private static final String TABLENAME = "logs";
@@ -44,7 +47,17 @@ public class LogTable {
     }
 
     public Collection<LogRow> get() {
-        return null;
+        ArrayList<LogRow> mockList = new ArrayList<LogRow>();
+        for (int i = 0; i < 200; i++) {
+            LogRow row = new LogRow();
+            row.setMessage("Kaikki räjähti " + i);
+            row.setSeverity(LogSeverity.ERROR);
+            row.setSource("Barskaali");
+            Date d = new Date();
+            row.setTimestamp(d);
+            mockList.add(row);
+        }
+        return mockList;
     }
 
     /**
