@@ -91,6 +91,7 @@ div.content{
 	top:1px;
 }
 
+// Infobox and error box that are on top of the page.
 div.info-box{
 	border-style:solid;
 	border-radius: 6px;

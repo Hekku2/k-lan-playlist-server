@@ -258,7 +258,8 @@ public class PlaylistsResource extends BaseResource {
 
             // TODO Validate that file is audio
             // TODO Check that disk has space
-
+            // TODO Check that file is not too big.
+            
             PlayList playlist = playlistService.getPlaylist(playlistId);
             Track item = new Track();
 
