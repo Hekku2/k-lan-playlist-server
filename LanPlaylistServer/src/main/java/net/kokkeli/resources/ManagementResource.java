@@ -13,7 +13,6 @@ import net.kokkeli.ISettings;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Role;
 import net.kokkeli.data.services.ISessionService;
-import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.player.IPlayer;
 import net.kokkeli.resources.models.BaseModel;
 import net.kokkeli.server.ITemplateService;
