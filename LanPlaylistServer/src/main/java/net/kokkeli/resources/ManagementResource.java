@@ -46,7 +46,6 @@ public class ManagementResource extends BaseResource {
     /**
      * Shows index page for user
      * @return HTML-page, main page
-     * @throws ServiceException Thrown when there is problem with rendering.
      * @throws NotAuthenticatedException Thrown if there is problem with session.
      */
     @GET
