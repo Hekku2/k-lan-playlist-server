@@ -66,6 +66,11 @@ public class LanServletConfig extends GuiceServletContextListener {
     private final ISettings settings;
     private final SQLiteQueue queue;
     
+    /**
+     * Creates a new lan servet config instance
+     * @param settings Settings file given to resources and services.
+     * @param queue Database queue 
+     */
     public LanServletConfig(ISettings settings, SQLiteQueue queue) {
         this.settings = settings;
         this.queue = queue;

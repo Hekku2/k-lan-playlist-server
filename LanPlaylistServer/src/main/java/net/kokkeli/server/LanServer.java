@@ -103,7 +103,7 @@ public class LanServer {
         }
         logger.log("Server shut down.", LogSeverity.TRACE);
         if (queue != null){
-            queue.stop(true);
+            queue.stop(true).join();
         }
     }
 }
