@@ -12,3 +12,10 @@ Setup:
 Usage:
 server.bat starts server
 ripper.bat starts ripper
+
+Troubleshooting:
+* Unable to load library 'libvlc'
+  1. Check that settings/publish.dat contains correct vlc-folder. There shoule be something like "VlcLocation=F:\\vlc-2.1.2"
+  2. Make sure that VLC is newer than 2.1.0
+  3. Make sure that VLC is for correct architechture (32bit or 64bit). 
+     This is testted with 64bit version Windows 7.
