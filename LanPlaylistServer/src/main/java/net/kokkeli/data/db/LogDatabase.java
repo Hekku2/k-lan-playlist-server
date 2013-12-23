@@ -38,7 +38,8 @@ public class LogDatabase extends Database implements ILogDatabase {
 
     @Override
     public LogRow add(LogRow item) throws DatabaseException {
-        return logTable.insert(item);
+        logTable.insert(item);
+        return item;
     }
 
 }

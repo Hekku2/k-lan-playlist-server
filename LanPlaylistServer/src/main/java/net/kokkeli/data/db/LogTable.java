@@ -44,8 +44,8 @@ public class LogTable {
      * @return
      * @throws DatabaseException
      */
-    public LogRow insert(final LogRow item) throws DatabaseException {
-        long id = queue.execute(new SQLiteJob<Long>() {
+    public void insert(final LogRow item) throws DatabaseException {
+        queue.execute(new SQLiteJob<Long>() {
             @Override
             protected Long job(SQLiteConnection connection) throws SQLiteException {
                 SQLiteStatement st = connection.prepare(createInsertString(item));
@@ -58,10 +58,7 @@ public class LogTable {
 
                 return connection.getLastInsertId();
             }
-        }).complete();
-
-        item.setId(id);
-        return item;
+        });
     }
 
     /**
