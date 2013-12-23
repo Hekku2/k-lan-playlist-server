@@ -1,6 +1,7 @@
 <#assign header = "Logs">
 <#assign tab = 3>
 <!DOCTYPE HTML>
+<link rel="stylesheet" type="text/css" href="/resource/css/Log.css">
 
 <html>
 	<#include "/common/_header.ftl">
@@ -25,7 +26,7 @@
 				<table class="table table-striped">
 					<tr>
 						<th>Severity</th>
-						<th>Time</th>
+						<th class="time-column">Time</th>
 						<th>Message</th>
 						<th>Source</th>
 					</tr>
