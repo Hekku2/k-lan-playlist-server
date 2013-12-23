@@ -118,8 +118,10 @@ public class RootResource extends BaseResource {
     @Path("/play")
     public Response play(@Context HttpServletRequest req){
         try {
-            player.play();
-            log("Playing started.", LogSeverity.TRACE);
+            if (player.playlistPlaying()){
+                player.play();
+                log("Playing started.", LogSeverity.TRACE);
+            }
             return Response.ok().build();
         } catch (ServiceException e) {
             return Response.status(Status.INTERNAL_SERVER_ERROR).build();
