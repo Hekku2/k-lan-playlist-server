@@ -20,6 +20,7 @@ import net.kokkeli.resources.Field;
 import net.kokkeli.resources.models.BaseModel;
 import net.kokkeli.resources.models.ViewModel;
 
+import freemarker.cache.StrongCacheStorage;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
@@ -46,6 +47,7 @@ public class Templates implements ITemplateService {
         cfg = new Configuration();
         cfg.setDirectoryForTemplateLoading(new File(settings.getTemplatesLocation()));
         cfg.setObjectWrapper(new DefaultObjectWrapper());
+        cfg.setCacheStorage(new StrongCacheStorage());
     }
 
     /**
