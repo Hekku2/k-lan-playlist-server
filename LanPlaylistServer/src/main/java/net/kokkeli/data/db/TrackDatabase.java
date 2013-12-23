@@ -3,9 +3,9 @@ package net.kokkeli.data.db;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.almworks.sqlite4java.SQLiteQueue;
 import com.google.inject.Inject;
 
-import net.kokkeli.ISettings;
 import net.kokkeli.data.Track;
 
 public class TrackDatabase extends Database implements ITrackDatabase{
@@ -13,10 +13,10 @@ public class TrackDatabase extends Database implements ITrackDatabase{
     private final UsersTable usersTable;
     
     @Inject
-    public TrackDatabase(ISettings settings){
-        super(settings);
-        tracksTable = new TracksTable(getDatabaseLocation());
-        usersTable = new UsersTable(getDatabaseLocation());
+    public TrackDatabase(SQLiteQueue queue){
+        super();
+        tracksTable = new TracksTable(queue);
+        usersTable = new UsersTable(queue);
     }
     
     @Override

@@ -1,11 +1,12 @@
 package net.kokkeli.data.db;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import com.almworks.sqlite4java.SQLiteConnection;
 import com.almworks.sqlite4java.SQLiteException;
+import com.almworks.sqlite4java.SQLiteJob;
+import com.almworks.sqlite4java.SQLiteQueue;
 import com.almworks.sqlite4java.SQLiteStatement;
 
 public class TrackPlaylistTable {
@@ -17,14 +18,14 @@ public class TrackPlaylistTable {
     private static final String DELETE = "DELETE FROM " + TABLENAME + " ";
     private static final String INSERT = "INSERT INTO " + TABLENAME + " (" + TRACK_ID_COLUMN + "," + PLAYLIST_ID_COLUMN + ") VALUES ";
     
-    private final String databaseLocation;
+    private final SQLiteQueue queue;
     
     /**
      * Creates new table with given database location
-     * @param databaseLocation
+     * @param queue
      */
-    public TrackPlaylistTable(String databaseLocation) {
-        this.databaseLocation = databaseLocation;
+    public TrackPlaylistTable(SQLiteQueue queue) {
+        this.queue = queue;
     }
 
     /**
@@ -33,23 +34,27 @@ public class TrackPlaylistTable {
      * @return Collection of trackIds.
      * @throws DatabaseException Thrown if there is problem with database
      */
-    public Collection<Long> getTracks(long playlistId) throws DatabaseException {
-        SQLiteConnection db = new SQLiteConnection(new File(databaseLocation));
-        Collection<Long> ids = new ArrayList<Long>();
-        
-        try {
-            db.open(false);
-            SQLiteStatement st = db.prepare(getAllTracksWithPlaylistId(playlistId));
-            try {
-                while (st.step()) {
-                    ids.add(st.columnLong(0));
+    public Collection<Long> getTracks(final long playlistId) throws DatabaseException {
+        Collection<Long> ids = queue.execute(new SQLiteJob<Collection<Long>>() {
+            @Override
+            protected Collection<Long> job(SQLiteConnection connection) throws SQLiteException {
+                SQLiteStatement st = connection.prepare(getAllTracksWithPlaylistId(playlistId));
+
+                Collection<Long> ids = new ArrayList<Long>();
+                try {
+                    while (st.step()) {
+                        ids.add(st.columnLong(0));
+                    }
+                } finally {
+                    st.dispose();
                 }
-            } finally {
-                st.dispose();
+
+                return ids;
             }
-            db.dispose();
-        } catch (SQLiteException e) {
-            throw new DatabaseException("Unable to get tracks for playlist with Id: " + playlistId, e);
+        }).complete();
+        
+        if (ids == null){
+            throw new DatabaseException("Unable to get tracks for playlist with Id: " + playlistId);
         }
         
         return ids;
@@ -61,21 +66,19 @@ public class TrackPlaylistTable {
      * @param playlistId Playlist Id
      * @throws DatabaseException Thrown if there is problem with database
      */
-    public void delete(long trackId, long playlistId) throws DatabaseException{
-        SQLiteConnection db = new SQLiteConnection(new File(databaseLocation));
-        
-        try {
-            db.open(false);
-            SQLiteStatement st = db.prepare(DELETE + selectorForRow(trackId, playlistId));
-            try {
-                st.stepThrough();
-            } finally {
-                st.dispose();
+    public void delete(final long trackId, final long playlistId) throws DatabaseException{
+        queue.execute(new SQLiteJob<Object>() {
+            @Override
+            protected Object job(SQLiteConnection connection) throws SQLiteException {
+                SQLiteStatement st = connection.prepare(DELETE + selectorForRow(trackId, playlistId));
+                try {
+                    st.stepThrough();
+                } finally {
+                    st.dispose();
+                }
+                return null;
             }
-            db.dispose();
-        } catch (SQLiteException e) {
-            throw new DatabaseException("Unable to delete item. TrackId: " + trackId + ", PlaylistId: " + playlistId, e);
-        }
+        });
     }
     
     /**
@@ -84,21 +87,19 @@ public class TrackPlaylistTable {
      * @param playlistId Playlist id
      * @throws DatabaseException Thrown if there is problem with database
      */
-    public void insert(long trackId, long playlistId) throws DatabaseException {
-        SQLiteConnection db = new SQLiteConnection(new File(databaseLocation));
-        
-        try {
-            db.open(false);
-            SQLiteStatement st = db.prepare(buildInsert(trackId, playlistId));
-            try {
-                st.stepThrough();
-            } finally {
-                st.dispose();
+    public void insert(final long trackId, final long playlistId) throws DatabaseException {
+        queue.execute(new SQLiteJob<Object>() {
+            @Override
+            protected Object job(SQLiteConnection connection) throws SQLiteException {
+                SQLiteStatement st = connection.prepare(buildInsert(trackId, playlistId));
+                try {
+                    st.stepThrough();
+                } finally {
+                    st.dispose();
+                }
+                return null;
             }
-            db.dispose();
-        } catch (SQLiteException e) {
-            throw new DatabaseException("Unable to insert item. TrackId: " + trackId + ", PlaylistId: " + playlistId, e);
-        }
+        });
     }
     
     /**

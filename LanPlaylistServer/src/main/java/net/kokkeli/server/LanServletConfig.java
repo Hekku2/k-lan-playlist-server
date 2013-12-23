@@ -48,6 +48,7 @@ import net.kokkeli.resources.UsersResource;
 import net.kokkeli.resources.authentication.AuthenticationInceptor;
 import net.kokkeli.resources.authentication.AuthenticationResource;
 
+import com.almworks.sqlite4java.SQLiteQueue;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Singleton;
@@ -62,10 +63,12 @@ import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
  * @version 15.11.2012
  */
 public class LanServletConfig extends GuiceServletContextListener {
-    private ISettings settings;
+    private final ISettings settings;
+    private final SQLiteQueue queue;
     
-    public LanServletConfig(ISettings settings) {
+    public LanServletConfig(ISettings settings, SQLiteQueue queue) {
         this.settings = settings;
+        this.queue = queue;
     }
 
     @Override
@@ -75,6 +78,7 @@ public class LanServletConfig extends GuiceServletContextListener {
             protected void configureServlets() {
                 //Settings
                 bind(ISettings.class).toInstance(settings);
+                bind(SQLiteQueue.class).toInstance(queue);
                 
                 //Exceptions
                 bind(RenderExceptionMapper.class).asEagerSingleton();
@@ -92,7 +96,7 @@ public class LanServletConfig extends GuiceServletContextListener {
                 
                 //Services
                 bind(ISessionService.class).to(SessionService.class).asEagerSingleton();
-                bind(ITemplateService.class).to(Templates.class);
+                bind(ITemplateService.class).to(Templates.class).asEagerSingleton();
                 bind(IPlayer.class).to(VlcPlayer.class).asEagerSingleton();
                 bind(IUserService.class).to(UserService.class);
                 bind(IPlaylistService.class).to(PlaylistService.class);

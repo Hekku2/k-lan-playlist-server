@@ -1,11 +1,13 @@
 package net.kokkeli.data.db;
 
-import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import com.almworks.sqlite4java.SQLiteConnection;
+import com.almworks.sqlite4java.SQLiteConstants;
 import com.almworks.sqlite4java.SQLiteException;
+import com.almworks.sqlite4java.SQLiteJob;
+import com.almworks.sqlite4java.SQLiteQueue;
 import com.almworks.sqlite4java.SQLiteStatement;
 
 import net.kokkeli.data.FetchRequest;
@@ -17,7 +19,6 @@ import net.kokkeli.data.Track;
  * @author Hekku2
  */
 public class FetchRequestsTable {
-    private final String databaseLocation;
     private static final String TABLENAME = "fetch_requests";
     private static final String ALLREQUESTS = "SELECT * FROM " + TABLENAME;
     private static final String DATEFORMAT = "yyyy-MM-dd hh:mm:ss";
@@ -31,12 +32,14 @@ public class FetchRequestsTable {
     private static final int STATUSCOLUMN = 5;
     private static final int TRACKCOLUMN = 6;
     
+    private final SQLiteQueue queue;
+    
     /**
      * Database location
-     * @param databaseLocation
+     * @param queue Queue
      */
-    public FetchRequestsTable(String databaseLocation){
-        this.databaseLocation = databaseLocation;
+    public FetchRequestsTable(SQLiteQueue queue){
+        this.queue = queue;
     }
 
     /**
@@ -46,36 +49,41 @@ public class FetchRequestsTable {
      * @throws DatabaseException
      */
     public ArrayList<FetchRequest> get() throws DatabaseException {
-        SQLiteConnection db = new SQLiteConnection(new File(databaseLocation));
-        
-        ArrayList<FetchRequest> requests = new ArrayList<FetchRequest>();
-        try {
-            db.openReadonly();
-            SQLiteStatement st = db.prepare(ALLREQUESTS);
-            try {
-                while (st.step()) {
-                    FetchRequest request = new FetchRequest();
-                    
-                    request.setId(st.columnLong(IDCOLUMN));
-                    request.setLocation(st.columnString(LOCATIONCOLUMN));
-                    request.setHandler(st.columnString(HANDLERCOLUMN));
-                    request.setDestinationFile(st.columnString(DESTINATIONFILECOLUMN));
-                    
-                    request.setLastUpdated(formatter.parse(st.columnString(LASTUPDATEDCOLUMN)));
-                    request.setStatus(getStatus(st.columnInt(STATUSCOLUMN)));
-                    request.setTrack(new Track(st.columnLong(TRACKCOLUMN)));
-                    
-                    requests.add(request);
+        ArrayList<FetchRequest> requests = queue.execute(new SQLiteJob<ArrayList<FetchRequest>>() {
+            @Override
+            protected ArrayList<FetchRequest> job(SQLiteConnection connection) throws SQLiteException {
+                ArrayList<FetchRequest> requests = new ArrayList<FetchRequest>();
+                
+                SQLiteStatement st = connection.prepare(ALLREQUESTS);
+                
+                try {
+                    while (st.step()) {
+                        FetchRequest request = new FetchRequest();
+                        
+                        request.setId(st.columnLong(IDCOLUMN));
+                        request.setLocation(st.columnString(LOCATIONCOLUMN));
+                        request.setHandler(st.columnString(HANDLERCOLUMN));
+                        request.setDestinationFile(st.columnString(DESTINATIONFILECOLUMN));
+                        
+                        request.setLastUpdated(formatter.parse(st.columnString(LASTUPDATEDCOLUMN)));
+                        request.setStatus(getStatus(st.columnInt(STATUSCOLUMN)));
+                        request.setTrack(new Track(st.columnLong(TRACKCOLUMN)));
+                        
+                        requests.add(request);
+                    }
+                } catch (ParseException e) {
+                    throw new SQLiteException(SQLiteConstants.SQLITE_MISMATCH, "There was an invalid timestamp format in some column.");
+                } finally {
+                    st.dispose();
                 }
-            } finally {
-                st.dispose();
+                return requests;
             }
-            db.dispose();
-        } catch (ParseException e) {
-            throw new DatabaseException("There was invalid format in LastUpdated field.", e);
-        } catch (SQLiteException e) {
-            throw new DatabaseException("Unabe to get requests from database.", e);
+        }).complete();
+        
+        if (requests == null){
+            throw new DatabaseException("Getting fetch requests failed.");
         }
+        
         return requests;
     }
     
@@ -85,38 +93,40 @@ public class FetchRequestsTable {
      * @return Oldest unhandled request or null.
      * @throws DatabaseException Thrown if there is a problem with the database.
      */
-    public FetchRequest oldestUnhandledfetchRequest(String handler) throws DatabaseException {
-        SQLiteConnection db = new SQLiteConnection(new File(databaseLocation));
-        FetchRequest request = null;
-        try {
-            db.openReadonly();
-            
-            String command = String.format("%s WHERE FetchStatus = %s AND Handler = '%s' ORDER BY LastUpdated DESC LIMIT 1;",ALLREQUESTS, FetchStatus.WAITING.getStatus(), handler);
-            SQLiteStatement st = db.prepare(command);
-            
-            try {
-                while (st.step()) {
-                    request = new FetchRequest();
-                    
-                    request.setId(st.columnLong(IDCOLUMN));
-                    request.setLocation(st.columnString(LOCATIONCOLUMN));
-                    request.setHandler(st.columnString(HANDLERCOLUMN));
-                    request.setDestinationFile(st.columnString(DESTINATIONFILECOLUMN));
-                    
-                    request.setLastUpdated(formatter.parse(st.columnString(LASTUPDATEDCOLUMN)));
-                    request.setStatus(getStatus(st.columnInt(STATUSCOLUMN)));
-                    request.setTrack(new Track(st.columnLong(TRACKCOLUMN)));
-                    
+    public FetchRequest oldestUnhandledfetchRequest(final String handler) throws DatabaseException {
+        FetchRequest request = queue.execute(new SQLiteJob<FetchRequest>() {
+            @Override
+            protected FetchRequest job(SQLiteConnection connection) throws SQLiteException {
+                String command = String.format("%s WHERE FetchStatus = %s AND Handler = '%s' ORDER BY LastUpdated DESC LIMIT 1;",ALLREQUESTS, FetchStatus.WAITING.getStatus(), handler);
+                SQLiteStatement st = connection.prepare(command);
+                
+                FetchRequest request = null;
+                try {
+                    while (st.step()) {
+                        request = new FetchRequest();
+                        
+                        request.setId(st.columnLong(IDCOLUMN));
+                        request.setLocation(st.columnString(LOCATIONCOLUMN));
+                        request.setHandler(st.columnString(HANDLERCOLUMN));
+                        request.setDestinationFile(st.columnString(DESTINATIONFILECOLUMN));
+                        
+                        request.setLastUpdated(formatter.parse(st.columnString(LASTUPDATEDCOLUMN)));
+                        request.setStatus(getStatus(st.columnInt(STATUSCOLUMN)));
+                        request.setTrack(new Track(st.columnLong(TRACKCOLUMN)));
+                    }
+                } catch (ParseException e) {
+                    throw new SQLiteException(SQLiteConstants.SQLITE_MISMATCH, "There was an invalid timestamp format in some column.");
+                } finally {
+                    st.dispose();
                 }
-            } finally {
-                st.dispose();
-            }
-            db.dispose();
-        } catch (ParseException e) {
-            throw new DatabaseException("There was invalid format in LastUpdated field.", e);
-        } catch (SQLiteException e) {
-            throw new DatabaseException("Unable to get requests from database.", e);
-        }       
+                
+                return request;
+            }}).complete();
+        
+        if (request == null){
+            throw new DatabaseException("Getting oldest unhandled fettch request failed.");
+        }
+        
         return request;
     }
     
@@ -126,22 +136,26 @@ public class FetchRequestsTable {
      * @return Added fetchrequest with new id.
      * @throws DatabaseException Thrown if there is a problem with the database.
      */
-    public FetchRequest insert(FetchRequest item) throws DatabaseException {
-        SQLiteConnection db = new SQLiteConnection(new File(databaseLocation));
-        long id;
-        try {
-            db.open(false);
-            SQLiteStatement st = db.prepare(createInsertString(item));
-            try {
-                st.stepThrough();
-            } finally {
-                st.dispose();
+    public FetchRequest insert(final FetchRequest item) throws DatabaseException {
+        Long id = queue.execute(new SQLiteJob<Long>() {
+            @Override
+            protected Long job(SQLiteConnection connection) throws SQLiteException {
+                SQLiteStatement st = connection.prepare(createInsertString(item));
+                
+                try {
+                    st.stepThrough();
+                } finally {
+                    st.dispose();
+                }
+                
+                return connection.getLastInsertId();
             }
-            id = db.getLastInsertId();
-            db.dispose();
-        } catch (SQLiteException e) {
-            throw new DatabaseException("Unable to insert request to database.", e);
+          }).complete();
+
+        if (id == null){
+            throw new DatabaseException("Inserting fetch request failed.");
         }
+        
         item.setId(id);
         return item;
     }
@@ -152,20 +166,19 @@ public class FetchRequestsTable {
      * @param status New status
      * @throws DatabaseException Thrown if there is a problem with the database.
      */
-    public void update(long id, FetchStatus status) throws DatabaseException {
-        SQLiteConnection db = new SQLiteConnection(new File(databaseLocation));
-        try {
-            db.open(false);
-            SQLiteStatement st = db.prepare(createStatusUpdateString(id, status));
-            try {
-                st.stepThrough();
-            } finally {
-                st.dispose();
+    public void update(final long id, final FetchStatus status) throws DatabaseException {
+        queue.execute(new SQLiteJob<Object>() {
+            @Override
+            protected Object job(SQLiteConnection connection) throws SQLiteException {
+                SQLiteStatement st = connection.prepare(createStatusUpdateString(id, status));
+                try {
+                    st.stepThrough();
+                } finally {
+                    st.dispose();
+                }
+                return null;
             }
-            db.dispose();
-        } catch (SQLiteException e) {
-            throw new DatabaseException(String.format("Unable to update fetch status of item with id %s.", id), e);
-        }
+          });
     }
     
     /**
@@ -173,36 +186,34 @@ public class FetchRequestsTable {
      * @param status Status
      * @throws DatabaseException Thrown if there is a problem with the database
      */
-    public void removeWithStatus(FetchStatus status) throws DatabaseException {
-        SQLiteConnection db = new SQLiteConnection(new File(databaseLocation));
-        try {
-            db.open(false);
-            SQLiteStatement st = db.prepare(createStatusRemove(status));
-            try {
-                st.stepThrough();
-            } finally {
-                st.dispose();
+    public void removeWithStatus(final FetchStatus status) throws DatabaseException {
+        queue.execute(new SQLiteJob<Object>() {
+            @Override
+            protected Object job(SQLiteConnection connection) throws SQLiteException {
+                SQLiteStatement st = connection.prepare(createStatusRemove(status));
+                try {
+                    st.stepThrough();
+                } finally {
+                    st.dispose();
+                }
+                return null;
             }
-            db.dispose();
-        } catch (SQLiteException e) {
-            throw new DatabaseException(String.format("Unable to remove fetch requests with status %s.", status.getStatus()), e);
-        }
+          });
     }
     
-    public void remove(long requestId) throws DatabaseException {
-        SQLiteConnection db = new SQLiteConnection(new File(databaseLocation));
-        try {
-            db.open(false);
-            SQLiteStatement st = db.prepare(createRemove(requestId));
-            try {
-                st.stepThrough();
-            } finally {
-                st.dispose();
+    public void remove(final long requestId) {
+        queue.execute(new SQLiteJob<Object>() {
+            @Override
+            protected Object job(SQLiteConnection connection) throws SQLiteException {
+                SQLiteStatement st = connection.prepare(createRemove(requestId));
+                try {
+                    st.stepThrough();
+                } finally {
+                    st.dispose();
+                }
+                return null;
             }
-            db.dispose();
-        } catch (SQLiteException e) {
-            throw new DatabaseException(String.format("Unable to remove fetch requests with id %s.", requestId), e);
-        }
+          });
     }
     
     /**

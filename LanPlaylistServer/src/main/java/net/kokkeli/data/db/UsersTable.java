@@ -1,6 +1,5 @@
 package net.kokkeli.data.db;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -8,7 +7,10 @@ import net.kokkeli.data.Role;
 import net.kokkeli.data.User;
 
 import com.almworks.sqlite4java.SQLiteConnection;
+import com.almworks.sqlite4java.SQLiteConstants;
 import com.almworks.sqlite4java.SQLiteException;
+import com.almworks.sqlite4java.SQLiteJob;
+import com.almworks.sqlite4java.SQLiteQueue;
 import com.almworks.sqlite4java.SQLiteStatement;
 
 public class UsersTable {
@@ -19,10 +21,10 @@ public class UsersTable {
     private static final String COLUMN_USERNAME = "Username";
     private static final String COLUMN_ROLE = "Role";
     
-    private final String databaseLocation;
+    private final SQLiteQueue queue;
     
-    public UsersTable(String databaseLocation){
-        this.databaseLocation = databaseLocation;
+    public UsersTable(SQLiteQueue queue){
+        this.queue = queue;
     }
     
     /**
@@ -32,38 +34,40 @@ public class UsersTable {
      * @throws DatabaseException Thrown if there is a problem with the database
      * @throws NotFoundInDatabase Thrown if user is not found in database.
      */
-    public User get(long id) throws DatabaseException, NotFoundInDatabase {
-        SQLiteConnection db = new SQLiteConnection(new File(databaseLocation));
-        User user = null;
-        
-        try {
-            db.open(false);
-            SQLiteStatement st = db.prepare(getSingleUserQuery(id));
-            try {
-                while (st.step()) {
-                    long userId = st.columnLong(0);
-                    String userName = st.columnString(1);
-                    int roleId = st.columnInt(2);
-                    
-                    Role role;
-                    
-                    try {
-                        role = getRole(roleId);
-                    } catch (IndexOutOfBoundsException e) {
-                        throw new DatabaseException(String.format("Value in Role column was invalid. It was %s", roleId));
-                    }
+    public User get(final long id) throws DatabaseException, NotFoundInDatabase {
+        User user = queue.execute(new SQLiteJob<User>() {
+            @Override
+            protected User job(SQLiteConnection connection) throws SQLiteException {
+                SQLiteStatement st = connection.prepare(getSingleUserQuery(id));
 
-                    user = new User(userId, userName, role);
-                    user.setPasswordHash(st.columnString(3));
-                    
+                User user = null;
+                try {
+                    while (st.step()) {
+                        long userId = st.columnLong(0);
+                        String userName = st.columnString(1);
+                        int roleId = st.columnInt(2);
+                        
+                        Role role;
+                        
+                        try {
+                            role = getRole(roleId);
+                        } catch (IndexOutOfBoundsException e) {
+                            throw new SQLiteException(SQLiteConstants.SQLITE_MISMATCH, String.format("Value in Role column was invalid. It was %s", roleId));
+                        }
+
+                        user = new User(userId, userName, role);
+                        user.setPasswordHash(st.columnString(3));
+                        
+                    }
+                } finally {
+                    st.dispose();
                 }
-            } finally {
-                st.dispose();
+
+                return user;
             }
-            db.dispose();
-        } catch (SQLiteException e) {
-            throw new DatabaseException("Unable to get user with Id: " + id, e);
-        }
+        }).complete();
+        
+        //TODO How to handle database exception?
         if (user == null)
             throw new NotFoundInDatabase("User not found in database");
         
@@ -76,37 +80,43 @@ public class UsersTable {
      * @throws DatabaseException Thrown if there is a problem with the database
      */
     public Collection<User> get() throws DatabaseException {
-        SQLiteConnection db = new SQLiteConnection(new File(databaseLocation));
-        ArrayList<User> users = new ArrayList<User>();
+        ArrayList<User> users = queue.execute(new SQLiteJob<ArrayList<User>>() {
+            @Override
+            protected ArrayList<User> job(SQLiteConnection connection) throws SQLiteException {
+                ArrayList<User> users = new ArrayList<User>();
 
-        try {
-            db.open(false);
-            SQLiteStatement st = db.prepare(ALLUSERS);
-            try {
-                while (st.step()) {
-                    long id = st.columnLong(0);
-                    String userName = st.columnString(1);
-                    int roleId = st.columnInt(2);
-                    
-                    Role role;
-                    
-                    try {
-                        role = getRole(roleId);
-                    } catch (IndexOutOfBoundsException e) {
-                        throw new DatabaseException(String.format("Value in Role column was invalid. It was %s", roleId));
+                SQLiteStatement st = connection.prepare(ALLUSERS);
+
+                try {
+                    while (st.step()) {
+                        long id = st.columnLong(0);
+                        String userName = st.columnString(1);
+                        int roleId = st.columnInt(2);
+                        
+                        Role role;
+                        
+                        try {
+                            role = getRole(roleId);
+                        } catch (IndexOutOfBoundsException e) {
+                            throw new SQLiteException(SQLiteConstants.SQLITE_MISMATCH, String.format("Value in Role column was invalid. It was %s", roleId));
+                        }
+
+                        User user = new User(id, userName, role);
+                        user.setPasswordHash(st.columnString(3));
+                        
+                        users.add(user);
                     }
-
-                    User user = new User(id, userName, role);
-                    user.setPasswordHash(st.columnString(3));
-                    
-                    users.add(user);
+                } finally {
+                    st.dispose();
                 }
-            } finally {
-                st.dispose();
+
+                return users;
+
             }
-            db.dispose();
-        } catch (SQLiteException e) {
-            throw new DatabaseException("There was problem with database", e);
+        }).complete();
+
+        if (users == null){
+            throw new DatabaseException("Error occurred in database when trying to get all users.");
         }
 
         return users;
@@ -118,25 +128,27 @@ public class UsersTable {
      * @return Inserted user, with id.
      * @throws DatabaseException Thrown if there is a problem with the database
      */
-    public User insert(User item) throws DatabaseException {
+    public User insert(final User item) throws DatabaseException {
         if (exists(item.getUserName()))
             throw new DatabaseException("Username already exists.");
         
-        SQLiteConnection db = new SQLiteConnection(new File(databaseLocation));
-        long id;
-        try {
-            db.open(false);
-            SQLiteStatement st = db.prepare(createInsertString(item));
-            try {
-                st.stepThrough();
-            } finally {
-                st.dispose();
+        Long id = queue.execute(new SQLiteJob<Long>() {
+            @Override
+            protected Long job(SQLiteConnection connection) throws SQLiteException {
+                SQLiteStatement st = connection.prepare(createInsertString(item));
+
+                try {
+                    st.stepThrough();
+                } finally {
+                    st.dispose();
+                }
+
+                return connection.getLastInsertId();
             }
-            id = db.getLastInsertId();
-            
-            db.dispose();
-        } catch (SQLiteException e) {
-            throw new DatabaseException("There was problem with database", e);
+        }).complete();
+
+        if (id == null) {
+            throw new DatabaseException("Inserting user failed.");
         }
         
         item.setId(id);
@@ -149,25 +161,27 @@ public class UsersTable {
      * @return True, if user with username exists.
      * @throws DatabaseException Thrown if there is a problem with the database
      */
-    public boolean exists(String username) throws DatabaseException {
-        SQLiteConnection db = new SQLiteConnection(new File(databaseLocation));
-        
-        try {
-            db.open(false);
-            SQLiteStatement st = db.prepare(getUserWithUsername(username));
-            try {
-                while (st.step()) {
-                    return true;
+    public boolean exists(final String username) throws DatabaseException {
+        Boolean exists = queue.execute(new SQLiteJob<Boolean>() {
+            @Override
+            protected Boolean job(SQLiteConnection connection) throws SQLiteException {
+                SQLiteStatement st = connection.prepare(getUserWithUsername(username));
+                try {
+                    while (st.step()) {
+                        return true;
+                    }
+                } finally {
+                    st.dispose();
                 }
-            } finally {
-                st.dispose();
+                return false;
             }
-            
-            db.dispose();
-        } catch (SQLiteException e) {
-            throw new DatabaseException("Problem with database.", e);
+        }).complete();
+
+        if (exists == null) {
+            throw new DatabaseException("Unable to check if username exists in database.");
         }
-        return false;
+        
+        return exists;
     }
     
     /**
@@ -180,19 +194,20 @@ public class UsersTable {
         String set = String.format("SET %s, %s", format(COLUMN_USERNAME, user.getUserName()), format(COLUMN_ROLE, user.getRole().getId()+""));
         String where = String.format("WHERE %s", format(COLUMN_ID, user.getId()+""));
         
-        String query = String.format("%s %s %s", update,set,where);
-        SQLiteConnection db = new SQLiteConnection(new File(databaseLocation));
-        try {
-            db.open(false);
-            SQLiteStatement st = db.prepare(query);
-            try {
-                while (st.step());
-            } finally {
-                st.dispose();
+        final String query = String.format("%s %s %s", update,set,where);
+
+        queue.execute(new SQLiteJob<Object>() {
+            @Override
+            protected Object job(SQLiteConnection connection) throws SQLiteException {
+                SQLiteStatement st = connection.prepare(query);
+                try {
+                    st.stepThrough();
+                } finally {
+                    st.dispose();
+                }
+                return null;
             }
-        } catch (SQLiteException e) {
-            throw new DatabaseException("There was problem with database.", e);
-        }
+        });
     }
     
     /**

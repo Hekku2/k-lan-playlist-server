@@ -2,6 +2,9 @@ package net.kokkeli.server;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -12,6 +15,8 @@ import net.kokkeli.data.ILogger;
 import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.LoggingModule;
 
+import com.almworks.sqlite4java.SQLite;
+import com.almworks.sqlite4java.SQLiteQueue;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceFilter;
@@ -26,6 +31,7 @@ public class LanServer {
     private final ILogger logger;
     private final ISettings settings;
     private final IFileSystem filesystem;
+    private final SQLiteQueue queue;
     
     private Server server;
     
@@ -35,7 +41,6 @@ public class LanServer {
      */
     public LanServer(String settingsFile) throws ServerException{
         filesystem = new FileSystem();
-        
         settings = new Settings();
         try {
             settings.loadSettings(settingsFile);
@@ -43,6 +48,12 @@ public class LanServer {
             System.out.println(e.toString());
             throw new ServerException("Settings file " + settingsFile + " is missings or invalid format!");
         }
+        
+        SQLite.setLibraryPath(settings.getLibLocation());
+        Logger.getLogger("com.almworks.sqlite4java").setLevel(Level.OFF);
+        queue = new SQLiteQueue(new File(settings.getDatabaseLocation()));
+        queue.start();
+        
         Injector injector = Guice.createInjector(new LoggingModule(settings));
         logger = injector.getInstance(ILogger.class);
         
@@ -66,7 +77,7 @@ public class LanServer {
     public void start() throws ServerException{
         server = new Server(PORT);
         ServletContextHandler sch = new ServletContextHandler(server, "/");
-        sch.addEventListener(new LanServletConfig(settings));
+        sch.addEventListener(new LanServletConfig(settings,queue));
         sch.addFilter(GuiceFilter.class, "/*", null);
         sch.addServlet(DefaultServlet.class, "/");
         try {
@@ -91,5 +102,8 @@ public class LanServer {
             server.stop();
         }
         logger.log("Server shut down.", LogSeverity.TRACE);
+        if (queue != null){
+            queue.stop(true);
+        }
     }
 }

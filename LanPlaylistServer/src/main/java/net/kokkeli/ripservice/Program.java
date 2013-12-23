@@ -1,8 +1,11 @@
 package net.kokkeli.ripservice;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import com.almworks.sqlite4java.SQLiteQueue;
 
 import net.kokkeli.ISettings;
 import net.kokkeli.Settings;
@@ -40,11 +43,14 @@ public class Program {
             System.out.println("Unable to load settings from file " + settingsFile);
         }
         
-        ILogger logger = new Logging("Ripper", settings, new LogDatabase(settings));
+        SQLiteQueue queue = new SQLiteQueue(new File(settings.getDatabaseLocation()));
+        queue.start();
+        
+        ILogger logger = new Logging("Ripper", settings, new LogDatabase(queue));
         
        //TODO Check vlc existance, so user gets better errormessage...
         
-        IFetchRequestDatabase fetcherDatabase = new FetchRequestDatabase(settings);
+        IFetchRequestDatabase fetcherDatabase = new FetchRequestDatabase(queue);
         
         IFetcher ripper = new VlcRipper(settings, logger);
         ExecutorService executor = Executors.newFixedThreadPool(1);

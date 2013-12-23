@@ -2,9 +2,9 @@ package net.kokkeli.data.db;
 
 import java.util.Collection;
 
+import com.almworks.sqlite4java.SQLiteQueue;
 import com.google.inject.Inject;
 
-import net.kokkeli.ISettings;
 import net.kokkeli.data.User;
 
 public class UserDatabase extends Database implements IUserDatabase {   
@@ -15,9 +15,9 @@ public class UserDatabase extends Database implements IUserDatabase {
      * @param settings Settings user for database.
      */
     @Inject
-    public UserDatabase(ISettings settings) throws DatabaseException{
-        super(settings);
-        users = new UsersTable(getDatabaseLocation());
+    public UserDatabase(SQLiteQueue queue) throws DatabaseException{
+        super();
+        users = new UsersTable(queue);
         CheckDatabaseFormat();
     }
     

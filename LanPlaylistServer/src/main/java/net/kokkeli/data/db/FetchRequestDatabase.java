@@ -3,9 +3,9 @@ package net.kokkeli.data.db;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.almworks.sqlite4java.SQLiteQueue;
 import com.google.inject.Inject;
 
-import net.kokkeli.ISettings;
 import net.kokkeli.data.FetchRequest;
 import net.kokkeli.data.FetchStatus;
 
@@ -23,11 +23,11 @@ public class FetchRequestDatabase extends Database implements IFetchRequestDatab
      * @param settings Settings
      */
     @Inject
-    public FetchRequestDatabase(ISettings settings) {
-        super(settings);
+    public FetchRequestDatabase(SQLiteQueue queue) {
+        super();
         
-        tracks = new TracksTable(settings.getDatabaseLocation());
-        table = new FetchRequestsTable(settings.getDatabaseLocation());
+        tracks = new TracksTable(queue);
+        table = new FetchRequestsTable(queue);
     }
 
     @Override

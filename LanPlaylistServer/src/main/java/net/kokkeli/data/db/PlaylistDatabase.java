@@ -2,8 +2,8 @@ package net.kokkeli.data.db;
 
 import java.util.Collection;
 
+import com.almworks.sqlite4java.SQLiteQueue;
 import com.google.inject.Inject;
-import net.kokkeli.ISettings;
 import net.kokkeli.data.PlayList;
 import net.kokkeli.data.Track;
 import net.kokkeli.data.User;
@@ -15,12 +15,12 @@ public class PlaylistDatabase extends Database implements IPlaylistDatabase {
     private final UsersTable usersTable;
     
     @Inject
-    public PlaylistDatabase(ISettings settings) throws DatabaseException {
-        super(settings);
-        playlistTable = new PlaylistsTable(getDatabaseLocation());
-        trackPlaylistTable = new TrackPlaylistTable(getDatabaseLocation());
-        tracksTable = new TracksTable(getDatabaseLocation());
-        usersTable = new UsersTable(getDatabaseLocation());
+    public PlaylistDatabase(SQLiteQueue queue) throws DatabaseException {
+        super();
+        playlistTable = new PlaylistsTable(queue);
+        trackPlaylistTable = new TrackPlaylistTable(queue);
+        tracksTable = new TracksTable(queue);
+        usersTable = new UsersTable(queue);
         
         CheckDatabaseFormat();
     }

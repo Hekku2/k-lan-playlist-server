@@ -9,6 +9,10 @@ import java.util.Collection;
  */
 public interface IDatabase<T> {
 
+    /**
+     * Checks database format. Throws DatabaseException if format is not fine.
+     * @throws DatabaseException
+     */
     void CheckDatabaseFormat() throws DatabaseException;
     
     T get(long id) throws DatabaseException, NotFoundInDatabase;
