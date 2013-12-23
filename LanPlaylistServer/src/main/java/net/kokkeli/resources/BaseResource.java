@@ -72,6 +72,8 @@ public abstract class BaseResource {
             sessions.clearError(session.getAuthId());
             sessions.clearInfo(session.getAuthId());
             
+            //TODO Also check if there is anything in queue
+            model.setAnythingPlaying(player.playlistPlaying());
         } catch (AuthenticationCookieNotFound e) {
             throw new NotAuthenticatedException("There was a problem with authentication.", e);
         } catch (NotFoundInDatabase e) {

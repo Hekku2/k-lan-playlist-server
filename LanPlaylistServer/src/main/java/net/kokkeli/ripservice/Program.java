@@ -31,7 +31,6 @@ public class Program {
     public static void main(String[] args) throws InterruptedException, IOException {
         String settingsFile = "settings/default.dat";
         
-        
         if (args.length > 0){
             settingsFile = args[0];
         }

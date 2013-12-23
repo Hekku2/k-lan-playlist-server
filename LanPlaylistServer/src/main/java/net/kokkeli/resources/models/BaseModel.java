@@ -17,6 +17,8 @@ public class BaseModel extends ViewModel {
     private String error;
     private String info;
     
+    private boolean anythingPlaying;
+    
     private ViewModel model;
     private Session session;
     
@@ -119,5 +121,22 @@ public class BaseModel extends ViewModel {
      */
     public Session getCurrentSession(){
         return session;
+    }
+    
+    /**
+     * Return playlist playing.
+     * @return playlist playing
+     */
+    @Field
+    public boolean getAnythingPlaying(){
+        return anythingPlaying;
+    }
+    
+    /**
+     * Sets value indicating if playlist is selected
+     * @return playlist playing
+     */
+    public void setAnythingPlaying(boolean playing){
+        anythingPlaying = playing;
     }
 }
