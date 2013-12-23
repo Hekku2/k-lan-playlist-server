@@ -2,7 +2,9 @@
 <script type="text/javascript" src="/resource/js/play-controls.js"></script>
 
 <div class="now-playing-bar">
+	<!-- Not yet implemented.
 	<button id="stop" class="btn" <#if !getAnythingPlaying>disabled</#if>><i class="icon-stop"></i></button>
+	-->
 	<button id="pause" class="btn" <#if !getAnythingPlaying>disabled</#if>><i class="icon-pause"></i></button>
 	<button id="play" class="btn" <#if !getAnythingPlaying>disabled</#if>><i class="icon-play"></i></button>
 	<span class="now-playing-bar-song-name">

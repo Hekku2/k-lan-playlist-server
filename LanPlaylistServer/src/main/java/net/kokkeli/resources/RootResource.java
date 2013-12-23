@@ -118,7 +118,7 @@ public class RootResource extends BaseResource {
     @Path("/play")
     public Response play(@Context HttpServletRequest req){
         try {
-            if (player.playlistPlaying()){
+            if (player.readyForPlay()){
                 player.play();
                 log("Playing started.", LogSeverity.TRACE);
             }
@@ -126,5 +126,16 @@ public class RootResource extends BaseResource {
         } catch (ServiceException e) {
             return Response.status(Status.INTERNAL_SERVER_ERROR).build();
         }
+    }
+    
+    @POST
+    @Produces("text/html")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Access(Role.ADMIN)
+    @Path("/pause")
+    public Response pause(@Context HttpServletRequest req){
+        player.pause();
+        log("Playing paused.", LogSeverity.TRACE);
+        return Response.ok().build();
     }
 }

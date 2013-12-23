@@ -32,4 +32,9 @@ public class MockPlayer implements IPlayer {
     @Override
     public void selectPlaylist(long id) {
     }
+
+    @Override
+    public boolean readyForPlay() {
+        return true;
+    }
 }

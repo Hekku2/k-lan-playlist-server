@@ -217,10 +217,11 @@ public class PlaylistsResource extends BaseResource {
             @FormDataParam("file") FormDataContentDisposition fileDetail) throws ServiceException, NotFoundInDatabase,
             NotAuthenticatedException {
         BaseModel model = buildBaseModel(req);
-
+        ModelPlaylistItem failModel = new ModelPlaylistItem();
+        failModel.setPlaylistId(playlistId);
+        model.setModel(failModel);
         try {
-            ModelPlaylistItem failModel = new ModelPlaylistItem();
-            failModel.setPlaylistId(playlistId);
+
             
             if (ValidationUtils.isEmpty(track) || ValidationUtils.isEmpty(artist)) {
                 model.setError("Track must have name and artist.");
@@ -242,9 +243,11 @@ public class PlaylistsResource extends BaseResource {
                 return Response.ok(templates.process(PLAYLIST_TRACK_ADD_TEMPLATE, model)).build();
             }
 
-            log("User trying to upload file: " + fileDetail.getFileName() + ", Filetype: " + fileDetail.getType(),
+            
+            String converted = new String (fileDetail.getFileName().getBytes ("iso-8859-1"), "UTF-8");
+            log("User trying to upload file: " + converted + ", Filetype: " + fileDetail.getType(),
                     LogSeverity.TRACE);
-            String filename = settings.getTracksFolder() + "/" + fileDetail.getFileName();
+            String filename = settings.getTracksFolder() + "/" + converted;
 
             if (filesystem.fileExists(filename)) {
                 model.setError("Similar file already exists. Remove existing file, or upload different.");

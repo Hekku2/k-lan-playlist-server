@@ -52,4 +52,10 @@ public interface IPlayer {
      * @throws ServiceException Thrown if there is a problem with the database
      */
     void selectPlaylist(long id) throws NotFoundInDatabase, ServiceException;
+    
+    /**
+     * Returnc true, if player can begin playback. (There is anything in queue or playlist is selected)
+     * @return true, if play can be used.
+     */
+    boolean readyForPlay();
 }

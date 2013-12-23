@@ -57,6 +57,7 @@ public class VlcPlayer implements IPlayer {
     
     @Override
     public void pause() {
+        player.pause();
     }
 
     @Override
@@ -92,6 +93,12 @@ public class VlcPlayer implements IPlayer {
         currentPlaylistId = id;
     }
     
+
+    @Override
+    public boolean readyForPlay() {
+        return playlistPlaying() || (trackQueue.peek() != null);
+    }
+    
     /**
      * Extended AudioMediaPlayerComponent to match needs of this system.
      * @author Hekku2
@@ -121,6 +128,7 @@ public class VlcPlayer implements IPlayer {
                     }
                     
                     Track chosen = tracks.get(trackPointer++);
+                    logger.log("Playing: " + chosen.getLocation(),LogSeverity.TRACE);
                     player.getMediaPlayer().playMedia(chosen.getLocation());
                     return;
                 } catch (NotFoundInDatabase e) {
@@ -131,6 +139,13 @@ public class VlcPlayer implements IPlayer {
             }
                 
             player.getMediaPlayer().playMedia(file);
+        }
+        
+        /**
+         * Pauses playing
+         */
+        public void pause(){
+            player.getMediaPlayer().pause();
         }
         
         @Override
@@ -167,6 +182,7 @@ public class VlcPlayer implements IPlayer {
         @Override
         public void error(MediaPlayer mediaPlayer) {
             //This can happen, media is corrupted or for some reason cannot be played.
+            
             logger.log("Failed to play media.", LogSeverity.ERROR);
             try {
                 play();

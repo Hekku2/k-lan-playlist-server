@@ -117,6 +117,7 @@ public class TestRootResource extends ResourceTestsBase{
     
     @Test
     public void testPlayCallsPlay() throws ServiceException{
+        when(getPlayer().readyForPlay()).thenReturn(true);
         Response r = resource.play(buildRequest());
         assertEquals(RESPONSE_OK, r.getStatus());
         verify(getPlayer()).play();
@@ -124,6 +125,7 @@ public class TestRootResource extends ResourceTestsBase{
     
     @Test
     public void testPlayReturnsInternalErrorWhenPlayerThrowsServiceException() throws ServiceException{
+        when(getPlayer().readyForPlay()).thenReturn(true);
         Mockito.doThrow(new ServiceException("Boom!")).when(getPlayer()).play();
         Response r = resource.play(buildRequest());
         assertEquals(INTERNAL_SERVER_ERROR, r.getStatus());
