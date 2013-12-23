@@ -12,6 +12,7 @@ public class LogRow {
     private LogSeverity severity;
     private String source;
     private Date timestamp;
+    private long id;
     
     /**
      * @return the message
@@ -60,5 +61,17 @@ public class LogRow {
      */
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
+    }
+    /**
+     * @return the id
+     */
+    public long getId() {
+        return id;
+    }
+    /**
+     * @param id the id to set
+     */
+    public void setId(long id) {
+        this.id = id;
     }
 }
