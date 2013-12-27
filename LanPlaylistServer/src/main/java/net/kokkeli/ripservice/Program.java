@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import com.almworks.sqlite4java.SQLite;
 import com.almworks.sqlite4java.SQLiteQueue;
 
 import net.kokkeli.ISettings;
@@ -22,7 +23,7 @@ import net.kokkeli.data.db.LogDatabase;
  *
  */
 public class Program {
-
+    
     /**
      * @param args
      * @throws InterruptedException 
@@ -41,7 +42,7 @@ public class Program {
         } catch (IOException | IllegalArgumentException e) {
             System.out.println("Unable to load settings from file " + settingsFile);
         }
-        
+        SQLite.setLibraryPath(settings.getLibLocation());
         SQLiteQueue queue = new SQLiteQueue(new File(settings.getDatabaseLocation()));
         queue.start();
         
@@ -52,18 +53,23 @@ public class Program {
         IFetchRequestDatabase fetcherDatabase = new FetchRequestDatabase(queue);
         
         IFetcher ripper = new VlcRipper(settings, logger);
-        ExecutorService executor = Executors.newFixedThreadPool(1);
+        ExecutorService executor = Executors.newFixedThreadPool(2);
         Runnable worker = new FetcherRunner(logger, ripper, fetcherDatabase);
         executor.execute(worker);
-
+        
         System.out.println("Started to handle requests.");
+        
         System.in.read();
+        
+        queue.stop(true).join();
         
         executor.shutdown();
         //Wait until all are handled.
         while (!executor.isTerminated()) {
             //TODO Handling for hangups
         }
+        
+        
         logger.log("Stopped fetch request handlers.", LogSeverity.TRACE);
     }
 }

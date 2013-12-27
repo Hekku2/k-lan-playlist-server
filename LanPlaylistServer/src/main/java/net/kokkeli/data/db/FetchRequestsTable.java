@@ -97,7 +97,7 @@ public class FetchRequestsTable {
         FetchRequest request = queue.execute(new SQLiteJob<FetchRequest>() {
             @Override
             protected FetchRequest job(SQLiteConnection connection) throws SQLiteException {
-                String command = String.format("%s WHERE FetchStatus = %s AND Handler = '%s' ORDER BY LastUpdated DESC LIMIT 1;",ALLREQUESTS, FetchStatus.WAITING.getStatus(), handler);
+                String command = String.format("%s WHERE FetchStatus = %s AND Handler = '%s' ORDER BY LastUpdated DESC LIMIT 1;", ALLREQUESTS, FetchStatus.WAITING.getStatus(), handler);
                 SQLiteStatement st = connection.prepare(command);
                 
                 FetchRequest request = null;
@@ -122,10 +122,6 @@ public class FetchRequestsTable {
                 
                 return request;
             }}).complete();
-        
-        if (request == null){
-            throw new DatabaseException("Getting oldest unhandled fettch request failed.");
-        }
         
         return request;
     }
