@@ -71,6 +71,7 @@ public class TestValidationUtis {
         Assert.assertFalse(ValidationUtils.isValidInput(">"));
         Assert.assertFalse(ValidationUtils.isValidInput("gfgdfgfdgd>fg"));
         Assert.assertFalse(ValidationUtils.isValidInput("&#"));
+        Assert.assertFalse(ValidationUtils.isValidInput("gfdsgsdf&#gfdgf&#s<dgd"));
         Assert.assertFalse(ValidationUtils.isValidInput("gfgdf&#gfdgdfg"));
         Assert.assertFalse(ValidationUtils.isValidInput("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
     }

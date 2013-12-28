@@ -13,6 +13,9 @@ public final class ValidationUtils {
     
     private static final String REGEX_USERNAME = "[a-zA-Z0-9]+";
     
+    /**
+     * Matches <, > and &#
+     */
     private static final String REGEX_GENERAL_INPUT = ".*(&#|<|>).*"; 
     
     /**
