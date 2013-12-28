@@ -221,16 +221,14 @@ public class PlaylistsResource extends BaseResource {
         failModel.setPlaylistId(playlistId);
         model.setModel(failModel);
         try {
-
-            
             if (ValidationUtils.isEmpty(track) || ValidationUtils.isEmpty(artist)) {
                 model.setError("Track must have name and artist.");
                 model.setModel(failModel);
                 return Response.ok(templates.process(PLAYLIST_TRACK_ADD_TEMPLATE, model)).build();
             }
 
-            if (!ValidationUtils.containsOnlyNumbersAndLettersAndWhiteSpace(track)
-                    || !ValidationUtils.containsOnlyNumbersAndLettersAndWhiteSpace(artist)) {
+            if (!ValidationUtils.isValidInput(track)
+                    || !ValidationUtils.isValidInput(artist)) {
                 model.setError("Track or artist contained invalid charachters.");
                 model.setModel(failModel);
                 return Response.ok(templates.process(PLAYLIST_TRACK_ADD_TEMPLATE, model)).build();
