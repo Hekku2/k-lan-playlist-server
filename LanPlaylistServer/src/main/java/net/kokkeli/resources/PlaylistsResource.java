@@ -302,14 +302,14 @@ public class PlaylistsResource extends BaseResource {
                 return Response.ok(templates.process(PLAYLIST_TRACK_ADD_VLC_TEMPLATE, model)).build();
             }
 
-            if (!ValidationUtils.containsOnlyNumbersAndLettersAndWhiteSpace(track)
-                    || !ValidationUtils.containsOnlyNumbersAndLettersAndWhiteSpace(artist)) {
+            if (!ValidationUtils.isValidInput(track)
+                    || !ValidationUtils.isValidInput(artist)) {
                 model.setError("Track or artist contained invalid characters.");
                 return Response.ok(templates.process(PLAYLIST_TRACK_ADD_VLC_TEMPLATE, model)).build();
             }
 
             //TODO Proper generation for destination file and extension.
-            String destination = artist + " - " + track + ".ogg";
+            String destination = settings.getTracksFolder() + "/" + artist + " - " + track + ".ogg";
             
             FetchRequest newRequest = new FetchRequest();
             newRequest.setDestinationFile(destination);
@@ -404,7 +404,7 @@ public class PlaylistsResource extends BaseResource {
 
     @POST
     @Produces("text/html; charset=utf-8")
-    @Access(Role.USER)
+    @Access(Role.ADMIN)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Path("/delete/{playlistId: [0-9]*}")
     public Response delete(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId,

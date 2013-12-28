@@ -55,4 +55,23 @@ public class TestValidationUtis {
         Assert.assertFalse(ValidationUtils.isValidUsername("_"));
         Assert.assertFalse(ValidationUtils.isValidUsername(null));
     }
+    
+    @SuppressWarnings("static-method")
+    @Test
+    public void testIsValidInput(){
+        Assert.assertTrue(ValidationUtils.isValidInput("ghjjk"));
+        Assert.assertTrue(ValidationUtils.isValidInput("Jerry Cotton"));
+        Assert.assertTrue(ValidationUtils.isValidInput("Pestest' testest"));
+        Assert.assertTrue(ValidationUtils.isValidInput("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
+        Assert.assertFalse(ValidationUtils.isValidInput(null));
+        Assert.assertFalse(ValidationUtils.isValidInput(""));
+        Assert.assertFalse(ValidationUtils.isValidInput("         "));
+        Assert.assertFalse(ValidationUtils.isValidInput("<"));
+        Assert.assertFalse(ValidationUtils.isValidInput("gfgdf<gfdgdfg"));
+        Assert.assertFalse(ValidationUtils.isValidInput(">"));
+        Assert.assertFalse(ValidationUtils.isValidInput("gfgdfgfdgd>fg"));
+        Assert.assertFalse(ValidationUtils.isValidInput("&#"));
+        Assert.assertFalse(ValidationUtils.isValidInput("gfgdf&#gfdgdfg"));
+        Assert.assertFalse(ValidationUtils.isValidInput("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
+    }
 }

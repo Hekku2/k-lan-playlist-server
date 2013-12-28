@@ -13,6 +13,8 @@ public final class ValidationUtils {
     
     private static final String REGEX_USERNAME = "[a-zA-Z0-9]+";
     
+    private static final String REGEX_GENERAL_INPUT = ".*(&#|<|>).*"; 
+    
     /**
      * Checks if given string contains only numbers and letters.
      * @param input input string. If it's null, false is returned.
@@ -47,6 +49,18 @@ public final class ValidationUtils {
             return false;
         
         return username.matches(REGEX_USERNAME) && username.length() <= 255;
+    }
+    
+    /**
+     * Validates general input
+     * @param input
+     * @return
+     */
+    public static boolean isValidInput(String input){
+        if (isEmpty(input))
+            return false;
+        
+        return !input.matches(REGEX_GENERAL_INPUT) && input.length() <= 255;
     }
     
     /**
