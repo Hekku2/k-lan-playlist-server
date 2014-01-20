@@ -15,6 +15,16 @@
 		</div>
 	</div>
 </#macro>
+
+<#macro passwordField label name>
+	<div class="control-group">
+		<label class="control-label" for="${name}">${label}</label>
+		<div class="controls">
+			<input type="password" class="input-xlarge" name="${name}" value=""/>
+		</div>
+	</div>
+</#macro>
+
 <head>
 	<link rel="stylesheet" type="text/css" href="/resource/css/bootstrap/bootstrap.css">
 	<link rel="stylesheet" type="text/css" href="/resource/css/bootstrap/bootstrap-responsive.css">

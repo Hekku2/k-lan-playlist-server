@@ -12,6 +12,8 @@ public final class ModelUser extends ViewModel {
     private String username;
     private final Role role;
     private final long id;
+    private String newPassword;
+    private String confirmPassword;
     
     /**
      * Creates user model
@@ -63,5 +65,37 @@ public final class ModelUser extends ViewModel {
      */
     public void setUsername(String username){
         this.username = username;
+    }
+
+    /**
+     * Returns new password
+     * @return the newPassword
+     */
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    /**
+     * Sets new password
+     * @param newPassword the newPassword to set
+     */
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
+    }
+
+    /**
+     * Returns confirm password
+     * @return the confirmPassword
+     */
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    /**
+     * Sets confirm password
+     * @param confirmPassword the confirmPassword to set
+     */
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 }

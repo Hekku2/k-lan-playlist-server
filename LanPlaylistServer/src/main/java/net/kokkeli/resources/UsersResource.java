@@ -49,6 +49,8 @@ public class UsersResource extends BaseResource {
     private static final String FORM_USERNAME = "username";
     private static final String FORM_ID = "id";
     private static final String FORM_ROLE = "role";
+    private static final String FORM_NEW_PASSWORD = "new_password";
+    private static final String FORM_CONFIRM_PASSWORD = "confirm_password";
     
     private IUserService userService;
     
@@ -183,8 +185,19 @@ public class UsersResource extends BaseResource {
                 return editPostErrorResponse(model, editedUser, "Invalid username.");
             }
             
-            if (userService.exists(editedUser.getUsername())){
+            // If there is a password, it must match.
+            if ((!editedUser.getConfirmPassword().isEmpty() || !editedUser.getConfirmPassword().isEmpty())
+                    && !editedUser.getConfirmPassword().equals(editedUser.getNewPassword())){
+                return editPostErrorResponse(model, editedUser, "Passwords did not match.");
+            }
+            
+            if (!editedUser.getUsername().equals(user.getUserName()) && userService.exists(editedUser.getUsername())){
                 return editPostErrorResponse(model, editedUser, "Username already exists.");
+            }
+            
+            //Change to new password.
+            if (!editedUser.getNewPassword().isEmpty()){
+                userService.changePassword(editedUser.getId(), editedUser.getNewPassword());
             }
             
             //TODO Field validation
@@ -234,32 +247,45 @@ public class UsersResource extends BaseResource {
     @Access(Role.ADMIN)
     @Path("/create/")
     public Response userCreate(@Context HttpServletRequest req, MultivaluedMap<String, String> formParams) throws BadRequestException, NotAuthenticatedException{
-        BaseModel model = buildBaseModel(req);
+        BaseModel baseModel = buildBaseModel(req);
         
         try {
             containsNeededFieldsForCreate(formParams);
-            ModelUser user = createUser(formParams);
+            ModelUser model = createUser(formParams);
 
             //TODO Validation for user values.
-            if (ValidationUtils.isEmpty(user.getUsername())){
-                model.setError("Username is required.");
-                return Response.ok(templates.process(USER_CREATE_TEMPLATE, model)).build();
+            if (ValidationUtils.isEmpty(model.getUsername())){
+                baseModel.setError("Username is required.");
+                return Response.ok(templates.process(USER_CREATE_TEMPLATE, baseModel)).build();
             }
             
-            if (!ValidationUtils.isValidUsername(user.getUsername())){
-                model.setError("Username was invalid.");
-                return Response.ok(templates.process(USER_CREATE_TEMPLATE, model)).build();
+            if (!ValidationUtils.isValidUsername(model.getUsername())){
+                baseModel.setError("Username was invalid.");
+                return Response.ok(templates.process(USER_CREATE_TEMPLATE, baseModel)).build();
             }
             
-            long id = userService.add(new User(user.getUsername(),user.getRoleEnum())).getId();
+            if (model.getNewPassword().isEmpty()){
+                baseModel.setError("Password is required for normal user.");
+                return Response.ok(templates.process(USER_CREATE_TEMPLATE, baseModel)).build();
+            }
+            
+            if (!model.getNewPassword().equals(model.getConfirmPassword())){
+                baseModel.setError("Confirm password did not match new password.");
+                return Response.ok(templates.process(USER_CREATE_TEMPLATE, baseModel)).build();
+            }
+            
+            User user = new User(model.getUsername(),model.getRoleEnum());
+            user.setPasswordHash(userService.calculateHash(model.getNewPassword()));
+            
+            long id = userService.add(user).getId();
             log("User created.", LogSeverity.TRACE);
             
-            sessions.setInfo(model.getCurrentSession().getAuthId(), "User created.");
+            sessions.setInfo(baseModel.getCurrentSession().getAuthId(), "User created.");
             return Response.seeOther(settings.getURI(String.format("users/%s", id))).build();
         } catch (RenderException e) {
-            return handleRenderingError(model, e);
+            return handleRenderingError(baseModel, e);
         } catch (ServiceException e){
-            return handleServiceException(model, e);
+            return handleServiceException(baseModel, e);
         }
 
     }
@@ -319,7 +345,6 @@ public class UsersResource extends BaseResource {
         }
         
         String username = formParams.getFirst(FORM_USERNAME).trim();
-        
         Role role;
         try {
             role = Role.valueOf(formParams.getFirst(FORM_ROLE).toUpperCase());
@@ -327,7 +352,11 @@ public class UsersResource extends BaseResource {
             throw new BadRequestException("There was no such role.", e);
         }
         
-        return new ModelUser(id, username, role);
+        ModelUser user = new ModelUser(id, username, role);
+        
+        user.setNewPassword(formParams.getFirst(FORM_NEW_PASSWORD));
+        user.setConfirmPassword(formParams.getFirst(FORM_CONFIRM_PASSWORD));
+        return user;
     }
     
     /**
@@ -346,7 +375,11 @@ public class UsersResource extends BaseResource {
             throw new BadRequestException("There was no such role.", e);
         }
         
-        return new ModelUser(0, username,role);
+        ModelUser user = new ModelUser(0, username, role);
+        
+        user.setNewPassword(formParams.getFirst(FORM_NEW_PASSWORD));
+        user.setConfirmPassword(formParams.getFirst(FORM_CONFIRM_PASSWORD));
+        return user;
     }
     
     /**

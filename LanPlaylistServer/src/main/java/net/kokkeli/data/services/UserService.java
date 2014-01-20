@@ -141,6 +141,30 @@ public class UserService implements IUserService {
         throw new NotFoundInDatabase("Wrong username or password.");
     }
     
+    @Override
+    public void changePassword(long id, String password) throws ServiceException {
+        try {
+            
+            userDatabase.changeUserPasswordHash(id, calculateHash(password));
+        } catch (DatabaseException e) {
+            logger.log("Something went wrong in database: " + e.getMessage(), LogSeverity.ERROR);
+            throw new ServiceException("There is a problem with the database.", e);
+        }
+
+    }
+    
+    /**
+     * Calculates hash for new password
+     * @param password
+     * @return
+     */
+    @Override
+    public String calculateHash(String password) {
+        String combined = password + passwordSalt;
+        hasher.update(combined.getBytes(), 0, combined.length());
+        return new BigInteger(1,hasher.digest()).toString(16);
+    }
+    
     /**
      * Checks if password matches hash
      * @param password Password
@@ -148,9 +172,6 @@ public class UserService implements IUserService {
      * @return True, if password matches hash
      */
     private boolean matches(String password, String passwordHash) {
-        String combined = password + passwordSalt;
-        hasher.update(combined.getBytes(), 0, combined.length());
-        String hash = new BigInteger(1,hasher.digest()).toString(16);
-        return hash.equals(passwordHash);
+        return calculateHash(password).equals(passwordHash);
     }
 }

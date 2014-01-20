@@ -50,4 +50,9 @@ public class UserDatabase extends Database implements IUserDatabase {
     public boolean exists(String username) throws DatabaseException {
         return users.exists(username);
     }
+
+    @Override
+    public void changeUserPasswordHash(long id, String passwordHash) throws DatabaseException {
+        users.updatePasswordHash(id, passwordHash);
+    }
 }

@@ -71,4 +71,19 @@ public interface IUserService {
      * @throws ServiceException Thrown if there is problem with the database.
      */
     User get(String username, String password) throws NotFoundInDatabase, ServiceException;
+    
+    /**
+     * Changes users password
+     * @param id Id of user
+     * @param password Password of user
+     * @throws ServiceException Thrown if there is problem with the database.
+     */
+    void changePassword(long id, String password) throws ServiceException;
+    
+    /**
+     * Calculates hash from password
+     * @param password Password
+     * @return Hash
+     */
+    String calculateHash(String password);
 }

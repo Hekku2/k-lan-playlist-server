@@ -23,4 +23,12 @@ public interface IUserDatabase extends IDatabase<User>{
      * @throws DatabaseException Thrown, if there is problem with database
      */
     boolean exists(String username) throws DatabaseException;
+
+    /**
+     * Changes user password hash to new hash
+     * @param id Id of user
+     * @param passwordHash Password hash
+     * @throws DatabaseException Thrown, if there is problem with database
+     */
+    void changeUserPasswordHash(long id, String passwordHash) throws DatabaseException;
 }

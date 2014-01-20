@@ -20,6 +20,7 @@ public class UsersTable {
     private static final String COLUMN_ID = "Id";
     private static final String COLUMN_USERNAME = "Username";
     private static final String COLUMN_ROLE = "Role";
+    private static final String COLUMN_PASSWORDHASH = "PasswordHash";
     
     private final SQLiteQueue queue;
     
@@ -211,6 +212,32 @@ public class UsersTable {
     }
     
     /**
+     * Udpates password hash
+     * @param id
+     * @param passwordHash
+     */
+    public void updatePasswordHash(long id, String passwordHash) {
+        String update = String.format("UPDATE %s", TABLENAME);
+        String set = String.format("SET %s", format(COLUMN_PASSWORDHASH, passwordHash));
+        String where = String.format("WHERE %s", format(COLUMN_ID, id+""));
+        
+        final String query = String.format("%s %s %s", update,set,where);
+
+        queue.execute(new SQLiteJob<Object>() {
+            @Override
+            protected Object job(SQLiteConnection connection) throws SQLiteException {
+                SQLiteStatement st = connection.prepare(query);
+                try {
+                    st.stepThrough();
+                } finally {
+                    st.dispose();
+                }
+                return null;
+            }
+        });
+    }
+    
+    /**
      * Returns Role with given id.
      * @param id Id of role
      * @return Role with given id.
@@ -249,7 +276,7 @@ public class UsersTable {
      * @return Insert statement
      */
     private static String createInsertString(User user){
-        return String.format("INSERT INTO %s (%s, %s) VALUES ('%s', %s)",TABLENAME, COLUMN_USERNAME, COLUMN_ROLE, user.getUserName(), user.getRole().getId());
+        return String.format("INSERT INTO %s (%s, %s, %s) VALUES ('%s', %s, '%s')",TABLENAME, COLUMN_USERNAME, COLUMN_ROLE, COLUMN_PASSWORDHASH, user.getUserName(), user.getRole().getId(), user.getPasswordHash());
     }
     
     /**
