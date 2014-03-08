@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import javax.ws.rs.core.MultivaluedMap;
 
 import net.kokkeli.data.Role;
+import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.resources.models.ViewModel;
 
 public class ModelBuilder<T extends ViewModel> {
@@ -21,21 +22,27 @@ public class ModelBuilder<T extends ViewModel> {
      * Crates model from form params.
      * @param formParams
      * @return
-     * @throws InstantiationException
-     * @throws IllegalAccessException
+     * @throws ServiceException 
      */
-    public T createModelFrom(MultivaluedMap<String, String> formParams) throws InstantiationException, IllegalAccessException{
-        T model = classOfModel.newInstance();
-        
-        for (Method method : methods) {
-            String methodName = method.getName();
+    public T createModelFrom(MultivaluedMap<String, String> formParams) throws ServiceException {
+        try {
+            T model = classOfModel.newInstance();
             
-            if (containsParameter(methodName, formParams)){
-                String parameterName = parseParameterName(methodName);
-                setField(formParams.getFirst(parameterName), method, model);
-            }
-        }       
-        return model;
+            for (Method method : methods) {
+                String methodName = method.getName();
+                
+                if (containsParameter(methodName, formParams)){
+                    String parameterName = parseParameterName(methodName);
+                    setField(formParams.getFirst(parameterName), method, model);
+                }
+            }       
+            return model;
+        } catch (InstantiationException e) {
+            throw new ServiceException("Parsing model from form failed.", e);
+        } catch (IllegalAccessException e) {
+            throw new ServiceException("Parsing model from form failed.", e);
+        }
+
     }
     
     /**

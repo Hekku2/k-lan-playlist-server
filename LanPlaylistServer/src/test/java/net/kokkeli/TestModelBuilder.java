@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 import javax.ws.rs.core.MultivaluedMap;
 
 import net.kokkeli.data.Role;
+import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.resources.models.ModelPlaylistItem;
 import net.kokkeli.resources.models.ModelUser;
 
@@ -16,7 +17,7 @@ public class TestModelBuilder {
     
     @SuppressWarnings({ "unchecked", "static-method" })
     @Test
-    public void testLongValueIsParsedCorrectly() throws InstantiationException, IllegalAccessException{
+    public void testLongValueIsParsedCorrectly() throws ServiceException{
         ModelBuilder<ModelPlaylistItem> builder = new ModelBuilder<ModelPlaylistItem>(ModelPlaylistItem.class);
         
         MultivaluedMap<String, String> map = mock(MultivaluedMap.class);
@@ -30,7 +31,7 @@ public class TestModelBuilder {
     
     @SuppressWarnings({ "unchecked", "static-method" })
     @Test
-    public void testStringValueIsUsedCorrectly() throws InstantiationException, IllegalAccessException{
+    public void testStringValueIsUsedCorrectly() throws ServiceException  {
         ModelBuilder<ModelPlaylistItem> builder = new ModelBuilder<ModelPlaylistItem>(ModelPlaylistItem.class);
         
         MultivaluedMap<String, String> map = mock(MultivaluedMap.class);
@@ -44,7 +45,7 @@ public class TestModelBuilder {
     
     @SuppressWarnings({ "unchecked", "static-method" })
     @Test
-    public void testBooleanValueIsUsedCorrectly() throws InstantiationException, IllegalAccessException{
+    public void testBooleanValueIsUsedCorrectly() throws ServiceException  {
         ModelBuilder<ModelPlaylistItem> builder = new ModelBuilder<ModelPlaylistItem>(ModelPlaylistItem.class);
         
         MultivaluedMap<String, String> map = mock(MultivaluedMap.class);
@@ -64,7 +65,7 @@ public class TestModelBuilder {
     
     @SuppressWarnings({ "unchecked", "static-method" })
     @Test
-    public void testUserRoleValueIsParsedCorrectly() throws InstantiationException, IllegalAccessException{
+    public void testUserRoleValueIsParsedCorrectly() throws ServiceException{
         ModelBuilder<ModelUser> builder = new ModelBuilder<ModelUser>(ModelUser.class);
         
         MultivaluedMap<String, String> map = mock(MultivaluedMap.class);
