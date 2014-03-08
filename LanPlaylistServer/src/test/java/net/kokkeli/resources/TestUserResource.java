@@ -25,6 +25,8 @@ public class TestUserResource extends ResourceTestsBase{
     private static final String FORM_USERNAME = "username";
     private static final String FORM_ROLE = "role";
     private static final String FORM_ID = "id";
+    private static final String FORM_NEW_PASSWORD = "new_password";
+    private static final String FORM_CONFIRM_PASSWORD = "confirm_password";
     
     private static final String INVALID_CHARACHTERS_USERNAME = "editedUser<";
     private static final String EMPTY_USERNAME = "";
@@ -188,9 +190,14 @@ public class TestUserResource extends ResourceTestsBase{
         
         when(map.containsKey(FORM_USERNAME)).thenReturn(true);
         when(map.containsKey(FORM_ROLE)).thenReturn(true);
+        when(map.containsKey(FORM_NEW_PASSWORD)).thenReturn(true);
+        when(map.containsKey(FORM_CONFIRM_PASSWORD)).thenReturn(true);
         
         when(map.getFirst(FORM_USERNAME)).thenReturn(username);
         when(map.getFirst(FORM_ROLE)).thenReturn(role.name().toUpperCase());
+        when(map.getFirst(FORM_NEW_PASSWORD)).thenReturn("A");
+        when(map.getFirst(FORM_CONFIRM_PASSWORD)).thenReturn("A");
+
         return map;
     }
     
