@@ -285,6 +285,10 @@ public class UsersResource extends BaseResource {
             return "Username already in use!";
         }
         
+        if (model.getRoleEnum() == null || model.getRoleEnum() == Role.NONE){
+            return "User must have role.";
+        }
+        
         return null;
     }
     
@@ -312,6 +316,11 @@ public class UsersResource extends BaseResource {
         if (!editedUser.getUsername().equals(user.getUserName()) && userService.exists(editedUser.getUsername())){
             return "Username already exists.";
         }
+        
+        if (editedUser.getRoleEnum() == null || editedUser.getRoleEnum() == Role.NONE){
+            return "User must have role.";
+        }
+        
         return null;
     }
     
