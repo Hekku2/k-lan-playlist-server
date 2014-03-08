@@ -51,7 +51,7 @@ public class UsersTable {
                         Role role;
                         
                         try {
-                            role = getRole(roleId);
+                            role = Role.getRole(roleId);
                         } catch (IndexOutOfBoundsException e) {
                             throw new SQLiteException(SQLiteConstants.SQLITE_MISMATCH, String.format("Value in Role column was invalid. It was %s", roleId));
                         }
@@ -97,7 +97,7 @@ public class UsersTable {
                         Role role;
                         
                         try {
-                            role = getRole(roleId);
+                            role = Role.getRole(roleId);
                         } catch (IndexOutOfBoundsException e) {
                             throw new SQLiteException(SQLiteConstants.SQLITE_MISMATCH, String.format("Value in Role column was invalid. It was %s", roleId));
                         }
@@ -235,21 +235,6 @@ public class UsersTable {
                 return null;
             }
         });
-    }
-    
-    /**
-     * Returns Role with given id.
-     * @param id Id of role
-     * @return Role with given id.
-     */
-    private static Role getRole(int id){
-        
-        for (Role r : Role.values()) {
-            if (r.getId() == id){
-                return r;
-            }
-        }
-        throw new IndexOutOfBoundsException("There was no role with given Id.");
     }
     
     /**

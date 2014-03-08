@@ -22,4 +22,19 @@ public enum Role {
     public int getId(){
         return id;
     }
+    
+    /**
+     * Returns Role with given id.
+     * @param id Id of role
+     * @return Role with given id.
+     */
+    public static Role getRole(int id){
+        
+        for (Role r : Role.values()) {
+            if (r.getId() == id){
+                return r;
+            }
+        }
+        throw new IndexOutOfBoundsException("There was no role with given Id.");
+    }
 }
