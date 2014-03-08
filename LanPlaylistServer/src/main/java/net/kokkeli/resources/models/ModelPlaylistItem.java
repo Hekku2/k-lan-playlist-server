@@ -11,6 +11,7 @@ public final class ModelPlaylistItem extends ViewModel{
     private String trackName;
     private String artist;
     private String uploader;
+    private String url;
     private long id;
     private boolean exists;
     private long playlistId;
@@ -115,5 +116,19 @@ public final class ModelPlaylistItem extends ViewModel{
      */
     public void setPlaylistId(long playlistId){
         this.playlistId = playlistId;
+    }
+
+    /**
+     * @return the url
+     */
+    public String getUrl() {
+        return url;
+    }
+
+    /**
+     * @param url the url to set
+     */
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

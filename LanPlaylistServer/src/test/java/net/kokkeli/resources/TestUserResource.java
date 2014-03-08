@@ -114,7 +114,7 @@ public class TestUserResource extends ResourceTestsBase{
         ModelAnswer answer = new ModelAnswer();
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(answer);
         
-        assertModelResponse(userResource.userEdit(buildRequest(), editUserPost(EXISTING_USER_ID, INVALID_CHARACHTERS_USERNAME, newRole)), answer, "Invalid username.", null);
+        assertModelResponse(userResource.userEdit(buildRequest(), editUserPost(EXISTING_USER_ID, INVALID_CHARACHTERS_USERNAME, newRole)), answer, "Username was invalid.", null);
         assertModelResponse(userResource.userEdit(buildRequest(), editUserPost(EXISTING_USER_ID, EMPTY_USERNAME, newRole)), answer, "Username is required.", null);
     }
     

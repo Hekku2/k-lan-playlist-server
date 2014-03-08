@@ -29,6 +29,7 @@ import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.PlayList;
 import net.kokkeli.data.Role;
 import net.kokkeli.data.Track;
+import net.kokkeli.data.User;
 import net.kokkeli.data.db.NotFoundInDatabase;
 import net.kokkeli.data.services.IFetchRequestService;
 import net.kokkeli.data.services.IPlaylistService;
@@ -227,8 +228,7 @@ public class PlaylistsResource extends BaseResource {
                 return Response.ok(templates.process(PLAYLIST_TRACK_ADD_TEMPLATE, model)).build();
             }
 
-            if (!ValidationUtils.isValidInput(track)
-                    || !ValidationUtils.isValidInput(artist)) {
+            if (!ValidationUtils.isValidInput(track) || !ValidationUtils.isValidInput(artist)) {
                 model.setError("Track or artist contained invalid charachters.");
                 model.setModel(failModel);
                 return Response.ok(templates.process(PLAYLIST_TRACK_ADD_TEMPLATE, model)).build();
@@ -249,8 +249,7 @@ public class PlaylistsResource extends BaseResource {
 
             if (filesystem.fileExists(filename)) {
                 model.setError("Similar file already exists. Remove existing file, or upload different.");
-                log("User tried to upload file with same name with file already in system. File: " + filename,
-                        LogSeverity.TRACE);
+                log("User tried to upload file with same name with file already in system. File: " + filename, LogSeverity.TRACE);
                 return Response.ok(templates.process(PLAYLIST_TRACK_ADD_TEMPLATE, model)).build();
             }
 
@@ -293,7 +292,11 @@ public class PlaylistsResource extends BaseResource {
         try {
             ModelPlaylistItem item = new ModelPlaylistItem();
             item.setPlaylistId(playlistId);
+            item.setArtist(artist);
+            item.setTrackName(track);
+            item.setUrl(url);
             model.setModel(item);
+            
             
             if (ValidationUtils.isEmpty(track) || ValidationUtils.isEmpty(artist)) {
                 model.setError("Track must have name and artist.");
@@ -306,29 +309,39 @@ public class PlaylistsResource extends BaseResource {
                 return Response.ok(templates.process(PLAYLIST_TRACK_ADD_VLC_TEMPLATE, model)).build();
             }
 
-            //TODO Proper generation for destination file and extension.
-            String destination = settings.getTracksFolder() + "/" + artist + " - " + track + ".ogg";
-            
-            FetchRequest newRequest = new FetchRequest();
-            newRequest.setDestinationFile(destination);
-            newRequest.setHandler("vlc");
-            newRequest.setLocation(url);
-            newRequest.setStatus(FetchStatus.WAITING);
-            PlayList playlist = new PlayList(playlistId);
-            newRequest.setPlaylist(playlist);
-            Track newTrack = new Track();
-            newTrack.setArtist(artist);
-            newTrack.setTrackName(track);
-            newTrack.setUploader(model.getCurrentSession().getUser());
-            newTrack.setLocation(destination);
-            newRequest.setTrack(newTrack);
-            
+            FetchRequest newRequest = createFetchRequestFromModelPlaylistItem(item, model.getCurrentSession().getUser());
             fetchRequestService.add(newRequest);
             
             return Response.seeOther(settings.getURI(String.format("playlists/%s", playlistId))).build();
         } catch (RenderException e) {
             return handleRenderingError(model, e);
         }
+    }
+
+    /**
+     * Creates a new fetch request from model playlist item
+     * @param uploader Uploading user
+     * @param item model playlist item
+     * @return Created fetch request
+     */
+    private FetchRequest createFetchRequestFromModelPlaylistItem(ModelPlaylistItem item, User uploader) {
+        //TODO Proper generation for destination file and extension.
+        String destination = settings.getTracksFolder() + "/" + item.getArtist() + " - " + item.getTrackName() + ".ogg";
+        
+        Track newTrack = new Track();
+        newTrack.setArtist(item.getArtist());
+        newTrack.setTrackName(item.getTrackName());
+        newTrack.setUploader(uploader);
+        newTrack.setLocation(destination);
+        
+        FetchRequest newRequest = new FetchRequest();
+        newRequest.setDestinationFile(destination);
+        newRequest.setHandler("vlc");
+        newRequest.setLocation(item.getUrl());
+        newRequest.setStatus(FetchStatus.WAITING);
+        newRequest.setPlaylist(new PlayList(item.getPlaylistId()));
+        newRequest.setTrack(newTrack);
+        return newRequest;
     }
 
     @GET
