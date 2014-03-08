@@ -114,4 +114,13 @@ public abstract class BaseResource {
         log("There was a problem with the service: " + e.getMessage(), LogSeverity.ERROR);
         return Response.seeOther(settings.getURI("")).build();
     }
+    
+    /**
+     * Returns true if given string is null or whitespace
+     * @param string String
+     * @return true, if string is null or white space
+     */
+    protected final boolean isNullOrWhitespace(String string){
+        return string == null || string.trim().length() == 0;
+    }
 }

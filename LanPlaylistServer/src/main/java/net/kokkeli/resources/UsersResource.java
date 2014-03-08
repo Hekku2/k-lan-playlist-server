@@ -15,6 +15,7 @@ import com.google.inject.Inject;
 import com.sun.jersey.api.NotFoundException;
 
 import net.kokkeli.ISettings;
+import net.kokkeli.ModelBuilder;
 import net.kokkeli.ValidationUtils;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.LogSeverity;
@@ -53,6 +54,7 @@ public class UsersResource extends BaseResource {
     private static final String FORM_CONFIRM_PASSWORD = "confirm_password";
     
     private IUserService userService;
+    private ModelBuilder<ModelUser> modelBuilder;
     
     /**
      * Creates users resource.
@@ -62,6 +64,8 @@ public class UsersResource extends BaseResource {
     protected UsersResource(ILogger logger, ITemplateService templateService, IUserService userservice, IPlayer player, ISessionService sessions, ISettings settings) {
         super(logger, templateService, player, sessions, settings);
         this.userService = userservice;
+        
+        modelBuilder = new ModelBuilder<ModelUser>(ModelUser.class);
     }
     
     /**
@@ -171,15 +175,15 @@ public class UsersResource extends BaseResource {
         BaseModel model = buildBaseModel(req);
         
         containsNeededFieldsForEdit(formParams);
-        ModelUser editedUser = createEditUser(formParams);
         try {
+            ModelUser editedUser = modelBuilder.createModelFrom(formParams);
             String validationError = getValidationErrorForUserEditing(editedUser);
             if (validationError != null){
                 return editPostErrorResponse(model, editedUser, validationError);
             }
             
             //Change to new password.
-            if (!editedUser.getNewPassword().isEmpty()){
+            if (!isNullOrWhitespace(editedUser.getNewPassword())){
                 userService.changePassword(editedUser.getId(), editedUser.getNewPassword());
             }
             
@@ -301,7 +305,8 @@ public class UsersResource extends BaseResource {
             return usernameValidationError;
         }
 
-        if ((!editedUser.getConfirmPassword().isEmpty() || !editedUser.getConfirmPassword().isEmpty())
+        
+        if ((!isNullOrWhitespace(editedUser.getConfirmPassword()) || !isNullOrWhitespace(editedUser.getNewPassword()) )
                 && !editedUser.getConfirmPassword().equals(editedUser.getNewPassword())){
             return "Passwords did not match.";
         }
@@ -367,37 +372,7 @@ public class UsersResource extends BaseResource {
             throw new BadRequestException("User edit post did not contain needed fields.");
         }
     }
-    
-    /**
-     * Creates new user for edit from formParams. If values are missing, exception is thrown.
-     * @param formParams Parameters. Contains all needed field for ModelUser
-     * @return Created ModelUser
-     * @throws BadRequestException Thrown formParams contain illegal input.
-     */
-    private static ModelUser createEditUser(MultivaluedMap<String, String> formParams) throws BadRequestException{
-        long id;
-        
-        try {
-            id = Long.parseLong(formParams.getFirst(FORM_ID));
-        } catch (NumberFormatException e) {
-            throw new BadRequestException("Id was not in correct format.", e);
-        }
-        
-        String username = formParams.getFirst(FORM_USERNAME).trim();
-        Role role;
-        try {
-            role = Role.valueOf(formParams.getFirst(FORM_ROLE).toUpperCase());
-        } catch (IllegalArgumentException e) {
-            throw new BadRequestException("There was no such role.", e);
-        }
-        
-        ModelUser user = new ModelUser(id, username, role);
-        
-        user.setNewPassword(formParams.getFirst(FORM_NEW_PASSWORD));
-        user.setConfirmPassword(formParams.getFirst(FORM_CONFIRM_PASSWORD));
-        return user;
-    }
-    
+
     /**
      * Creates user from formParams. If username or role is missing, exception is thrown.
      * @param formParams
