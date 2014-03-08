@@ -30,7 +30,7 @@ public class Program {
         } finally {
             if (server != null){
                 server.stop();
-            }            
+            }
         }
 	}
 }
