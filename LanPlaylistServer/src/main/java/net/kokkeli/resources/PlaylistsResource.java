@@ -218,39 +218,30 @@ public class PlaylistsResource extends BaseResource {
             @FormDataParam("file") FormDataContentDisposition fileDetail) throws ServiceException, NotFoundInDatabase,
             NotAuthenticatedException {
         BaseModel model = buildBaseModel(req);
-        ModelPlaylistItem failModel = new ModelPlaylistItem();
-        failModel.setPlaylistId(playlistId);
-        model.setModel(failModel);
-        try {
-            if (ValidationUtils.isEmpty(track) || ValidationUtils.isEmpty(artist)) {
-                model.setError("Track must have name and artist.");
-                model.setModel(failModel);
-                return Response.ok(templates.process(PLAYLIST_TRACK_ADD_TEMPLATE, model)).build();
+        ModelPlaylistItem createModel = new ModelPlaylistItem();
+        createModel.setPlaylistId(playlistId);
+        createModel.setArtist(artist);
+        createModel.setTrackName(track);
+        model.setModel(createModel);
+        try {      
+            
+            String validationError = getValidationError(createModel);
+            if (validationError != null){
+                return createErrorResponse(model, validationError);
             }
-
-            if (!ValidationUtils.isValidInput(track) || !ValidationUtils.isValidInput(artist)) {
-                model.setError("Track or artist contained invalid charachters.");
-                model.setModel(failModel);
-                return Response.ok(templates.process(PLAYLIST_TRACK_ADD_TEMPLATE, model)).build();
-            }
-
+            
             if (ValidationUtils.isEmpty(fileDetail.getFileName())) {
                 log("User tried to upload with no file.", LogSeverity.TRACE);
-                model.setError("Select a file to upload.");
-                model.setModel(failModel);
-                return Response.ok(templates.process(PLAYLIST_TRACK_ADD_TEMPLATE, model)).build();
+                return createErrorResponse(model, "Select a file to upload.");
             }
 
-            
-            String converted = new String (fileDetail.getFileName().getBytes ("iso-8859-1"), "UTF-8");
-            log("User trying to upload file: " + converted + ", Filetype: " + fileDetail.getType(),
-                    LogSeverity.TRACE);
+            String converted = new String(fileDetail.getFileName().getBytes("iso-8859-1"), "UTF-8");
+            log("User trying to upload file: " + converted + ", Filetype: " + fileDetail.getType(), LogSeverity.TRACE);
             String filename = settings.getTracksFolder() + "/" + converted;
 
             if (filesystem.fileExists(filename)) {
-                model.setError("Similar file already exists. Remove existing file, or upload different.");
                 log("User tried to upload file with same name with file already in system. File: " + filename, LogSeverity.TRACE);
-                return Response.ok(templates.process(PLAYLIST_TRACK_ADD_TEMPLATE, model)).build();
+                return createErrorResponse(model, "Similar file already exists. Remove existing file, or upload different.");
             }
 
             filesystem.writeToFile(uploadedInputStream, filename);
@@ -262,9 +253,8 @@ public class PlaylistsResource extends BaseResource {
             
             PlayList playlist = playlistService.getPlaylist(playlistId);
             Track item = new Track();
-
-            item.setArtist(artist);
-            item.setTrackName(track);
+            item.setArtist(createModel.getArtist());
+            item.setTrackName(createModel.getTrackName());
             item.setLocation(filename);
             item.setUploader(model.getCurrentSession().getUser());
 
@@ -279,6 +269,27 @@ public class PlaylistsResource extends BaseResource {
         }
     }
 
+    private Response createErrorResponse(BaseModel model, String validationError) throws RenderException {
+        model.setError(validationError);
+        return Response.ok(templates.process(PLAYLIST_TRACK_ADD_TEMPLATE, model)).build();
+    }
+
+    /**
+     * Returns error message if model doesn't contain valid data, otherwise null is returned.
+     * @param model
+     * @return Validation error, or null if model is valid.
+     */
+    private static String getValidationError(ModelPlaylistItem model){
+        if (ValidationUtils.isEmpty(model.getTrackName()) || ValidationUtils.isEmpty(model.getArtist())) {
+            return "Track must have name and artist.";
+        }
+
+        if (!ValidationUtils.isValidInput(model.getTrackName()) || !ValidationUtils.isValidInput(model.getArtist())) {
+            return "Track or artist contained invalid charachters.";
+        }
+        return null;
+    }
+    
     @POST
     @Produces("text/html; charset=utf-8")
     @Access(Role.USER)
