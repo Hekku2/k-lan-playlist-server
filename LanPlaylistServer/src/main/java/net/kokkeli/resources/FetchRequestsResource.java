@@ -21,6 +21,7 @@ import net.kokkeli.data.ILogger;
 import net.kokkeli.data.PlayList;
 import net.kokkeli.data.Role;
 import net.kokkeli.data.Track;
+import net.kokkeli.data.User;
 import net.kokkeli.data.services.IFetchRequestService;
 import net.kokkeli.data.services.IPlaylistService;
 import net.kokkeli.data.services.ISessionService;
@@ -102,13 +103,7 @@ public class FetchRequestsResource extends BaseResource{
         BaseModel model = buildBaseModel(req);
         try {
             Collection<PlayList> playlists = playlistService.getIdNames();
-            ModelFetchRequestCreate createModel = new ModelFetchRequestCreate();
-            
-            for (PlayList playList : playlists) {
-                ModelPlaylistListItem modelItem = new ModelPlaylistListItem(playList.getId());
-                modelItem.setName(playList.getName());
-                createModel.getItems().add(modelItem);
-            }
+            ModelFetchRequestCreate createModel = createModelFetchRequestCreate(playlists);
             model.setModel(createModel);
             
             return Response.ok(templates.process(REQUEST_CREATE_TEMPLATE, model)).build();
@@ -128,21 +123,7 @@ public class FetchRequestsResource extends BaseResource{
         
         try {
             ModelFetchRequestCreate createModel = createModel(formParams);
-            
-            FetchRequest newRequest = new FetchRequest();
-            newRequest.setDestinationFile(createModel.getDestination());
-            newRequest.setHandler(createModel.getHandler());
-            newRequest.setLocation(createModel.getLocation());
-            newRequest.setStatus(FetchStatus.WAITING);
-            PlayList playlist = new PlayList(createModel.getSelectedPlaylistId());
-            newRequest.setPlaylist(playlist);
-            Track track = new Track();
-            track.setArtist(createModel.getArtist());
-            track.setTrackName(createModel.getTrack());
-            track.setUploader(model.getCurrentSession().getUser());
-            track.setLocation(createModel.getDestination());
-            newRequest.setTrack(track);
-            
+            FetchRequest newRequest = createNewFetchRequest(createModel, model.getCurrentSession().getUser());
             fetchRequestService.add(newRequest);
             
             sessions.setInfo(model.getCurrentSession().getAuthId(), "Fetch request created.");
@@ -166,7 +147,6 @@ public class FetchRequestsResource extends BaseResource{
     public Response removeHandled(@Context HttpServletRequest req) throws NotAuthenticatedException, ServiceException {
         buildBaseModel(req);
         fetchRequestService.removeHandled();
-        
         return Response.ok().build();
     }
     
@@ -213,6 +193,38 @@ public class FetchRequestsResource extends BaseResource{
     }
     
     /**
+     * Creates a new FetchRequest from model
+     * @param uploader Uploader
+     * @param createModel Create model
+     * @return New fetch request
+     */
+    private static FetchRequest createNewFetchRequest(ModelFetchRequestCreate createModel, User uploader) {
+        FetchRequest newRequest = new FetchRequest();
+        newRequest.setDestinationFile(createModel.getDestination());
+        newRequest.setHandler(createModel.getHandler());
+        newRequest.setLocation(createModel.getLocation());
+        newRequest.setStatus(FetchStatus.WAITING);
+        newRequest.setPlaylist(new PlayList(createModel.getSelectedPlaylistId()));
+        newRequest.setTrack(createTrackFromModelFetchRequestCreate(createModel, uploader));
+        return newRequest;
+    }
+    
+    /**
+     * Creates a new track from model fetch request
+     * @param uploader User who uploaded this track
+     * @param createModel Other data is taken from this model.
+     * @return New Track
+     */
+    private static Track createTrackFromModelFetchRequestCreate(ModelFetchRequestCreate createModel, User uploader) {
+        Track track = new Track();
+        track.setArtist(createModel.getArtist());
+        track.setTrackName(createModel.getTrack());
+        track.setUploader(uploader);
+        track.setLocation(createModel.getDestination());
+        return track;
+    }
+    
+    /**
      * Craete model fetch request from form.
      * @param formParams Form Params
      * @return Created model
@@ -252,5 +264,21 @@ public class FetchRequestsResource extends BaseResource{
         }
         
         return model;
+    }
+    
+    /**
+     * Create a new ModelFetchRequestCreate that is populated with playlists.
+     * @param playlists Playlists
+     * @return a new ModelFetchRequestCreate
+     */
+    private static ModelFetchRequestCreate createModelFetchRequestCreate(Collection<PlayList> playlists) {
+        ModelFetchRequestCreate createModel = new ModelFetchRequestCreate();
+        
+        for (PlayList playList : playlists) {
+            ModelPlaylistListItem modelItem = new ModelPlaylistListItem(playList.getId());
+            modelItem.setName(playList.getName());
+            createModel.getItems().add(modelItem);
+        }
+        return createModel;
     }
 }
