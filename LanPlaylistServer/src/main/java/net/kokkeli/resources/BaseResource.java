@@ -120,7 +120,7 @@ public abstract class BaseResource {
      * @param string String
      * @return true, if string is null or white space
      */
-    protected final boolean isNullOrWhitespace(String string){
+    protected final static boolean isNullOrWhitespace(String string){
         return string == null || string.trim().length() == 0;
     }
 }

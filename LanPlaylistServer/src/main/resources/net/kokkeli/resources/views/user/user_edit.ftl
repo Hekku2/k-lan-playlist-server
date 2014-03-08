@@ -26,8 +26,8 @@
 							</label>
 						</div>
 					</div>
-					<@passwordField label="Password" name="newPassword" />
-					<@passwordField label="Confirm password" name="confirmPassword" />
+					<@passwordField label="Password" name="newpassword" />
+					<@passwordField label="Confirm password" name="confirmpassword" />
 					<input class="button" type="submit" value="Edit">
 					<a class="button" href="/users/${getModel.getId}">Cancel</a>
 				</form>

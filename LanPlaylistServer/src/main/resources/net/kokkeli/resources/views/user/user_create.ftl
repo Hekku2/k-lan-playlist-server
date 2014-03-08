@@ -16,17 +16,17 @@
 						<div class="control-label">Role</div>
 						<div class="controls">
 							<label class="radio">
-							  <input type="radio" name="role" value="user">
+							  <input type="radio" name="role" value="1">
 							  User
 							</label>
 							<label class="radio">
-							  <input type="radio" name="role" value="admin">
+							  <input type="radio" name="role" value="2">
 							  Admin
 							</label>
 						</div>
 					</div>
-					<@passwordField label="Password" name="new_password" />
-					<@passwordField label="Confirm password" name="confirm_password" />
+					<@passwordField label="Password" name="newpassword" />
+					<@passwordField label="Confirm password" name="confirmpassword" />
 					<div class="submit-box">
 						<input class="button" type="submit" value="Create">
 						<a class="button" href="/users">Cancel</a>

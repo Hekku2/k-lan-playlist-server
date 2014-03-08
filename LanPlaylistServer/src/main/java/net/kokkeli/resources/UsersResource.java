@@ -50,8 +50,6 @@ public class UsersResource extends BaseResource {
     private static final String FORM_USERNAME = "username";
     private static final String FORM_ID = "id";
     private static final String FORM_ROLE = "role";
-    private static final String FORM_NEW_PASSWORD = "new_password";
-    private static final String FORM_CONFIRM_PASSWORD = "confirm_password";
     
     private IUserService userService;
     private ModelBuilder<ModelUser> modelBuilder;
@@ -237,7 +235,7 @@ public class UsersResource extends BaseResource {
         
         try {
             containsNeededFieldsForCreate(formParams);
-            ModelUser model = createUser(formParams);
+            ModelUser model = modelBuilder.createModelFrom(formParams);
 
             String validationError = getValidationErrorForUserCreation(model);
             if (validationError != null){
@@ -275,7 +273,7 @@ public class UsersResource extends BaseResource {
             return usernameValidationError;
         }
         
-        if (model.getNewPassword().isEmpty()){
+        if (isNullOrWhitespace(model.getNewPassword())){
             return "Password is required for normal user.";
         }
         
@@ -358,7 +356,6 @@ public class UsersResource extends BaseResource {
         if (!formParams.containsKey(FORM_ID)){
             throw new BadRequestException("User edit post did not contain needed fields.");
         }
-        
         containsNeededFieldsForCreate(formParams);
     }
     
@@ -371,29 +368,6 @@ public class UsersResource extends BaseResource {
         if (!formParams.containsKey(FORM_USERNAME) || !formParams.containsKey(FORM_ROLE)){
             throw new BadRequestException("User edit post did not contain needed fields.");
         }
-    }
-
-    /**
-     * Creates user from formParams. If username or role is missing, exception is thrown.
-     * @param formParams
-     * @return
-     * @throws BadRequestException
-     */
-    private static ModelUser createUser(MultivaluedMap<String, String> formParams) throws BadRequestException{
-        String username = formParams.getFirst(FORM_USERNAME).trim();
-        
-        Role role;
-        try {
-            role = Role.valueOf(formParams.getFirst(FORM_ROLE).toUpperCase());
-        } catch (IllegalArgumentException e) {
-            throw new BadRequestException("There was no such role.", e);
-        }
-        
-        ModelUser user = new ModelUser(0, username, role);
-        
-        user.setNewPassword(formParams.getFirst(FORM_NEW_PASSWORD));
-        user.setConfirmPassword(formParams.getFirst(FORM_CONFIRM_PASSWORD));
-        return user;
     }
     
     /**
