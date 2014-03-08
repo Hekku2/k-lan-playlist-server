@@ -173,26 +173,9 @@ public class UsersResource extends BaseResource {
         containsNeededFieldsForEdit(formParams);
         ModelUser editedUser = createEditUser(formParams);
         try {
-            // Checks that user exists
-            User user = userService.get(editedUser.getId());
-            
-            if (ValidationUtils.isEmpty(editedUser.getUsername())){
-                return editPostErrorResponse(model, editedUser, "Username is required.");
-            }
-            
-            if (!ValidationUtils.isValidUsername(editedUser.getUsername())){
-                editedUser.setUsername(user.getUserName());
-                return editPostErrorResponse(model, editedUser, "Invalid username.");
-            }
-            
-            // If there is a password, it must match.
-            if ((!editedUser.getConfirmPassword().isEmpty() || !editedUser.getConfirmPassword().isEmpty())
-                    && !editedUser.getConfirmPassword().equals(editedUser.getNewPassword())){
-                return editPostErrorResponse(model, editedUser, "Passwords did not match.");
-            }
-            
-            if (!editedUser.getUsername().equals(user.getUserName()) && userService.exists(editedUser.getUsername())){
-                return editPostErrorResponse(model, editedUser, "Username already exists.");
+            String validationError = getValidationErrorForUserEditing(editedUser);
+            if (validationError != null){
+                return editPostErrorResponse(model, editedUser, validationError);
             }
             
             //Change to new password.
@@ -200,10 +183,9 @@ public class UsersResource extends BaseResource {
                 userService.changePassword(editedUser.getId(), editedUser.getNewPassword());
             }
             
-            //TODO Field validation
             userService.update(new User(editedUser.getId(), editedUser.getUsername(), editedUser.getRoleEnum()));
             sessions.setInfo(model.getCurrentSession().getAuthId(), "User edited.");
-            return Response.seeOther(settings.getURI(String.format("users/%s", user.getId()))).build();
+            return Response.seeOther(settings.getURI(String.format("users/%s", editedUser.getId()))).build();
         } catch (NotFoundInDatabase e) {
             sessions.setError(model.getCurrentSession().getAuthId(), "User not found.");
             return Response.seeOther(settings.getURI("users")).build();
@@ -211,7 +193,7 @@ public class UsersResource extends BaseResource {
             return handleServiceException(model, e);
         }
     }
-
+    
     /**
      * User create get.
      * @param req Request
@@ -253,24 +235,9 @@ public class UsersResource extends BaseResource {
             containsNeededFieldsForCreate(formParams);
             ModelUser model = createUser(formParams);
 
-            //TODO Validation for user values.
-            if (ValidationUtils.isEmpty(model.getUsername())){
-                baseModel.setError("Username is required.");
-                return Response.ok(templates.process(USER_CREATE_TEMPLATE, baseModel)).build();
-            }
-            
-            if (!ValidationUtils.isValidUsername(model.getUsername())){
-                baseModel.setError("Username was invalid.");
-                return Response.ok(templates.process(USER_CREATE_TEMPLATE, baseModel)).build();
-            }
-            
-            if (model.getNewPassword().isEmpty()){
-                baseModel.setError("Password is required for normal user.");
-                return Response.ok(templates.process(USER_CREATE_TEMPLATE, baseModel)).build();
-            }
-            
-            if (!model.getNewPassword().equals(model.getConfirmPassword())){
-                baseModel.setError("Confirm password did not match new password.");
+            String validationError = getValidationErrorForUserCreation(model);
+            if (validationError != null){
+                baseModel.setError(validationError);
                 return Response.ok(templates.process(USER_CREATE_TEMPLATE, baseModel)).build();
             }
             
@@ -288,6 +255,78 @@ public class UsersResource extends BaseResource {
             return handleServiceException(baseModel, e);
         }
 
+    }
+    
+    /**
+     * Checks that model is valid, and if model is not valid, validation error is returned.
+     * If model is valid, null is returned
+     * @param model Model
+     * @return Null if model is valid, otherwise validation error string
+     * @throws ServiceException Thrown if there is a problem with the service
+     */
+    private String getValidationErrorForUserCreation(ModelUser model) throws ServiceException{
+        //TODO Validation for user values.
+        String usernameValidationError = getUsernameValidationError(model.getUsername());
+        if (usernameValidationError != null){
+            return usernameValidationError;
+        }
+        
+        if (model.getNewPassword().isEmpty()){
+            return "Password is required for normal user.";
+        }
+        
+        if (!model.getNewPassword().equals(model.getConfirmPassword())){
+            return "Confirm password did not match new password.";
+        }
+        
+        if (userService.exists(model.getUsername())){
+            return "Username already in use!";
+        }
+        
+        return null;
+    }
+    
+    /**
+     * Returns validation error if edited user contains invalid values.
+     * @param editedUser Editer user
+     * @return Validation error if there is one.
+     * @throws ServiceException Thrown if there is a problem with the service
+     * @throws NotFoundInDatabase Thrown if there is no user to be edited.
+     */
+    private String getValidationErrorForUserEditing(ModelUser editedUser) throws ServiceException, NotFoundInDatabase{
+        User user = userService.get(editedUser.getId());
+        
+        String usernameValidationError = getUsernameValidationError(editedUser.getUsername());
+        if (usernameValidationError != null){
+            return usernameValidationError;
+        }
+
+        if ((!editedUser.getConfirmPassword().isEmpty() || !editedUser.getConfirmPassword().isEmpty())
+                && !editedUser.getConfirmPassword().equals(editedUser.getNewPassword())){
+            return "Passwords did not match.";
+        }
+        
+        if (!editedUser.getUsername().equals(user.getUserName()) && userService.exists(editedUser.getUsername())){
+            return "Username already exists.";
+        }
+        return null;
+    }
+    
+    /**
+     * Check if username is valid and returns error, if there is one. Otherwise null is returned.
+     * @param username Username
+     * @return Null, if username is valid
+     */
+    private static String getUsernameValidationError(String username){
+        if (ValidationUtils.isEmpty(username)){
+            return "Username is required.";
+        }
+        
+        if (!ValidationUtils.isValidUsername(username)){
+            return "Username was invalid.";
+        }
+        
+        return null;
     }
     
     /**
