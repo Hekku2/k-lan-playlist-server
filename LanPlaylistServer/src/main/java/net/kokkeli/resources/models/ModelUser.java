@@ -10,10 +10,17 @@ import net.kokkeli.resources.Field;
  */
 public final class ModelUser extends ViewModel {
     private String username;
-    private final Role role;
-    private final long id;
+    private Role role;
+    private long id;
     private String newPassword;
     private String confirmPassword;
+    
+    /**
+     * Empty constructor
+     */
+    public ModelUser(){
+        
+    }
     
     /**
      * Creates user model
@@ -51,12 +58,29 @@ public final class ModelUser extends ViewModel {
     }
     
     /**
+     * Sets role
+     * @param role
+     */
+    public void setRole(Role role){
+        this.role = role;
+    }
+    
+    /**
      * Getter for int 
      * @return Id of user
      */
     @Field
     public long getId(){
         return id;
+    }
+    
+    /**
+     * Setter for id
+     * @param id
+     * @return Sets id
+     */
+    public void setId(long id){
+        this.id = id;
     }
     
     /**
