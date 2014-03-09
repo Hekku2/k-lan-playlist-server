@@ -11,7 +11,7 @@
 			<div class="content">
 				<#include "/common/_info_error.ftl">
 				<form class="form-horizontal" method="post">
-					<@valueField label="Track" name="track" value=getModel.getTrackName />
+					<@valueField label="Track" name="track" value=getModel.getTrack />
 					<@valueField label="Artist" name="artist" value=getModel.getArtist />
 					<@valueField label="Location" name="location" value=getModel.getLocation />
 					<@uneditableValueField label="Uploader" value=getModel.getUploader />

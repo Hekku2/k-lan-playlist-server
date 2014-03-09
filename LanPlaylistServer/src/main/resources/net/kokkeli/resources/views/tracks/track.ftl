@@ -12,7 +12,7 @@
 				<#include "/common/_info_error.ftl">
 				<form class="form-horizontal">
 					<div class="form-horizontal">
-						<@uneditableValueField label="Track" value=getModel.getTrackName />
+						<@uneditableValueField label="Track" value=getModel.getTrack />
 						<@uneditableValueField label="Artist" value=getModel.getArtist />
 						<@uneditableValueField label="Location" value=getModel.getLocation />
 						<@uneditableValueField label="Uploader" value=getModel.getUploader />

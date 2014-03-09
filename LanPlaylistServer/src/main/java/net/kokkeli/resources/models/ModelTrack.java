@@ -7,7 +7,7 @@ import net.kokkeli.resources.Field;
  * @author Hekku2
  */
 public class ModelTrack extends ViewModel {
-    private String trackName;
+    private String track;
     private String artist;
     private long id;
     private String location;
@@ -35,8 +35,8 @@ public class ModelTrack extends ViewModel {
      * Sets name of item
      * @param name
      */
-    public void setTrackName(String name){
-        this.trackName = name;
+    public void setTrack(String name){
+        this.track = name;
     }
     
     /**
@@ -44,8 +44,8 @@ public class ModelTrack extends ViewModel {
      * @return Name of item
      */
     @Field
-    public String getTrackName(){
-        return trackName;
+    public String getTrack(){
+        return track;
     }
     
     /**

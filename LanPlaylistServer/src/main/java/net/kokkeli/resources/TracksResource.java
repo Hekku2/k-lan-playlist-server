@@ -15,6 +15,7 @@ import javax.ws.rs.core.Response;
 import com.google.inject.Inject;
 
 import net.kokkeli.ISettings;
+import net.kokkeli.ModelBuilder;
 import net.kokkeli.ValidationUtils;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Role;
@@ -45,6 +46,7 @@ public class TracksResource extends BaseResource {
     
     private final ITrackService trackService;
     private final IFileSystem fileSystem;
+    private final ModelBuilder<ModelTrack> modelBuilder;
     
     /**
      * Creates tracks resource.
@@ -57,6 +59,7 @@ public class TracksResource extends BaseResource {
         
         this.trackService = trackService;
         this.fileSystem = fileSystem;
+        modelBuilder = new ModelBuilder<ModelTrack>(ModelTrack.class);
     }
 
     @GET
@@ -73,7 +76,7 @@ public class TracksResource extends BaseResource {
             trackModel.setId(track.getId());
             trackModel.setArtist(track.getArtist());
             trackModel.setLocation(track.getLocation());
-            trackModel.setTrackName(track.getTrackName());
+            trackModel.setTrack(track.getTrackName());
             trackModel.setExists(track.getExists());
             trackModel.setUploader(track.getUploader().getUserName());
             
@@ -136,7 +139,7 @@ public class TracksResource extends BaseResource {
             trackModel.setId(track.getId());
             trackModel.setArtist(track.getArtist());
             trackModel.setLocation(track.getLocation());
-            trackModel.setTrackName(track.getTrackName());
+            trackModel.setTrack(track.getTrackName());
             trackModel.setExists(track.getExists());
             trackModel.setUploader(track.getUploader().getUserName());
             
@@ -164,19 +167,23 @@ public class TracksResource extends BaseResource {
         validateEditForm(formParams);
         
         try {
-            ModelTrack trackModel = createEditTrack(formParams);
+            Track track = trackService.get(id);
+            
+            ModelTrack trackModel = modelBuilder.createModelFrom(formParams);
+            model.setModel(trackModel);
+            trackModel.setUploader(track.getUploader().getUserName());
             
             if (ValidationUtils.isEmpty(trackModel.getArtist()) ||
                 ValidationUtils.isEmpty(trackModel.getLocation()) ||
-                ValidationUtils.isEmpty(trackModel.getTrackName())){
-                model.setError("Artist, track name and location are required..");
+                ValidationUtils.isEmpty(trackModel.getTrack())){
+                model.setError("Artist, track name and location are required.");
                 return Response.ok(templates.process(TRACK_EDIT_TEMPLATE, model)).build();
             }
             
-            Track track = trackService.get(id);
+            
             track.setArtist(trackModel.getArtist());
             track.setLocation(trackModel.getLocation());
-            track.setTrackName(trackModel.getTrackName());
+            track.setTrackName(trackModel.getTrack());
             
             trackService.update(track);
             
@@ -203,20 +210,5 @@ public class TracksResource extends BaseResource {
             !formParams.containsKey(FORM_TRACK)){
             throw new BadRequestException("Form doesnt have needed values.");
         }
-    }
-
-    /**
-     * Creates model track from form
-     * @param formParams
-     * @return
-     */
-    private static ModelTrack createEditTrack(MultivaluedMap<String, String> formParams) {
-        ModelTrack track = new ModelTrack();
-        
-        track.setLocation(formParams.getFirst(FORM_LOCATION).trim());
-        track.setArtist(formParams.getFirst(FORM_ARTIST).trim());
-        track.setTrackName(formParams.getFirst(FORM_TRACK).trim());
-        
-        return track;
     }
 }
