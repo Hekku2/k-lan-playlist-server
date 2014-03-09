@@ -15,6 +15,7 @@ import javax.ws.rs.core.Response;
 import com.google.inject.Inject;
 
 import net.kokkeli.ISettings;
+import net.kokkeli.ModelBuilder;
 import net.kokkeli.data.FetchRequest;
 import net.kokkeli.data.FetchStatus;
 import net.kokkeli.data.ILogger;
@@ -47,16 +48,11 @@ import net.kokkeli.server.RenderException;
 public class FetchRequestsResource extends BaseResource{
     private static final String INDEX_TEMPLATE = "fetchers/index.ftl";
     private static final String REQUEST_CREATE_TEMPLATE = "fetchers/createRequest.ftl";
-    private static final String FORM_HANDLER = "handler";
-    private static final String FORM_DESTINATION = "destination";
-    private static final String FORM_LOCATION = "location";
-    private static final String FORM_ARTIST = "artist";
-    private static final String FORM_TRACK = "trackname";
-    private static final String FORM_SELECTED_PLAYLIST = "playlist";
     private static final String FORM_ID = "id";
     
     private final IFetchRequestService fetchRequestService;
     private final IPlaylistService playlistService;
+    private final ModelBuilder<ModelFetchRequestCreate> modelBuilder;
     
     /**
      * Initializes new resource for fetch request related resources
@@ -77,6 +73,7 @@ public class FetchRequestsResource extends BaseResource{
         
         this.fetchRequestService = fetchRequestService;
         this.playlistService = playlistService;
+        modelBuilder = new ModelBuilder<ModelFetchRequestCreate>(ModelFetchRequestCreate.class);
     }
 
     @GET
@@ -122,12 +119,22 @@ public class FetchRequestsResource extends BaseResource{
         BaseModel model = buildBaseModel(req);
         
         try {
-            ModelFetchRequestCreate createModel = createModel(formParams);
+            ModelFetchRequestCreate createModel = modelBuilder.createModelFrom(formParams);
+            model.setModel(createModel);
+            
+            String validationError = getValidationError(createModel);
+            if (validationError != null){
+                model.setError(validationError);
+                return Response.ok(templates.process(REQUEST_CREATE_TEMPLATE, model)).build();
+            }
+            
             FetchRequest newRequest = createNewFetchRequest(createModel, model.getCurrentSession().getUser());
             fetchRequestService.add(newRequest);
             
             sessions.setInfo(model.getCurrentSession().getAuthId(), "Fetch request created.");
             return Response.seeOther(settings.getURI("fetchers")).build();
+        } catch (RenderException e) {
+            return handleRenderingError(model, e);
         } catch (ServiceException e) {
             return handleServiceException(model, e);
         }
@@ -193,6 +200,19 @@ public class FetchRequestsResource extends BaseResource{
     }
     
     /**
+     * Returns validation error for model
+     * @param model Model
+     * @return Validation error. Null, if valid.
+     */
+    private static String getValidationError(ModelFetchRequestCreate model){
+        if (isNullOrWhitespace(model.getLocation())){
+            return "Fetch request did not have a location,";
+        }
+        
+        return null;
+    }
+    
+    /**
      * Creates a new FetchRequest from model
      * @param uploader Uploader
      * @param createModel Create model
@@ -222,23 +242,6 @@ public class FetchRequestsResource extends BaseResource{
         track.setUploader(uploader);
         track.setLocation(createModel.getDestination());
         return track;
-    }
-    
-    /**
-     * Craete model fetch request from form.
-     * @param formParams Form Params
-     * @return Created model
-     */
-    private static ModelFetchRequestCreate createModel(MultivaluedMap<String, String> formParams) {
-        ModelFetchRequestCreate model = new ModelFetchRequestCreate();
-        model.setHandler(formParams.getFirst(FORM_HANDLER).trim());
-        model.setDestination(formParams.getFirst(FORM_DESTINATION).trim());
-        model.setLocation(formParams.getFirst(FORM_LOCATION).trim());
-        model.setArtist(formParams.getFirst(FORM_ARTIST).trim());
-        model.setTrack(formParams.getFirst(FORM_TRACK).trim());
-        model.setSelectedPlaylistId(Long.parseLong(formParams.getFirst(FORM_SELECTED_PLAYLIST)));
-        
-        return model;
     }
 
     /**

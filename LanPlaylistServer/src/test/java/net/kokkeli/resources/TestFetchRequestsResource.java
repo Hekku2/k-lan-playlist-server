@@ -19,10 +19,13 @@ import net.kokkeli.server.RenderException;
 import org.junit.Assert;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 public class TestFetchRequestsResource extends ResourceTestsBase {
+    private static final String FORM_LOCATION = "location";
+    
     private FetchRequestsResource resource;
     private IFetchRequestService mockFetchRequestService;
     private IPlaylistService mockPlaylistService; 
@@ -85,6 +88,31 @@ public class TestFetchRequestsResource extends ResourceTestsBase {
         
         Response response = resource.createRequest(buildRequest());
         assertModelResponse(response, answer, null, null);
+    }
+    
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testCreateRequestPost() throws NotAuthenticatedException{
+        MultivaluedMap<String, String> map = mock(MultivaluedMap.class);
+        
+        when(map.containsKey(FORM_LOCATION)).thenReturn(true);
+        when(map.getFirst(FORM_LOCATION)).thenReturn("example location");
+        
+        Response response = resource.createRequest(buildRequest(), map);
+        assertSessionInfo("Fetch request created.");
+        assertEquals(REDIRECT, response.getStatus());
+    }
+    
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testCreateRequestPostRequiresLocation() throws NotAuthenticatedException, RenderException{
+        MultivaluedMap<String, String> map = mock(MultivaluedMap.class);
+        when(map.containsKey(FORM_LOCATION)).thenReturn(false);
+        
+        ModelAnswer answer = new ModelAnswer();
+        when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(answer);
+        
+        assertModelResponse(resource.createRequest(buildRequest(), map), answer, "Fetch request did not have a location,", null);
     }
     
     @Test
