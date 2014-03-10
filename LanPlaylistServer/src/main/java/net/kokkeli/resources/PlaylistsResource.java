@@ -226,7 +226,8 @@ public class PlaylistsResource extends BaseResource {
         createModel.setArtist(artist);
         createModel.setTrack(track);
         model.setModel(createModel);
-        try {      
+        try {
+            //TODO Check if this method can use model builder and refactor if possible.
             
             String validationError = getValidationError(createModel);
             if (validationError != null){
@@ -271,11 +272,6 @@ public class PlaylistsResource extends BaseResource {
             throw new ServiceException("There was a problem with file uploading.", e);
         }
     }
-
-    private Response createErrorResponse(BaseModel model, String validationError) throws RenderException {
-        model.setError(validationError);
-        return Response.ok(templates.process(PLAYLIST_TRACK_ADD_TEMPLATE, model)).build();
-    }
     
     @POST
     @Produces("text/html; charset=utf-8")
@@ -302,32 +298,6 @@ public class PlaylistsResource extends BaseResource {
         } catch (RenderException e) {
             return handleRenderingError(model, e);
         }
-    }
-
-    /**
-     * Creates a new fetch request from model playlist item
-     * @param uploader Uploading user
-     * @param item model playlist item
-     * @return Created fetch request
-     */
-    private FetchRequest createFetchRequestFromModelPlaylistItem(ModelPlaylistItem item, User uploader) {
-        //TODO Proper generation for destination file and extension.
-        String destination = settings.getTracksFolder() + "/" + item.getArtist() + " - " + item.getTrack() + ".ogg";
-        
-        Track newTrack = new Track();
-        newTrack.setArtist(item.getArtist());
-        newTrack.setTrackName(item.getTrack());
-        newTrack.setUploader(uploader);
-        newTrack.setLocation(destination);
-        
-        FetchRequest newRequest = new FetchRequest();
-        newRequest.setDestinationFile(destination);
-        newRequest.setHandler("vlc");
-        newRequest.setLocation(item.getUrl());
-        newRequest.setStatus(FetchStatus.WAITING);
-        newRequest.setPlaylist(new PlayList(item.getPlaylistId()));
-        newRequest.setTrack(newTrack);
-        return newRequest;
     }
 
     @GET
@@ -502,5 +472,36 @@ public class PlaylistsResource extends BaseResource {
         }
         
         return null;
+    }
+    
+    /**
+     * Creates a new fetch request from model playlist item
+     * @param uploader Uploading user
+     * @param item model playlist item
+     * @return Created fetch request
+     */
+    private FetchRequest createFetchRequestFromModelPlaylistItem(ModelPlaylistItem item, User uploader) {
+        //TODO Proper generation for destination file and extension.
+        String destination = settings.getTracksFolder() + "/" + item.getArtist() + " - " + item.getTrack() + ".ogg";
+        
+        Track newTrack = new Track();
+        newTrack.setArtist(item.getArtist());
+        newTrack.setTrackName(item.getTrack());
+        newTrack.setUploader(uploader);
+        newTrack.setLocation(destination);
+        
+        FetchRequest newRequest = new FetchRequest();
+        newRequest.setDestinationFile(destination);
+        newRequest.setHandler("vlc");
+        newRequest.setLocation(item.getUrl());
+        newRequest.setStatus(FetchStatus.WAITING);
+        newRequest.setPlaylist(new PlayList(item.getPlaylistId()));
+        newRequest.setTrack(newTrack);
+        return newRequest;
+    }
+    
+    private Response createErrorResponse(BaseModel model, String validationError) throws RenderException {
+        model.setError(validationError);
+        return Response.ok(templates.process(PLAYLIST_TRACK_ADD_TEMPLATE, model)).build();
     }
 }
