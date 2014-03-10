@@ -372,16 +372,11 @@ public class PlaylistsResource extends BaseResource {
 
         try {
             ModelPlaylist item = createPlaylist(formParams);
-
-            if (item.getName() == null || item.getName().length() == 0) {
-                baseModel.setError("Playlist did not have a name.");
-                baseModel.setModel(item);
-                return Response.ok(templates.process(PLAYLIST_CREATE_TEMPLATE, baseModel)).build();
-            }
-
-            if (playlistService.nameExists(item.getName())) {
-                baseModel.setError(String.format("Playlist with name %s already exits.", item.getName()));
-                baseModel.setModel(item);
+            baseModel.setModel(item);
+            
+            String validationError = getValidationError(item);
+            if (validationError != null){
+                baseModel.setError(validationError);
                 return Response.ok(templates.process(PLAYLIST_CREATE_TEMPLATE, baseModel)).build();
             }
 
@@ -494,6 +489,18 @@ public class PlaylistsResource extends BaseResource {
         if (!ValidationUtils.isValidInput(model.getTrack()) || !ValidationUtils.isValidInput(model.getArtist())) {
             return "Track or artist contained invalid charachters.";
         }
+        return null;
+    }
+    
+    private String getValidationError(ModelPlaylist item) throws ServiceException {
+        if (ValidationUtils.isEmpty(item.getName())) {
+            return "Playlist did not have a name.";
+        }
+
+        if (playlistService.nameExists(item.getName())) {
+            return String.format("Playlist with name %s already exits.", item.getName());
+        }
+        
         return null;
     }
 }
