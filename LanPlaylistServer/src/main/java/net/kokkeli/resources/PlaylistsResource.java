@@ -21,6 +21,7 @@ import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
 
 import net.kokkeli.ISettings;
+import net.kokkeli.ModelBuilder;
 import net.kokkeli.ValidationUtils;
 import net.kokkeli.data.FetchRequest;
 import net.kokkeli.data.FetchStatus;
@@ -66,6 +67,7 @@ public class PlaylistsResource extends BaseResource {
     private final ISettings settings;
     private final IFileSystem filesystem;
     private final IFetchRequestService fetchRequestService;
+    private final ModelBuilder<ModelPlaylistItem> modelBuilder;
 
     /**
      * Creates resource
@@ -84,6 +86,7 @@ public class PlaylistsResource extends BaseResource {
         this.settings = settings;
         this.filesystem = filesystem;
         this.fetchRequestService = fetchRequestService;
+        modelBuilder = new ModelBuilder<ModelPlaylistItem>(ModelPlaylistItem.class);
     }
 
     /**
@@ -221,7 +224,7 @@ public class PlaylistsResource extends BaseResource {
         ModelPlaylistItem createModel = new ModelPlaylistItem();
         createModel.setPlaylistId(playlistId);
         createModel.setArtist(artist);
-        createModel.setTrackName(track);
+        createModel.setTrack(track);
         model.setModel(createModel);
         try {      
             
@@ -254,7 +257,7 @@ public class PlaylistsResource extends BaseResource {
             PlayList playlist = playlistService.getPlaylist(playlistId);
             Track item = new Track();
             item.setArtist(createModel.getArtist());
-            item.setTrackName(createModel.getTrackName());
+            item.setTrackName(createModel.getTrack());
             item.setLocation(filename);
             item.setUploader(model.getCurrentSession().getUser());
 
@@ -280,11 +283,11 @@ public class PlaylistsResource extends BaseResource {
      * @return Validation error, or null if model is valid.
      */
     private static String getValidationError(ModelPlaylistItem model){
-        if (ValidationUtils.isEmpty(model.getTrackName()) || ValidationUtils.isEmpty(model.getArtist())) {
+        if (ValidationUtils.isEmpty(model.getTrack()) || ValidationUtils.isEmpty(model.getArtist())) {
             return "Track must have name and artist.";
         }
 
-        if (!ValidationUtils.isValidInput(model.getTrackName()) || !ValidationUtils.isValidInput(model.getArtist())) {
+        if (!ValidationUtils.isValidInput(model.getTrack()) || !ValidationUtils.isValidInput(model.getArtist())) {
             return "Track or artist contained invalid charachters.";
         }
         return null;
@@ -293,29 +296,22 @@ public class PlaylistsResource extends BaseResource {
     @POST
     @Produces("text/html; charset=utf-8")
     @Access(Role.USER)
-    @Path("/add/vlc/{playlistId: [0-9]*}")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public Response addVlc(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId,
-            @FormDataParam("artist") String artist, @FormDataParam("track") String track,
-            @FormDataParam("url") String url) throws ServiceException, NotAuthenticatedException {
+    @Path("/add/vlc/{playlistid: [0-9]*}")
+    public Response addVlc(@Context HttpServletRequest req,  MultivaluedMap<String, String> formParams)
+            throws ServiceException, NotAuthenticatedException {
         BaseModel model = buildBaseModel(req);
 
         try {
-            ModelPlaylistItem item = new ModelPlaylistItem();
-            item.setPlaylistId(playlistId);
-            item.setArtist(artist);
-            item.setTrackName(track);
-            item.setUrl(url);
+            ModelPlaylistItem item = modelBuilder.createModelFrom(formParams);
             model.setModel(item);
             
-            
-            if (ValidationUtils.isEmpty(track) || ValidationUtils.isEmpty(artist)) {
+            if (ValidationUtils.isEmpty(item.getTrack()) || ValidationUtils.isEmpty(item.getArtist())) {
                 model.setError("Track must have name and artist.");
                 return Response.ok(templates.process(PLAYLIST_TRACK_ADD_VLC_TEMPLATE, model)).build();
             }
 
-            if (!ValidationUtils.isValidInput(track)
-                    || !ValidationUtils.isValidInput(artist)) {
+            if (!ValidationUtils.isValidInput(item.getTrack())
+                    || !ValidationUtils.isValidInput(item.getArtist())) {
                 model.setError("Track or artist contained invalid characters.");
                 return Response.ok(templates.process(PLAYLIST_TRACK_ADD_VLC_TEMPLATE, model)).build();
             }
@@ -323,7 +319,7 @@ public class PlaylistsResource extends BaseResource {
             FetchRequest newRequest = createFetchRequestFromModelPlaylistItem(item, model.getCurrentSession().getUser());
             fetchRequestService.add(newRequest);
             
-            return Response.seeOther(settings.getURI(String.format("playlists/%s", playlistId))).build();
+            return Response.seeOther(settings.getURI(String.format("playlists/%s", item.getPlaylistId()))).build();
         } catch (RenderException e) {
             return handleRenderingError(model, e);
         }
@@ -337,11 +333,11 @@ public class PlaylistsResource extends BaseResource {
      */
     private FetchRequest createFetchRequestFromModelPlaylistItem(ModelPlaylistItem item, User uploader) {
         //TODO Proper generation for destination file and extension.
-        String destination = settings.getTracksFolder() + "/" + item.getArtist() + " - " + item.getTrackName() + ".ogg";
+        String destination = settings.getTracksFolder() + "/" + item.getArtist() + " - " + item.getTrack() + ".ogg";
         
         Track newTrack = new Track();
         newTrack.setArtist(item.getArtist());
-        newTrack.setTrackName(item.getTrackName());
+        newTrack.setTrackName(item.getTrack());
         newTrack.setUploader(uploader);
         newTrack.setLocation(destination);
         
@@ -392,8 +388,7 @@ public class PlaylistsResource extends BaseResource {
     @Produces("text/html; charset=utf-8")
     @Access(Role.USER)
     @Path("/create")
-    public Response create(@Context HttpServletRequest req, MultivaluedMap<String, String> formParams)
-            throws NotAuthenticatedException, BadRequestException {
+    public Response create(@Context HttpServletRequest req, MultivaluedMap<String, String> formParams) throws NotAuthenticatedException, BadRequestException {
         BaseModel baseModel = buildBaseModel(req);
 
         try {
@@ -475,7 +470,7 @@ public class PlaylistsResource extends BaseResource {
         for (Track playListItem : playlist.getItems()) {
             ModelPlaylistItem model = new ModelPlaylistItem();
             model.setArtist(playListItem.getArtist());
-            model.setTrackName(playListItem.getTrackName());
+            model.setTrack(playListItem.getTrackName());
             model.setUploader(playListItem.getUploader().getUserName());
             model.setId(playListItem.getId());
 

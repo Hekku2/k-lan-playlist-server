@@ -15,7 +15,8 @@
 				<#include "/common/_info_error.ftl">
 				<#include "/playlist/_method.ftl">
 				<p>Url can be any location that vlc can handle.</p>
-				<form action="" enctype="multipart/form-data" method="post" class="form-horizontal">
+				<form action="" method="post" class="form-horizontal">
+					<input type="hidden" name="playlistid" value="${getModel.getPlaylistId}">
 					<fieldset>
 						<legend>Track data:</legend>
 						<@valueField label="Artist" name="artist" />

@@ -219,7 +219,7 @@ public class TestTemplates {
          for (int i = 0; i < 7; i++) {
              ModelPlaylistItem item = new ModelPlaylistItem();
              item.setArtist("Mockker " + i);
-             item.setTrackName("Murdockmardock " + i);
+             item.setTrack("Murdockmardock " + i);
              item.setUploader("username");
              playlistWithItems.getItems().add(item);
          }

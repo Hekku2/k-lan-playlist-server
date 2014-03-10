@@ -10,7 +10,7 @@
 		<#list getModel.getItems as item>
 			<tr>
 	  			<td>${item.getArtist}</td>
-	  			<td>${item.getTrackName}</td>
+	  			<td>${item.getTrack}</td>
 	  			<td>
 	  				<a title="Edit" class="btn" href="/tracks/${item.getId}"><i class="icon-edit"></i></a>
 	  				<a title="Delete" class="btn delete" id="${item.getId}" href="/playlists/delete/${getModel.getId}"><i class="icon-remove"></i></a>

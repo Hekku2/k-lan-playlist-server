@@ -93,7 +93,7 @@ public class TracksResource extends BaseResource {
             for (Track track : tracks) {
                 ModelPlaylistItem item = new ModelPlaylistItem();
                 item.setArtist(track.getArtist());
-                item.setTrackName(track.getTrackName());
+                item.setTrack(track.getTrackName());
                 if (track.getUploader() != null){
                     item.setUploader(track.getUploader().toString());
                 }

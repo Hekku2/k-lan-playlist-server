@@ -34,7 +34,7 @@
 									${item.getArtist}
 								</td>
 								<td>
-									${item.getTrackName}
+									${item.getTrack}
 								</td>
 								<td>
 									${item.getUploader}
