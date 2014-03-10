@@ -40,10 +40,6 @@ public class TracksResource extends BaseResource {
     private static final String TRACK_DETAILS_TEMPLATE = "tracks/track.ftl";
     private static final String TRACK_EDIT_TEMPLATE = "tracks/edit.ftl";
     
-    private static final String FORM_TRACK = "track";
-    private static final String FORM_ARTIST = "artist";
-    private static final String FORM_LOCATION = "location";
-    
     private final ITrackService trackService;
     private final IFileSystem fileSystem;
     private final ModelBuilder<ModelTrack> modelBuilder;
@@ -71,16 +67,7 @@ public class TracksResource extends BaseResource {
         
         try {
             Track track = trackService.get(id);
-            
-            ModelTrack trackModel = new ModelTrack();
-            trackModel.setId(track.getId());
-            trackModel.setArtist(track.getArtist());
-            trackModel.setLocation(track.getLocation());
-            trackModel.setTrack(track.getTrackName());
-            trackModel.setExists(track.getExists());
-            trackModel.setUploader(track.getUploader().getUserName());
-            
-            model.setModel(trackModel);
+            model.setModel(CreateModelTrack(track));
             
             return Response.ok(templates.process(TRACK_DETAILS_TEMPLATE, model)).build();
         } catch (RenderException e) {
@@ -134,18 +121,8 @@ public class TracksResource extends BaseResource {
         BaseModel baseModel = buildBaseModel(req);
         try {
             Track track = trackService.get(id);
-            
-            ModelTrack trackModel = new ModelTrack();
-            trackModel.setId(track.getId());
-            trackModel.setArtist(track.getArtist());
-            trackModel.setLocation(track.getLocation());
-            trackModel.setTrack(track.getTrackName());
-            trackModel.setExists(track.getExists());
-            trackModel.setUploader(track.getUploader().getUserName());
-            
-            baseModel.setModel(trackModel);
-            
-            
+            baseModel.setModel(CreateModelTrack(track));
+
             return Response.ok(templates.process(TRACK_EDIT_TEMPLATE, baseModel)).build();
         } catch (RenderException e) {
             return handleRenderingError(baseModel, e);
@@ -161,10 +138,8 @@ public class TracksResource extends BaseResource {
     @Path("edit/{id: [0-9]*}")
     @Produces("text/html")
     @Access(Role.ADMIN)
-    public Response editTrack(@Context HttpServletRequest req, @PathParam("id") long id, MultivaluedMap<String, String> formParams) throws NotAuthenticatedException, BadRequestException{
+    public Response editTrack(@Context HttpServletRequest req, @PathParam("id") long id, MultivaluedMap<String, String> formParams) throws NotAuthenticatedException{
         BaseModel model = buildBaseModel(req);
-        
-        validateEditForm(formParams);
         
         try {
             Track track = trackService.get(id);
@@ -173,13 +148,11 @@ public class TracksResource extends BaseResource {
             model.setModel(trackModel);
             trackModel.setUploader(track.getUploader().getUserName());
             
-            if (ValidationUtils.isEmpty(trackModel.getArtist()) ||
-                ValidationUtils.isEmpty(trackModel.getLocation()) ||
-                ValidationUtils.isEmpty(trackModel.getTrack())){
-                model.setError("Artist, track name and location are required.");
+            String validationError = getValidationError(trackModel);
+            if (validationError != null){
+                model.setError(validationError);
                 return Response.ok(templates.process(TRACK_EDIT_TEMPLATE, model)).build();
             }
-            
             
             track.setArtist(trackModel.getArtist());
             track.setLocation(trackModel.getLocation());
@@ -200,15 +173,39 @@ public class TracksResource extends BaseResource {
     }
 
     /**
-     * Checks that form contains correct values
-     * @param formParams 
-     * @throws BadRequestException
+     * Creates a model track from given track
+     * @param track
+     * @return
      */
-    private static void validateEditForm(MultivaluedMap<String, String> formParams) throws BadRequestException{
-        if (!formParams.containsKey(FORM_LOCATION) ||
-            !formParams.containsKey(FORM_ARTIST) ||
-            !formParams.containsKey(FORM_TRACK)){
-            throw new BadRequestException("Form doesnt have needed values.");
+    private static ModelTrack CreateModelTrack(Track track) {
+        ModelTrack trackModel = new ModelTrack();
+        trackModel.setId(track.getId());
+        trackModel.setArtist(track.getArtist());
+        trackModel.setLocation(track.getLocation());
+        trackModel.setTrack(track.getTrackName());
+        trackModel.setExists(track.getExists());
+        trackModel.setUploader(track.getUploader().getUserName());
+        return trackModel;
+    }
+    
+    /**
+     * Returns validation error for model track
+     * @param trackModel Track model
+     * @return Validation error
+     */
+    private static String getValidationError(ModelTrack trackModel){
+        if (ValidationUtils.isEmpty(trackModel.getArtist())){
+            return "Artist is required.";
         }
+        
+        if (ValidationUtils.isEmpty(trackModel.getTrack())){
+            return "Track name is required.";
+        }
+        
+        if (ValidationUtils.isEmpty(trackModel.getLocation())){
+            return "Track location is required.";
+        }
+        
+        return null;
     }
 }

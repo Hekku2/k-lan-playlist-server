@@ -16,6 +16,7 @@ import com.google.inject.Inject;
 
 import net.kokkeli.ISettings;
 import net.kokkeli.ModelBuilder;
+import net.kokkeli.ValidationUtils;
 import net.kokkeli.data.FetchRequest;
 import net.kokkeli.data.FetchStatus;
 import net.kokkeli.data.ILogger;
@@ -205,7 +206,7 @@ public class FetchRequestsResource extends BaseResource{
      * @return Validation error. Null, if valid.
      */
     private static String getValidationError(ModelFetchRequestCreate model){
-        if (isNullOrWhitespace(model.getLocation())){
+        if (ValidationUtils.isEmpty(model.getLocation())){
             return "Fetch request did not have a location,";
         }
         

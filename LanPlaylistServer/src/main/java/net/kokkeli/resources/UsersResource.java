@@ -181,7 +181,7 @@ public class UsersResource extends BaseResource {
             }
             
             //Change to new password.
-            if (!isNullOrWhitespace(editedUser.getNewPassword())){
+            if (!ValidationUtils.isEmpty(editedUser.getNewPassword())){
                 userService.changePassword(editedUser.getId(), editedUser.getNewPassword());
             }
             
@@ -273,7 +273,7 @@ public class UsersResource extends BaseResource {
             return usernameValidationError;
         }
         
-        if (isNullOrWhitespace(model.getNewPassword())){
+        if (ValidationUtils.isEmpty(model.getNewPassword())){
             return "Password is required for normal user.";
         }
         
@@ -308,7 +308,7 @@ public class UsersResource extends BaseResource {
         }
 
         
-        if ((!isNullOrWhitespace(editedUser.getConfirmPassword()) || !isNullOrWhitespace(editedUser.getNewPassword()) )
+        if ((!ValidationUtils.isEmpty(editedUser.getConfirmPassword()) || !ValidationUtils.isEmpty(editedUser.getNewPassword()) )
                 && !editedUser.getConfirmPassword().equals(editedUser.getNewPassword())){
             return "Passwords did not match.";
         }
