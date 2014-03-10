@@ -276,22 +276,6 @@ public class PlaylistsResource extends BaseResource {
         model.setError(validationError);
         return Response.ok(templates.process(PLAYLIST_TRACK_ADD_TEMPLATE, model)).build();
     }
-
-    /**
-     * Returns error message if model doesn't contain valid data, otherwise null is returned.
-     * @param model
-     * @return Validation error, or null if model is valid.
-     */
-    private static String getValidationError(ModelPlaylistItem model){
-        if (ValidationUtils.isEmpty(model.getTrack()) || ValidationUtils.isEmpty(model.getArtist())) {
-            return "Track must have name and artist.";
-        }
-
-        if (!ValidationUtils.isValidInput(model.getTrack()) || !ValidationUtils.isValidInput(model.getArtist())) {
-            return "Track or artist contained invalid charachters.";
-        }
-        return null;
-    }
     
     @POST
     @Produces("text/html; charset=utf-8")
@@ -305,14 +289,9 @@ public class PlaylistsResource extends BaseResource {
             ModelPlaylistItem item = modelBuilder.createModelFrom(formParams);
             model.setModel(item);
             
-            if (ValidationUtils.isEmpty(item.getTrack()) || ValidationUtils.isEmpty(item.getArtist())) {
-                model.setError("Track must have name and artist.");
-                return Response.ok(templates.process(PLAYLIST_TRACK_ADD_VLC_TEMPLATE, model)).build();
-            }
-
-            if (!ValidationUtils.isValidInput(item.getTrack())
-                    || !ValidationUtils.isValidInput(item.getArtist())) {
-                model.setError("Track or artist contained invalid characters.");
+            String validationError = getValidationError(item);
+            if (validationError != null){
+                model.setError(validationError);
                 return Response.ok(templates.process(PLAYLIST_TRACK_ADD_VLC_TEMPLATE, model)).build();
             }
 
@@ -500,5 +479,21 @@ public class PlaylistsResource extends BaseResource {
         playlist.setName(name.trim());
 
         return playlist;
+    }
+    
+    /**
+     * Returns error message if model doesn't contain valid data, otherwise null is returned.
+     * @param model
+     * @return Validation error, or null if model is valid.
+     */
+    private static String getValidationError(ModelPlaylistItem model){
+        if (ValidationUtils.isEmpty(model.getTrack()) || ValidationUtils.isEmpty(model.getArtist())) {
+            return "Track must have name and artist.";
+        }
+
+        if (!ValidationUtils.isValidInput(model.getTrack()) || !ValidationUtils.isValidInput(model.getArtist())) {
+            return "Track or artist contained invalid charachters.";
+        }
+        return null;
     }
 }
