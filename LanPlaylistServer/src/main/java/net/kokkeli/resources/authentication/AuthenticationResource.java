@@ -156,7 +156,6 @@ public class AuthenticationResource extends BaseResource {
      */
     private Response handleWrongUsernameOrPassword(BaseModel model){
         try {
-            //Shows error if username or password is wrong.
             model.setUsername("");
             model.setError("Wrong username or password.");
             return Response.ok(templates.process(AUTHENTICATE_TEMPLATE, model)).build();
