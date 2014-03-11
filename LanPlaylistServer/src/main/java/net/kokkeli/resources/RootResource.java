@@ -15,6 +15,7 @@ import javax.ws.rs.core.Response.Status;
 import com.google.inject.Inject;
 
 import net.kokkeli.ISettings;
+import net.kokkeli.ValidationUtils;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.Role;
@@ -73,7 +74,7 @@ public class RootResource extends BaseResource {
             
             Track track = trackService.get(id);
             
-            if (track.getLocation() == null){
+            if (ValidationUtils.isEmpty(track.getLocation())){
                 log(String.format("Track #%s did not have a location.", track.getId()), LogSeverity.TRACE);
                 return Response.status(Status.INTERNAL_SERVER_ERROR).build();
             }
