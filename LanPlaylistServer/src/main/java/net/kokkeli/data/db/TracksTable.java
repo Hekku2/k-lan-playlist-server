@@ -123,7 +123,7 @@ public class TracksTable {
     public void update(final Track track) throws DatabaseException {
         try (Connection connection = storage.getConnection()){
             try (Statement statement = connection.createStatement()){
-                statement.executeUpdate(updateItemRow(track), Statement.NO_GENERATED_KEYS);
+                statement.executeUpdate(updateItemRow(track));
             }
         } catch (SQLException e) {
             throw new DatabaseException("Getting user failed.", e);

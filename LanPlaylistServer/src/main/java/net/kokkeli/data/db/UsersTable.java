@@ -83,8 +83,11 @@ public class UsersTable {
         
         try (Connection connection = storage.getConnection()){
             try (Statement statement = connection.createStatement()){
-                int id =  statement.executeUpdate(createInsertString(item),Statement.RETURN_GENERATED_KEYS);
+                connection.setAutoCommit(false);
+                statement.executeUpdate(createInsertString(item));
+                long id = statement.executeQuery("SELECT last_insert_rowid()").getLong(1);
                 item.setId(id);
+                connection.commit();
                 return item;
             }
         } catch (SQLException e) {
@@ -128,7 +131,7 @@ public class UsersTable {
 
         try (Connection connection = storage.getConnection()){
             try (Statement statement = connection.createStatement()){
-                statement.executeUpdate(query, Statement.NO_GENERATED_KEYS);
+                statement.executeUpdate(query);
             }
         } catch (SQLException e) {
             throw new DatabaseException("Updating user failed.", e);
