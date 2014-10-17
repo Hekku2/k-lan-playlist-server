@@ -29,8 +29,8 @@
 					</div>
 				</div>
 				<div class="navi">
-					<a class="button" href="/users/edit/${getModel.getId}">Edit</a>
-					<a class="button" href="/users">Back</a>
+					<a class="btn" href="/users/edit/${getModel.getId}">Edit</a>
+					<a class="btn" href="/users">Back</a>
 				</div>
 			</div>
 		</div>

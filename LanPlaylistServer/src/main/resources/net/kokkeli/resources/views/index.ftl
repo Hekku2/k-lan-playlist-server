@@ -12,7 +12,7 @@
 			<div class="content">
 				<#include "common/_info_error.ftl">
 				<#if getModel?? && getModel.getItems??>
-					<a class="button" href="/playlists/add/upload/${getModel.getId}">Add song</a>
+					<a class="btn" href="/playlists/add/upload/${getModel.getId}">Add song</a>
 					<#include "common/_playlist.ftl">
 				<#else>
 					No playlist loaded.

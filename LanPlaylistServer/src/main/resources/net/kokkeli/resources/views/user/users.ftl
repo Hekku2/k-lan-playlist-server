@@ -11,7 +11,7 @@
 			<h1>${header}</h1>
 			<div class="content">
 				<#include "/common/_info_error.ftl">
-				<a class="button" href="users/create">Create</a>
+				<a class="btn" href="users/create">Create</a>
 				<#if getModel.getUsers??>
 					<table class="table table-striped">
 						<tr>

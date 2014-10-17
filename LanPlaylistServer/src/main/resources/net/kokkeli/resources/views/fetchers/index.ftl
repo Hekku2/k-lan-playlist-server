@@ -35,8 +35,8 @@
 			<h1>${header}</h1>
 			<div class="content">
 				<#include "/common/_info_error.ftl">
-				<a class="button" href="fetchers/createRequest">Create</a>
-				<a class="button" id="remove-handled" href="fetchers/removeHandled">Remove handled</a>
+				<a class="btn" href="fetchers/createRequest">Create</a>
+				<a class="btn" id="remove-handled" href="fetchers/removeHandled">Remove handled</a>
 				<table class="table table-striped">
 					<tr>
 						<th>Type</th>

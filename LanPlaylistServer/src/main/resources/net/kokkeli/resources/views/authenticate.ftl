@@ -24,12 +24,12 @@
 						<div class="description">
 							Password:
 						</div>
-						<div class=value>
+						<div class="value">
 							<input type="password" name="pwd">
 						</div>
 					</div>
 					<div class="login-button-container">
-						<input type="submit" value="Log in" class="button">
+						<input type="submit" value="Log in" class="btn btn-primary">
 					</div>
 				</form>
 			</div>

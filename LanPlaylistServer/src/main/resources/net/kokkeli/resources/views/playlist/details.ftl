@@ -16,7 +16,7 @@
 					<strong>Name:</strong>
 						${getModel.getName}
 				</div>
-				<a class="button" href="/playlists/add/upload/${getModel.getId}">Add song</a>
+				<a class="btn" href="/playlists/add/upload/${getModel.getId}">Add song</a>
 				<div class="playlist-values">			
 					<#if getModel.getItems??>
 					<table class="table table-bordered table-striped">
@@ -52,7 +52,7 @@
 					
 				</div>
 				<div class="navi">
-					<a class="button" href="/playlists">Back</a>
+					<a class="btn" href="/playlists">Back</a>
 				</div>
 			</div>
 		</div>

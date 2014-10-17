@@ -28,8 +28,8 @@
 					<@passwordField label="Password" name="newpassword" />
 					<@passwordField label="Confirm password" name="confirmpassword" />
 					<div class="submit-box">
-						<input class="button" type="submit" value="Create">
-						<a class="button" href="/users">Cancel</a>
+						<input class="btn" type="submit" value="Create">
+						<a class="btn" href="/users">Cancel</a>
 					</div>
 				</form>
 			</div>

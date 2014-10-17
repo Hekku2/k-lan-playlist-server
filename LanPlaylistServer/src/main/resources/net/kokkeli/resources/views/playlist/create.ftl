@@ -21,8 +21,8 @@
 						</div>
 					</div>
 					<div class="navi">
-						<input class="button" type="submit" value="Create">
-						<a class="button" href="/playlists">Back</a>
+						<input class="btn" type="submit" value="Create">
+						<a class="btn" href="/playlists">Back</a>
 					</div>
 				</form>
 			</div>

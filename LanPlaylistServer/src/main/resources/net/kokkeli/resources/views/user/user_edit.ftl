@@ -28,8 +28,8 @@
 					</div>
 					<@passwordField label="Password" name="newpassword" />
 					<@passwordField label="Confirm password" name="confirmpassword" />
-					<input class="button" type="submit" value="Edit">
-					<a class="button" href="/users/${getModel.getId}">Cancel</a>
+					<input class="btn" type="submit" value="Edit">
+					<a class="btn" href="/users/${getModel.getId}">Cancel</a>
 				</form>
 			</div>
 		</div>

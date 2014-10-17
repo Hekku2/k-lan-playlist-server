@@ -12,7 +12,7 @@
 			<h1>${header}</h1>
 			<div class="content">
 				<#include "/common/_info_error.ftl">
-				<a class="button" href="/playlists/create">Create a playlist</a>
+				<a class="btn" href="/playlists/create">Create a playlist</a>
 				<#if getModel?? && getModel.getItems??>
 					<table class="table table-striped">
 						<tr>

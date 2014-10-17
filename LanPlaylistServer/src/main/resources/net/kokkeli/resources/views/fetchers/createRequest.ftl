@@ -65,8 +65,8 @@
 						</div>
 					</div>
 					<div class="submit-box">
-						<input class="button" type="submit" value="Create">
-						<a class="button" href="/fetchers">Cancel</a>
+						<input class="btn" type="submit" value="Create">
+						<a class="btn" href="/fetchers">Cancel</a>
 					</div>
 				</form>
 			</div>
