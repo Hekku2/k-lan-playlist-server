@@ -1,38 +1,31 @@
-<#assign header = "Authentication">
+<#assign header = "Sign in">
 <!DOCTYPE HTML>
-
-<link rel="stylesheet" type="text/css" href="/resource/css/Authentication.css">
 
 <html>
 	<#include "common/_header.ftl">
 	<body>
-		<div class="inner-body">
-			<#include "common/_topsection.ftl">
+		<div class="container">
 			<h1>${header}</h1>
-			<div class="content">
-				<#include "common/_info_error.ftl">
-				<form name="input" action="authentication" method="post" class="authentication-box">
-					<div class="field">
-						<div class="description">
-							Username: 
-						</div>
-						<div class=value>
-							<input type="text" name="user">
-						</div>
+			<#include "common/_info_error.ftl">
+			<form class="form-horizontal" role="form" action="authentication" method="post">
+				<div class="form-group form-group-lg">
+					<label for="user" class="col-sm-1 control-label">Username</label>
+					<div class="col-sm-3">
+						<input type="text" class="form-control" id="user" placeholder="Username" name="user">
 					</div>
-					<div class="field">
-						<div class="description">
-							Password:
-						</div>
-						<div class="value">
-							<input type="password" name="pwd">
-						</div>
+				</div>
+				<div class="form-group form-group-lg">
+					<label for="pwd" class="col-sm-1 control-label">Password</label>
+					<div class="col-sm-3">
+						<input type="password" class="form-control" id="pwd" placeholder="Password" name="pwd">
 					</div>
-					<div class="login-button-container">
-						<input type="submit" value="Log in" class="btn btn-primary">
+				</div>
+				<div class="form-group form-group-lg">
+					<div class="col-sm-offset-3">
+						<button type="submit" class="btn btn-primary">Sign in</button>
 					</div>
-				</form>
-			</div>
+				</div>
+			</form>
 		</div>
 	</body>
 </html> 

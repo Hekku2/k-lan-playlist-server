@@ -4,28 +4,18 @@
 
 <html>
 	<#include "/common/_header.ftl">
-	<link rel="stylesheet" type="text/css" href="/resource/css/Playlist.css">
 	<body>
-		<div class="inner-body">
+		<div class="container">
 			<#include "/common/_topsection.ftl">
 			<h1>${header}</h1>
-			<div class="content">
-				<#include "/common/_info_error.ftl">
-				<form method="POST" class="value-fields">
-					<div class="field">
-						<div class="description">
-							Playlist name: 
-						</div>
-						<div class=value>
-							<input type="text" name="name"">
-						</div>
-					</div>
-					<div class="navi">
-						<input class="btn" type="submit" value="Create">
-						<a class="btn" href="/playlists">Back</a>
-					</div>
-				</form>
-			</div>
+			<#include "/common/_info_error.ftl">
+			<form method="POST" class="form-horizontal">
+				<@valueField label="Playlist name" name="name" />
+				<div>
+					<input class="btn btn-primary" type="submit" value="Create">
+					<a class="btn btn-default" href="/playlists">Back</a>
+				</div>
+			</form>
 		</div>
 	</body>
 </html> 

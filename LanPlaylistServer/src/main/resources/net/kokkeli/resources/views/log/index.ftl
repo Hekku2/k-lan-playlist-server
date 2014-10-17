@@ -17,23 +17,21 @@
 	
 	<script type="text/javascript" src="/resource/js/log.js"></script>
 	<body>
-		<div class="inner-body">
+		<div class="container">
 			<#include "/common/_topsection.ftl">
 			<#include "/common/_playing.ftl">
 			<h1>${header}</h1>
-			<div class="content">
-				<#include "/common/_info_error.ftl">
-				<table class="table table-striped">
-					<tr>
-						<th>Severity</th>
-						<th class="time-column">Time</th>
-						<th>Message</th>
-						<th>Source</th>
-					</tr>
-					<tbody id="log-table">
-					</tbody>
-				</table>
-			</div>
+			<#include "/common/_info_error.ftl">
+			<table class="table table-striped">
+				<tr>
+					<th>Severity</th>
+					<th class="time-column">Time</th>
+					<th>Message</th>
+					<th>Source</th>
+				</tr>
+				<tbody id="log-table">
+				</tbody>
+			</table>
 		</div>
 	</body>
 </html> 

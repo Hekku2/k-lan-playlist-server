@@ -1,8 +1,8 @@
 <#if getInfo??>
-	<div class="info-box">
+	<div class="alert alert-info" role="alert">
 		${getInfo}
 	</div>
 </#if>
 <#if getError??>
-	<div class="error-box"> ${getError}</div>
+	<div class="alert alert-danger" role="alert"> ${getError}</div>
 </#if>

@@ -27,6 +27,7 @@ public class StaticResources {
     private final String CSS_FOLDER;
     private final String IMAGES_FOLDER;
     private final String JS_FOLDER;
+    private final String FONTS_FOLDER;
     
     /**
      * Creates static resources.
@@ -37,6 +38,7 @@ public class StaticResources {
         CSS_FOLDER = settings.getResourcesFolder() + "css/";
         IMAGES_FOLDER = settings.getResourcesFolder() + "images/";
         JS_FOLDER = settings.getResourcesFolder() + "js/";
+        FONTS_FOLDER = settings.getResourcesFolder() + "fonts/";
     }
     
     /**
@@ -49,6 +51,18 @@ public class StaticResources {
     @Path("/css/{file: .*}")
     public StreamingOutput getCSS(@PathParam("file") final String file) {
         return getStream(CSS_FOLDER, file);
+    }
+    
+    /**
+     * Loads css-file with given name from resources.
+     * @param file Name of file.
+     * @return Css-file
+     */
+    @GET
+    @Produces("font/opentype")
+    @Path("/css/fonts/{file: .*}")
+    public StreamingOutput getFonts(@PathParam("file") final String file) {
+        return getStream(FONTS_FOLDER, file);
     }
     
     /**

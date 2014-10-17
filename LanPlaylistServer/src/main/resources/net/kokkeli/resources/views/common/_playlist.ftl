@@ -12,15 +12,10 @@
 	  			<td>${item.getArtist}</td>
 	  			<td>${item.getTrack}</td>
 	  			<td>
-	  				<a title="Edit" class="btn" href="/tracks/${item.getId}"><i class="icon-edit"></i></a>
-	  				<a title="Delete" class="btn delete" id="${item.getId}" href="/playlists/delete/${getModel.getId}"><i class="icon-remove"></i></a>
+	  				<a title="Edit" class="btn btn-default" href="/tracks/${item.getId}"><span class="glyphicon glyphicon-edit"></span></a>
+	  				<a title="Delete" class="btn btn-default delete" id="${item.getId}" href="/playlists/delete/${getModel.getId}"><span class="glyphicon glyphicon-remove"></span></a>
 	  			</td>
-	  			
 	  		</tr>
 		</#list>
-		
 	</table>
-	<ul>
-
-	</ul>
 <div>

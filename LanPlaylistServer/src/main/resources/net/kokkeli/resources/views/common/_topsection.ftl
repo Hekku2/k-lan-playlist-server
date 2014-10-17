@@ -1,11 +1,16 @@
-<div class="top-section">
-
-	<a class="menu-item <#if tab?? && tab == 0>selected</#if>" href="/"><div>View</div></a>
-	<a class="menu-item <#if tab?? && tab == 1>selected</#if>" href="/users"><div>Users</div></a>
-	<a class="menu-item <#if tab?? && tab == 2>selected</#if>" href="/playlists"><div>Playlists</div></a>
-	<a class="menu-item <#if tab?? && tab == 3>selected</#if>" href="/management"><div>Management</div></a>
-	<div class="top-page-bar"></div>
-	
-	<div class="logout-item">${getUsername}</div>
-	<div class="logout-item"><a href="/authentication/logout">Logout</a></div>
-</div>
+<nav class="navbar navbar-default nav-tabs" role="navigation">
+  <div class="container-fluid">
+    <div class="collapse navbar-collapse in" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+		<li class="<#if tab?? && tab == 0>active</#if>"><a href="/">View</a></li>
+		<li class="<#if tab?? && tab == 1>active</#if>"><a href="/users">Users</a></li>
+		<li class="<#if tab?? && tab == 2>active</#if>"><a href="/playlists">Playlists</a></li>
+		<li class="<#if tab?? && tab == 3>active</#if>"><a href="/management">Management</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+		<li><p class="navbar-text navbar-right">${getUsername}</p></li>
+		<li><a href="/authentication/logout">Logout</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>

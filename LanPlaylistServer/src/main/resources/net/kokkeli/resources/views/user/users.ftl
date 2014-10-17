@@ -5,32 +5,32 @@
 <html>
 	<#include "/common/_header.ftl">
 	<body>
-		<div class="inner-body">
+		<div class="container">
 			<#include "/common/_topsection.ftl">
 			<#include "/common/_playing.ftl">
 			<h1>${header}</h1>
-			<div class="content">
-				<#include "/common/_info_error.ftl">
-				<a class="btn" href="users/create">Create</a>
-				<#if getModel.getUsers??>
-					<table class="table table-striped">
+			
+			<#include "/common/_info_error.ftl">
+			<a class="btn btn-default" href="users/create">Create</a>
+			<#if getModel.getUsers??>
+				<table class="table table-striped">
+					<tr>
+						<th>Username</th>
+						<th>Role</th>
+						<th></th>
+					</tr>
+					<#list getModel.getUsers as item>
 						<tr>
-							<th>Username</th>
-							<th>Role</th>
-							<th></th>
+							<td>${item.getUsername}</td>
+							<td>${item.getRole}</td>
+							<td><a title="Edit" class="btn btn-default" href="/users/${item.getId}"><span class="glyphicon glyphicon-edit"></span></a></td>
 						</tr>
-						<#list getModel.getUsers as item>
-							<tr>
-								<td>${item.getUsername}</td>
-								<td>${item.getRole}</td>
-								<td><a title="Edit" class="btn" href="/users/${item.getId}"><i class="icon-edit"></i></a></td>
-							</tr>
-						</#list>
-					</table>
-				<#else>
-					<p> No users. </p>
-				</#if>
-			</div>
+					</#list>
+				</table>
+			<#else>
+				<p> No users. </p>
+			</#if>
+			
 		</div>
 	</body>
 </html> 

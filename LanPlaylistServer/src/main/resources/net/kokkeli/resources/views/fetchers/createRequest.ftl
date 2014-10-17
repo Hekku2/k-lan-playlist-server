@@ -5,71 +5,32 @@
 <html>
 	<#include "/common/_header.ftl">
 	<body>
-		<div class="inner-body">
+		<div class="container">
 			<#include "/common/_topsection.ftl">
 			<#include "/common/_playing.ftl">
 			<h1>${header}</h1>
-			<div class="content">
-				<#include "/common/_info_error.ftl">
-				<form method="POST" class="value-fields" id="form">
-					<div class="field">
-						<div class="description">
-							Handler: 
-						</div>
-						<div class=value>
-							<input type="text" name="handler">
-						</div>
+			<#include "/common/_info_error.ftl">
+			<form method="POST" class="form-horizontal" id="form">
+				<@valueField label="Handler" name="handler" />
+				<@valueField label="Location" name="location" />
+				<@valueField label="Destination" name="destination" />
+				<@valueField label="Artist" name="artist" />
+				<@valueField label="Track name" name="trackname" />
+				<div class="form-group">
+					<label class="col-md-2 control-label">Playlist</label>
+					<div class="col-md-4">
+						<select class="form-control" name="playlist">
+							<#list getModel.getItems as item>
+								<option value="${item.getId}">${item.getName}</option>
+							</#list>
+						</select>
 					</div>
-					<div class="field">
-						<div class="description">
-							Location:
-						</div>
-						<div class="value">
-							<input type="text" name="location">
-						</div>
-					</div>
-					<div class="field">
-						<div class="description">
-							Destination:
-						</div>
-						<div class="value">
-							<input type="text" name="destination">
-						</div>
-					</div>
-					<div class="field">
-						<div class="description">
-							Artist:
-						</div>
-						<div class="value">
-							<input type="text" name="artist">
-						</div>
-					</div>
-					<div class="field">
-						<div class="description">
-							Track name:
-						</div>
-						<div class="value">
-							<input type="text" name="trackname">
-						</div>
-					</div>
-					<div class="field">
-						<div class="description">
-							Playlist:
-						</div>
-						<div class="value">
-							<select name="playlist" form="form">
-								<#list getModel.getItems as item>
-									<option value="${item.getId}">${item.getName}</option>
-								</#list>
-							</select>
-						</div>
-					</div>
-					<div class="submit-box">
-						<input class="btn" type="submit" value="Create">
-						<a class="btn" href="/fetchers">Cancel</a>
-					</div>
-				</form>
-			</div>
+				</div>
+				<div class="submit-box">
+					<input class="btn btn-primary" type="submit" value="Create">
+					<a class="btn btn-default" href="/fetchers">Cancel</a>
+				</div>
+			</form>
 		</div>
 	</body>
 </html> 

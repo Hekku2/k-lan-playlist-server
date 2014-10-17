@@ -103,6 +103,7 @@ public class TracksTable {
     public Track insert(final Track newTrack) throws DatabaseException {
         try (Connection connection = storage.getConnection()){
             try (Statement statement = connection.createStatement()){
+                //TODO FIX
                 int id = statement.executeUpdate(insertItemRow(newTrack), Statement.RETURN_GENERATED_KEYS);
                 newTrack.setId(id);
                 return newTrack;
