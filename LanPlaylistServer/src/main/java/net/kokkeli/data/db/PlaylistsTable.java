@@ -1,14 +1,13 @@
 package net.kokkeli.data.db;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import net.kokkeli.data.PlayList;
-import com.almworks.sqlite4java.SQLiteConnection;
-import com.almworks.sqlite4java.SQLiteException;
-import com.almworks.sqlite4java.SQLiteJob;
-import com.almworks.sqlite4java.SQLiteQueue;
-import com.almworks.sqlite4java.SQLiteStatement;
 
 public class PlaylistsTable {
     private static final String TABLENAME = "playlists";
@@ -16,7 +15,7 @@ public class PlaylistsTable {
     private static final String COLUMN_ID = "Id";
     private static final String COLUMN_NAME = "Name";
 
-    private final SQLiteQueue queue;
+    private final IConnectionStorage storage;
 
     /**
      * Creates PlaylistTable with given databaselocation
@@ -24,8 +23,8 @@ public class PlaylistsTable {
      * @param queue
      *            Location of database
      */
-    public PlaylistsTable(SQLiteQueue queue) {
-        this.queue = queue;
+    public PlaylistsTable(IConnectionStorage storage) {
+        this.storage = storage;
     }
 
     /**
@@ -39,33 +38,22 @@ public class PlaylistsTable {
      * @throws NotFoundInDatabase
      *             thrown if no such item is found with given id.
      */
+    @SuppressWarnings("resource")
     public PlayList get(final long id) throws DatabaseException, NotFoundInDatabase {
-        PlayList list = queue.execute(new SQLiteJob<PlayList>() {
-            @Override
-            protected PlayList job(SQLiteConnection connection) throws SQLiteException {
-                SQLiteStatement st = connection.prepare(getSingleItemQuery(id));
-
-                PlayList playlist = null;
-                try {
-                    while (st.step()) {
-                        playlist = new PlayList(st.columnLong(0));
-                        playlist.setName(st.columnString(1));
-                    }
-                } finally {
-                    st.dispose();
+        try (Connection connection = storage.getConnection()){
+            try (Statement statement = connection.createStatement()){
+                ResultSet rs = statement.executeQuery(getSingleItemQuery(id));
+                while(rs.next())
+                {
+                    return createPlayList(rs);
                 }
-
-                return playlist;
             }
-        }).complete();
-
-        //TODO Handle database exception.
-        if (list == null)
-            throw new NotFoundInDatabase("No such playlist in database.");
-
-        return list;
+        } catch (SQLException e) {
+            throw new DatabaseException("Getting playlist failed.", e);
+        }
+        throw new NotFoundInDatabase("No such playlist in database.");
     }
-
+    
     /**
      * Returns collection of playlists. Doesn't contain tracks.
      * 
@@ -73,33 +61,21 @@ public class PlaylistsTable {
      * @throws DatabaseException
      *             thrown if there is problem with database.
      */
+    @SuppressWarnings("resource")
     public Collection<PlayList> get() throws DatabaseException {
-        Collection<PlayList> lists = queue.execute(new SQLiteJob<ArrayList<PlayList>>() {
-            @Override
-            protected ArrayList<PlayList> job(SQLiteConnection connection) throws SQLiteException {
+        try (Connection connection = storage.getConnection()){
+            try (Statement statement = connection.createStatement()){
                 ArrayList<PlayList> playlists = new ArrayList<PlayList>();
-
-                SQLiteStatement st = connection.prepare(ALLLISTS);
-                try {
-                    while (st.step()) {
-                        PlayList list = new PlayList(st.columnLong(0));
-                        list.setName(st.columnString(1));
-                        playlists.add(list);
-                    }
-                } finally {
-                    st.dispose();
+                ResultSet rs = statement.executeQuery(ALLLISTS);
+                while(rs.next())
+                {
+                    playlists.add(createPlayList(rs));
                 }
-
                 return playlists;
-
             }
-        }).complete();
-
-        if (lists == null) {
-            throw new DatabaseException("Unable to get all playlists. There was a problem with the database.");
+        } catch (SQLException e) {
+            throw new DatabaseException("Getting playlists failed.", e);
         }
-
-        return lists;
     }
 
     /**
@@ -126,27 +102,15 @@ public class PlaylistsTable {
         if (exists(item.getName()))
             throw new DatabaseException("Playlist with given name already exists.");
 
-        Long id = queue.execute(new SQLiteJob<Long>() {
-            @Override
-            protected Long job(SQLiteConnection connection) throws SQLiteException {
-                SQLiteStatement st = connection.prepare(createInsertString(item));
-
-                try {
-                    st.stepThrough();
-                } finally {
-                    st.dispose();
-                }
-
-                return connection.getLastInsertId();
+        try (Connection connection = storage.getConnection()){
+            try (Statement statement = connection.createStatement()){
+                int id = statement.executeUpdate(createInsertString(item), Statement.RETURN_GENERATED_KEYS);
+                item.setId(id);
+                return item;
             }
-        }).complete();
-
-        if (id == null) {
-            throw new DatabaseException("Inserting playlist failed.");
+        } catch (SQLException e) {
+            throw new DatabaseException("Inserting playlist failed.", e);
         }
-
-        item.setId(id);
-        return item;
     }
 
     /**
@@ -158,27 +122,20 @@ public class PlaylistsTable {
      * @throws DatabaseException
      *             Thrown if there is a problem with the database
      */
+    @SuppressWarnings("resource")
     public boolean exists(final String name) throws DatabaseException {
-        Boolean exists = queue.execute(new SQLiteJob<Boolean>() {
-            @Override
-            protected Boolean job(SQLiteConnection connection) throws SQLiteException {
-                SQLiteStatement st = connection.prepare(getPlaylistWithName(name));
-                try {
-                    while (st.step()) {
-                        return true;
-                    }
-                } finally {
-                    st.dispose();
+        try (Connection connection = storage.getConnection()){
+            try (Statement statement = connection.createStatement()){
+                ResultSet rs = statement.executeQuery(getPlaylistWithName(name));
+                while(rs.next())
+                {
+                    return true;
                 }
                 return false;
             }
-        }).complete();
-
-        if (exists == null) {
-            throw new DatabaseException("Unable to check if username exists in database.");
+        } catch (SQLException e) {
+            throw new DatabaseException("Checkin playlist name existance failed.", e);
         }
-
-        return exists;
     }
 
     /**
@@ -212,5 +169,12 @@ public class PlaylistsTable {
      */
     private static String getPlaylistWithName(String name) {
         return ALLLISTS + " WHERE " + COLUMN_NAME + " = '" + name + "'";
+    }
+    
+    private static PlayList createPlayList(ResultSet rs) throws SQLException{
+        PlayList playlist = null;
+        playlist = new PlayList(rs.getLong(COLUMN_ID));
+        playlist.setName(rs.getString(COLUMN_NAME));
+        return playlist;
     }
 }

@@ -10,6 +10,7 @@ import net.kokkeli.ISettings;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Logging;
 import net.kokkeli.data.db.FetchRequestDatabase;
+import net.kokkeli.data.db.IConnectionStorage;
 import net.kokkeli.data.db.IFetchRequestDatabase;
 import net.kokkeli.data.db.ILogDatabase;
 import net.kokkeli.data.db.IPlaylistDatabase;
@@ -49,7 +50,6 @@ import net.kokkeli.resources.UsersResource;
 import net.kokkeli.resources.authentication.AuthenticationInceptor;
 import net.kokkeli.resources.authentication.AuthenticationResource;
 
-import com.almworks.sqlite4java.SQLiteQueue;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Singleton;
@@ -65,16 +65,16 @@ import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
  */
 public class LanServletConfig extends GuiceServletContextListener {
     private final ISettings settings;
-    private final SQLiteQueue queue;
+    private final IConnectionStorage storage;
     
     /**
      * Creates a new lan servet config instance
      * @param settings Settings file given to resources and services.
      * @param queue Database queue 
      */
-    public LanServletConfig(ISettings settings, SQLiteQueue queue) {
+    public LanServletConfig(ISettings settings, IConnectionStorage storage) {
         this.settings = settings;
-        this.queue = queue;
+        this.storage = storage;
     }
 
     @Override
@@ -84,7 +84,7 @@ public class LanServletConfig extends GuiceServletContextListener {
             protected void configureServlets() {
                 //Settings
                 bind(ISettings.class).toInstance(settings);
-                bind(SQLiteQueue.class).toInstance(queue);
+                bind(IConnectionStorage.class).toInstance(storage);
                 
                 //Exceptions
                 bind(RenderExceptionMapper.class).asEagerSingleton();

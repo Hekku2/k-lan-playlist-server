@@ -1,13 +1,10 @@
 package net.kokkeli.ripservice;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import com.almworks.sqlite4java.SQLite;
-import com.almworks.sqlite4java.SQLiteQueue;
-
 import net.kokkeli.ISettings;
 import net.kokkeli.Settings;
 import net.kokkeli.data.ILogger;
@@ -16,6 +13,7 @@ import net.kokkeli.data.Logging;
 import net.kokkeli.data.db.FetchRequestDatabase;
 import net.kokkeli.data.db.IFetchRequestDatabase;
 import net.kokkeli.data.db.LogDatabase;
+import net.kokkeli.data.db.SqliteConnectionStorage;
 
 /**
  * Program running rippers
@@ -43,14 +41,12 @@ public class Program {
             System.out.println("Unable to load settings from file " + settingsFile);
         }
         SQLite.setLibraryPath(settings.getLibLocation());
-        SQLiteQueue queue = new SQLiteQueue(new File(settings.getDatabaseLocation()));
-        queue.start();
+        SqliteConnectionStorage storage = new SqliteConnectionStorage("jdbc:sqlite:" + settings.getDatabaseLocation());
         
-        ILogger logger = new Logging("Ripper", settings, new LogDatabase(queue));
+        IFetchRequestDatabase fetcherDatabase = new FetchRequestDatabase(storage);
+        ILogger logger = new Logging("Ripper", settings, new LogDatabase(storage));
         
        //TODO Check vlc existance, so user gets better errormessage...
-        
-        IFetchRequestDatabase fetcherDatabase = new FetchRequestDatabase(queue);
         
         IFetcher ripper = new VlcRipper(settings, logger);
         ExecutorService executor = Executors.newFixedThreadPool(2);
@@ -60,8 +56,6 @@ public class Program {
         System.out.println("Started to handle requests.");
         
         System.in.read();
-        
-        queue.stop(true).join();
         
         executor.shutdown();
         //Wait until all are handled.

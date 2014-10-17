@@ -2,7 +2,6 @@ package net.kokkeli.data.db;
 
 import java.util.Collection;
 
-import com.almworks.sqlite4java.SQLiteQueue;
 import com.google.inject.Inject;
 
 import net.kokkeli.data.LogRow;
@@ -15,10 +14,10 @@ public class LogDatabase extends Database implements ILogDatabase {
      * @param settings Settigs
      */
     @Inject
-    public LogDatabase(SQLiteQueue queue) {
+    public LogDatabase(IConnectionStorage storage) {
         super();
         
-        logTable = new LogTable(queue);
+        logTable = new LogTable(storage);
     }
 
     @Override

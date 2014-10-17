@@ -24,7 +24,7 @@
 						<#list getModel.getItems as item>
 							<tr class="<#if item.getExists>success<#else>error</#if>">
 								<td>${item.getArtist}</td>
-								<td>${item.getTrackName}</td>
+								<td>${item.getTrack}</td>
 								<td>
 									<button class="btn"><i class="icon-plus-sign" id="${item.getId}"></i></button>
 									<a title="Edit" class="btn" href="/tracks/${item.getId}"><i class="icon-edit"></i></a>

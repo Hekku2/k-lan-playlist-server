@@ -1,12 +1,10 @@
 package net.kokkeli.data.db;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
-import com.almworks.sqlite4java.SQLiteConnection;
-import com.almworks.sqlite4java.SQLiteException;
-import com.almworks.sqlite4java.SQLiteJob;
-import com.almworks.sqlite4java.SQLiteQueue;
-import com.almworks.sqlite4java.SQLiteStatement;
-
 import net.kokkeli.data.Role;
 import net.kokkeli.data.Track;
 import net.kokkeli.data.User;
@@ -30,15 +28,15 @@ public class TracksTable {
     private static final String INSERT = "INSERT INTO " + TABLENAME + " (" + COLUMN_TRACK + "," + COLUMN_ARTIST + ", "
             + COLUMN_LOCATION + ", " + COLUMN_UPLOADER + ") VALUES ";
 
-    private final SQLiteQueue queue;
+    private final IConnectionStorage storage;
 
     /**
      * Creates TracksTable with given databaselocation
      * 
      * @param databaseLocation
      */
-    public TracksTable(SQLiteQueue queue) {
-        this.queue = queue;
+    public TracksTable(IConnectionStorage storage) {
+        this.storage = storage;
     }
 
     /**
@@ -53,38 +51,22 @@ public class TracksTable {
      * @throws NotFoundInDatabase
      *             Thrown if track is not in database.
      */
+    @SuppressWarnings("resource")
     public Track get(final long id) throws DatabaseException, NotFoundInDatabase {
-        Track track = queue.execute(new SQLiteJob<Track>() {
-            @Override
-            protected Track job(SQLiteConnection connection) throws SQLiteException {
-                SQLiteStatement st = connection.prepare(getSingleItemQuery(id));
-
-                Track track = null;
-                try {
-                    while (st.step()) {
-                        track = new Track(st.columnLong(0));
-                        track.setTrackName(st.columnString(1));
-                        track.setArtist(st.columnString(2));
-                        track.setLocation(st.columnString(3));
-
-                        User uploader = new User(st.columnLong(4), null, Role.NONE);
-                        track.setUploader(uploader);
-                    }
-                } finally {
-                    st.dispose();
+        try (Connection connection = storage.getConnection()){
+            try (Statement statement = connection.createStatement()){
+                ResultSet rs = statement.executeQuery(getSingleItemQuery(id));
+                while(rs.next())
+                {
+                    return createTrack(rs);
                 }
-
-                return track;
             }
-        }).complete();
-
-        // TODO How to check for database problem?
-        if (track == null)
-            throw new NotFoundInDatabase("No track with id: " + id + " in database.");
-
-        return track;
+        } catch (SQLException e) {
+            throw new DatabaseException("Getting user failed.", e);
+        }
+        throw new NotFoundInDatabase("No track with id: " + id + " in database.");
     }
-
+    
     /**
      * Returns all tracks from database. User only holds Id.
      * 
@@ -92,39 +74,21 @@ public class TracksTable {
      * @throws DatabaseException
      *             Thrown if there is a problem with the database
      */
+    @SuppressWarnings("resource")
     public ArrayList<Track> get() throws DatabaseException {
-        ArrayList<Track> tracks = queue.execute(new SQLiteJob<ArrayList<Track>>() {
-            @Override
-            protected ArrayList<Track> job(SQLiteConnection connection) throws SQLiteException {
+        try (Connection connection = storage.getConnection()){
+            try (Statement statement = connection.createStatement()){
                 ArrayList<Track> tracks = new ArrayList<Track>();
-
-                SQLiteStatement st = connection.prepare(ALLTRACKS);
-
-                try {
-                    while (st.step()) {
-                        Track track = new Track(st.columnLong(0));
-                        track.setTrackName(st.columnString(1));
-                        track.setArtist(st.columnString(2));
-                        track.setLocation(st.columnString(3));
-
-                        User uploader = new User(st.columnLong(4), null, Role.NONE);
-                        track.setUploader(uploader);
-                        tracks.add(track);
-                    }
-                } finally {
-                    st.dispose();
+                ResultSet rs = statement.executeQuery(ALLTRACKS);
+                while(rs.next())
+                {
+                    tracks.add(createTrack(rs));
                 }
-
                 return tracks;
-
             }
-        }).complete();
-
-        if (tracks == null) {
-            throw new DatabaseException("Unable to get tracks from database");
+        } catch (SQLException e) {
+            throw new DatabaseException("Getting user failed.", e);
         }
-
-        return tracks;
     }
 
     /**
@@ -137,27 +101,15 @@ public class TracksTable {
      *             thrown if there is problem with the database.
      */
     public Track insert(final Track newTrack) throws DatabaseException {
-        Long id = queue.execute(new SQLiteJob<Long>() {
-            @Override
-            protected Long job(SQLiteConnection connection) throws SQLiteException {
-                SQLiteStatement st = connection.prepare(insertItemRow(newTrack));
-
-                try {
-                    st.stepThrough();
-                } finally {
-                    st.dispose();
-                }
-
-                return connection.getLastInsertId();
+        try (Connection connection = storage.getConnection()){
+            try (Statement statement = connection.createStatement()){
+                int id = statement.executeUpdate(insertItemRow(newTrack), Statement.RETURN_GENERATED_KEYS);
+                newTrack.setId(id);
+                return newTrack;
             }
-        }).complete();
-
-        if (id == null) {
-            throw new DatabaseException("Inserting fetch request failed.");
+        } catch (SQLException e) {
+            throw new DatabaseException("Getting user failed.", e);
         }
-
-        newTrack.setId(id);
-        return newTrack;
     }
 
     /**
@@ -169,18 +121,13 @@ public class TracksTable {
      *             Thrown if there is a problem with the database
      */
     public void update(final Track track) throws DatabaseException {
-        queue.execute(new SQLiteJob<Object>() {
-            @Override
-            protected Object job(SQLiteConnection connection) throws SQLiteException {
-                SQLiteStatement st = connection.prepare(updateItemRow(track));
-                try {
-                    st.stepThrough();
-                } finally {
-                    st.dispose();
-                }
-                return null;
+        try (Connection connection = storage.getConnection()){
+            try (Statement statement = connection.createStatement()){
+                statement.executeUpdate(updateItemRow(track), Statement.NO_GENERATED_KEYS);
             }
-        });
+        } catch (SQLException e) {
+            throw new DatabaseException("Getting user failed.", e);
+        }
     }
 
     /**
@@ -207,12 +154,19 @@ public class TracksTable {
     }
 
     private static String updateItemRow(Track track) {
-        /*
-         * UPDATE table_name SET column1=value1,column2=value2,... WHERE
-         * some_column=some_value;
-         */
         return String.format("UPDATE %s SET %s='%s', %s='%s', %s='%s' WHERE Id = %s", TABLENAME, COLUMN_TRACK,
                 track.getTrackName(), COLUMN_ARTIST, track.getArtist(), COLUMN_LOCATION, track.getLocation(),
                 track.getId());
+    }
+    
+    private static Track createTrack(ResultSet rs) throws SQLException{
+        Track track = new Track(rs.getLong(COLUMN_ID));
+        track.setTrackName(rs.getString(COLUMN_TRACK));
+        track.setArtist(rs.getString(COLUMN_ARTIST));
+        track.setLocation(rs.getString(COLUMN_LOCATION));
+
+        User uploader = new User(rs.getLong(COLUMN_UPLOADER), null, Role.NONE);
+        track.setUploader(uploader);
+        return track;
     }
 }

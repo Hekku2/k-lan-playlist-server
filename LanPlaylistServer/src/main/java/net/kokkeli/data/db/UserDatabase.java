@@ -2,7 +2,6 @@ package net.kokkeli.data.db;
 
 import java.util.Collection;
 
-import com.almworks.sqlite4java.SQLiteQueue;
 import com.google.inject.Inject;
 
 import net.kokkeli.data.User;
@@ -15,9 +14,9 @@ public class UserDatabase extends Database implements IUserDatabase {
      * @param settings Settings user for database.
      */
     @Inject
-    public UserDatabase(SQLiteQueue queue) throws DatabaseException{
+    public UserDatabase(IConnectionStorage storage) throws DatabaseException{
         super();
-        users = new UsersTable(queue);
+        users = new UsersTable(storage);
         CheckDatabaseFormat();
     }
     
