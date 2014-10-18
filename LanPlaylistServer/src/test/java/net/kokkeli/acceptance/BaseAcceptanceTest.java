@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import net.kokkeli.ISettings;
 import net.kokkeli.Settings;
+import net.kokkeli.acceptance.pages.BasePage;
+import net.kokkeli.acceptance.pages.PageAuthentication;
 import net.kokkeli.server.LanServer;
 import net.kokkeli.server.ServerException;
 
@@ -44,5 +46,12 @@ public abstract class BaseAcceptanceTest {
     public void afterTest(){
         if (driver != null)
             driver.quit();
+    }
+    
+    protected BasePage authenticate(String username, String password){
+        PageAuthentication page = new PageAuthentication(settings, driver);
+        page.open();
+        page.LogIn(username, password);
+        return page;
     }
 }

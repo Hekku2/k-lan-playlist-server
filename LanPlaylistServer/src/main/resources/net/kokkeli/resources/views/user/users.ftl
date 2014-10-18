@@ -14,18 +14,22 @@
 			<a class="btn btn-default" href="users/create">Create</a>
 			<#if getModel.getUsers??>
 				<table class="table table-striped">
-					<tr>
-						<th>Username</th>
-						<th>Role</th>
-						<th></th>
-					</tr>
-					<#list getModel.getUsers as item>
+					<thead>
 						<tr>
-							<td>${item.getUsername}</td>
-							<td>${item.getRole}</td>
-							<td><a title="Edit" class="btn btn-default" href="/users/${item.getId}"><span class="glyphicon glyphicon-edit"></span></a></td>
+							<th>Username</th>
+							<th>Role</th>
+							<th></th>
 						</tr>
-					</#list>
+					</thead>
+					<tbody>
+						<#list getModel.getUsers as item>
+							<tr>
+								<td>${item.getUsername}</td>
+								<td>${item.getRole}</td>
+								<td><a title="Edit" class="btn btn-default" href="/users/${item.getId}"><span class="glyphicon glyphicon-edit"></span></a></td>
+							</tr>
+						</#list>
+					</tbody>
 				</table>
 			<#else>
 				<p> No users. </p>

@@ -45,6 +45,7 @@
   		<groupId>org.mockito</groupId>
   		<artifactId>mockito-core</artifactId>
   		<version>1.9.5-rc1</version>
+  		<scope>test</scope>
   	</dependency>
   	<dependency>
   		<groupId>uk.co.caprica</groupId>
@@ -71,11 +72,13 @@
   		<artifactId>jacoco-maven-plugin</artifactId>
   		<version>0.6.3.201306030806</version>
   		<type>maven-plugin</type>
+  		<scope>test</scope>
   	</dependency>
   	<dependency>
   		<groupId>org.apache.httpcomponents</groupId>
   		<artifactId>httpclient</artifactId>
   		<version>4.3.1</version>
+  		<scope>test</scope>
   	</dependency>
   	<dependency>
   		<groupId>org.xerial</groupId>
@@ -86,11 +89,13 @@
   		<groupId>org.seleniumhq.selenium</groupId>
   		<artifactId>selenium-java</artifactId>
   		<version>2.43.1</version>
+  		<scope>test</scope>
   	</dependency>
   	<dependency>
   		<groupId>com.github.detro</groupId>
   		<artifactId>phantomjsdriver</artifactId>
   		<version>1.2.0</version>
+  		<scope>test</scope>
   	</dependency>
   </dependencies>
   <build>

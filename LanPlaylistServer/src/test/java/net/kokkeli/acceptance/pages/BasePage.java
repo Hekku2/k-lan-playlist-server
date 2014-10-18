@@ -17,11 +17,11 @@ public abstract class BasePage {
         this.url = pageUrl;
     }
     
-    public void Open(){
+    public void open(){
         driver.get(settings.getURI(url).toString());
     }
     
-    public String LoggedInUser(){
+    public String loggedInUser(){
         return driver.findElement(By.cssSelector("p.navbar-right")).getText();
     }
 }
