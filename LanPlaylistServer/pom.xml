@@ -82,6 +82,16 @@
   		<artifactId>sqlite-jdbc</artifactId>
   		<version>3.8.6</version>
   	</dependency>
+  	<dependency>
+  		<groupId>org.seleniumhq.selenium</groupId>
+  		<artifactId>selenium-java</artifactId>
+  		<version>2.43.1</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>com.github.detro</groupId>
+  		<artifactId>phantomjsdriver</artifactId>
+  		<version>1.2.0</version>
+  	</dependency>
   </dependencies>
   <build>
     <plugins>
@@ -198,6 +208,19 @@
     								<ignore></ignore>
     							</action>
     						</pluginExecution>
+							<pluginExecution>
+                                <pluginExecutionFilter>
+                                    <groupId>com.github.klieber</groupId>
+                                    <artifactId>phantomjs-maven-plugin</artifactId>
+                                    <versionRange>[0.4,)</versionRange>
+                                    <goals>
+                                        <goal>install</goal>
+                                    </goals>
+                                </pluginExecutionFilter>
+                                <action>
+                                    <execute />
+                                </action>
+                            </pluginExecution>
     					</pluginExecutions>
     				</lifecycleMappingMetadata>
     			</configuration>
