@@ -7,6 +7,7 @@ import net.kokkeli.Settings;
 import net.kokkeli.server.LanServer;
 import net.kokkeli.server.ServerException;
 
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -25,16 +26,12 @@ public abstract class BaseAcceptanceTest {
     public static void fixtureSetup() throws IOException, ServerException{
         settings = new Settings();
         settings.loadSettings(DEFAULT_SETTINGS);
-        
-        
-        
         server = new LanServer(settings);
         server.start();
     }
     
     @AfterClass
     public static void fixtureTeardown() throws Exception{
-        
         server.stop();
     }
     
@@ -43,7 +40,9 @@ public abstract class BaseAcceptanceTest {
         driver = new PhantomJSDriver();
     }
     
+    @After
     public void afterTest(){
-        driver.quit();
+        if (driver != null)
+            driver.quit();
     }
 }
