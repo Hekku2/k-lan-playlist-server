@@ -12,6 +12,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
+
+import net.kokkeli.Settings;
 import net.kokkeli.server.LanServer;
 import net.kokkeli.server.ServerException;
 
@@ -86,7 +88,6 @@ public class StressTestProgram {
             running = false;
         }
         
-        @SuppressWarnings("resource")
         @Override
         public void run() {
             CloseableHttpResponse response = null;
@@ -158,16 +159,17 @@ public class StressTestProgram {
                 System.setProperty("SQLite.encoding", "utf-8");
                 String settingsFile = "settings/default.dat";
 
-                
+                Settings settings = new Settings();
+                settings.loadSettings("settings/default.dat");
                 System.out.println("Starting server with settings: " + settingsFile);
-                server = new LanServer(settingsFile);
+                server = new LanServer(settings);
                 server.start();
 
                 while(running){
                     Thread.sleep(500);
                 }
                 
-            } catch (ServerException | InterruptedException e) {
+            } catch (ServerException | InterruptedException | IllegalArgumentException | IOException e) {
                 System.out.println(e.toString());
             } finally {
                 if (server != null){

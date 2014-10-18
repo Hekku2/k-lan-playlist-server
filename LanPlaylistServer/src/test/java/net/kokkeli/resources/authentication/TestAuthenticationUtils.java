@@ -40,7 +40,7 @@ public class TestAuthenticationUtils {
     @Test
     public void testExtractingLoginCookieFindsCookie() throws AuthenticationCookieNotFound{
         Cookie[] cookies = new Cookie[]{
-                new Cookie("", ""),
+                new Cookie("wrong", "cookie"),
                 new Cookie(AUTH, "test")
                 };
         Cookie cook = AuthenticationUtils.extractLoginCookie(cookies);

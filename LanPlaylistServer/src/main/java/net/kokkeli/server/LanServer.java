@@ -1,7 +1,6 @@
 package net.kokkeli.server;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -10,7 +9,6 @@ import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 
 import net.kokkeli.ISettings;
-import net.kokkeli.Settings;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.LoggingModule;
@@ -40,15 +38,9 @@ public class LanServer {
      * Creates server 
      * @throws ServerException thrown if there is problem width server.
      */
-    public LanServer(String settingsFile) throws ServerException{
+    public LanServer(ISettings settings) throws ServerException{
         filesystem = new FileSystem();
-        settings = new Settings();
-        try {
-            settings.loadSettings(settingsFile);
-        } catch (IOException | IllegalArgumentException e) {
-            System.out.println(e.toString());
-            throw new ServerException("Settings file " + settingsFile + " is missings or invalid format!");
-        }
+        this.settings = settings;
         
         SQLite.setLibraryPath(settings.getLibLocation());
         Logger.getLogger("com.almworks.sqlite4java").setLevel(Level.OFF);
@@ -83,7 +75,6 @@ public class LanServer {
         sch.addServlet(DefaultServlet.class, "/");
         try {
             server.start();
-            
             logger.log("Server started at " + settings.getBaseURI(), LogSeverity.TRACE);
         } catch (InterruptedException e) {
             throw new ServerException("Unable to start server: " + e.getMessage());

@@ -1,5 +1,7 @@
 package net.kokkeli;
 
+import java.io.IOException;
+
 import net.kokkeli.server.LanServer;
 import net.kokkeli.server.ServerException;
 
@@ -12,19 +14,23 @@ public class Program {
 	 */
 	public static void main(String[] args) throws Exception {    
 	    LanServer server = null;
+	    String settingsFile = "settings/default.dat";
 		try {
 		    System.setProperty("SQLite.encoding", "utf-8");
-		    
-		    String settingsFile = "settings/default.dat";
 		    
 		    if (args.length > 0){
 		        settingsFile = args[0];
 		    }
 		    
+	        Settings settings = new Settings();
+            settings.loadSettings(settingsFile);
+
 		    System.out.println("Starting server with settings: " + settingsFile);
-		    server = new LanServer(settingsFile);
+		    server = new LanServer(settings);
             server.start();
             System.in.read();
+        } catch (IOException | IllegalArgumentException e) {
+            System.out.println("Settings file " + settingsFile + " is missings or invalid format!");
         } catch (ServerException e) {
             System.out.println(e.toString());
         } finally {
