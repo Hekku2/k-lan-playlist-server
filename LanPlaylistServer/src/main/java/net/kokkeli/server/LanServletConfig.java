@@ -33,6 +33,7 @@ import net.kokkeli.data.services.SessionService;
 import net.kokkeli.data.services.TrackService;
 import net.kokkeli.data.services.UserService;
 import net.kokkeli.player.IPlayer;
+import net.kokkeli.player.MockPlayer;
 import net.kokkeli.player.VlcPlayer;
 import net.kokkeli.resources.Access;
 import net.kokkeli.resources.BadRequestExceptionMapper;
@@ -102,9 +103,13 @@ public class LanServletConfig extends GuiceServletContextListener {
                 bind(ILogDatabase.class).to(LogDatabase.class).asEagerSingleton();
                 
                 //Services
+                if (settings.getPlayerEnabled())
+                    bind(IPlayer.class).to(VlcPlayer.class).asEagerSingleton();
+                else 
+                    bind(IPlayer.class).to(MockPlayer.class).asEagerSingleton();
+                
                 bind(ISessionService.class).to(SessionService.class).asEagerSingleton();
                 bind(ITemplateService.class).to(Templates.class).asEagerSingleton();
-                bind(IPlayer.class).to(VlcPlayer.class).asEagerSingleton();
                 bind(IUserService.class).to(UserService.class);
                 bind(IPlaylistService.class).to(PlaylistService.class);
                 bind(IFileSystem.class).to(FileSystem.class);

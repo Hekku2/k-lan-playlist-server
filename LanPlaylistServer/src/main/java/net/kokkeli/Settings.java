@@ -30,6 +30,7 @@ public class Settings implements ISettings {
     private String resourcesFolder;
     private LogSeverity logSeverity = LogSeverity.TRACE;
     private int port;
+    private boolean playerEnabled;
     
     /**
      * Loads settings from file
@@ -174,6 +175,12 @@ public class Settings implements ISettings {
         return logSeverity;
     }
     
+
+    @Override
+    public boolean getPlayerEnabled() {
+        return playerEnabled;
+    }
+    
     /**
      * Loads settings
      * @param key Key
@@ -208,6 +215,9 @@ public class Settings implements ISettings {
             break;
         case "ResourcesFolder":
             resourcesFolder = value;
+            break;
+        case "PlayerEnabled":
+            playerEnabled = Boolean.parseBoolean(value);
             break;
         case "LogSeverity":
             int parsed = Integer.parseInt(value);

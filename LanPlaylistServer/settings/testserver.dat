@@ -8,3 +8,4 @@ VlcLocation=D:\\vlc-2.0.5
 ServerUri=http://192.168.1.44/
 Port=9998
 LogSeverity=3
+PlayerEnabled=false

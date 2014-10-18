@@ -80,4 +80,6 @@ public interface ISettings {
      * @return Log severity
      */
     LogSeverity getLogSeverity();
+    
+    boolean getPlayerEnabled();
 }
