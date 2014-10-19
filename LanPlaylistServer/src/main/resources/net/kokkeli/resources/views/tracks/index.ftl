@@ -20,7 +20,7 @@
 						<th></th>
 					</tr>
 					<#list getModel.getItems as item>
-						<tr class="<#if item.getExists>success<#else>error</#if>">
+						<tr class="<#if item.getExists>success<#else>danger</#if>">
 							<td>${item.getArtist}</td>
 							<td>${item.getTrack}</td>
 							<td>
