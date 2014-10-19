@@ -1,8 +1,8 @@
-<#macro uneditableValueField label value>
+<#macro uneditableValueField label value id="">
 	<div class="form-group">
 		<label class="col-md-2 control-label">${label}</label>
 		<div class="col-md-4">
-			<p class="form-control-static">${value}</p>
+			<p class="form-control-static" id="${id}">${value}</p>
 		</div>
 	</div>
 </#macro>

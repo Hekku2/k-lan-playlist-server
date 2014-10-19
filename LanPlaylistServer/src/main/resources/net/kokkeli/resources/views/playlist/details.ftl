@@ -11,7 +11,7 @@
 			<h1>${header}</h1>
 			<#include "/common/_info_error.ftl">
 			<form class="form-horizontal">
-				<@uneditableValueField label="Name" value=getModel.getName />
+				<@uneditableValueField label="Name" value=getModel.getName id="name" />
 				<a class="btn btn-default" href="/playlists/add/upload/${getModel.getId}">Add song</a>
 				<div class="playlist-values">			
 					<#if getModel.getItems??>

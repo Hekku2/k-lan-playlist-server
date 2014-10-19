@@ -11,7 +11,7 @@
 			<h1>${header}</h1>
 			<div class="content">
 				<#include "/common/_info_error.ftl">
-				<a class="btn btn-default" href="/tracks">Verify track database</a>
+				<a class="btn btn-default" href="/tracks">Tracks</a>
 				<a class="btn btn-default" href="/fetchers">View fetch requests</a>
 				<a class="btn btn-default" href="/log">View log</a>
 			</div>

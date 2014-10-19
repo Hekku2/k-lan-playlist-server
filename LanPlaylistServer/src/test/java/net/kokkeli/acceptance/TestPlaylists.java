@@ -1,7 +1,9 @@
 package net.kokkeli.acceptance;
 
+import net.kokkeli.acceptance.pages.PagePlaylist;
 import net.kokkeli.acceptance.pages.PagePlaylistCreate;
 import net.kokkeli.acceptance.pages.PagePlaylists;
+import net.kokkeli.resources.models.ModelPlaylist;
 import net.kokkeli.resources.models.ModelPlaylists;
 
 import org.junit.Assert;
@@ -27,9 +29,13 @@ public class TestPlaylists extends BaseAcceptanceTest{
         listPage.open();
         int playlists = listPage.playlistCount();
         
-        PagePlaylistCreate page = new PagePlaylistCreate(settings, driver);
-        page.open();
-        page.createPlaylist("New playlist");
+        PagePlaylistCreate create = new PagePlaylistCreate(settings, driver);
+        create.open();
+        create.createPlaylist("New playlist");
+        
+        PagePlaylist playlist = new PagePlaylist(settings, driver);
+        ModelPlaylist created = playlist.getPlaylist();
+        Assert.assertEquals("New playlist", created.getName());
         
         listPage = new PagePlaylists(settings, driver);
         listPage.open();
