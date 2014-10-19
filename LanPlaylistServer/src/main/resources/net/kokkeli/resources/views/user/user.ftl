@@ -12,12 +12,12 @@
 			<form class="form-horizontal" role="form">
 				<div class="form-group">
 					<label class="col-md-2 control-label">Username:</label>
-					<p class="col-md-10 form-control-static">${getModel.getUsername}</p>
+					<p class="col-md-10 form-control-static" id="username">${getModel.getUsername}</p>
 				</div>
 				<div class="form-group">
 					<label class="col-md-2 control-label">Role:</label>
 					<div class="col-md-10">
-						<p class="form-control-static">${getModel.getRole}</p>
+						<p class="form-control-static" id="role">${getModel.getRole}</p>
 					</div>
 				</div>
 			</form>

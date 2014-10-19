@@ -9,7 +9,7 @@ public abstract class BasePage {
     protected final WebDriver driver;
     protected final ISettings settings;
     
-    private final String url;
+    protected final String url;
     
     protected BasePage(ISettings settings, WebDriver driver, String pageUrl){
         this.driver = driver;

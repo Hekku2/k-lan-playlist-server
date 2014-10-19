@@ -1,6 +1,12 @@
 package net.kokkeli.acceptance;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 import net.kokkeli.ISettings;
 import net.kokkeli.Settings;
@@ -21,13 +27,16 @@ public abstract class BaseAcceptanceTest {
 
     protected static ISettings settings;
     private static LanServer server;
+    private static Connection connection;
     
     protected WebDriver driver;
     
     @BeforeClass
-    public static void fixtureSetup() throws IOException, ServerException{
+    public static void fixtureSetup() throws IOException, ServerException, ClassNotFoundException, SQLException{
         settings = new Settings();
         settings.loadSettings(DEFAULT_SETTINGS);
+        Class.forName("org.sqlite.JDBC");
+        connection = DriverManager.getConnection("jdbc:sqlite:" + settings.getDatabaseLocation());
         server = new LanServer(settings);
         server.start();
     }
@@ -38,7 +47,11 @@ public abstract class BaseAcceptanceTest {
     }
     
     @Before
-    public void beforeTest(){
+    public void beforeTest() throws FileNotFoundException, IOException, SQLException{
+        try (Reader reader = new FileReader("db/test_data.sql")){
+            ScriptRunner runner = new ScriptRunner(connection, false, true);
+            runner.runScript(reader);
+        }
         driver = new PhantomJSDriver();
     }
     
