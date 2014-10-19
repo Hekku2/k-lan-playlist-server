@@ -15,19 +15,19 @@ public class TestAuthentication extends BaseAcceptanceTest{
     
     @Test
     public void testUserIsRedirectedToMainPageAfterAuthentication(){
-        authenticate("admin", "kokkeli");
+        authenticate(ADMIN_USERNAME, DEFAULT_PASSWORD);
         
         Assert.assertEquals("Main page", driver.getTitle());
     }
     
     @Test
     public void testUsernameIsShownAfterAuthentication(){
-        Assert.assertEquals("admin", authenticate("admin", "kokkeli").loggedInUser());
+        Assert.assertEquals(ADMIN_USERNAME, authenticate(ADMIN_USERNAME, DEFAULT_PASSWORD).loggedInUser());
     }
     
     @Test
     public void testUserCantLogInWithWrongPassword(){
-        authenticate("admin", "wrong");
+        authenticate(ADMIN_USERNAME, "wrong");
         Assert.assertEquals(authenticationPageTitle, driver.getTitle());
     }
 }

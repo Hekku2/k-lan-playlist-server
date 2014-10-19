@@ -16,7 +16,7 @@ public class TestUserManagement extends BaseAcceptanceTest{
     
     @Test
     public void testUserListIsShownWithCorrectUsers(){
-        authenticate("admin", "kokkeli");
+        authenticate(ADMIN_USERNAME, DEFAULT_PASSWORD);
         
         PageUsers page = new PageUsers(settings, driver);
         page.open();
@@ -27,7 +27,7 @@ public class TestUserManagement extends BaseAcceptanceTest{
     
     @Test
     public void testUserCanBeCreated(){
-        authenticate("admin", "kokkeli");
+        authenticate(ADMIN_USERNAME, DEFAULT_PASSWORD);
         
         PageUsers userList = new PageUsers(settings, driver);
         userList.open();
@@ -47,12 +47,28 @@ public class TestUserManagement extends BaseAcceptanceTest{
     
     @Test
     public void testUserPageShowsCorrectInformation(){
-        authenticate("admin", "kokkeli");
+        authenticate(ADMIN_USERNAME, DEFAULT_PASSWORD);
         
         PageUser page = new PageUser(settings, driver);
         page.Open(adminId);
         ModelUser user = page.getUser();
-        Assert.assertEquals("admin", user.getUsername());
+        Assert.assertEquals(ADMIN_USERNAME, user.getUsername());
         Assert.assertEquals("ADMIN", user.getRole());
+    }
+    
+    @Test
+    public void testCreatedUserCanLogIn(){
+        authenticate(ADMIN_USERNAME, DEFAULT_PASSWORD);
+        
+        ModelUser newUser = new ModelUser(0, "newUser", Role.ADMIN);
+        newUser.setNewPassword("password");
+        newUser.setConfirmPassword("password");
+        
+        PageUserCreate page = new PageUserCreate(settings, driver);
+        page.open();
+        page.createUser(newUser);
+        
+        logOut();
+        Assert.assertEquals("newUser", authenticate("newUser", "password").loggedInUser());
     }
 }

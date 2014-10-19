@@ -19,12 +19,17 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 
 public abstract class BaseAcceptanceTest {
     private static final String DEFAULT_SETTINGS = "settings/default.dat";
 
+    protected static final String ADMIN_USERNAME = "admin";
+    protected static final String USER_USERNAME = "user";
+    protected static final String DEFAULT_PASSWORD = "kokkeli";
+    
     protected static ISettings settings;
     private static LanServer server;
     private static Connection connection;
@@ -66,5 +71,10 @@ public abstract class BaseAcceptanceTest {
         page.open();
         page.LogIn(username, password);
         return page;
+    }
+    
+    protected void logOut(){
+        driver.findElement(By.cssSelector("a[href*='authentication']")).click();
+        
     }
 }

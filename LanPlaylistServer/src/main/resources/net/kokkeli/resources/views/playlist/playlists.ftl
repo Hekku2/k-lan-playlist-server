@@ -14,19 +14,23 @@
 			<a class="btn btn-default" href="/playlists/create">Create a playlist</a>
 			<#if getModel?? && getModel.getItems??>
 				<table class="table table-striped">
-					<tr>
-						<th>Name</th>
-						<th></th>
-					</tr>
-					<#list getModel.getItems as item>
+					<thead>
 						<tr>
-							<td>${item.getName}</td>
-							<td>
-								<a class="btn btn-default" href="/playlists/${item.getId}"><span class="glyphicon glyphicon-edit"></span></a>
-								<button class="btn btn-default select-playlist" id="${item.getId}"><span class="glyphicon glyphicon-play"></span></button>
-							</td>
+							<th>Name</th>
+							<th></th>
 						</tr>
-					</#list>
+					</thead>
+					<tbody>
+						<#list getModel.getItems as item>
+							<tr>
+								<td>${item.getName}</td>
+								<td>
+									<a class="btn btn-default" href="/playlists/${item.getId}"><span class="glyphicon glyphicon-edit"></span></a>
+									<button class="btn btn-default select-playlist" id="${item.getId}"><span class="glyphicon glyphicon-play"></span></button>
+								</td>
+							</tr>
+						</#list>
+					</tbody>
 				</table>
 			<#else>
 				No playlists found.
