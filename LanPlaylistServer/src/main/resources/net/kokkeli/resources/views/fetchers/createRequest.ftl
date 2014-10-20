@@ -1,4 +1,4 @@
-<#assign header = "Fetch requests">
+<#assign header = "Create fetch request">
 <#assign tab = 3>
 <!DOCTYPE HTML>
 
@@ -15,11 +15,11 @@
 				<@valueField label="Location" name="location" />
 				<@valueField label="Destination" name="destination" />
 				<@valueField label="Artist" name="artist" />
-				<@valueField label="Track name" name="trackname" />
+				<@valueField label="Track name" name="track" />
 				<div class="form-group">
 					<label class="col-md-2 control-label">Playlist</label>
 					<div class="col-md-4">
-						<select class="form-control" name="playlist">
+						<select class="form-control" name="selectedplaylistid">
 							<#list getModel.getItems as item>
 								<option value="${item.getId}">${item.getName}</option>
 							</#list>

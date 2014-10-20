@@ -37,14 +37,16 @@
 			<a class="btn btn-default" href="fetchers/createRequest">Create</a>
 			<a class="btn btn-default" id="remove-handled" href="fetchers/removeHandled">Remove handled</a>
 			<table class="table table-striped">
-				<tr>
-					<th>Type</th>
-					<th>Track</th>
-					<th>Location</th>
-					<th>Destination</th>
-					<th>Status</th>
-					<th></th>
-				</tr>
+				<thead>
+					<tr>
+						<th>Type</th>
+						<th>Track</th>
+						<th>Location</th>
+						<th>Destination</th>
+						<th>Status</th>
+						<th></th>
+					</tr>
+				</thead>
 				<tbody id="request-table">
 				</tbody>
 			</table>

@@ -24,4 +24,8 @@ public abstract class BasePage {
     public String loggedInUser(){
         return driver.findElement(By.cssSelector("p.navbar-right")).getText();
     }
+    
+    public String getAlert(){
+        return driver.findElement(By.cssSelector("div[role='alert']")).getText();
+    }
 }
