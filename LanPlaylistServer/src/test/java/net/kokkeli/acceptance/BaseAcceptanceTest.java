@@ -30,6 +30,8 @@ public abstract class BaseAcceptanceTest {
     protected static final String USER_USERNAME = "user";
     protected static final String DEFAULT_PASSWORD = "kokkeli";
     
+    protected static final long TEST_PLAYLIST_ID = 1;
+    
     protected static ISettings settings;
     private static LanServer server;
     private static Connection connection;

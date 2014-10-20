@@ -103,9 +103,11 @@ public class TracksTable {
     public Track insert(final Track newTrack) throws DatabaseException {
         try (Connection connection = storage.getConnection()){
             try (Statement statement = connection.createStatement()){
-                //TODO FIX
-                int id = statement.executeUpdate(insertItemRow(newTrack), Statement.RETURN_GENERATED_KEYS);
+                connection.setAutoCommit(false);
+                statement.executeUpdate(insertItemRow(newTrack));
+                long id = statement.executeQuery("SELECT last_insert_rowid()").getLong(1);
                 newTrack.setId(id);
+                connection.commit();
                 return newTrack;
             }
         } catch (SQLException e) {

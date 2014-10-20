@@ -95,8 +95,11 @@ public class FetchRequestsTable {
     public FetchRequest insert(final FetchRequest item) throws DatabaseException {
         try (Connection connection = storage.getConnection()){
             try (Statement statement = connection.createStatement()){
-                int id = statement.executeUpdate(createInsertString(item), Statement.RETURN_GENERATED_KEYS);
+                connection.setAutoCommit(false);
+                statement.executeUpdate(createInsertString(item));
+                long id = statement.executeQuery("SELECT last_insert_rowid()").getLong(1);
                 item.setId(id);
+                connection.commit();
                 return item;
             } 
         } catch (SQLException e) {
