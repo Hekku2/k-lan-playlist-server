@@ -146,7 +146,7 @@ public class FetchRequestsResource extends BaseResource{
      * @param req Request
      * @return Ok, if everything went fine, otherwise something else
      * @throws NotAuthenticatedException Thrown if user is not authenticated
-     * @throws ServiceException Thrown if something went wronf with the service
+     * @throws ServiceException Thrown if something went wrong with the service
      */
     @POST
     @Produces("text/html")
