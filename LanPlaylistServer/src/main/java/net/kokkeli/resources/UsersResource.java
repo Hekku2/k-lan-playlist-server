@@ -243,7 +243,7 @@ public class UsersResource extends BaseResource {
                 return Response.ok(templates.process(USER_CREATE_TEMPLATE, baseModel)).build();
             }
             
-            User user = new User(model.getUsername(),model.getRoleEnum());
+            User user = new User(model.getUsername(), model.getRoleEnum());
             user.setPasswordHash(userService.calculateHash(model.getNewPassword()));
             
             long id = userService.add(user).getId();

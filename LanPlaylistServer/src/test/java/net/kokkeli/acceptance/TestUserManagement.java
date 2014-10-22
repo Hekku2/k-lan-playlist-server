@@ -2,6 +2,7 @@ package net.kokkeli.acceptance;
 
 import java.util.ArrayList;
 
+import net.kokkeli.acceptance.pages.BasePage;
 import net.kokkeli.acceptance.pages.PageUser;
 import net.kokkeli.acceptance.pages.PageUserCreate;
 import net.kokkeli.acceptance.pages.PageUsers;
@@ -41,6 +42,11 @@ public class TestUserManagement extends BaseAcceptanceTest{
         page.open();
         page.createUser(newUser);
         
+        Assert.assertEquals("User created.", page.getAlert());
+        ModelUser user = new PageUser(settings, driver).getUser();
+        Assert.assertEquals(newUser.getUsername(), user.getUsername());
+        Assert.assertEquals(newUser.getRole(), user.getRole());
+        
         userList.open();
         Assert.assertEquals(oldCount + 1, userList.getUsers().size());
     }
@@ -70,5 +76,16 @@ public class TestUserManagement extends BaseAcceptanceTest{
         
         logOut();
         Assert.assertEquals("newUser", authenticate("newUser", "password").loggedInUser());
+    }
+    
+    @Test
+    public void testUserNameAtTheTopOfThePageNavigatesToCurrentUserPage(){
+        BasePage index = authenticate(ADMIN_USERNAME, DEFAULT_PASSWORD);
+        index.clickUsername();
+        
+        PageUser page = new PageUser(settings, driver);
+        ModelUser user = page.getUser();
+        Assert.assertEquals(ADMIN_USERNAME, user.getUsername());
+        Assert.assertEquals("ADMIN", user.getRole());
     }
 }

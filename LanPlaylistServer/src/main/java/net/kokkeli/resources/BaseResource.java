@@ -66,6 +66,8 @@ public abstract class BaseResource {
         try {
             Session session = sessions.get(AuthenticationUtils.extractLoginCookie(req.getCookies()).getValue());
             model.setUsername(session.getUser().getUserName());
+            model.setUserId(session.getUser().getId());
+            model.setUserRole(session.getUser().getRole().getId());
             model.setCurrentSession(session);
             model.setError(session.getError());
             model.setInfo(session.getInfo());

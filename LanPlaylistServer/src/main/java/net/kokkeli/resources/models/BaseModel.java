@@ -14,6 +14,8 @@ import net.kokkeli.resources.Model;
 public class BaseModel extends ViewModel {
     private String nowPlaying;
     private String userName;
+    private int userRole;
+    private long userId;
     private String error;
     private String info;
     
@@ -138,5 +140,36 @@ public class BaseModel extends ViewModel {
      */
     public void setAnythingPlaying(boolean playing){
         anythingPlaying = playing;
+    }
+
+    /**
+     * @return the currently logged in user id
+     */
+    @Field
+    public long getUserId() {
+        return userId;
+    }
+
+    /**
+     * Sets the user ID of currently logged in user.
+     * @param userId the userId to set
+     */
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
+
+    /**
+     * @return the userRole
+     */
+    @Field
+    public int getUserRole() {
+        return userRole;
+    }
+
+    /**
+     * @param userRole the userRole to set
+     */
+    public void setUserRole(int userRole) {
+        this.userRole = userRole;
     }
 }
