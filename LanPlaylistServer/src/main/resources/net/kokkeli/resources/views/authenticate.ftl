@@ -9,19 +9,19 @@
 			<#include "common/_info_error.ftl">
 			<form class="form-horizontal" role="form" action="authentication" method="post">
 				<div class="form-group form-group-lg">
-					<label for="user" class="col-sm-1 control-label">Username</label>
-					<div class="col-sm-3">
+					<label for="user" class="col-md-1 control-label">Username</label>
+					<div class="col-md-3">
 						<input type="text" class="form-control" id="user" placeholder="Username" name="user">
 					</div>
 				</div>
 				<div class="form-group form-group-lg">
-					<label for="pwd" class="col-sm-1 control-label">Password</label>
-					<div class="col-sm-3">
+					<label for="pwd" class="col-md-1 control-label">Password</label>
+					<div class="col-md-3">
 						<input type="password" class="form-control" id="pwd" placeholder="Password" name="pwd">
 					</div>
 				</div>
 				<div class="form-group form-group-lg">
-					<div class="col-sm-offset-3">
+					<div class="col-md-offset-3">
 						<button type="submit" class="btn btn-primary">Sign in</button>
 					</div>
 				</div>
