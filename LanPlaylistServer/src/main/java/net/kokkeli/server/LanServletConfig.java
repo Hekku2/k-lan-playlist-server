@@ -48,7 +48,7 @@ import net.kokkeli.resources.RootResource;
 import net.kokkeli.resources.ServiceExceptionMapper;
 import net.kokkeli.resources.TracksResource;
 import net.kokkeli.resources.UsersResource;
-import net.kokkeli.resources.authentication.AuthenticationInceptor;
+import net.kokkeli.resources.authentication.AuthenticationInterceptor;
 import net.kokkeli.resources.authentication.AuthenticationResource;
 
 import com.google.inject.Guice;
@@ -86,11 +86,6 @@ public class LanServletConfig extends GuiceServletContextListener {
                 //Settings
                 bind(ISettings.class).toInstance(settings);
                 bind(IConnectionStorage.class).toInstance(storage);
-                
-                //Exceptions
-                bind(RenderExceptionMapper.class).asEagerSingleton();
-                bind(ServiceExceptionMapper.class).asEagerSingleton();
-                bind(BadRequestExceptionMapper.class).asEagerSingleton();
                 
                 //Logging
                 bind(ILogger.class).to(Logging.class);
@@ -130,7 +125,7 @@ public class LanServletConfig extends GuiceServletContextListener {
                 bind(LogResource.class);
                 
                 //Aspects
-                AuthenticationInceptor interceptor = new AuthenticationInceptor();
+                AuthenticationInterceptor interceptor = new AuthenticationInterceptor();
                 requestInjection(interceptor);
                 
                 bindInterceptor(Matchers.any(), 
@@ -146,6 +141,12 @@ public class LanServletConfig extends GuiceServletContextListener {
                 
                 // Route all requests through GuiceContainer
                 serve("/*").with(GuiceContainer.class, initParams);
+                
+                //Exceptions
+                bind(RenderExceptionMapper.class);
+                bind(BadRequestExceptionMapper.class).asEagerSingleton();
+                bind(NotAuthenticatedExceptionMapper.class).asEagerSingleton();
+                bind(ServiceExceptionMapper.class).asEagerSingleton();
             }
         });
     }
