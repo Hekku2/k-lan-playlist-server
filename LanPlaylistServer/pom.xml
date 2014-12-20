@@ -14,7 +14,7 @@
   	<dependency>
   		<groupId>com.sun.jersey</groupId>
   		<artifactId>jersey-server</artifactId>
-  		<version>1.18.1</version>
+  		<version>1.18.3</version>
   	</dependency>
   	<dependency>
   		<groupId>org.freemarker</groupId>
@@ -29,12 +29,12 @@
   	<dependency>
   		<groupId>org.eclipse.jetty</groupId>
   		<artifactId>jetty-servlet</artifactId>
-  		<version>9.3.0.M0</version>
+  		<version>9.3.0.M1</version>
   	</dependency>
   	<dependency>
   		<groupId>com.sun.jersey.contribs</groupId>
   		<artifactId>jersey-guice</artifactId>
-  		<version>1.18.1</version>
+  		<version>1.18.3</version>
   	</dependency>
   	<dependency>
   		<groupId>com.almworks.sqlite4java</groupId>
@@ -60,12 +60,12 @@
   	<dependency>
   		<groupId>com.sun.jersey.contribs</groupId>
   		<artifactId>jersey-multipart</artifactId>
-  		<version>1.18.1</version>
+  		<version>1.18.3</version>
   	</dependency>
   	<dependency>
   		<groupId>com.sun.jersey</groupId>
   		<artifactId>jersey-json</artifactId>
-  		<version>1.18.1</version>
+  		<version>1.18.3</version>
   	</dependency>
   	<dependency>
   		<groupId>org.jacoco</groupId>
