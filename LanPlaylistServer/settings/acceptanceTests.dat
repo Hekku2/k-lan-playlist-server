@@ -1,0 +1,13 @@
+#Default settings file
+DatabaseLocation=db/testserver.db
+LibLocation=lib
+TemplatesLocation=target/classes/net/kokkeli/resources/views
+TracksFolder=tracks
+PasswordSalt=hgdfskh4341%
+VlcLocation=F:\\vlc-2.1.2
+ServerUri=http://localhost/
+Port=9998
+ResourcesFolder=target/classes/net/kokkeli/resources/
+LogSeverity=2
+PlayerEnabled=false
+RequireAuthentication=true

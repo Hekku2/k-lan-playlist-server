@@ -24,7 +24,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 
 public abstract class BaseAcceptanceTest {
-    private static final String DEFAULT_SETTINGS = "settings/default.dat";
+    private static final String DEFAULT_SETTINGS = "settings/acceptanceTests.dat";
 
     protected static final String ADMIN_USERNAME = "admin";
     protected static final String USER_USERNAME = "user";
