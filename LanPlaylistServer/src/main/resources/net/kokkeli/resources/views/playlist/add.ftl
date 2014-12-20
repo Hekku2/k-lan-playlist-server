@@ -5,7 +5,10 @@
 
 <html>
 	<#include "/common/_header.ftl">
+	<link rel="stylesheet" type="text/css" href="/resource/css/jquery-fileupload-ui/jquery.fileupload.css">
 	<link rel="stylesheet" type="text/css" href="/resource/css/PlaylistAdd.css">
+	<script type="text/javascript" src="/resource/js/jquery-file-upload/vendor/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="/resource/js/jquery-file-upload/jquery.fileupload.js"></script>
 	<script type="text/javascript" src="/resource/js/playlist-add.js"></script>
 	<body>
 		<div class="container">
@@ -19,15 +22,20 @@
 					<legend>Track data:</legend>
 					<@valueField label="Artist" name="artist" />
 					<@valueField label="Track" name="track" />
+					
 					<div class="form-group">
-					    <label class="control-label col-md-2" for="file">File</label>
-					    <div class="col-md-4">
-					    	<input class="form-control" type="file" id="file" name="file" size="40">
-					    </div>
+						<label class="col-md-2 control-label">File upload</label>
+						<div class="col-md-4">
+							<span class="btn btn-success fileinput-button">
+						        <i class="glyphicon glyphicon-plus"></i>
+						        <span>Select file</span>
+						        <input type="file" id="file" name="file" size="40">
+							</span>
+							<span id="filename" class="help-block"></span>
+						</div>
 					</div>
 					<div class="controls">
-						<div id="validation-error"></div>
-						<input type="submit" value="Send" class="btn btn-primary">
+						<input type="submit" value="Send" class="btn btn-primary" data-loading-text="Loading...">
 					</div>
 				</fieldset>
 			</form>

@@ -232,12 +232,12 @@ public class PlaylistsResource extends BaseResource {
             
             String validationError = getValidationError(createModel);
             if (validationError != null){
-                return createErrorResponse(model, validationError);
+                return Response.status(Status.BAD_REQUEST).entity(validationError).build();
             }
             
             if (ValidationUtils.isEmpty(fileDetail.getFileName())) {
                 log("User tried to upload with no file.", LogSeverity.TRACE);
-                return createErrorResponse(model, "Select a file to upload.");
+                return Response.status(Status.BAD_REQUEST).entity("Select a file to upload.").build();
             }
 
             String converted = new String(fileDetail.getFileName().getBytes("iso-8859-1"), "UTF-8");
@@ -246,7 +246,7 @@ public class PlaylistsResource extends BaseResource {
 
             if (filesystem.fileExists(filename)) {
                 log("User tried to upload file with same name with file already in system. File: " + filename, LogSeverity.TRACE);
-                return createErrorResponse(model, "Similar file already exists. Remove existing file, or upload different.");
+                return Response.status(Status.BAD_REQUEST).entity("Similar file already exists. Remove existing file, or upload different.").build();
             }
 
             filesystem.writeToFile(uploadedInputStream, filename);
@@ -265,10 +265,8 @@ public class PlaylistsResource extends BaseResource {
 
             playlist.getItems().add(item);
             playlistService.update(playlist);
-            return Response.seeOther(settings.getURI(String.format("playlists/%s", playlist.getId()))).build();
-        } catch (RenderException e) {
-            return handleRenderingError(model, e);
-        } catch (IOException e) {
+            return Response.ok().entity("Upload successful.").build();
+        }  catch (IOException e) {
             log("There was a problem with IO:" + e.getMessage(), LogSeverity.ERROR);
             throw new ServiceException("There was a problem with file uploading.", e);
         }
@@ -494,10 +492,5 @@ public class PlaylistsResource extends BaseResource {
         newRequest.setPlaylist(new PlayList(item.getPlaylistId()));
         newRequest.setTrack(newTrack);
         return newRequest;
-    }
-    
-    private Response createErrorResponse(BaseModel model, String validationError) throws RenderException {
-        model.setError(validationError);
-        return Response.ok(templates.process(PLAYLIST_TRACK_ADD_TEMPLATE, model)).build();
     }
 }

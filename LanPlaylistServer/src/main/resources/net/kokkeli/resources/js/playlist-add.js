@@ -1,40 +1,48 @@
 //About 20mb
 var maxFileSize = 10399744 * 2;
+var file;
+var submitButtonSelector = 'input[type="submit"]';
 
 $(document).ready(function(){
-	$('#validation-error').hide();
-	
-	$('#file').bind('change', function() {
-		if (this.files.length > 0 && this.files[0].size > maxFileSize){
-			event.preventDefault();
-			$('#validation-error').show();
-			$('#validation-error').text('File size is too big.');
-		}else {
-			$('#validation-error').text('');
-			$('#validation-error').hide();
-		}
-	});
-	
-	$('#form').submit(function(event){
-		var files = document.getElementById('file').files;
-		
-		if (files.length < 1){
-			event.preventDefault();
-			$('#validation-error').show();
-			$('#validation-error').text('File is needed.');
-			return;
-		}
-		
-		//TODO Check type
-		//TODO check file size
-		if (files[0].size > maxFileSize){
-			event.preventDefault();
-			$('#validation-error').show();
-			$('#validation-error').text('File size too big.');
-			return;
-		}
-		
-		$('#validation-error').text('');
-		$('#validation-error').hide();
+    $('form').fileupload({
+        url: "",
+        autoUpload: false,
+        add: function (e, data) {
+            data.context = $(submitButtonSelector).click(function () {
+            	data.submit().done(uploadSuccess).fail(uploadfailed).always(resetButton);
+            });
+        }
+    }).bind('fileuploadadd', fileAdded);
+    
+	$('form').submit(function(event){
+		event.preventDefault();
+		$(submitButtonSelector).button('loading')
 	});
 });
+
+function fileAdded(event, data){
+	$('#filename').text(data.originalFiles[0].name);
+}
+
+function uploadfailed(event){
+	$.notify(event.responseText, { 
+		position:"top-center",
+		className: "error"
+	});
+}
+
+function uploadSuccess(event){
+	$.notify(event, { 
+		position:"top-center",
+		className: "success"
+	});
+	clearForm();
+}
+
+function resetButton(){
+	$(submitButtonSelector).button('reset')
+}
+
+function clearForm(){
+	$('form').find("input[type=text], textarea").val("");
+}

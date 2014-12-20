@@ -124,7 +124,7 @@ public class TestPlaylistResource extends ResourceTestsBase {
 
         Response r = resource.addUpload(buildRequest(), EXISTING_PLAYLIST, CORRECT_ARTISTNAME, CORRECT_TRACKNAME,
                 mockStream, mockDisposition);
-        Assert.assertEquals(REDIRECT, r.getStatus());
+        Assert.assertEquals(RESPONSE_OK, r.getStatus());
         verify(mockFilesystem).writeToFile(any(InputStream.class), eq(TRACKS_FOLDER + "/" + filename));
         verify(mockFilesystem).fileExists(TRACKS_FOLDER + "/" + filename);
     }
@@ -142,9 +142,8 @@ public class TestPlaylistResource extends ResourceTestsBase {
         when(mockDisposition.getFileName()).thenReturn(filename);
         when(mockFilesystem.fileExists(any(String.class))).thenReturn(true);
 
-        assertModelResponse(resource.addUpload(buildRequest(), EXISTING_PLAYLIST, CORRECT_ARTISTNAME,
-                CORRECT_TRACKNAME, mockStream, mockDisposition), answer,
-                "Similar file already exists. Remove existing file, or upload different.", null);
+        Response response = resource.addUpload(buildRequest(),EXISTING_PLAYLIST, CORRECT_ARTISTNAME, CORRECT_TRACKNAME, mockStream, mockDisposition);
+        Assert.assertEquals("Similar file already exists. Remove existing file, or upload different.", response.getEntity().toString());
     }
 
     @Test
