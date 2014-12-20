@@ -11,6 +11,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
 
 import net.kokkeli.ISettings;
 import net.kokkeli.data.ILogger;
@@ -145,8 +146,7 @@ public class AuthenticationResource extends BaseResource {
                 cook.getDomain(), cook.getComment(), cook.getMaxAge(),
                 cook.getSecure());
 
-        return Response.seeOther(settings.getBaseURI()).cookie(modified)
-                .build();
+        return Response.seeOther(UriBuilder.fromUri(settings.getBaseURI()).path("/authentication").build()).cookie(modified).build();
     }
     
     /**
