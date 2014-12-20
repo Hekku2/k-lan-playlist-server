@@ -10,8 +10,7 @@ CREATE TABLE tracks(
     Track TEXT,
     Artist TEXT,
     Location TEXT,
-    Uploader INTEGER NOT NULL,
-    FOREIGN KEY(Uploader) REFERENCES users(Id)
+    Uploader INTEGER NULL
 );
 
 CREATE TABLE playlists(
