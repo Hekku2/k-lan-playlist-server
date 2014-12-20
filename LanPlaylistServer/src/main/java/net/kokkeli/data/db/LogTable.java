@@ -47,7 +47,7 @@ public class LogTable {
                 statement.executeUpdate(createInsertString(item));
             }
         } catch (SQLException e) {
-            throw new DatabaseException("Getting users failed.", e);
+            throw new DatabaseException("Inserting log row failed.", e);
         }
     }
 
