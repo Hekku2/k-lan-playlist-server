@@ -8,21 +8,18 @@ $(document).ready(function(){
         url: "",
         autoUpload: false,
         add: function (e, data) {
+        	$('#filename').text(data.originalFiles[0].name);
             data.context = $(submitButtonSelector).click(function () {
-            	data.submit().done(uploadSuccess).fail(uploadfailed).always(resetButton);
+            	data.submit().fail(uploadfailed).done(uploadSuccess).always(resetButton);
             });
         }
-    }).bind('fileuploadadd', fileAdded);
+    });
     
 	$('form').submit(function(event){
 		event.preventDefault();
 		$(submitButtonSelector).button('loading')
 	});
 });
-
-function fileAdded(event, data){
-	$('#filename').text(data.originalFiles[0].name);
-}
 
 function uploadfailed(event){
 	$.notify(event.responseText, { 
