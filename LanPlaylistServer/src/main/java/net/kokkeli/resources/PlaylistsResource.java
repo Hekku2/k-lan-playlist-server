@@ -30,8 +30,8 @@ import net.kokkeli.data.ILogger;
 import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.PlayList;
 import net.kokkeli.data.Role;
+import net.kokkeli.data.Session;
 import net.kokkeli.data.Track;
-import net.kokkeli.data.User;
 import net.kokkeli.data.db.NotFoundInDatabase;
 import net.kokkeli.data.services.IFetchRequestService;
 import net.kokkeli.data.services.IPlaylistService;
@@ -91,15 +91,11 @@ public class PlaylistsResource extends BaseResource {
     }
 
     /**
-     * Shows list of users
+     * Shows list of playlists
      * 
-     * @return HTML-page for user list
-     * @throws ServiceException
-     *             Thrown if there was a problem with service.
+     * @return HTML-page for playlists
      * @throws NotAuthenticatedException
      *             Thrown if there is problem with session.
-     * @throws RenderException
-     *             Thrown if there is problem with rendering template
      */
     @GET
     @Produces("text/html; charset=utf-8")
@@ -141,7 +137,7 @@ public class PlaylistsResource extends BaseResource {
      */
     @GET
     @Produces("text/html; charset=utf-8")
-    @Access(Role.USER)
+    @Access(Role.ANYNOMOUS)
     @Path("/add/upload/{playlistId: [0-9]*}")
     public Response addUpload(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId)
             throws NotAuthenticatedException {
@@ -171,7 +167,7 @@ public class PlaylistsResource extends BaseResource {
      */
     @GET
     @Produces("text/html; charset=utf-8")
-    @Access(Role.USER)
+    @Access(Role.ANYNOMOUS)
     @Path("/add/vlc/{playlistId: [0-9]*}")
     public Response addVlc(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId)
             throws NotAuthenticatedException {
@@ -213,7 +209,7 @@ public class PlaylistsResource extends BaseResource {
      */
     @POST
     @Produces("text/html; charset=utf-8")
-    @Access(Role.USER)
+    @Access(Role.ANYNOMOUS)
     @Path("/add/upload/{playlistId: [0-9]*}")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response addUpload(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId,
@@ -261,7 +257,8 @@ public class PlaylistsResource extends BaseResource {
             item.setArtist(createModel.getArtist());
             item.setTrackName(createModel.getTrack());
             item.setLocation(filename);
-            item.setUploader(model.getCurrentSession().getUser());
+            if (model.getCurrentSession() != null)
+                item.setUploader(model.getCurrentSession().getUser());
 
             playlist.getItems().add(item);
             playlistService.update(playlist);
@@ -274,7 +271,7 @@ public class PlaylistsResource extends BaseResource {
     
     @POST
     @Produces("text/html; charset=utf-8")
-    @Access(Role.USER)
+    @Access(Role.ANYNOMOUS)
     @Path("/add/vlc/{playlistid: [0-9]*}")
     public Response addVlc(@Context HttpServletRequest req,  MultivaluedMap<String, String> formParams)
             throws ServiceException, NotAuthenticatedException {
@@ -288,7 +285,7 @@ public class PlaylistsResource extends BaseResource {
             return Response.status(Status.BAD_REQUEST).entity(validationError).build();
         }
 
-        FetchRequest newRequest = createFetchRequestFromModelPlaylistItem(item, model.getCurrentSession().getUser());
+        FetchRequest newRequest = createFetchRequestFromModelPlaylistItem(item, model.getCurrentSession());
         fetchRequestService.add(newRequest);
         
         return Response.ok().entity("Upload successful.").build();
@@ -296,7 +293,7 @@ public class PlaylistsResource extends BaseResource {
 
     @GET
     @Produces("text/html; charset=utf-8")
-    @Access(Role.USER)
+    @Access(Role.ANYNOMOUS)
     @Path("/{playlistId: [0-9]*}")
     public Response details(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId)
             throws ServiceException, NotAuthenticatedException {
@@ -315,7 +312,7 @@ public class PlaylistsResource extends BaseResource {
 
     @GET
     @Produces("text/html")
-    @Access(Role.USER)
+    @Access(Role.ADMIN)
     @Path("/create")
     public Response create(@Context HttpServletRequest req) throws NotAuthenticatedException {
         BaseModel baseModel = buildBaseModel(req);
@@ -329,7 +326,7 @@ public class PlaylistsResource extends BaseResource {
 
     @POST
     @Produces("text/html; charset=utf-8")
-    @Access(Role.USER)
+    @Access(Role.ADMIN)
     @Path("/create")
     public Response create(@Context HttpServletRequest req, MultivaluedMap<String, String> formParams) throws NotAuthenticatedException, BadRequestException {
         BaseModel baseModel = buildBaseModel(req);
@@ -474,14 +471,15 @@ public class PlaylistsResource extends BaseResource {
      * @param item model playlist item
      * @return Created fetch request
      */
-    private FetchRequest createFetchRequestFromModelPlaylistItem(ModelPlaylistItem item, User uploader) {
+    private FetchRequest createFetchRequestFromModelPlaylistItem(ModelPlaylistItem item, Session uploader) {
         //TODO Proper generation for destination file and extension.
         String destination = settings.getTracksFolder() + "/" + item.getArtist() + " - " + item.getTrack() + ".ogg";
         
         Track newTrack = new Track();
         newTrack.setArtist(item.getArtist());
         newTrack.setTrackName(item.getTrack());
-        newTrack.setUploader(uploader);
+        if (uploader != null)
+            newTrack.setUploader(uploader.getUser());
         newTrack.setLocation(destination);
         
         FetchRequest newRequest = new FetchRequest();

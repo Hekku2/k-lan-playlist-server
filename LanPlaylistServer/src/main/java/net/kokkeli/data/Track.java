@@ -125,4 +125,8 @@ public class Track {
     public boolean getExists() {
         return exists;
     }
+    
+    public boolean hasUploader(){
+        return this.uploader != null;
+    }
 }

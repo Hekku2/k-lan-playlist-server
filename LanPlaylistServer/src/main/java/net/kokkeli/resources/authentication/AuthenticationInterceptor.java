@@ -22,7 +22,7 @@ import com.google.inject.Inject;
  * Authentication checker class
  * @author Hekku2
  */
-public class AuthenticationInceptor implements MethodInterceptor{
+public class AuthenticationInterceptor implements MethodInterceptor{
     
     /**
      * ILogger. This is protected for injecting.
@@ -53,7 +53,7 @@ public class AuthenticationInceptor implements MethodInterceptor{
             Access access = AuthenticationUtils.extractRoleAnnotation(invocation.getMethod().getAnnotations());
             
             //If no role is needed, continue proceeded without checking authentication
-            if (access.value() == Role.NONE){
+            if (access.value() == Role.NONE || (access.value() == Role.ANYNOMOUS && !settings.getRequireAuthentication())){
                 return invocation.proceed();
             }
 

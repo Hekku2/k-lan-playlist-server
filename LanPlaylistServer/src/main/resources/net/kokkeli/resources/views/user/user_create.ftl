@@ -16,13 +16,13 @@
 					<div class="col-md-10">
 						<div class="radio">
 						  <label>
-						    <input type="radio" name="role" value="1">
+						    <input type="radio" name="role" value="2">
 						    User
 						  </label>
 						</div>
 						<div class="radio">
 						  <label>
-						    <input type="radio" name="role" value="2">
+						    <input type="radio" name="role" value="3">
 						    Admin
 						  </label>
 						</div>

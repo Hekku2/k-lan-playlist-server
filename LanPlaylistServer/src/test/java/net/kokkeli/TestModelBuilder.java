@@ -71,7 +71,7 @@ public class TestModelBuilder {
         MultivaluedMap<String, String> map = mock(MultivaluedMap.class);
         
         when(map.containsKey("role")).thenReturn(true);
-        when(map.getFirst("role")).thenReturn("1");
+        when(map.getFirst("role")).thenReturn("2");
         
         ModelUser createdItem = builder.createModelFrom(map);
         Assert.assertEquals(Role.USER, createdItem.getRoleEnum());

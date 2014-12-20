@@ -153,7 +153,7 @@ public class TracksTable {
      */
     private static String insertItemRow(Track track) {
         return INSERT + "('" + track.getTrackName() + "','" + track.getArtist() + "','" + track.getLocation() + "',"
-                + track.getUploader().getId() + ")";
+                + (track.hasUploader() ? (track.getUploader().getId()+"") : "NULL") + ")";
     }
 
     private static String updateItemRow(Track track) {
@@ -168,8 +168,12 @@ public class TracksTable {
         track.setArtist(rs.getString(COLUMN_ARTIST));
         track.setLocation(rs.getString(COLUMN_LOCATION));
 
-        User uploader = new User(rs.getLong(COLUMN_UPLOADER), null, Role.NONE);
-        track.setUploader(uploader);
+        long id = rs.getLong(COLUMN_UPLOADER);
+        if (!rs.wasNull()){
+            User uploader = new User(id, null, Role.NONE);
+            track.setUploader(uploader);
+        }
+
         return track;
     }
 }

@@ -18,13 +18,13 @@
 					<div class="col-md-10">
 						<div class="radio">
 						  <label>
-						    <input type="radio" name="role" id="optionsRadios1" value="1" <#if getModel.getRole == "USER">checked</#if>>
+						    <input type="radio" name="role" id="optionsRadios1" value="2" <#if getModel.getRole == "USER">checked</#if>>
 						    User
 						  </label>
 						</div>
 						<div class="radio">
 						  <label>
-						    <input type="radio" name="role" id="optionsRadios1" value="2" <#if getModel.getRole == "ADMIN">checked</#if>>
+						    <input type="radio" name="role" id="optionsRadios1" value="3" <#if getModel.getRole == "ADMIN">checked</#if>>
 						    Admin
 						  </label>
 						</div>

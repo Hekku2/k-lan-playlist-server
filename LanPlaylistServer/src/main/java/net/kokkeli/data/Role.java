@@ -2,8 +2,9 @@ package net.kokkeli.data;
 
 public enum Role {
     NONE(0),
-    USER(1),
-    ADMIN(2);
+    ANYNOMOUS(1),
+    USER(2),
+    ADMIN(3);
     
     private final int id;
     

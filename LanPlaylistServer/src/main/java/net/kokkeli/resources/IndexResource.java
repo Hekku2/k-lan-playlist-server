@@ -63,7 +63,7 @@ public class IndexResource extends BaseResource {
      */
     @GET
     @Produces("text/html")
-    @Access(Role.USER)
+    @Access(Role.ANYNOMOUS)
     public Response index(@Context HttpServletRequest req) throws NotAuthenticatedException, ServiceException {
         try {
             BaseModel base = buildBaseModel(req);

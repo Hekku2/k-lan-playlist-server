@@ -25,21 +25,13 @@ public class TestBaseResource extends ResourceTestsBase{
     
     @Override
     public void before() throws NotFoundException, ServiceException, NotFoundInDatabase {
-        resource = new BaseResource(getLogger(), getTemplateService(), getPlayer(), getSessionService(), getSettings()){
-            
-        };
+        resource = new BaseResource(getLogger(), getTemplateService(), getPlayer(), getSessionService(), getSettings()){};
     }
     
     @Test
-    public void testBaseModelThrowsUnauthenticatedExceptionWhenAuthenticationCookieIsNotFound() {
+    public void testBaseModelDoesntThrowUnauthenticatedExceptionWhenAuthenticationCookieIsNotFound() throws NotAuthenticatedException {
         HttpServletRequest req = mock(HttpServletRequest.class);
-        
-        try {
-            resource.buildBaseModel(req);
-            Assert.fail("Building base model without authentication cookies should have thrown UnauthenticatedException");
-        } catch (NotAuthenticatedException e) {
-            Assert.assertEquals("There was a problem with authentication.", e.getMessage());
-        }
+        resource.buildBaseModel(req);
     }
     
     @Test
@@ -50,7 +42,7 @@ public class TestBaseResource extends ResourceTestsBase{
             resource.buildBaseModel(buildRequest());
             Assert.fail("Building base model without authentication cookies should have thrown UnauthenticatedException");
         } catch (NotAuthenticatedException e) {
-            Assert.assertEquals("There was a problem with authentication.", e.getMessage());
+            Assert.assertEquals("There was a problem with authentication. Session AUTH id was invalid.", e.getMessage());
         }
     }
     

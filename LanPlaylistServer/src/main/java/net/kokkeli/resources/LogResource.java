@@ -78,6 +78,7 @@ public class LogResource extends BaseResource {
     @GET
     @Path("/logs")
     @Produces(MediaType.APPLICATION_JSON)
+    @Access(Role.ADMIN)
     public Collection<LogRow> logRows(@Context HttpServletRequest req) throws ServiceException, NotAuthenticatedException {
         //TODO Time selection
         buildBaseModel(req); //Check authentication data

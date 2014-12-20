@@ -5,8 +5,8 @@ DELETE FROM playlists;
 DELETE FROM tracks;
 DELETE FROM users;
 
-INSERT INTO users (UserName, Role, PasswordHash) VALUES ('admin', 2, '4c971b7a598e1c1fb09e6fe1750c6fd3ed1e73ff');
-INSERT INTO users (UserName, Role, PasswordHash) VALUES ('user', 1, '4c971b7a598e1c1fb09e6fe1750c6fd3ed1e73ff');
+INSERT INTO users (UserName, Role, PasswordHash) VALUES ('admin', 3, '4c971b7a598e1c1fb09e6fe1750c6fd3ed1e73ff');
+INSERT INTO users (UserName, Role, PasswordHash) VALUES ('user', 2, '4c971b7a598e1c1fb09e6fe1750c6fd3ed1e73ff');
 
 -- Tracks
 INSERT INTO tracks (Track, Artist, Location, Uploader) VALUES ('Seitan is guud', 'Lucifer Virtanen', 'X:\Music\song.ogg',(SELECT Id FROM users WHERE UserName like 'admin'));

@@ -194,6 +194,7 @@ public class FetchRequestsResource extends BaseResource{
     @GET
     @Path("/requests")
     @Produces(MediaType.APPLICATION_JSON)
+    @Access(Role.ADMIN)
     public ModelFetchRequests requests(@Context HttpServletRequest req) throws NotAuthenticatedException, ServiceException{
         buildBaseModel(req);
         

@@ -18,6 +18,7 @@ public class BaseModel extends ViewModel {
     private long userId;
     private String error;
     private String info;
+    private boolean authenticationRequired;
     
     private boolean anythingPlaying;
     
@@ -171,5 +172,20 @@ public class BaseModel extends ViewModel {
      */
     public void setUserRole(int userRole) {
         this.userRole = userRole;
+    }
+
+    /**
+     * @return the authenticationRequired
+     */
+    @Field
+    public boolean isAuthenticationRequired() {
+        return authenticationRequired;
+    }
+
+    /**
+     * @param authenticationRequired the authenticationRequired to set
+     */
+    public void setAuthenticationRequired(boolean authenticationRequired) {
+        this.authenticationRequired = authenticationRequired;
     }
 }

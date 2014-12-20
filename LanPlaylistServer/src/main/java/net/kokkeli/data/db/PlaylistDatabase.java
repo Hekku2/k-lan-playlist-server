@@ -58,8 +58,8 @@ public class PlaylistDatabase extends Database implements IPlaylistDatabase {
                 
                 for (Long trackId : trackIds) {
                     Track track = tracksTable.get(trackId);
-                    User uploader = usersTable.get(track.getUploader().getId());
-                    track.setUploader(uploader);
+                    if (track.getUploader() != null)
+                        track.setUploader(usersTable.get(track.getUploader().getId()));
                     playList.getItems().add(track);
                 }
             }

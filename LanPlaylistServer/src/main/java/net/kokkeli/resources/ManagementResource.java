@@ -49,7 +49,7 @@ public class ManagementResource extends BaseResource {
      */
     @GET
     @Produces("text/html")
-    @Access(Role.USER)
+    @Access(Role.ADMIN)
     public Response index(@Context HttpServletRequest req) throws NotAuthenticatedException {
         BaseModel base = buildBaseModel(req);
         try {

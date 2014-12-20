@@ -6,6 +6,7 @@ import javax.ws.rs.core.Response;
 import net.kokkeli.ISettings;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.LogSeverity;
+import net.kokkeli.data.Role;
 import net.kokkeli.data.Session;
 import net.kokkeli.data.db.NotFoundInDatabase;
 import net.kokkeli.data.services.ISessionService;
@@ -63,6 +64,20 @@ public abstract class BaseResource {
         BaseModel model = new BaseModel();
         model.setNowPlaying(player.getTitle());
         
+        if (!loadDataFromSession(req, model))
+            loadAnonymousData(model);
+        
+        model.setAnythingPlaying(player.readyForPlay());
+        return model;
+    }
+    
+    private static void loadAnonymousData(BaseModel model) {
+        model.setUsername(null);
+        model.setUserId(0);
+        model.setUserRole(Role.ANYNOMOUS.getId());
+    }
+
+    private boolean loadDataFromSession(HttpServletRequest req, BaseModel model) throws NotAuthenticatedException{
         try {
             Session session = sessions.get(AuthenticationUtils.extractLoginCookie(req.getCookies()).getValue());
             model.setUsername(session.getUser().getUserName());
@@ -73,15 +88,12 @@ public abstract class BaseResource {
             model.setInfo(session.getInfo());
             sessions.clearError(session.getAuthId());
             sessions.clearInfo(session.getAuthId());
-            
-            model.setAnythingPlaying(player.readyForPlay());
+            return true;
         } catch (AuthenticationCookieNotFound e) {
-            throw new NotAuthenticatedException("There was a problem with authentication.", e);
+            return false;
         } catch (NotFoundInDatabase e) {
-            throw new NotAuthenticatedException("There was a problem with authentication.", e);
+            throw new NotAuthenticatedException("There was a problem with authentication. Session AUTH id was invalid.", e);
         }
-        
-        return model;
     }
     
     /**
@@ -92,6 +104,7 @@ public abstract class BaseResource {
         BaseModel model = new BaseModel();
         model.setNowPlaying(player.getTitle());
         model.setUsername("");
+        model.setAuthenticationRequired(settings.getRequireAuthentication());
         return model;
     }
     
