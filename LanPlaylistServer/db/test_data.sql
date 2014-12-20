@@ -56,3 +56,16 @@ VALUES (
 	'http://www.example.com/',	'mockHandler',	'Marssimailat - Katujyrä.ogg',	datetime('now'),3,
 	(SELECT Id FROM tracks WHERE Track like 'Katujyrä' and Artist like 'Marssimailat')
 );
+
+INSERT INTO logs (Timestamp, Severity, Message, Source) VALUES ('2014-10-22 07:41:27', '2', 'User created.', '');
+INSERT INTO logs (Timestamp, Severity, Message, Source) VALUES ('2014-10-22 07:41:28', '2', 'User created.', '');
+INSERT INTO logs (Timestamp, Severity, Message, Source) VALUES ('2014-10-22 07:41:29', '3', 'Shitter exploded.', '');
+INSERT INTO logs (Timestamp, Severity, Message, Source) VALUES ('2014-10-22 07:41:30', '2', 'User created.', '');
+INSERT INTO logs (Timestamp, Severity, Message, Source) VALUES ('2014-10-22 07:41:31', '2', 'User created.', '');
+INSERT INTO logs (Timestamp, Severity, Message, Source) VALUES ('2014-10-22 07:41:32', '2', 'User created.', '');
+INSERT INTO logs (Timestamp, Severity, Message, Source) VALUES ('2014-10-22 07:41:33', '2', 'User created.', '');
+INSERT INTO logs (Timestamp, Severity, Message, Source) VALUES ('2014-10-22 07:41:34', '3', 'Something went terribly wrong.', '');
+INSERT INTO logs (Timestamp, Severity, Message, Source) VALUES ('2014-10-22 07:41:35', '2', 'User created.', '');
+INSERT INTO logs (Timestamp, Severity, Message, Source) VALUES ('2014-10-22 07:41:36', '2', 'User created.', '');
+INSERT INTO logs (Timestamp, Severity, Message, Source) VALUES ('2014-10-22 07:41:37', '2', 'User created.', '');
+INSERT INTO logs (Timestamp, Severity, Message, Source) VALUES ('2014-10-22 07:41:38', '2', 'User created.', '');
