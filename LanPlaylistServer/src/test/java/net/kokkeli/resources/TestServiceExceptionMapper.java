@@ -16,7 +16,7 @@ public class TestServiceExceptionMapper {
         mapper = new ServiceExceptionMapper();
 
         Response r = mapper.toResponse(new ServiceException(message));
-        Assert.assertEquals(message, r.getEntity().toString());
+        Assert.assertEquals(message + " : Service exception", r.getEntity().toString());
         Assert.assertEquals(500, r.getStatus());
     }
 
