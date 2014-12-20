@@ -10,3 +10,4 @@ Port=9998
 ResourcesFolder=resources/
 LogSeverity=2
 PlayerEnabled=true
+RequireAuthentication=false

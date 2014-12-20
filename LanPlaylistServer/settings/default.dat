@@ -10,3 +10,4 @@ Port=9998
 ResourcesFolder=target/classes/net/kokkeli/resources/
 LogSeverity=2
 PlayerEnabled=false
+RequireAuthentication=false

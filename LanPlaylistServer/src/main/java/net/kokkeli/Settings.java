@@ -31,6 +31,7 @@ public class Settings implements ISettings {
     private LogSeverity logSeverity = LogSeverity.TRACE;
     private int port;
     private boolean playerEnabled;
+    private boolean requireAuthentication;
     
     /**
      * Loads settings from file
@@ -181,6 +182,11 @@ public class Settings implements ISettings {
         return playerEnabled;
     }
     
+    @Override
+    public boolean getRequireAuthentication() {
+        return requireAuthentication;
+    }
+    
     /**
      * Loads settings
      * @param key Key
@@ -218,6 +224,9 @@ public class Settings implements ISettings {
             break;
         case "PlayerEnabled":
             playerEnabled = Boolean.parseBoolean(value);
+            break;
+        case "RequireAuthentication":
+            requireAuthentication = Boolean.parseBoolean(value);
             break;
         case "LogSeverity":
             int parsed = Integer.parseInt(value);

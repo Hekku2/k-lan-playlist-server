@@ -82,4 +82,6 @@ public interface ISettings {
     LogSeverity getLogSeverity();
     
     boolean getPlayerEnabled();
+    
+    boolean getRequireAuthentication();
 }
