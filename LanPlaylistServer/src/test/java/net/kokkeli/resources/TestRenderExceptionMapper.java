@@ -17,7 +17,7 @@ public class TestRenderExceptionMapper {
         mapper = new RenderExceptionMapper();
 
         Response r = mapper.toResponse(new RenderException(message));
-        Assert.assertEquals(message, r.getEntity().toString());
+        Assert.assertEquals(message + ": Render exception", r.getEntity().toString());
         Assert.assertEquals(500, r.getStatus());
     }
 

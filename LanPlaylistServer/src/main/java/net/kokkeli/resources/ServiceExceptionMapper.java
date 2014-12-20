@@ -21,7 +21,7 @@ public class ServiceExceptionMapper implements ExceptionMapper<ServiceException>
     @Override
     public Response toResponse(ServiceException ex) {
         return Response.status(500).
-            entity(ex.getMessage()).
+            entity(ex.getMessage() + " : Service exception").
             type("text/plain").
             build();
     }
