@@ -5,7 +5,6 @@
 $(document).ready(function(){
 	$('form').submit(function(event){
 		event.preventDefault();
-		//<input type="submit" value="Send" class="btn btn-primary" data-loading-text="Loading...">
 		$('input[type="submit"]').button('loading')
 		$.post("", $( "form" ).serialize()).fail(uploadfailed).done(uploadSuccess).always(resetButton);
 	});
