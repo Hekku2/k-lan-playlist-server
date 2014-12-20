@@ -44,6 +44,11 @@ public abstract class BaseAcceptanceTest {
         settings.loadSettings(DEFAULT_SETTINGS);
         Class.forName("org.sqlite.JDBC");
         connection = DriverManager.getConnection("jdbc:sqlite:" + settings.getDatabaseLocation());
+        
+        try (Reader reader = new FileReader("db/test_data.sql")){
+            ScriptRunner runner = new ScriptRunner(connection, false, true);
+            runner.runScript(reader);
+        }
         server = new LanServer(settings);
         server.start();
     }
