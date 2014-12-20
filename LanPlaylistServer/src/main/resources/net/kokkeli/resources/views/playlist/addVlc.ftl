@@ -6,6 +6,7 @@
 <html>
 	<#include "/common/_header.ftl">
 	<link rel="stylesheet" type="text/css" href="/resource/css/PlaylistAdd.css">
+	<script type="text/javascript" src="/resource/js/playlist-vlc-add.js"></script>
 	<body>
 		<div class="container">
 			<#include "/common/_topsection.ftl">
@@ -28,7 +29,7 @@
 						<span class="help-block">Url can be any location that vlc can handle.</span>
 					</div>
 					<div class="controls">
-						<input type="submit" value="Send" class="btn btn-primary">
+						<input type="submit" value="Send" class="btn btn-primary" data-loading-text="Loading...">
 					</div>
 				</fieldset>
 			</form>

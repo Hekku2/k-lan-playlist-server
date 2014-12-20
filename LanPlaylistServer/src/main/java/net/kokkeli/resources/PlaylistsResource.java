@@ -3,6 +3,7 @@ package net.kokkeli.resources;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -281,23 +282,18 @@ public class PlaylistsResource extends BaseResource {
             throws ServiceException, NotAuthenticatedException {
         BaseModel model = buildBaseModel(req);
 
-        try {
-            ModelPlaylistItem item = modelBuilder.createModelFrom(formParams);
-            model.setModel(item);
-            
-            String validationError = getValidationError(item);
-            if (validationError != null){
-                model.setError(validationError);
-                return Response.ok(templates.process(PLAYLIST_TRACK_ADD_VLC_TEMPLATE, model)).build();
-            }
-
-            FetchRequest newRequest = createFetchRequestFromModelPlaylistItem(item, model.getCurrentSession().getUser());
-            fetchRequestService.add(newRequest);
-            
-            return Response.seeOther(settings.getURI(String.format("playlists/%s", item.getPlaylistId()))).build();
-        } catch (RenderException e) {
-            return handleRenderingError(model, e);
+        ModelPlaylistItem item = modelBuilder.createModelFrom(formParams);
+        model.setModel(item);
+        
+        String validationError = getValidationError(item);
+        if (validationError != null){
+            return Response.status(Status.BAD_REQUEST).entity(validationError).build();
         }
+
+        FetchRequest newRequest = createFetchRequestFromModelPlaylistItem(item, model.getCurrentSession().getUser());
+        fetchRequestService.add(newRequest);
+        
+        return Response.ok().entity("Upload successful.").build();
     }
 
     @GET
