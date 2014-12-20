@@ -247,7 +247,7 @@ public class UsersResource extends BaseResource {
             user.setPasswordHash(userService.calculateHash(model.getNewPassword()));
             
             long id = userService.add(user).getId();
-            log("User created.", LogSeverity.TRACE);
+            log("User created.", LogSeverity.INFO);
             
             sessions.setInfo(baseModel.getCurrentSession().getAuthId(), "User created.");
             return Response.seeOther(settings.getURI(String.format("users/%s", id))).build();

@@ -3,7 +3,8 @@ package net.kokkeli.data;
 public enum LogSeverity {
     TRACE(0),
     DEBUG(1),
-    ERROR(2);
+    INFO(2),
+    ERROR(3);
     
     private final int severity;
     
