@@ -357,8 +357,8 @@ public class PlaylistsResource extends BaseResource {
     @Produces("text/html; charset=utf-8")
     @Access(Role.ADMIN)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Path("/delete/{playlistId: [0-9]*}")
-    public Response delete(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId,
+    @Path("/removeTrackFromPlaylist/{playlistId: [0-9]*}")
+    public Response removeTrackFromPlaylist(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId,
             MultivaluedMap<String, String> formParams) throws BadRequestException {
         try {
             long trackId = Long.parseLong(formParams.getFirst(FORM_ID));

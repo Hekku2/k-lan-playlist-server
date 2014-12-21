@@ -1,11 +1,17 @@
 $(document).ready(function(){
-	$("a[class*='delete']").click(deleteItem);
+	$("button[data-method='delete']").click(deleteItem);
 });
 
 function deleteItem(event){
 	var element = $(event.currentTarget);
-	$.post(element.attr("href"), { "id": element.attr('id') }, function() {
-		document.location.reload(true);
-	});
+	$.post("/playlists/removeTrackFromPlaylist/" + $("#playlist-id").val(), buildData(element)).done(refreshPage);
 	return false;
+}
+
+function buildData(element){
+	return { "id": element.attr("data-track-id") };
+}
+
+function refreshPage(){
+	document.location.reload(true);
 }

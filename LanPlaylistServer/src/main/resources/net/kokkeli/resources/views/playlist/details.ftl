@@ -11,6 +11,7 @@
 			<h1>${header}</h1>
 			<#include "/common/_info_error.ftl">
 			<form class="form-horizontal">
+				<input type="hidden" id="playlist-id" value="${getModel.getId}"></input>
 				<@uneditableValueField label="Name" value=getModel.getName id="name" />
 				<a class="btn btn-default" href="/playlists/add/upload/${getModel.getId}">Add song</a>
 				<div class="playlist-values">			
@@ -24,23 +25,25 @@
 								<th>Man.</th>
 							</tr>
 						</thead>
-						<#list getModel.getItems as item>
-							<tr>
-								<td>
-									${item.getArtist}
-								</td>
-								<td>
-									${item.getTrack}
-								</td>
-								<td>
-									${item.getUploader}
-								</td>
-								<td class="col-md-1">
-									<a class="btn btn-default col-md-6" title="Edit" href="/tracks/${item.getId}"><span class="glyphicon glyphicon-edit"></span></a>
-									<a title="Delete" class="btn btn-default delete col-md-6" id="${item.getId}" href="/playlists/delete/${getModel.getId}"><span class="glyphicon glyphicon-remove"></span></a>
-								</td>
-							</tr>
-						</#list>
+						<tbody>
+							<#list getModel.getItems as item>
+								<tr>
+									<td>
+										${item.getArtist}
+									</td>
+									<td>
+										${item.getTrack}
+									</td>
+									<td>
+										${item.getUploader}
+									</td>
+									<td class="col-md-1">
+										<a class="btn btn-default col-md-6" title="Edit" href="/tracks/${item.getId}"><span class="glyphicon glyphicon-edit"></span></a>
+										<button title="Delete" class="btn btn-default col-md-6" data-track-id="${item.getId}" data-method="delete"><span class="glyphicon glyphicon-remove"></span></a>
+									</td>
+								</tr>
+							</#list>
+						</tbody>
 					</table>
 					<#else>
 						No tracks found.

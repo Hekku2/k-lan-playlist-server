@@ -33,4 +33,10 @@ public class PagePlaylists extends BasePage{
     public int playlistCount(){
         return driver.findElements(By.cssSelector("tbody tr")).size();
     }
+
+    public void selectFirstPlaylist() {
+        By selector = By.cssSelector("tbody button.select-playlist");
+        WebElement button = driver.findElement(selector);
+        button.click();
+    }
 }
