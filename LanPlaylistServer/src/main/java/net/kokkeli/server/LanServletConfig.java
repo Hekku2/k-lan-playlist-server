@@ -40,6 +40,7 @@ import net.kokkeli.resources.BadRequestExceptionMapper;
 import net.kokkeli.resources.FetchRequestsResource;
 import net.kokkeli.resources.LogResource;
 import net.kokkeli.resources.ManagementResource;
+import net.kokkeli.resources.PlayerResource;
 import net.kokkeli.resources.StaticResources;
 import net.kokkeli.resources.IndexResource;
 import net.kokkeli.resources.PlaylistsResource;
@@ -123,6 +124,7 @@ public class LanServletConfig extends GuiceServletContextListener {
                 bind(TracksResource.class);
                 bind(FetchRequestsResource.class);
                 bind(LogResource.class);
+                bind(PlayerResource.class);
                 
                 //Aspects
                 AuthenticationInterceptor interceptor = new AuthenticationInterceptor();

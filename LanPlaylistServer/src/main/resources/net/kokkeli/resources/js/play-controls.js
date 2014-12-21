@@ -1,9 +1,9 @@
 $(document).ready(function(){
 	$("#play").click(function () {
-		$.post('/play', {});
+		$.post('/player/play', {});
 	});
 	
 	$("#pause").click(function () {
-		$.post('/pause', {});
+		$.post('/player/pause', {});
 	});
 });
