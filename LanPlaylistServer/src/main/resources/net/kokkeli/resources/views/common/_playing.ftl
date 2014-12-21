@@ -10,6 +10,6 @@
 		<button id="play" type="button" class="btn btn-default" <#if !getAnythingPlaying>disabled</#if>><span class="glyphicon glyphicon-play"></span></button>
 	</#if>
 	<span class="now-playing-bar-song-name">
-		<#if getNowPlaying??> <strong>${getNowPlaying}</strong> <#else>Nothing playing. </#if>
+		<strong id="now-playing">Fetching...</strong>
 	</span>
 </div>
