@@ -15,7 +15,7 @@ function updateAndSetTimeout(){
 }
 
 function updateNowPlaying(){
-	return $.get('player/nowPlaying').fail(function(data){
+	return $.get('/player/nowPlaying').fail(function(data){
 		$("#now-playing").text("(Fetching failed)");
 	}).done(function(data){
 		$("#now-playing").text(data != "" ? data : "Nothing playing");
