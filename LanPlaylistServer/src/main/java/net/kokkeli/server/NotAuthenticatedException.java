@@ -9,7 +9,7 @@ public class NotAuthenticatedException extends Exception {
     private static final long serialVersionUID = -4965541199856654411L;
 
     /**
-     * Creates new bad not authenticated exception with given message and inner exception
+     * Creates new NotAuthenticatedException with given message and inner exception
      * @param message Message
      * @param inner Inner exception
      */
@@ -18,7 +18,7 @@ public class NotAuthenticatedException extends Exception {
     }
     
     /**
-     * Creates new not authenticated exception.
+     * Creates new NotAuthenticatedException.
      * @param message Message
      */
     public NotAuthenticatedException(String message){
