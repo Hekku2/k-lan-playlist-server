@@ -20,8 +20,7 @@ import com.sun.jersey.api.NotFoundException;
 
 import static org.mockito.Mockito.*;
 
-public class TestBaseResource extends ResourceTestsBase{
-    private BaseResource resource;
+public class TestBaseResource extends ResourceTestsBase<BaseResource>{
     
     @Override
     public void before() throws NotFoundException, ServiceException, NotFoundInDatabase {

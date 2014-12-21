@@ -30,7 +30,7 @@ import com.sun.jersey.core.header.FormDataContentDisposition;
 
 import static org.mockito.Mockito.*;
 
-public class TestPlaylistResource extends ResourceTestsBase {
+public class TestPlaylistResource extends ResourceTestsBase<PlaylistsResource> {
     private static final long EXISTING_PLAYLIST = 654;
     private static final String UPLOADER_USERNAME = "user";
     private static final String TRACKS_FOLDER = "trackfolder";
@@ -44,7 +44,6 @@ public class TestPlaylistResource extends ResourceTestsBase {
     private IPlaylistService mockPlaylistService;
     private IFetchRequestService mockFetchRequestService;
 
-    private PlaylistsResource resource;
     private PlayList existingList;
 
     @Override
@@ -161,7 +160,8 @@ public class TestPlaylistResource extends ResourceTestsBase {
         }
 
         String name = "";
-        assertModelResponse(resource.create(buildRequest(), createCreatePost(name)), answer,
+        Response s = resource.create(buildRequest(), createCreatePost(name));
+        assertModelResponse(s, answer,
                 "Playlist did not have a name.", null);
 
         assertModelResponse(resource.create(buildRequest(), createCreatePost(EXISTING_PLAYLIST_NAME)), answer,

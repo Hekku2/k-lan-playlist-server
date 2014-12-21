@@ -19,7 +19,7 @@ import com.sun.jersey.api.NotFoundException;
 
 import static org.mockito.Mockito.*;
 
-public class TestUserResource extends ResourceTestsBase{
+public class TestUserResource extends ResourceTestsBase<UsersResource>{
     private static final long EXISTING_USER_ID = 54;
     private static final long NONEXISTING_ID = -3;    
     private static final String FORM_USERNAME = "username";
@@ -34,8 +34,6 @@ public class TestUserResource extends ResourceTestsBase{
     private IUserService mockUserService;
     
     private User existing;
-    
-    private UsersResource userResource;
 
     @Override
     public void before() throws NotFoundInDatabase, ServiceException {
@@ -46,19 +44,19 @@ public class TestUserResource extends ResourceTestsBase{
         when(mockUserService.get(EXISTING_USER_ID)).thenReturn(existing);
         when(mockUserService.get(NONEXISTING_ID)).thenThrow(new NotFoundInDatabase("User not found"));
         
-        userResource = new UsersResource(getLogger(), getTemplateService(), mockUserService, getPlayer(), getSessionService(), getSettings());
+        resource = new UsersResource(getLogger(), getTemplateService(), mockUserService, getPlayer(), getSessionService(), getSettings());
     }
     
     // USER DETAILS GET
     @Test
     public void testGetDetailsRedirectsWhenUserIsNotFound() throws NotAuthenticatedException{
-        assertRedirectAndError(userResource.userDetails(buildRequest(), NONEXISTING_ID), "User not found.");
+        assertRedirectAndError(resource.userDetails(buildRequest(), NONEXISTING_ID), "User not found.");
     }
     
     @Test
     public void testGetDetailsRedirectWhenTemplateCantBeProcessed() throws RenderException, NotFoundException, NotAuthenticatedException{
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenThrow(new RenderException("Rendering failed"));
-        assertRedirectAndError(userResource.userDetails(buildRequest(), EXISTING_USER_ID), "There was a problem with rendering the template.");
+        assertRedirectAndError(resource.userDetails(buildRequest(), EXISTING_USER_ID), "There was a problem with rendering the template.");
     }
     
     @Test
@@ -67,7 +65,7 @@ public class TestUserResource extends ResourceTestsBase{
         
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenReturn(processedTemplate);
         
-        Response r = userResource.userDetails(buildRequest(), EXISTING_USER_ID);
+        Response r = resource.userDetails(buildRequest(), EXISTING_USER_ID);
         assertEquals(processedTemplate, r.getEntity().toString());
         assertEquals(RESPONSE_OK, r.getStatus());
         verify(getTemplateService()).process(anyString(), isA(BaseModel.class));
@@ -76,13 +74,13 @@ public class TestUserResource extends ResourceTestsBase{
     //EDIT GET
     @Test
     public void testGetEditThrowsNotFoundException() throws NotAuthenticatedException{
-        assertRedirectAndError(userResource.userEdit(buildRequest(), NONEXISTING_ID), "User not found.");
+        assertRedirectAndError(resource.userEdit(buildRequest(), NONEXISTING_ID), "User not found.");
     }
     
     @Test
     public void testGetEditThrowsServiceExceptionWhenTemplateServiceFails() throws RenderException, NotAuthenticatedException{
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenThrow(new RenderException("Rendering failed"));
-        assertRedirectAndError(userResource.userEdit(buildRequest(), EXISTING_USER_ID), "There was a problem with rendering the template.");
+        assertRedirectAndError(resource.userEdit(buildRequest(), EXISTING_USER_ID), "There was a problem with rendering the template.");
     }
     
     @Test
@@ -90,7 +88,7 @@ public class TestUserResource extends ResourceTestsBase{
         final String processedTemplate = "Jeeah";
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenReturn(processedTemplate);
         
-        Response r = userResource.userEdit(buildRequest(), EXISTING_USER_ID);
+        Response r = resource.userEdit(buildRequest(), EXISTING_USER_ID);
         assertEquals(processedTemplate, r.getEntity().toString());
         assertEquals(RESPONSE_OK, r.getStatus());
         verify(getTemplateService()).process(anyString(), isA(BaseModel.class));
@@ -102,7 +100,7 @@ public class TestUserResource extends ResourceTestsBase{
         final String newUsername = "editedUser";
         final Role newRole = Role.ADMIN;
         
-        Response r = userResource.userEdit(buildRequest(), editUserPost(EXISTING_USER_ID, newUsername, newRole));
+        Response r = resource.userEdit(buildRequest(), editUserPost(EXISTING_USER_ID, newUsername, newRole));
         assertSessionInfo("User edited.");
         assertEquals(REDIRECT, r.getStatus());
         verify(mockUserService, times(1)).update(new User(EXISTING_USER_ID, newUsername, newRole));
@@ -114,8 +112,8 @@ public class TestUserResource extends ResourceTestsBase{
         ModelAnswer answer = new ModelAnswer();
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(answer);
         
-        assertModelResponse(userResource.userEdit(buildRequest(), editUserPost(EXISTING_USER_ID, INVALID_CHARACHTERS_USERNAME, newRole)), answer, "Username was invalid.", null);
-        assertModelResponse(userResource.userEdit(buildRequest(), editUserPost(EXISTING_USER_ID, EMPTY_USERNAME, newRole)), answer, "Username is required.", null);
+        assertModelResponse(resource.userEdit(buildRequest(), editUserPost(EXISTING_USER_ID, INVALID_CHARACHTERS_USERNAME, newRole)), answer, "Username was invalid.", null);
+        assertModelResponse(resource.userEdit(buildRequest(), editUserPost(EXISTING_USER_ID, EMPTY_USERNAME, newRole)), answer, "Username is required.", null);
     }
     
     @Test
@@ -127,7 +125,7 @@ public class TestUserResource extends ResourceTestsBase{
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(answer);
         when(mockUserService.exists(any(String.class))).thenReturn(true);
         
-        assertModelResponse(userResource.userEdit(buildRequest(), editUserPost(EXISTING_USER_ID, existing, newRole)), answer, "Username already exists.", null);
+        assertModelResponse(resource.userEdit(buildRequest(), editUserPost(EXISTING_USER_ID, existing, newRole)), answer, "Username already exists.", null);
     }
     
     //CREATE POST
@@ -136,8 +134,8 @@ public class TestUserResource extends ResourceTestsBase{
         ModelAnswer answer = new ModelAnswer();
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(answer);
         
-        assertModelResponse(userResource.userCreate(buildRequest(), createUserPost(INVALID_CHARACHTERS_USERNAME, Role.ADMIN)), answer, "Username was invalid.", null);
-        assertModelResponse(userResource.userCreate(buildRequest(), createUserPost(EMPTY_USERNAME, Role.ADMIN)), answer, "Username is required.", null);
+        assertModelResponse(resource.userCreate(buildRequest(), createUserPost(INVALID_CHARACHTERS_USERNAME, Role.ADMIN)), answer, "Username was invalid.", null);
+        assertModelResponse(resource.userCreate(buildRequest(), createUserPost(EMPTY_USERNAME, Role.ADMIN)), answer, "Username is required.", null);
     }
     
     @Test
@@ -150,7 +148,7 @@ public class TestUserResource extends ResourceTestsBase{
         when(mockUser.getId()).thenReturn(anyId);
         when(mockUserService.add(any(User.class))).thenReturn(mockUser);
         
-        Response r = userResource.userCreate(buildRequest(), createUserPost(username, Role.ADMIN));
+        Response r = resource.userCreate(buildRequest(), createUserPost(username, Role.ADMIN));
         assertEquals(REDIRECT, r.getStatus());
         assertSessionInfo("User created.");
         verify(mockUserService, times(1)).add(new User(username, role));
@@ -162,7 +160,7 @@ public class TestUserResource extends ResourceTestsBase{
         ModelAnswer answer = new ModelAnswer();
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(answer);
         
-        Response r = userResource.userCreate(buildRequest());
+        Response r = resource.userCreate(buildRequest());
         Assert.assertNotNull(r);
         assertEquals(RESPONSE_OK, r.getStatus());
         
@@ -175,7 +173,7 @@ public class TestUserResource extends ResourceTestsBase{
     public void testCreateGetReturnsRedirectWhenRenderingFails() throws RenderException, NotAuthenticatedException
     {
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenThrow(new RenderException("Suprise exception."));
-        assertRedirectAndError(userResource.userCreate(buildRequest()), "There was a problem with rendering the template.");
+        assertRedirectAndError(resource.userCreate(buildRequest()), "There was a problem with rendering the template.");
     }
     
     /**

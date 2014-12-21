@@ -22,8 +22,7 @@ import net.kokkeli.server.RenderException;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
-public class TestTracksResource extends ResourceTestsBase{
-    private TracksResource resource;
+public class TestTracksResource extends ResourceTestsBase<TracksResource>{
     private ITrackService trackService;
     private IFileSystem fileSystem;
     

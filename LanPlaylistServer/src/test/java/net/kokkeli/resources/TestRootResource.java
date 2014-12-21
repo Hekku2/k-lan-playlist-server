@@ -1,21 +1,16 @@
 package net.kokkeli.resources;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
 import javax.ws.rs.core.Response;
 
 import org.junit.Test;
-import net.kokkeli.data.services.ITrackService;
+
 import net.kokkeli.data.services.ServiceException;
 
-public class TestRootResource extends ResourceTestsBase{
-    private ITrackService mockTrackService;
-    private RootResource resource;
-    
+public class TestRootResource extends ResourceTestsBase<RootResource>{    
     @Override
     public void before() throws Exception {
-        mockTrackService = mock(ITrackService.class);
-        resource = new RootResource(getLogger(), getTemplateService(), getPlayer(), getSessionService(), getSettings(), mockTrackService);
+        resource = new RootResource(getLogger(), getTemplateService(), getPlayer(), getSessionService(), getSettings());
     }
     
     @Test

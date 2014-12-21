@@ -23,10 +23,9 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
-public class TestFetchRequestsResource extends ResourceTestsBase {
+public class TestFetchRequestsResource extends ResourceTestsBase<FetchRequestsResource> {
     private static final String FORM_LOCATION = "location";
     
-    private FetchRequestsResource resource;
     private IFetchRequestService mockFetchRequestService;
     private IPlaylistService mockPlaylistService; 
     

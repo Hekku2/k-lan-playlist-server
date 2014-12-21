@@ -28,9 +28,8 @@ import org.junit.Test;
 
 import com.sun.jersey.api.NotFoundException;
 
-public class TestIndexResource extends ResourceTestsBase{
+public class TestIndexResource extends ResourceTestsBase<IndexResource>{
     private IPlaylistService mockPlaylistService;
-    private IndexResource resource;
     
     @Override
     public void before() throws NotFoundException, ServiceException, NotFoundInDatabase {

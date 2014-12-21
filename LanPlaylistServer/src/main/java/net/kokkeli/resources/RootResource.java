@@ -12,7 +12,6 @@ import net.kokkeli.ISettings;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Role;
 import net.kokkeli.data.services.ISessionService;
-import net.kokkeli.data.services.ITrackService;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.player.IPlayer;
 import net.kokkeli.server.ITemplateService;
@@ -26,14 +25,12 @@ import net.kokkeli.server.ITemplateService;
  */
 @Path("/")
 public class RootResource extends BaseResource {
-
-    
     /**
      * Creates resource
      * @param logger
      */
     @Inject
-    protected RootResource(ILogger logger, ITemplateService templateService, IPlayer player, ISessionService sessions, ISettings settings, ITrackService trackService) {
+    protected RootResource(ILogger logger, ITemplateService templateService, IPlayer player, ISessionService sessions, ISettings settings) {
         super(logger, templateService, player, sessions, settings);
     }
    

@@ -17,9 +17,8 @@ import net.kokkeli.data.db.NotFoundInDatabase;
 import net.kokkeli.data.services.ITrackService;
 import net.kokkeli.data.services.ServiceException;
 
-public class TestPlayerResource extends ResourceTestsBase {
+public class TestPlayerResource extends ResourceTestsBase<PlayerResource> {
     private ITrackService mockTrackService;
-    private PlayerResource resource;
     
     @Override
     public void before() throws Exception {

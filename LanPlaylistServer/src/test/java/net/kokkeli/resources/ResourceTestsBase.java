@@ -12,7 +12,6 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
 import static org.junit.Assert.assertEquals;
-
 import net.kokkeli.ISettings;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Role;
@@ -23,11 +22,12 @@ import net.kokkeli.player.IPlayer;
 import net.kokkeli.resources.models.BaseModel;
 import net.kokkeli.server.ITemplateService;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-public abstract class ResourceTestsBase {
+public abstract class ResourceTestsBase<T extends BaseResource> {
     //General response codes
     protected static final int RESPONSE_OK = 200;
     protected static final int REDIRECT = 303;
@@ -37,6 +37,8 @@ public abstract class ResourceTestsBase {
     
     //General form fields
     private static final String FORM_ID = "id";
+    
+    protected T resource;
     
     private ILogger mockLogger;
     private ITemplateService mockTemplateService;
@@ -57,6 +59,8 @@ public abstract class ResourceTestsBase {
         when(mockSessionService.get(any(String.class))).thenReturn(session);
         
         before();
+        if (resource == null)
+            Assert.fail("Resource under test was not initialized.");
     }
     
     public static HttpServletRequest buildRequest(){
@@ -166,7 +170,7 @@ public abstract class ResourceTestsBase {
      * @author Hekku2
      *
      */
-    protected final class ModelAnswer implements Answer<String>{
+    protected static final class ModelAnswer implements Answer<String>{
         private BaseModel model;
         
         @Override
