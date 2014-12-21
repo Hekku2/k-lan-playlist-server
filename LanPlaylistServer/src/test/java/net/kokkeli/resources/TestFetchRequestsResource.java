@@ -38,19 +38,19 @@ public class TestFetchRequestsResource extends ResourceTestsBase<FetchRequestsRe
     }
     
     @Test
-    public void testIndexRedirectWhenRenderingExceptionIsThrown() throws NotAuthenticatedException, RenderException{
+    public void testIndexRedirectWhenRenderingExceptionIsThrown() throws RenderException{
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenThrow(new RenderException("Boom says database!"));
         assertRedirectError(resource.index(buildRequest()), "There was a problem with rendering the template.");
     }
     
     @Test
-    public void testIndexRedirectWhenServiceExceptionIsThrown() throws NotAuthenticatedException, ServiceException{
+    public void testIndexRedirectWhenServiceExceptionIsThrown() throws ServiceException{
         when(mockFetchRequestService.get()).thenThrow(new ServiceException("Boom says database!"));
         assertRedirectError(resource.index(buildRequest()), "Something went wrong with service.");
     }
     
     @Test
-    public void testIndexReturnsCorrectItems() throws NotAuthenticatedException, ServiceException, RenderException{
+    public void testIndexReturnsCorrectItems() throws ServiceException, RenderException{
         ArrayList<FetchRequest> requests = new ArrayList<FetchRequest>();
         FetchRequest basicRequest = new FetchRequest();
         basicRequest.setDestinationFile("Test destination");
@@ -71,7 +71,7 @@ public class TestFetchRequestsResource extends ResourceTestsBase<FetchRequestsRe
     }
     
     @Test
-    public void testCreateRequestGet() throws NotAuthenticatedException, RenderException, ServiceException{
+    public void testCreateRequestGet() throws RenderException, ServiceException{
         ModelAnswer answer = new ModelAnswer();
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(answer);
         
@@ -91,7 +91,7 @@ public class TestFetchRequestsResource extends ResourceTestsBase<FetchRequestsRe
     
     @SuppressWarnings("unchecked")
     @Test
-    public void testCreateRequestPost() throws NotAuthenticatedException{
+    public void testCreateRequestPost(){
         MultivaluedMap<String, String> map = mock(MultivaluedMap.class);
         
         when(map.containsKey(FORM_LOCATION)).thenReturn(true);
@@ -104,7 +104,7 @@ public class TestFetchRequestsResource extends ResourceTestsBase<FetchRequestsRe
     
     @SuppressWarnings("unchecked")
     @Test
-    public void testCreateRequestPostRequiresLocation() throws NotAuthenticatedException, RenderException{
+    public void testCreateRequestPostRequiresLocation() throws RenderException{
         MultivaluedMap<String, String> map = mock(MultivaluedMap.class);
         when(map.containsKey(FORM_LOCATION)).thenReturn(false);
         

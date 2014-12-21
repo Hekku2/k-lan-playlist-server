@@ -273,8 +273,7 @@ public class PlaylistsResource extends BaseResource {
     @Produces("text/html; charset=utf-8")
     @Access(Role.ANYNOMOUS)
     @Path("/add/vlc/{playlistid: [0-9]*}")
-    public Response addVlc(@Context HttpServletRequest req,  MultivaluedMap<String, String> formParams)
-            throws ServiceException, NotAuthenticatedException {
+    public Response addVlc(@Context HttpServletRequest req,  MultivaluedMap<String, String> formParams) throws ServiceException {
         BaseModel model = buildBaseModel(req);
 
         ModelPlaylistItem item = modelBuilder.createModelFrom(formParams);
@@ -296,7 +295,7 @@ public class PlaylistsResource extends BaseResource {
     @Access(Role.ANYNOMOUS)
     @Path("/{playlistId: [0-9]*}")
     public Response details(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId)
-            throws ServiceException, NotAuthenticatedException {
+            throws ServiceException {
         BaseModel baseModel = buildBaseModel(req);
 
         try {
@@ -314,7 +313,7 @@ public class PlaylistsResource extends BaseResource {
     @Produces("text/html")
     @Access(Role.ADMIN)
     @Path("/create")
-    public Response create(@Context HttpServletRequest req) throws NotAuthenticatedException {
+    public Response create(@Context HttpServletRequest req) {
         BaseModel baseModel = buildBaseModel(req);
 
         try {
@@ -328,7 +327,7 @@ public class PlaylistsResource extends BaseResource {
     @Produces("text/html; charset=utf-8")
     @Access(Role.ADMIN)
     @Path("/create")
-    public Response create(@Context HttpServletRequest req, MultivaluedMap<String, String> formParams) throws NotAuthenticatedException, BadRequestException {
+    public Response create(@Context HttpServletRequest req, MultivaluedMap<String, String> formParams) throws BadRequestException {
         BaseModel baseModel = buildBaseModel(req);
 
         try {

@@ -11,7 +11,6 @@ import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.db.NotFoundInDatabase;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.resources.models.BaseModel;
-import net.kokkeli.server.NotAuthenticatedException;
 import net.kokkeli.server.RenderException;
 
 import org.junit.Assert;
@@ -28,21 +27,16 @@ public class TestBaseResource extends ResourceTestsBase<BaseResource>{
     }
     
     @Test
-    public void testBaseModelDoesntThrowUnauthenticatedExceptionWhenAuthenticationCookieIsNotFound() throws NotAuthenticatedException {
+    public void testBaseModelDoesntThrowUnauthenticatedExceptionWhenAuthenticationCookieIsNotFound() {
         HttpServletRequest req = mock(HttpServletRequest.class);
         resource.buildBaseModel(req);
     }
     
     @Test
-    public void testBaseModelThrowsUnauthenticatedExceptionWhenSessionIsNotFound() throws NotFoundInDatabase{
+    public void testBaseModelDoesntThrowsUnauthenticatedExceptionWhenSessionIsNotFound() throws NotFoundInDatabase{
         when(getSessionService().get(any(String.class))).thenThrow(new NotFoundInDatabase("Not Found."));
         
-        try {
-            resource.buildBaseModel(buildRequest());
-            Assert.fail("Building base model without authentication cookies should have thrown UnauthenticatedException");
-        } catch (NotAuthenticatedException e) {
-            Assert.assertEquals("There was a problem with authentication. Session AUTH id was invalid.", e.getMessage());
-        }
+        resource.buildBaseModel(buildRequest());
     }
     
     @Test
@@ -74,7 +68,7 @@ public class TestBaseResource extends ResourceTestsBase<BaseResource>{
     }
     
     @Test
-    public void testHandlingRenderErrorRedirectsToIndex() throws NotAuthenticatedException{
+    public void testHandlingRenderErrorRedirectsToIndex(){
         String errorMessage = "There was a problem with rendering: Exception";
         BaseModel model = resource.buildBaseModel(buildRequest());
         RenderException ex = new RenderException("Exception");
@@ -87,7 +81,7 @@ public class TestBaseResource extends ResourceTestsBase<BaseResource>{
     }
     
     @Test
-    public void testHandlingServiceExceptionRedirectsToIndex() throws NotAuthenticatedException{
+    public void testHandlingServiceExceptionRedirectsToIndex(){
         String errorMessage = "There was a problem with the service: Exception";
         BaseModel model = resource.buildBaseModel(buildRequest());
         ServiceException ex = new ServiceException("Exception");

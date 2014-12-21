@@ -2,6 +2,7 @@ package net.kokkeli.resources;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -42,7 +43,7 @@ public class PlayerResource extends BaseResource{
     @POST
     @Produces("text/html")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Access(Role.ADMIN)
+    @Access(value = Role.ADMIN, errorHandling = AuthenticationErrorHandling.RETURN_CODE)
     @Path("/addToQueue")
     public Response addToQueue(@Context HttpServletRequest req, MultivaluedMap<String, String> formParams) throws BadRequestException{
         try {
@@ -70,7 +71,7 @@ public class PlayerResource extends BaseResource{
     @POST
     @Produces("text/html")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Access(Role.ADMIN)
+    @Access(value = Role.ADMIN, errorHandling = AuthenticationErrorHandling.RETURN_CODE)
     @Path("/selectPlaylist")
     public Response selectPlaylist(@Context HttpServletRequest req, MultivaluedMap<String, String> formParams) throws BadRequestException{
         try {
@@ -91,7 +92,7 @@ public class PlayerResource extends BaseResource{
     @POST
     @Produces("text/html")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Access(Role.ADMIN)
+    @Access(value = Role.ADMIN, errorHandling = AuthenticationErrorHandling.RETURN_CODE)
     @Path("/play")
     public Response play(@Context HttpServletRequest req){
         try {
@@ -108,11 +109,19 @@ public class PlayerResource extends BaseResource{
     @POST
     @Produces("text/html")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Access(Role.ADMIN)
+    @Access(value = Role.ADMIN, errorHandling = AuthenticationErrorHandling.RETURN_CODE)
     @Path("/pause")
     public Response pause(@Context HttpServletRequest req){
         player.pause();
         log("Playing paused.", LogSeverity.TRACE);
         return Response.ok().build();
+    }
+    
+    @GET
+    @Produces("text/html")
+    @Access(value = Role.ANYNOMOUS, errorHandling = AuthenticationErrorHandling.RETURN_CODE)
+    @Path("/nowPlaying")
+    public Response getPlaying(@Context HttpServletRequest req){
+        return Response.ok().entity(player.getTitle()).build();
     }
 }

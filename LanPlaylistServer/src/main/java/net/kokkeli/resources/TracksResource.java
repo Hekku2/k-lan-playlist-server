@@ -31,7 +31,6 @@ import net.kokkeli.resources.models.ModelTrack;
 import net.kokkeli.resources.models.ModelTracks;
 import net.kokkeli.server.IFileSystem;
 import net.kokkeli.server.ITemplateService;
-import net.kokkeli.server.NotAuthenticatedException;
 import net.kokkeli.server.RenderException;
 
 @Path("/tracks")
@@ -62,7 +61,7 @@ public class TracksResource extends BaseResource {
     @Produces("text/html")
     @Access(Role.ADMIN)
     @Path("{id: [0-9]*}")
-    public Response trackDetails(@Context HttpServletRequest req, @PathParam("id") long id) throws NotAuthenticatedException{
+    public Response trackDetails(@Context HttpServletRequest req, @PathParam("id") long id){
         BaseModel model = buildBaseModel(req);
         
         try {
@@ -83,7 +82,7 @@ public class TracksResource extends BaseResource {
     @GET
     @Produces("text/html")
     @Access(Role.ADMIN)
-    public Response verifiedTrack(@Context HttpServletRequest req) throws NotAuthenticatedException{
+    public Response verifiedTrack(@Context HttpServletRequest req){
         BaseModel baseModel = buildBaseModel(req);
 
         try {
@@ -117,7 +116,7 @@ public class TracksResource extends BaseResource {
     @Path("edit/{id: [0-9]*}")
     @Produces("text/html")
     @Access(Role.ADMIN)
-    public Response editTrack(@Context HttpServletRequest req, @PathParam("id") long id) throws NotAuthenticatedException{
+    public Response editTrack(@Context HttpServletRequest req, @PathParam("id") long id){
         BaseModel baseModel = buildBaseModel(req);
         try {
             Track track = trackService.get(id);
@@ -138,7 +137,7 @@ public class TracksResource extends BaseResource {
     @Path("edit/{id: [0-9]*}")
     @Produces("text/html")
     @Access(Role.ADMIN)
-    public Response editTrack(@Context HttpServletRequest req, @PathParam("id") long id, MultivaluedMap<String, String> formParams) throws NotAuthenticatedException{
+    public Response editTrack(@Context HttpServletRequest req, @PathParam("id") long id, MultivaluedMap<String, String> formParams){
         BaseModel model = buildBaseModel(req);
         
         try {

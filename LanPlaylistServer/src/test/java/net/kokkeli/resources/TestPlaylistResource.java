@@ -146,7 +146,7 @@ public class TestPlaylistResource extends ResourceTestsBase<PlaylistsResource> {
     }
 
     @Test
-    public void testCreateChecksForPlaylistNameValidity() throws NotAuthenticatedException, BadRequestException,
+    public void testCreateChecksForPlaylistNameValidity() throws BadRequestException,
             RenderException {
         ModelAnswer answer = new ModelAnswer();
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(answer);
@@ -169,8 +169,7 @@ public class TestPlaylistResource extends ResourceTestsBase<PlaylistsResource> {
     }
 
     @Test
-    public void testDetailsGetWithExistingPlaylistWorks() throws RenderException, ServiceException,
-            NotAuthenticatedException {
+    public void testDetailsGetWithExistingPlaylistWorks() throws RenderException, ServiceException {
         fillPlaylistWithTracks(existingList);
 
         ModelAnswer answer = new ModelAnswer();

@@ -60,7 +60,7 @@ public abstract class BaseResource {
      * @return Base model
      * @throws NotAuthenticatedException Thrown is authentication is invalid for some reason
      */
-    protected final BaseModel buildBaseModel(HttpServletRequest req) throws NotAuthenticatedException{
+    protected final BaseModel buildBaseModel(HttpServletRequest req) {
         BaseModel model = new BaseModel();
         model.setNowPlaying(player.getTitle());
         
@@ -77,7 +77,7 @@ public abstract class BaseResource {
         model.setUserRole(Role.ANYNOMOUS.getId());
     }
 
-    private boolean loadDataFromSession(HttpServletRequest req, BaseModel model) throws NotAuthenticatedException{
+    private boolean loadDataFromSession(HttpServletRequest req, BaseModel model){
         try {
             Session session = sessions.get(AuthenticationUtils.extractLoginCookie(req.getCookies()).getValue());
             model.setUsername(session.getUser().getUserName());
@@ -89,11 +89,9 @@ public abstract class BaseResource {
             sessions.clearError(session.getAuthId());
             sessions.clearInfo(session.getAuthId());
             return true;
-        } catch (AuthenticationCookieNotFound e) {
+        } catch (AuthenticationCookieNotFound | NotFoundInDatabase e) {
             return false;
-        } catch (NotFoundInDatabase e) {
-            throw new NotAuthenticatedException("There was a problem with authentication. Session AUTH id was invalid.", e);
-        }
+        } 
     }
     
     /**

@@ -17,7 +17,6 @@ import net.kokkeli.resources.models.BaseModel;
 import net.kokkeli.resources.models.ModelPlaylistItem;
 import net.kokkeli.resources.models.ModelTracks;
 import net.kokkeli.server.IFileSystem;
-import net.kokkeli.server.NotAuthenticatedException;
 import net.kokkeli.server.RenderException;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
@@ -35,7 +34,7 @@ public class TestTracksResource extends ResourceTestsBase<TracksResource>{
     }
     
     @Test
-    public void testTrackDetailsReturnCorrectViewWhenTrackExists() throws NotFoundInDatabase, ServiceException, NotAuthenticatedException{
+    public void testTrackDetailsReturnCorrectViewWhenTrackExists() throws NotFoundInDatabase, ServiceException {
         Track existingTrack = new Track();
         existingTrack.setId(23);
         existingTrack.setUploader(new User("anyUser", Role.USER));
@@ -47,7 +46,7 @@ public class TestTracksResource extends ResourceTestsBase<TracksResource>{
     }
     
     @Test
-    public void testTrackDetailsReturnsRedirectWhenTrackDoesntExist() throws NotFoundInDatabase, ServiceException, NotAuthenticatedException {
+    public void testTrackDetailsReturnsRedirectWhenTrackDoesntExist() throws NotFoundInDatabase, ServiceException {
         long notFoundId = 666;
         
         when(trackService.get(notFoundId)).thenThrow(new NotFoundInDatabase("Eijooole"));
@@ -56,7 +55,7 @@ public class TestTracksResource extends ResourceTestsBase<TracksResource>{
     }
     
     @Test
-    public void testTrackDetailsHandlesRenderingException() throws NotAuthenticatedException, RenderException, NotFoundInDatabase, ServiceException{
+    public void testTrackDetailsHandlesRenderingException() throws RenderException, NotFoundInDatabase, ServiceException{
         Track existingTrack = new Track();
         existingTrack.setId(23);
         existingTrack.setUploader(new User("anyUser", Role.USER));
@@ -70,7 +69,7 @@ public class TestTracksResource extends ResourceTestsBase<TracksResource>{
     }
     
     @Test
-    public void testTrackDetailsHandlesServiceException() throws NotFoundInDatabase, ServiceException, NotAuthenticatedException{
+    public void testTrackDetailsHandlesServiceException() throws NotFoundInDatabase, ServiceException {
         long anyId = 312;
         
         when(trackService.get(anyLong())).thenThrow(new ServiceException("Error pärrör"));
@@ -80,7 +79,7 @@ public class TestTracksResource extends ResourceTestsBase<TracksResource>{
     }
     
     @Test
-    public void testVerifiedTracksWorks() throws ServiceException, RenderException, NotAuthenticatedException{
+    public void testVerifiedTracksWorks() throws ServiceException, RenderException {
         ArrayList<Track> tracks = new ArrayList<Track>();
         for (int i = 0; i < 7; i++) {
             Track track = new Track();
@@ -112,7 +111,7 @@ public class TestTracksResource extends ResourceTestsBase<TracksResource>{
     }
     
     @Test
-    public void testVerifiedTracksHandlesServiceException() throws ServiceException, NotAuthenticatedException{
+    public void testVerifiedTracksHandlesServiceException() throws ServiceException {
         when(trackService.getAndVerifyTracks()).thenThrow(new ServiceException("Error pärrör"));
         
         Response r = resource.verifiedTrack(buildRequest());
@@ -120,7 +119,7 @@ public class TestTracksResource extends ResourceTestsBase<TracksResource>{
     }
     
     @Test
-    public void testVerifiedTracksHandlesRenderingException() throws ServiceException, RenderException, NotAuthenticatedException {
+    public void testVerifiedTracksHandlesRenderingException() throws ServiceException, RenderException {
         when(trackService.getAndVerifyTracks()).thenReturn(new ArrayList<Track>());
         
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenThrow(new RenderException("Calcutta."));

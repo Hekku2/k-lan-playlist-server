@@ -19,4 +19,5 @@ import net.kokkeli.data.Role;
 @Retention(RetentionPolicy.RUNTIME) @Target(ElementType.METHOD)
 public @interface Access {
     Role value();
+    AuthenticationErrorHandling errorHandling() default AuthenticationErrorHandling.DEFAULT;
 }

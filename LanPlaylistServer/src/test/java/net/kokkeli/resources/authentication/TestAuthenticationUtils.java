@@ -1,10 +1,12 @@
 package net.kokkeli.resources.authentication;
 
 import java.lang.annotation.Annotation;
+
 import javax.servlet.http.Cookie;
 
 import net.kokkeli.data.Role;
 import net.kokkeli.resources.Access;
+import net.kokkeli.resources.AuthenticationErrorHandling;
 import net.kokkeli.resources.Field;
 import net.kokkeli.server.ServerException;
 
@@ -86,6 +88,11 @@ public class TestAuthenticationUtils {
                     @Override
                     public Role value() {
                         return Role.ADMIN;
+                    }
+
+                    @Override
+                    public AuthenticationErrorHandling errorHandling() {
+                        return AuthenticationErrorHandling.DEFAULT;
                     }
                 }
         };

@@ -80,7 +80,7 @@ public class FetchRequestsResource extends BaseResource{
     @GET
     @Produces("text/html")
     @Access(Role.USER)
-    public Response index(@Context HttpServletRequest req) throws NotAuthenticatedException{
+    public Response index(@Context HttpServletRequest req){
         BaseModel model = buildBaseModel(req);
         try {
             model.setModel(createRequestsModel());
@@ -97,7 +97,7 @@ public class FetchRequestsResource extends BaseResource{
     @Produces("text/html")
     @Access(Role.ADMIN)
     @Path("/createRequest")
-    public Response createRequest(@Context HttpServletRequest req) throws NotAuthenticatedException {
+    public Response createRequest(@Context HttpServletRequest req) {
         BaseModel model = buildBaseModel(req);
         try {
             Collection<PlayList> playlists = playlistService.getIdNames();
@@ -116,7 +116,7 @@ public class FetchRequestsResource extends BaseResource{
     @Produces("text/html")
     @Access(Role.ADMIN)
     @Path("/createRequest")
-    public Response createRequest(@Context HttpServletRequest req, MultivaluedMap<String, String> formParams) throws NotAuthenticatedException {
+    public Response createRequest(@Context HttpServletRequest req, MultivaluedMap<String, String> formParams) {
         BaseModel model = buildBaseModel(req);
         
         try {
