@@ -10,6 +10,7 @@ import java.sql.SQLException;
 
 import net.kokkeli.ISettings;
 import net.kokkeli.Settings;
+import net.kokkeli.SettingsParseException;
 import net.kokkeli.acceptance.pages.BasePage;
 import net.kokkeli.acceptance.pages.PageAuthentication;
 import net.kokkeli.server.LanServer;
@@ -39,7 +40,7 @@ public abstract class BaseAcceptanceTest {
     protected WebDriver driver;
     
     @BeforeClass
-    public static void fixtureSetup() throws IOException, ServerException, ClassNotFoundException, SQLException{
+    public static void fixtureSetup() throws IOException, ServerException, ClassNotFoundException, SQLException, SettingsParseException{
         settings = new Settings();
         settings.loadSettings(DEFAULT_SETTINGS);
         Class.forName("org.sqlite.JDBC");

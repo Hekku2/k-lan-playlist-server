@@ -8,7 +8,7 @@ import net.kokkeli.server.ServerException;
 public class Program {
 
 	/**
-	 * Starting point of program.
+	 * Starts the server
 	 * @param args Used for settings file
 	 * @throws Exception 
 	 */
@@ -18,9 +18,8 @@ public class Program {
 		try {
 		    System.setProperty("SQLite.encoding", "utf-8");
 		    
-		    if (args.length > 0){
+		    if (args.length > 0)
 		        settingsFile = args[0];
-		    }
 		    
 	        Settings settings = new Settings();
             settings.loadSettings(settingsFile);
@@ -29,14 +28,15 @@ public class Program {
 		    server = new LanServer(settings);
             server.start();
             System.in.read();
-        } catch (IOException | IllegalArgumentException e) {
-            System.out.println("Settings file " + settingsFile + " is missings or invalid format!");
+        } catch (IOException | IllegalArgumentException | SettingsParseException e) {
+            System.out.println("Settings file " + settingsFile + " is missing or invalid format!");
+            System.out.println(e.getMessage());
         } catch (ServerException e) {
+            System.out.println("Server failure: ");
             System.out.println(e.toString());
         } finally {
-            if (server != null){
+            if (server != null)
                 server.stop();
-            }
         }
 	}
 }

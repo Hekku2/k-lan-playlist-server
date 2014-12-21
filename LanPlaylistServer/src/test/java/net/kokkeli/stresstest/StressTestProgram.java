@@ -15,7 +15,6 @@ import org.apache.http.message.BasicNameValuePair;
 
 import net.kokkeli.Settings;
 import net.kokkeli.server.LanServer;
-import net.kokkeli.server.ServerException;
 
 /**
  * This is a fast and dirty "stress test" to test that program can handle multiple connections.
@@ -141,8 +140,6 @@ public class StressTestProgram {
                 stopped = true;
             }
         }
-        
-        
     }
     
     private static class TestServer implements Runnable{
@@ -169,7 +166,7 @@ public class StressTestProgram {
                     Thread.sleep(500);
                 }
                 
-            } catch (ServerException | InterruptedException | IllegalArgumentException | IOException e) {
+            } catch (Exception e) {
                 System.out.println(e.toString());
             } finally {
                 if (server != null){

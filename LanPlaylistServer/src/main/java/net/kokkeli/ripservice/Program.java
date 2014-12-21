@@ -5,8 +5,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import com.almworks.sqlite4java.SQLite;
+
 import net.kokkeli.ISettings;
 import net.kokkeli.Settings;
+import net.kokkeli.SettingsParseException;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.Logging;
@@ -37,8 +39,9 @@ public class Program {
         ISettings settings = new Settings();
         try {
             settings.loadSettings(settingsFile);
-        } catch (IOException | IllegalArgumentException e) {
+        } catch (IOException | IllegalArgumentException | SettingsParseException e) {
             System.out.println("Unable to load settings from file " + settingsFile);
+            System.out.println(e.getMessage());
         }
         SQLite.setLibraryPath(settings.getLibLocation());
         SqliteConnectionStorage storage = new SqliteConnectionStorage("jdbc:sqlite:" + settings.getDatabaseLocation());

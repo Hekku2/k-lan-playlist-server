@@ -12,7 +12,7 @@ public interface ISettings {
      * @param file File
      * @throws IOException
      */
-    void loadSettings(String file) throws IOException;
+    void loadSettings(String file) throws IOException, SettingsParseException;
     
     /**
      * Returns location of database

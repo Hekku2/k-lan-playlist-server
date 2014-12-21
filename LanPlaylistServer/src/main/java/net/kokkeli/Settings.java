@@ -37,9 +37,10 @@ public class Settings implements ISettings {
      * Loads settings from file
      * @param file File
      * @throws IOException
+     * @throws SettingsParseException 
      */
     @Override
-    public void loadSettings(String file) throws IOException, IllegalArgumentException{
+    public void loadSettings(String file) throws IOException, IllegalArgumentException, SettingsParseException{
         DataInputStream in = null;
         BufferedReader br = null;
         
@@ -56,12 +57,12 @@ public class Settings implements ISettings {
                 
                 int split = line.indexOf(SPLITTER);
                 if (split < 1)
-                    throw new IOException("File format is invalid. Broken line: " + line);
+                    throw new SettingsParseException("File format is invalid. Broken line: " + line);
                 
                 String[] splitted = line.split(SPLITTER + "");
                 
                 if (splitted.length != 2)
-                    throw new IOException("File format is invalid. Broken line: " + line);
+                    throw new SettingsParseException("File format is invalid. Broken line: " + line);
                 
                 loadSetting(splitted[0], splitted[1]);
             }
@@ -193,7 +194,7 @@ public class Settings implements ISettings {
      * @param value Value
      * @throws IOException Thrown if there was no such key.
      */
-    private void loadSetting(String key, String value) throws IOException{
+    private void loadSetting(String key, String value) throws SettingsParseException{
         switch (key) {
         case "DatabaseLocation":
             databaseLocation = value;
@@ -233,7 +234,7 @@ public class Settings implements ISettings {
             logSeverity = LogSeverity.getSeverity(parsed);
             break;
         default:
-            throw new IOException("Invalid setting: " + key);
+            throw new SettingsParseException(String.format("Not recognized setting name: \"%s\". Value was \"%s\"", key, value));
         }
     }
 }
