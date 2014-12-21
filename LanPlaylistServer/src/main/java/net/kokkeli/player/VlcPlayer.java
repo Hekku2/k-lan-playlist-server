@@ -114,31 +114,35 @@ public class VlcPlayer implements IPlayer {
         public void play() throws ServiceException {
             String file = trackQueue.poll();
             if (file == null && playListPlaying){
-                try {
-                    PlayList list = playlistService.getPlaylist(currentPlaylistId);
-                    
-                    //TODO Some randomization implementation
-                    ArrayList<Track> tracks = list.getItems();
-                    if (tracks.size() == 0){
-                        return;
-                    }
-                    
-                    if (tracks.size() <= trackPointer){
-                        trackPointer = 0;
-                    }
-                    
-                    Track chosen = tracks.get(trackPointer++);
-                    logger.log("Playing: " + chosen.getLocation(),LogSeverity.TRACE);
-                    player.getMediaPlayer().playMedia(chosen.getLocation());
-                    return;
-                } catch (NotFoundInDatabase e) {
-                    logger.log("For some reason, playlist is playing but there is no playlist in database matching given id " + currentPlaylistId,LogSeverity.ERROR);
-                    //Suppress, nothing can be done.
+                playNextFromPlaylist();
+                return;
+            }
+            player.getMediaPlayer().playMedia(file);
+        }
+        
+        private void playNextFromPlaylist() throws ServiceException{
+            try {
+                PlayList list = playlistService.getPlaylist(currentPlaylistId);
+                
+                //TODO Some randomization implementation
+                ArrayList<Track> tracks = list.getItems();
+                if (tracks.size() == 0){
                     return;
                 }
-            }
                 
-            player.getMediaPlayer().playMedia(file);
+                if (tracks.size() <= trackPointer){
+                    trackPointer = 0;
+                }
+                
+                Track chosen = tracks.get(trackPointer++);
+                logger.log("Playing: " + chosen.getLocation(),LogSeverity.TRACE);
+                player.getMediaPlayer().playMedia(chosen.getLocation());
+                return;
+            } catch (NotFoundInDatabase e) {
+                logger.log("For some reason, playlist is playing but there is no playlist in database matching given id " + currentPlaylistId,LogSeverity.ERROR);
+                //Suppress, nothing can be done.
+                return;
+            }
         }
         
         /**
@@ -183,7 +187,7 @@ public class VlcPlayer implements IPlayer {
         public void error(MediaPlayer mediaPlayer) {
             //This can happen, media is corrupted or for some reason cannot be played.
             
-            logger.log("Failed to play media.", LogSeverity.ERROR);
+            logger.log("Failed to play media. Causing title: "+ currentTitle(), LogSeverity.ERROR);
             try {
                 play();
             } catch (ServiceException e) {
