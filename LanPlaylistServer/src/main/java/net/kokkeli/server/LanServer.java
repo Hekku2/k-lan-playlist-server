@@ -16,6 +16,7 @@ import net.kokkeli.data.db.IConnectionStorage;
 import net.kokkeli.data.db.SqliteConnectionStorage;
 
 import com.almworks.sqlite4java.SQLite;
+import com.google.inject.CreationException;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceFilter;
@@ -78,8 +79,12 @@ public class LanServer {
             logger.log("Server started at " + settings.getBaseURI(), LogSeverity.TRACE);
         } catch (InterruptedException e) {
             throw new ServerException("Unable to start server: " + e.getMessage());
+        } catch (CreationException e){
+            if (e.getCause().getClass() == UnsatisfiedLinkError.class && e.getCause().getMessage().contains("Unable to load library 'libvlc'"))
+                throw new ServerException("Unable to locate VLC libraries. Probably caused by invalid VlcLocation-setting.");
+            throw new ServerException("Creating injector failed: " + e.getMessage());
         } catch (Exception e) {
-            throw new ServerException("Unable to start server: " + e.getMessage());
+            throw new ServerException("Unrecognized exception: Unable to start server: " + e.getMessage());
         }
     }
     
