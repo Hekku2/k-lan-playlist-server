@@ -35,9 +35,9 @@
 								<td>
 									${item.getUploader}
 								</td>
-								<td>
-									<a class="btn btn-default" title="Edit" href="/tracks/${item.getId}"><span class="glyphicon glyphicon-edit"></span></a>
-									<a title="Delete" class="btn btn-default delete" id="${item.getId}" href="/playlists/delete/${getModel.getId}"><span class="glyphicon glyphicon-remove"></span></a>
+								<td class="col-md-1">
+									<a class="btn btn-default col-md-6" title="Edit" href="/tracks/${item.getId}"><span class="glyphicon glyphicon-edit"></span></a>
+									<a title="Delete" class="btn btn-default delete col-md-6" id="${item.getId}" href="/playlists/delete/${getModel.getId}"><span class="glyphicon glyphicon-remove"></span></a>
 								</td>
 							</tr>
 						</#list>

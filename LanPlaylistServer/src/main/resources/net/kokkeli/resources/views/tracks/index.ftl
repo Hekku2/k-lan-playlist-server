@@ -23,9 +23,9 @@
 						<tr class="<#if item.getExists>success<#else>danger</#if>">
 							<td>${item.getArtist}</td>
 							<td>${item.getTrack}</td>
-							<td>
-								<button class="btn btn-default"><span class="glyphicon glyphicon-plus-sign" id="${item.getId}"></span></button>
-								<a title="Edit" class="btn btn-default" href="/tracks/${item.getId}"><span class="glyphicon glyphicon-edit"></span></a>
+							<td class="col-md-1">
+								<button class="btn btn-default col-md-6"><span class="glyphicon glyphicon-plus-sign" id="${item.getId}"></span></button>
+								<a title="Edit" class="btn btn-default col-md-6" href="/tracks/${item.getId}"><span class="glyphicon glyphicon-edit"></span></a>
 							</td>
 						</tr>
 					</#list>

@@ -23,10 +23,12 @@
 					<tbody>
 						<#list getModel.getItems as item>
 							<tr>
-								<td>${item.getName}</td>
-								<td>
-									<a class="btn btn-default" href="/playlists/${item.getId}"><span class="glyphicon glyphicon-edit"></span></a>
-									<button class="btn btn-default select-playlist" id="${item.getId}"><span class="glyphicon glyphicon-play"></span></button>
+								<td class="col-md-11">${item.getName}</td>
+								<td class="col-md-1">
+									<#if getUserRole == 3>
+										<a class="btn btn-default col-md-6" href="/playlists/${item.getId}"><span class="glyphicon glyphicon-edit"></span></a>
+										<button class="btn btn-default select-playlist col-md-6" id="${item.getId}"><span class="glyphicon glyphicon-play"></span></button>
+									</#if>
 								</td>
 							</tr>
 						</#list>

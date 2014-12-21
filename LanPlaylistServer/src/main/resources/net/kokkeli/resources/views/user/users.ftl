@@ -24,9 +24,11 @@
 					<tbody>
 						<#list getModel.getUsers as item>
 							<tr>
-								<td>${item.getUsername}</td>
-								<td>${item.getRole}</td>
-								<td><a title="Edit" class="btn btn-default" href="/users/${item.getId}"><span class="glyphicon glyphicon-edit"></span></a></td>
+								<td class="col-md-10">${item.getUsername}</td>
+								<td class="col-md-1">${item.getRole}</td>
+								<td class="col-md-1">
+									<a title="Edit" class="btn btn-default col-md-12" href="/users/${item.getId}"><span class="glyphicon glyphicon-edit"></span></a>
+								</td>
 							</tr>
 						</#list>
 					</tbody>
