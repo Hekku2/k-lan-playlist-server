@@ -210,7 +210,7 @@ public class PlaylistsResource extends BaseResource {
      */
     @POST
     @Produces("text/html; charset=utf-8")
-    @Access(Role.ANYNOMOUS)
+    @Access(value = Role.ANYNOMOUS, errorHandling = AuthenticationErrorHandling.RETURN_CODE)
     @Path("/add/upload/{playlistId: [0-9]*}")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response addUpload(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId,
@@ -272,7 +272,7 @@ public class PlaylistsResource extends BaseResource {
     
     @POST
     @Produces("text/html; charset=utf-8")
-    @Access(Role.ANYNOMOUS)
+    @Access(value = Role.ANYNOMOUS, errorHandling = AuthenticationErrorHandling.RETURN_CODE)
     @Path("/add/vlc/{playlistid: [0-9]*}")
     public Response addVlc(@Context HttpServletRequest req,  MultivaluedMap<String, String> formParams) throws ServiceException {
         BaseModel model = buildBaseModel(req);
@@ -307,7 +307,7 @@ public class PlaylistsResource extends BaseResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Access(Role.ANYNOMOUS)
+    @Access(value = Role.ANYNOMOUS, errorHandling = AuthenticationErrorHandling.RETURN_CODE)
     @Path("/playlist/{playlistId: [0-9]*}")
     public ModelPlaylist getPlaylistData(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId) throws WebApplicationException{
         try {
@@ -364,8 +364,7 @@ public class PlaylistsResource extends BaseResource {
     }
 
     @POST
-    @Produces("text/html; charset=utf-8")
-    @Access(Role.ADMIN)
+    @Access(value = Role.ADMIN, errorHandling = AuthenticationErrorHandling.RETURN_CODE)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Path("/removeTrackFromPlaylist/{playlistId: [0-9]*}")
     public Response removeTrackFromPlaylist(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId,
@@ -379,7 +378,7 @@ public class PlaylistsResource extends BaseResource {
                     list.getItems().remove(track);
                     playlistService.update(list);
                     log(String.format("Removed track #%s from playlist #%s.", trackId, playlistId), LogSeverity.TRACE);
-                    return Response.ok().build();
+                    return Response.ok().entity(String.format("Removed track %s - %s from playlist.", track.getArtist(), track.getTrackName())).build();
                 }
             }
 

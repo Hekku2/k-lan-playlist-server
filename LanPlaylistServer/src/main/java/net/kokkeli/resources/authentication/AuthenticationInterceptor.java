@@ -91,7 +91,7 @@ public class AuthenticationInterceptor implements MethodInterceptor{
     }
     
     private static Response unauthorizedCode(){
-        return Response.status(Status.FORBIDDEN).build();
+        return Response.status(Status.FORBIDDEN).entity("Unauthorized!").build();
     }
     
     private Response defaultRedirect(){

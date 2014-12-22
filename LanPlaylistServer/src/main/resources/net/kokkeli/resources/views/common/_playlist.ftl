@@ -16,7 +16,7 @@
 				<button title="Delete" class="btn btn-default col-md-6" 
 					data-track-id="{id}"
 					data-method="delete"
-					data-loading-text="Loading...">
+					data-loading-text="<img src='/resource/images/ajax-loader.gif'/>">
 					<span class="glyphicon glyphicon-remove"></span></a>
 			</td>
 		</#if>
