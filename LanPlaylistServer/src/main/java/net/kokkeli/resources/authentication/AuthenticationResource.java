@@ -19,7 +19,7 @@ import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.Role;
 import net.kokkeli.data.Session;
 import net.kokkeli.data.User;
-import net.kokkeli.data.db.NotFoundInDatabase;
+import net.kokkeli.data.db.NotFoundInDatabaseException;
 import net.kokkeli.data.services.ISessionService;
 import net.kokkeli.data.services.IUserService;
 import net.kokkeli.data.services.ServiceException;
@@ -98,7 +98,7 @@ public class AuthenticationResource extends BaseResource {
         User user;
         try {
             user = users.get(username, password);
-        } catch (NotFoundInDatabase exception) {
+        } catch (NotFoundInDatabaseException exception) {
             return handleWrongUsernameOrPassword(model);
         } catch (ServiceException e){
             return handleServiceException(model, e);

@@ -26,7 +26,7 @@ public class LogDatabase extends Database implements ILogDatabase {
     }
 
     @Override
-    public LogRow get(long id) throws DatabaseException, NotFoundInDatabase {
+    public LogRow get(long id) throws DatabaseException, NotFoundInDatabaseException {
         return null;
     }
 

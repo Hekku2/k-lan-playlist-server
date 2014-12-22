@@ -5,7 +5,7 @@ package net.kokkeli.data.db;
  * @author Hekku2
  *
  */
-public class NotFoundInDatabase extends Exception{
+public class NotFoundInDatabaseException extends Exception{
     private static final long serialVersionUID = -4823687651337284754L;
 
     /**
@@ -13,7 +13,7 @@ public class NotFoundInDatabase extends Exception{
      * @param message Message
      * @param inner Inner exception.
      */
-    public NotFoundInDatabase(String message, Exception inner){
+    public NotFoundInDatabaseException(String message, Exception inner){
         super(message, inner);
     }
     
@@ -21,7 +21,7 @@ public class NotFoundInDatabase extends Exception{
      * Creates new not found in database exception with given message.
      * @param message
      */
-    public NotFoundInDatabase(String message){
+    public NotFoundInDatabaseException(String message){
         super(message);
     }
 }

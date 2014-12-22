@@ -6,7 +6,6 @@ package net.kokkeli.data.services;
  *
  */
 public class ServiceException extends Exception {
-
     private static final long serialVersionUID = -8809845997832250335L;
 
     /**

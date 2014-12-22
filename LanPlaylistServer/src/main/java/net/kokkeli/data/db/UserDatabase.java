@@ -26,7 +26,7 @@ public class UserDatabase extends Database implements IUserDatabase {
     }
     
     @Override
-    public User get(long id) throws DatabaseException, NotFoundInDatabase {       
+    public User get(long id) throws DatabaseException, NotFoundInDatabaseException {       
         return users.get(id);
     }
 

@@ -11,7 +11,7 @@ import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.User;
 import net.kokkeli.data.db.DatabaseException;
 import net.kokkeli.data.db.IUserDatabase;
-import net.kokkeli.data.db.NotFoundInDatabase;
+import net.kokkeli.data.db.NotFoundInDatabaseException;
 import com.google.inject.Inject;
 
 /**
@@ -46,12 +46,12 @@ public class UserService implements IUserService {
     }
     
     @Override
-    public User get(long id) throws ServiceException, NotFoundInDatabase {
+    public User get(long id) throws ServiceException, NotFoundInDatabaseException {
         try {
             User user = userDatabase.get(id);
             logger.log("User gotten with id: " + id, LogSeverity.TRACE);
             return user;
-        } catch (NotFoundInDatabase e) {
+        } catch (NotFoundInDatabaseException e) {
             logger.log("No user exists with id: " + id, LogSeverity.DEBUG);
             throw e;
         } catch (DatabaseException e) {
@@ -72,7 +72,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void update(User user) throws NotFoundInDatabase, ServiceException {
+    public void update(User user) throws NotFoundInDatabaseException, ServiceException {
         try {
             User oldUser = userDatabase.get(user.getId());
             //TODO SQL Injection protection...
@@ -84,9 +84,9 @@ public class UserService implements IUserService {
             userDatabase.update(user);
             logger.log(String.format("User (ID: %s) updated", user.getId()), LogSeverity.TRACE);
             
-        } catch (NotFoundInDatabase e) {
+        } catch (NotFoundInDatabaseException e) {
             logger.log("No user exists with id: " + user.getId(), LogSeverity.DEBUG);
-            throw new NotFoundInDatabase(String.format("User with id %s not found.", user.getId()));
+            throw new NotFoundInDatabaseException(String.format("User with id %s not found.", user.getId()));
         } catch (DatabaseException e) {
             logger.log("Something went wrong in database: " + e.getMessage(), LogSeverity.ERROR);
             throw new ServiceException("There was problem with database.", e);
@@ -106,7 +106,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User get(String username) throws ServiceException, NotFoundInDatabase {
+    public User get(String username) throws ServiceException, NotFoundInDatabaseException {
         try {
             Collection<User> users = userDatabase.get();
             
@@ -114,7 +114,7 @@ public class UserService implements IUserService {
                 if (username.equals(user.getUserName()))
                     return user;
             }
-            throw new NotFoundInDatabase(String.format("User with username %s not found.", username));
+            throw new NotFoundInDatabaseException(String.format("User with username %s not found.", username));
             
         } catch (DatabaseException e) {
             logger.log("Something went wrong in database: " + e.getMessage(), LogSeverity.ERROR);
@@ -127,18 +127,18 @@ public class UserService implements IUserService {
         try {
             get(username);
             return true;
-        } catch (NotFoundInDatabase e) {
+        } catch (NotFoundInDatabaseException e) {
             return false;
         }
     }
 
     @Override
-    public User get(String username, String password) throws NotFoundInDatabase, ServiceException {
+    public User get(String username, String password) throws NotFoundInDatabaseException, ServiceException {
         User user = get(username);
         if (matches(password, user.getPasswordHash())){
             return user;
         }
-        throw new NotFoundInDatabase("Wrong username or password.");
+        throw new NotFoundInDatabaseException("Wrong username or password.");
     }
     
     @Override

@@ -8,7 +8,7 @@ import net.kokkeli.data.ILogger;
 import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.Role;
 import net.kokkeli.data.Session;
-import net.kokkeli.data.db.NotFoundInDatabase;
+import net.kokkeli.data.db.NotFoundInDatabaseException;
 import net.kokkeli.data.services.ISessionService;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.player.IPlayer;
@@ -89,7 +89,7 @@ public abstract class BaseResource {
             sessions.clearError(session.getAuthId());
             sessions.clearInfo(session.getAuthId());
             return true;
-        } catch (AuthenticationCookieNotFound | NotFoundInDatabase e) {
+        } catch (AuthenticationCookieNotFound | NotFoundInDatabaseException e) {
             return false;
         } 
     }
@@ -112,7 +112,8 @@ public abstract class BaseResource {
      * @return Response
      */
     protected final Response handleRenderingError(BaseModel model, RenderException e){
-        sessions.setError(model.getCurrentSession().getAuthId(), "There was a problem with rendering the template.");
+        if (model.isAuthenticated())
+            sessions.setError(model.getCurrentSession().getAuthId(), "There was a problem with rendering the template.");
         log("There was a problem with rendering: " + e.getMessage(), LogSeverity.ERROR);
         return Response.seeOther(settings.getURI("")).build();
     }
@@ -123,7 +124,8 @@ public abstract class BaseResource {
      * @return Response
      */
     protected final Response handleServiceException(BaseModel model, ServiceException e){
-        sessions.setError(model.getCurrentSession().getAuthId(), "Something went wrong with service.");
+        if (model.isAuthenticated())
+            sessions.setError(model.getCurrentSession().getAuthId(), "Something went wrong with service.");
         log("There was a problem with the service: " + e.getMessage(), LogSeverity.ERROR);
         return Response.seeOther(settings.getURI("")).build();
     }

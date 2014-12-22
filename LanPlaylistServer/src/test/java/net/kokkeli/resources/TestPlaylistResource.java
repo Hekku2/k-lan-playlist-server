@@ -12,7 +12,7 @@ import net.kokkeli.data.PlayList;
 import net.kokkeli.data.Role;
 import net.kokkeli.data.Track;
 import net.kokkeli.data.User;
-import net.kokkeli.data.db.NotFoundInDatabase;
+import net.kokkeli.data.db.NotFoundInDatabaseException;
 import net.kokkeli.data.services.IFetchRequestService;
 import net.kokkeli.data.services.IPlaylistService;
 import net.kokkeli.data.services.ServiceException;
@@ -112,7 +112,7 @@ public class TestPlaylistResource extends ResourceTestsBase<PlaylistsResource> {
     }
 
     @Test
-    public void testAddPostWithProperValueTriesToWriteToFile() throws ServiceException, NotFoundInDatabase,
+    public void testAddPostWithProperValueTriesToWriteToFile() throws ServiceException, NotFoundInDatabaseException,
             NotAuthenticatedException, IOException {
         final String filename = "filename";
 
@@ -129,7 +129,7 @@ public class TestPlaylistResource extends ResourceTestsBase<PlaylistsResource> {
     }
 
     @Test
-    public void testAddPostReturnsErrorWhenFileExists() throws ServiceException, NotFoundInDatabase,
+    public void testAddPostReturnsErrorWhenFileExists() throws ServiceException, NotFoundInDatabaseException,
             NotAuthenticatedException, RenderException {
         ModelAnswer answer = new ModelAnswer();
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(answer);
@@ -169,18 +169,23 @@ public class TestPlaylistResource extends ResourceTestsBase<PlaylistsResource> {
     }
 
     @Test
-    public void testDetailsGetWithExistingPlaylistWorks() throws RenderException, ServiceException {
-        fillPlaylistWithTracks(existingList);
-
+    public void testDetailsGetWithExistingPlaylistWorks() throws RenderException {
         ModelAnswer answer = new ModelAnswer();
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(answer);
-
         assertModelResponse(RESPONSE_OK, resource.details(buildRequest(), EXISTING_PLAYLIST), answer, null, null);
         ModelPlaylist playlist = (ModelPlaylist) answer.getModel().getModel();
+        Assert.assertEquals(existingList.getId(), playlist.getId());
+    }
+
+    @Test
+    public void testGetPlaylistDataReturnsPlaylistData() {
+        fillPlaylistWithTracks(existingList);
+        
+        ModelPlaylist playlist = resource.getPlaylistData(buildRequest(), EXISTING_PLAYLIST);
         Assert.assertEquals(existingList.getName(), playlist.getName());
         Assert.assertEquals(existingList.getItems().size(), playlist.getItems().size());
     }
-
+    
     private static void fillPlaylistWithTracks(PlayList list) {
         for (int i = 0; i < 43; i++) {
             Track item = new Track(i);

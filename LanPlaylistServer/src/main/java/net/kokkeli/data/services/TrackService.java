@@ -8,7 +8,7 @@ import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.Track;
 import net.kokkeli.data.db.DatabaseException;
 import net.kokkeli.data.db.ITrackDatabase;
-import net.kokkeli.data.db.NotFoundInDatabase;
+import net.kokkeli.data.db.NotFoundInDatabaseException;
 import net.kokkeli.server.IFileSystem;
 
 /**
@@ -51,7 +51,7 @@ public class TrackService implements ITrackService{
     }
 
     @Override
-    public Track get(long id) throws NotFoundInDatabase, ServiceException {
+    public Track get(long id) throws NotFoundInDatabaseException, ServiceException {
         try {
             return trackDatabase.get(id);
         } catch (DatabaseException e) {
@@ -62,7 +62,7 @@ public class TrackService implements ITrackService{
     }
 
     @Override
-    public void update(Track track) throws NotFoundInDatabase, ServiceException {
+    public void update(Track track) throws NotFoundInDatabaseException, ServiceException {
         try {
             trackDatabase.update(track);
         } catch (DatabaseException e) {

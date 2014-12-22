@@ -9,7 +9,7 @@ import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.PlayList;
 import net.kokkeli.data.db.DatabaseException;
 import net.kokkeli.data.db.IPlaylistDatabase;
-import net.kokkeli.data.db.NotFoundInDatabase;
+import net.kokkeli.data.db.NotFoundInDatabaseException;
 
 /**
  * PlaylistService
@@ -34,15 +34,15 @@ public class PlaylistService implements IPlaylistService {
     /**
      * Return playlist with current id.
      * @throws ServiceException Thrown when there is general with database
-     * @throws NotFoundInDatabase Thrown when item does not exist in database.
+     * @throws NotFoundInDatabaseException Thrown when item does not exist in database.
      */
     @Override
-    public PlayList getPlaylist(long currentPlaylist) throws ServiceException, NotFoundInDatabase {
+    public PlayList getPlaylist(long currentPlaylist) throws ServiceException, NotFoundInDatabaseException {
         try {
             PlayList playlist = database.get(currentPlaylist);
             
             return playlist;
-        } catch (NotFoundInDatabase e) {
+        } catch (NotFoundInDatabaseException e) {
             logger.log("No playlist found with given id.", LogSeverity.DEBUG);
             throw e;
         } catch (DatabaseException e) {
@@ -62,7 +62,7 @@ public class PlaylistService implements IPlaylistService {
     }
 
     @Override
-    public void update(PlayList playlist) throws NotFoundInDatabase, ServiceException {
+    public void update(PlayList playlist) throws NotFoundInDatabaseException, ServiceException {
         try {
             database.update(playlist);
         } catch (DatabaseException e) {

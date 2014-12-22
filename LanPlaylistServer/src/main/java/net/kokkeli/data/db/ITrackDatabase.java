@@ -19,7 +19,7 @@ public interface ITrackDatabase extends IDatabase<Track>{
      * @param track Track to update
      * @throws DatabaseException Thrown if there is a problem with the database
      * @throws NotFoundException Throw if item is not found
-     * @throws NotFoundInDatabase 
+     * @throws NotFoundInDatabaseException 
      */
-    void update(Track track) throws DatabaseException, NotFoundInDatabase;
+    void update(Track track) throws DatabaseException, NotFoundInDatabaseException;
 }

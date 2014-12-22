@@ -9,7 +9,7 @@ import net.kokkeli.data.ILogger;
 import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.Session;
 import net.kokkeli.data.User;
-import net.kokkeli.data.db.NotFoundInDatabase;
+import net.kokkeli.data.db.NotFoundInDatabaseException;
 
 /**
  * Service for sessiondata
@@ -34,12 +34,12 @@ public class SessionService implements ISessionService{
     /**
      * Returns Session for authentication id.
      * @param authId Authentication id of session
-     * @throws NotFoundInDatabase thrown if there is no session with given authentication.
+     * @throws NotFoundInDatabaseException thrown if there is no session with given authentication.
      */
     @Override
-    public Session get(String authId) throws NotFoundInDatabase{
+    public Session get(String authId) throws NotFoundInDatabaseException{
         if (!sessions.containsKey(authId))
-            throw new NotFoundInDatabase("Auth not found in database.");
+            throw new NotFoundInDatabaseException("Auth not found in database.");
         
         Session session = sessions.get(authId);
         logger.log("Session found for user: " + session.getUser().getId(), LogSeverity.TRACE);

@@ -1,5 +1,6 @@
 package net.kokkeli.server;
 
+import javax.inject.Singleton;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.ext.ExceptionMapper;
@@ -15,6 +16,7 @@ import com.google.inject.Inject;
  *
  */
 @Provider
+@Singleton
 public class NotAuthenticatedExceptionMapper implements ExceptionMapper<NotAuthenticatedException>{
     
     @Inject

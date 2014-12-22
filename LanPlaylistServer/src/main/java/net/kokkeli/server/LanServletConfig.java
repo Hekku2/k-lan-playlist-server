@@ -146,9 +146,9 @@ public class LanServletConfig extends GuiceServletContextListener {
                 
                 //Exceptions
                 bind(RenderExceptionMapper.class);
-                bind(BadRequestExceptionMapper.class).asEagerSingleton();
-                bind(NotAuthenticatedExceptionMapper.class).asEagerSingleton();
-                bind(ServiceExceptionMapper.class).asEagerSingleton();
+                bind(BadRequestExceptionMapper.class);
+                bind(NotAuthenticatedExceptionMapper.class);
+                bind(ServiceExceptionMapper.class);
             }
         });
     }

@@ -188,4 +188,9 @@ public class BaseModel extends ViewModel {
     public void setAuthenticationRequired(boolean authenticationRequired) {
         this.authenticationRequired = authenticationRequired;
     }
+    
+    @Field
+    public boolean isAuthenticated(){
+        return getCurrentSession() != null;
+    }
 }

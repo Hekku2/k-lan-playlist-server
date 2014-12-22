@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response;
 
 import net.kokkeli.data.LogSeverity;
-import net.kokkeli.data.db.NotFoundInDatabase;
+import net.kokkeli.data.db.NotFoundInDatabaseException;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.resources.models.BaseModel;
 import net.kokkeli.server.RenderException;
@@ -22,7 +22,7 @@ import static org.mockito.Mockito.*;
 public class TestBaseResource extends ResourceTestsBase<BaseResource>{
     
     @Override
-    public void before() throws NotFoundException, ServiceException, NotFoundInDatabase {
+    public void before() throws NotFoundException, ServiceException, NotFoundInDatabaseException {
         resource = new BaseResource(getLogger(), getTemplateService(), getPlayer(), getSessionService(), getSettings()){};
     }
     
@@ -33,8 +33,8 @@ public class TestBaseResource extends ResourceTestsBase<BaseResource>{
     }
     
     @Test
-    public void testBaseModelDoesntThrowsUnauthenticatedExceptionWhenSessionIsNotFound() throws NotFoundInDatabase{
-        when(getSessionService().get(any(String.class))).thenThrow(new NotFoundInDatabase("Not Found."));
+    public void testBaseModelDoesntThrowsUnauthenticatedExceptionWhenSessionIsNotFound() throws NotFoundInDatabaseException{
+        when(getSessionService().get(any(String.class))).thenThrow(new NotFoundInDatabaseException("Not Found."));
         
         resource.buildBaseModel(buildRequest());
     }

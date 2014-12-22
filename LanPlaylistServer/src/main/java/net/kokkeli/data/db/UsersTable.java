@@ -30,10 +30,10 @@ public class UsersTable {
      * @param id Id to search
      * @return User
      * @throws DatabaseException Thrown if there is a problem with the database
-     * @throws NotFoundInDatabase Thrown if user is not found in database.
+     * @throws NotFoundInDatabaseException Thrown if user is not found in database.
      */
     @SuppressWarnings("resource")
-    public User get(final long id) throws DatabaseException, NotFoundInDatabase {
+    public User get(final long id) throws DatabaseException, NotFoundInDatabaseException {
         try (Connection connection = storage.getConnection()){
             try (Statement statement = connection.createStatement()){
                 ResultSet rs = statement.executeQuery(getSingleUserQuery(id));
@@ -46,7 +46,7 @@ public class UsersTable {
             throw new DatabaseException("Getting user failed.", e);
         }
         
-        throw new NotFoundInDatabase("User not found in database");
+        throw new NotFoundInDatabaseException("User not found in database");
     }
     
     /**

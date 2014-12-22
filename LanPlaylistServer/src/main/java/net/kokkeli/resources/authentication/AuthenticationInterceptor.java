@@ -10,7 +10,7 @@ import net.kokkeli.ISettings;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.Role;
-import net.kokkeli.data.db.NotFoundInDatabase;
+import net.kokkeli.data.db.NotFoundInDatabaseException;
 import net.kokkeli.data.services.ISessionService;
 import net.kokkeli.resources.Access;
 import net.kokkeli.resources.AuthenticationErrorHandling;
@@ -70,7 +70,7 @@ public class AuthenticationInterceptor implements MethodInterceptor{
             logger.log("User authenticated: " + session.getUser().getUserName(), LogSeverity.TRACE);
             
             return invocation.proceed();
-        } catch (NotFoundInDatabase e) {
+        } catch (NotFoundInDatabaseException e) {
             logger.log("Old or invalid authentication." + e.getMessage(), LogSeverity.DEBUG);
             return createProperResponse(access.errorHandling());
         } catch (AuthenticationException e) {

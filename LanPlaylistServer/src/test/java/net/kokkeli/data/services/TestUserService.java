@@ -9,7 +9,7 @@ import net.kokkeli.data.Role;
 import net.kokkeli.data.User;
 import net.kokkeli.data.db.DatabaseException;
 import net.kokkeli.data.db.IUserDatabase;
-import net.kokkeli.data.db.NotFoundInDatabase;
+import net.kokkeli.data.db.NotFoundInDatabaseException;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -31,7 +31,7 @@ public class TestUserService {
     private UserService userService;
     
     @Before
-    public void setup() throws NotFoundInDatabase, DatabaseException, ServiceException{
+    public void setup() throws NotFoundInDatabaseException, DatabaseException, ServiceException{
         mockDatabase = mock(IUserDatabase.class);
         mockLogger = mock(ILogger.class);
         mockSettings = mock(ISettings.class);
@@ -41,19 +41,19 @@ public class TestUserService {
     }
     
     @Test
-    public void testUserServiceIdGetThrowsNotFoundExceptionWhenThereIsNoUser() throws NotFoundInDatabase, DatabaseException, ServiceException{
-        when(mockDatabase.get(NON_EXISTING_USER_ID)).thenThrow(new NotFoundInDatabase("User not found."));
+    public void testUserServiceIdGetThrowsNotFoundExceptionWhenThereIsNoUser() throws NotFoundInDatabaseException, DatabaseException, ServiceException{
+        when(mockDatabase.get(NON_EXISTING_USER_ID)).thenThrow(new NotFoundInDatabaseException("User not found."));
         
         try {
             userService.get(NON_EXISTING_USER_ID);
             Assert.fail("Correct exception was not thrown.");
-        } catch (NotFoundInDatabase e) {
+        } catch (NotFoundInDatabaseException e) {
             Assert.assertEquals("User not found.", e.getMessage());
         }
     }
     
     @Test
-    public void testUserServiceIdGetThrowsServiceExceptionWhenDatabaseExceptionIsThrown() throws DatabaseException, NotFoundInDatabase{
+    public void testUserServiceIdGetThrowsServiceExceptionWhenDatabaseExceptionIsThrown() throws DatabaseException, NotFoundInDatabaseException{
         when(mockDatabase.get(USER_ID)).thenThrow(new DatabaseException("User not found."));
         
         try {
@@ -65,7 +65,7 @@ public class TestUserService {
     }
     
     @Test
-    public void testUserServiceIdGetReturnsCorrectUser() throws NotFoundInDatabase, ServiceException{
+    public void testUserServiceIdGetReturnsCorrectUser() throws NotFoundInDatabaseException, ServiceException{
         User user = userService.get(USER_ID);
         
         Assert.assertNotNull(user);
@@ -101,7 +101,7 @@ public class TestUserService {
         try {
             userService.get(user.getUserName(), "kokkeli");
             Assert.fail("Exception should have been thrown.");
-        } catch (NotFoundInDatabase e) {
+        } catch (NotFoundInDatabaseException e) {
             Assert.assertEquals("Wrong username or password.", e.getMessage());
         }
     }

@@ -15,7 +15,7 @@ import net.kokkeli.data.PlayList;
 import net.kokkeli.data.Role;
 import net.kokkeli.data.Track;
 import net.kokkeli.data.User;
-import net.kokkeli.data.db.NotFoundInDatabase;
+import net.kokkeli.data.db.NotFoundInDatabaseException;
 import net.kokkeli.data.services.IPlaylistService;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.player.NotPlaylistPlayingException;
@@ -32,13 +32,13 @@ public class TestIndexResource extends ResourceTestsBase<IndexResource>{
     private IPlaylistService mockPlaylistService;
     
     @Override
-    public void before() throws NotFoundException, ServiceException, NotFoundInDatabase {
+    public void before() throws NotFoundException, ServiceException, NotFoundInDatabaseException {
         mockPlaylistService = mock(IPlaylistService.class);
         resource = new IndexResource(getLogger(), getTemplateService(), getPlayer(), mockPlaylistService, getSessionService(), getSettings());
     }
     
     @Test
-    public void testIndexReturnsCorrectModel() throws NotAuthenticatedException, ServiceException, RenderException, NotPlaylistPlayingException, NotFoundInDatabase {
+    public void testIndexReturnsCorrectModel() throws NotAuthenticatedException, ServiceException, RenderException, NotPlaylistPlayingException, NotFoundInDatabaseException {
         long currentlyPlayingId = 434;
         
         PlayList playlist = new PlayList(currentlyPlayingId);
@@ -88,19 +88,19 @@ public class TestIndexResource extends ResourceTestsBase<IndexResource>{
     }
     
     @Test
-    public void testIndexShowsErrorIfPlayingPlaylistIsNotFound() throws NotPlaylistPlayingException, RenderException, ServiceException, NotFoundInDatabase, NotAuthenticatedException{
+    public void testIndexShowsErrorIfPlayingPlaylistIsNotFound() throws NotPlaylistPlayingException, RenderException, ServiceException, NotFoundInDatabaseException, NotAuthenticatedException{
         long currentlyPlayingNotFoundPlaylistId = 434;
         ModelAnswer model = new ModelAnswer();
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(model);
         when(getPlayer().playlistPlaying()).thenReturn(true);
         when(getPlayer().getCurrentPlaylistId()).thenReturn(currentlyPlayingNotFoundPlaylistId);
-        when(mockPlaylistService.getPlaylist(currentlyPlayingNotFoundPlaylistId)).thenThrow(new NotFoundInDatabase("Lol not found"));
+        when(mockPlaylistService.getPlaylist(currentlyPlayingNotFoundPlaylistId)).thenThrow(new NotFoundInDatabaseException("Lol not found"));
         
         assertModelResponse(resource.index(buildRequest()), model, "For some reason, currently playing playlist was not found.", null);
     }
     
     @Test
-    public void testIndexThrowsServiceExceptionWhenPlaylistServiceThrowsServiceExeption() throws RenderException, ServiceException, NotFoundInDatabase, NotAuthenticatedException {
+    public void testIndexThrowsServiceExceptionWhenPlaylistServiceThrowsServiceExeption() throws RenderException, ServiceException, NotFoundInDatabaseException, NotAuthenticatedException {
         ModelAnswer model = new ModelAnswer();
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(model);
         

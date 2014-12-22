@@ -11,6 +11,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
@@ -32,7 +33,7 @@ import net.kokkeli.data.PlayList;
 import net.kokkeli.data.Role;
 import net.kokkeli.data.Session;
 import net.kokkeli.data.Track;
-import net.kokkeli.data.db.NotFoundInDatabase;
+import net.kokkeli.data.db.NotFoundInDatabaseException;
 import net.kokkeli.data.services.IFetchRequestService;
 import net.kokkeli.data.services.IPlaylistService;
 import net.kokkeli.data.services.ISessionService;
@@ -202,7 +203,7 @@ public class PlaylistsResource extends BaseResource {
      * @return Redirect to playlist detais
      * @throws ServiceException
      *             Thrown if there is problem with service
-     * @throws NotFoundInDatabase
+     * @throws NotFoundInDatabaseException
      *             Thrown if there is no such playlist.
      * @throws NotAuthenticatedException
      *             Thrown if there is problem with session.
@@ -215,7 +216,7 @@ public class PlaylistsResource extends BaseResource {
     public Response addUpload(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId,
             @FormDataParam("artist") String artist, @FormDataParam("track") String track,
             @FormDataParam("file") InputStream uploadedInputStream,
-            @FormDataParam("file") FormDataContentDisposition fileDetail) throws ServiceException, NotFoundInDatabase,
+            @FormDataParam("file") FormDataContentDisposition fileDetail) throws ServiceException, NotFoundInDatabaseException,
             NotAuthenticatedException {
         BaseModel model = buildBaseModel(req);
         ModelPlaylistItem createModel = new ModelPlaylistItem();
@@ -294,21 +295,30 @@ public class PlaylistsResource extends BaseResource {
     @Produces("text/html; charset=utf-8")
     @Access(Role.ANYNOMOUS)
     @Path("/{playlistId: [0-9]*}")
-    public Response details(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId)
-            throws ServiceException {
+    public Response details(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId) {
         BaseModel baseModel = buildBaseModel(req);
-
         try {
-            baseModel.setModel(createPlaylistDetailsModel(playlistId));
+            baseModel.setModel(new ModelPlaylist(playlistId));
             return Response.ok(templates.process(PLAYLIST_DETAILS_TEMPLATE, baseModel)).build();
         } catch (RenderException e) {
             return handleRenderingError(baseModel, e);
-        } catch (NotFoundInDatabase e) {
-            sessions.setError(baseModel.getCurrentSession().getAuthId(), "Playlist not found.");
-            return Response.seeOther(settings.getURI("playlists")).build();
         }
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Access(Role.ANYNOMOUS)
+    @Path("/playlist/{playlistId: [0-9]*}")
+    public ModelPlaylist getPlaylistData(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId) throws WebApplicationException{
+        try {
+            return createPlaylistDetailsModel(playlistId);
+        } catch (ServiceException e) {
+            throw new WebApplicationException(500);
+        } catch (NotFoundInDatabaseException e) {
+            throw new WebApplicationException(Status.NOT_FOUND);
+        }
+    }
+    
     @GET
     @Produces("text/html")
     @Access(Role.ADMIN)
@@ -379,10 +389,9 @@ public class PlaylistsResource extends BaseResource {
             throw new BadRequestException("Id was not in correct format.", e);
         } catch (ServiceException e) {
             return Response.status(Status.INTERNAL_SERVER_ERROR).build();
-        } catch (NotFoundInDatabase e) {
+        } catch (NotFoundInDatabaseException e) {
             return Response.status(Status.NOT_FOUND).build();
         }
-
     }
 
     /**
@@ -393,10 +402,10 @@ public class PlaylistsResource extends BaseResource {
      * @return ModelPlaylist
      * @throws ServiceException
      *             Thrown if there is something wrong with the service
-     * @throws NotFoundInDatabase
+     * @throws NotFoundInDatabaseException
      *             Thrown if item is not found in database
      */
-    private ModelPlaylist createPlaylistDetailsModel(long playlistId) throws ServiceException, NotFoundInDatabase {
+    private ModelPlaylist createPlaylistDetailsModel(long playlistId) throws ServiceException, NotFoundInDatabaseException {
         PlayList playlist = playlistService.getPlaylist(playlistId);
         ModelPlaylist modelPlayList = new ModelPlaylist(playlist.getId());
         modelPlayList.setName(playlist.getName());

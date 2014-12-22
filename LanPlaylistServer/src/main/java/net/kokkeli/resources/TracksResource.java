@@ -20,7 +20,7 @@ import net.kokkeli.ValidationUtils;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Role;
 import net.kokkeli.data.Track;
-import net.kokkeli.data.db.NotFoundInDatabase;
+import net.kokkeli.data.db.NotFoundInDatabaseException;
 import net.kokkeli.data.services.ISessionService;
 import net.kokkeli.data.services.ITrackService;
 import net.kokkeli.data.services.ServiceException;
@@ -71,7 +71,7 @@ public class TracksResource extends BaseResource {
             return Response.ok(templates.process(TRACK_DETAILS_TEMPLATE, model)).build();
         } catch (RenderException e) {
             return handleRenderingError(model, e);
-        } catch (NotFoundInDatabase e){
+        } catch (NotFoundInDatabaseException e){
             sessions.setError(model.getCurrentSession().getAuthId(), "Track not found.");
             return Response.seeOther(settings.getURI("tracks")).build();
         } catch (ServiceException e) {
@@ -125,7 +125,7 @@ public class TracksResource extends BaseResource {
             return Response.ok(templates.process(TRACK_EDIT_TEMPLATE, baseModel)).build();
         } catch (RenderException e) {
             return handleRenderingError(baseModel, e);
-        } catch (NotFoundInDatabase e) {
+        } catch (NotFoundInDatabaseException e) {
             sessions.setError(baseModel.getCurrentSession().getAuthId(), "Track not found.");
             return Response.seeOther(settings.getURI("tracks")).build();
         } catch (ServiceException e) {
@@ -163,7 +163,7 @@ public class TracksResource extends BaseResource {
             return Response.seeOther(settings.getURI(String.format("tracks/%s", id))).build();
         } catch (RenderException e) {
             return handleRenderingError(model, e);
-        } catch (NotFoundInDatabase e) {
+        } catch (NotFoundInDatabaseException e) {
             sessions.setError(model.getCurrentSession().getAuthId(), "Track not found.");
             return Response.seeOther(settings.getURI("tracks")).build();
         } catch (ServiceException e) {

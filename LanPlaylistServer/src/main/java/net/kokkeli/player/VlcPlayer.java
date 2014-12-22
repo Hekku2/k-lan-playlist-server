@@ -9,7 +9,7 @@ import net.kokkeli.data.ILogger;
 import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.PlayList;
 import net.kokkeli.data.Track;
-import net.kokkeli.data.db.NotFoundInDatabase;
+import net.kokkeli.data.db.NotFoundInDatabaseException;
 import net.kokkeli.data.services.IPlaylistService;
 import net.kokkeli.data.services.ServiceException;
 
@@ -87,7 +87,7 @@ public class VlcPlayer implements IPlayer {
     }
     
     @Override
-    public void selectPlaylist(long id) throws NotFoundInDatabase, ServiceException {
+    public void selectPlaylist(long id) throws NotFoundInDatabaseException, ServiceException {
         playlistService.getPlaylist(id);
         playListPlaying = true;
         currentPlaylistId = id;
@@ -138,7 +138,7 @@ public class VlcPlayer implements IPlayer {
                 logger.log("Playing: " + chosen.getLocation(),LogSeverity.TRACE);
                 player.getMediaPlayer().playMedia(chosen.getLocation());
                 return;
-            } catch (NotFoundInDatabase e) {
+            } catch (NotFoundInDatabaseException e) {
                 logger.log("For some reason, playlist is playing but there is no playlist in database matching given id " + currentPlaylistId,LogSeverity.ERROR);
                 //Suppress, nothing can be done.
                 return;

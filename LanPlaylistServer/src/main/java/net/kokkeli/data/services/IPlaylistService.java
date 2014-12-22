@@ -3,10 +3,10 @@ package net.kokkeli.data.services;
 import java.util.Collection;
 
 import net.kokkeli.data.PlayList;
-import net.kokkeli.data.db.NotFoundInDatabase;
+import net.kokkeli.data.db.NotFoundInDatabaseException;
 
 public interface IPlaylistService {
-    PlayList getPlaylist(long currentPlaylist) throws ServiceException, NotFoundInDatabase;
+    PlayList getPlaylist(long currentPlaylist) throws ServiceException, NotFoundInDatabaseException;
 
     /**
      * Returns colection of ids and name of playlists.
@@ -18,10 +18,10 @@ public interface IPlaylistService {
     /**
      * Updates playlist. Adds missing tracks to database, removes removed tracks from database and updates changed tracks.
      * @param playlist Playlist to update
-     * @throws NotFoundInDatabase Thrown if there is no playlist with given id.
+     * @throws NotFoundInDatabaseException Thrown if there is no playlist with given id.
      * @throws ServiceException Thrown if there is something wrong with service.
      */
-    void update(PlayList playlist) throws NotFoundInDatabase, ServiceException;
+    void update(PlayList playlist) throws NotFoundInDatabaseException, ServiceException;
     
     /**
      * Adds playlist returns id of added playlist.

@@ -1,5 +1,6 @@
 package net.kokkeli.resources;
 
+import javax.inject.Singleton;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
@@ -12,6 +13,7 @@ import net.kokkeli.data.services.ServiceException;
  *
  */
 @Provider
+@Singleton
 public class ServiceExceptionMapper implements ExceptionMapper<ServiceException> { 
 
     /**

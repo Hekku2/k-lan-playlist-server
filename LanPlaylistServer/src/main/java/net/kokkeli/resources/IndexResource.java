@@ -14,7 +14,7 @@ import net.kokkeli.data.ILogger;
 import net.kokkeli.data.PlayList;
 import net.kokkeli.data.Track;
 import net.kokkeli.data.Role;
-import net.kokkeli.data.db.NotFoundInDatabase;
+import net.kokkeli.data.db.NotFoundInDatabaseException;
 import net.kokkeli.data.services.IPlaylistService;
 import net.kokkeli.data.services.ISessionService;
 import net.kokkeli.data.services.ServiceException;
@@ -85,7 +85,7 @@ public class IndexResource extends BaseResource {
                 }
             } catch (NotPlaylistPlayingException e) {
                 // Suppress. If no playlist is playing, index page is still shown.
-            } catch (NotFoundInDatabase e) {
+            } catch (NotFoundInDatabaseException e) {
                 base.setError("For some reason, currently playing playlist was not found.");
             } catch (ServiceException e) {
                 base.setError("For some reason, currently playing playlist can't be shown.");

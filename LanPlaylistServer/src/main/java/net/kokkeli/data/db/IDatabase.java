@@ -15,7 +15,7 @@ public interface IDatabase<T> {
      */
     void CheckDatabaseFormat() throws DatabaseException;
     
-    T get(long id) throws DatabaseException, NotFoundInDatabase;
+    T get(long id) throws DatabaseException, NotFoundInDatabaseException;
     
     /**
      * Returns all items from database.

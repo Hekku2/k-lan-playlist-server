@@ -35,11 +35,11 @@ public class PlaylistsTable {
      * @return Found playlist
      * @throws DatabaseException
      *             thrown if there is problem with database
-     * @throws NotFoundInDatabase
+     * @throws NotFoundInDatabaseException
      *             thrown if no such item is found with given id.
      */
     @SuppressWarnings("resource")
-    public PlayList get(final long id) throws DatabaseException, NotFoundInDatabase {
+    public PlayList get(final long id) throws DatabaseException, NotFoundInDatabaseException {
         try (Connection connection = storage.getConnection()){
             try (Statement statement = connection.createStatement()){
                 ResultSet rs = statement.executeQuery(getSingleItemQuery(id));
@@ -51,7 +51,7 @@ public class PlaylistsTable {
         } catch (SQLException e) {
             throw new DatabaseException("Getting playlist failed.", e);
         }
-        throw new NotFoundInDatabase("No such playlist in database.");
+        throw new NotFoundInDatabaseException("No such playlist in database.");
     }
     
     /**

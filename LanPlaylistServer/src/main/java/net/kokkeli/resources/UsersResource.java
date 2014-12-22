@@ -21,7 +21,7 @@ import net.kokkeli.data.ILogger;
 import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.Role;
 import net.kokkeli.data.User;
-import net.kokkeli.data.db.NotFoundInDatabase;
+import net.kokkeli.data.db.NotFoundInDatabaseException;
 import net.kokkeli.data.services.ISessionService;
 import net.kokkeli.data.services.IUserService;
 import net.kokkeli.data.services.ServiceException;
@@ -114,7 +114,7 @@ public class UsersResource extends BaseResource {
             return Response.ok(templates.process(USER_DETAILS_TEMPLATE, model)).build();
         } catch (RenderException e) {
             return handleRenderingError(model, e);
-        } catch (NotFoundInDatabase e){
+        } catch (NotFoundInDatabaseException e){
             sessions.setError(model.getCurrentSession().getAuthId(), "User not found.");
             return Response.seeOther(settings.getURI("users")).build();
         } catch (ServiceException e) {
@@ -146,7 +146,7 @@ public class UsersResource extends BaseResource {
             return Response.ok(templates.process(USER_EDIT_TEMPLATE, model)).build();
         } catch (RenderException e) {
             return handleRenderingError(model, e);
-        } catch (NotFoundInDatabase e) {
+        } catch (NotFoundInDatabaseException e) {
             sessions.setError(model.getCurrentSession().getAuthId(), "User not found.");
             return Response.seeOther(settings.getURI("users")).build();
         } catch (ServiceException e) {
@@ -188,7 +188,7 @@ public class UsersResource extends BaseResource {
             userService.update(new User(editedUser.getId(), editedUser.getUsername(), editedUser.getRoleEnum()));
             sessions.setInfo(model.getCurrentSession().getAuthId(), "User edited.");
             return Response.seeOther(settings.getURI(String.format("users/%s", editedUser.getId()))).build();
-        } catch (NotFoundInDatabase e) {
+        } catch (NotFoundInDatabaseException e) {
             sessions.setError(model.getCurrentSession().getAuthId(), "User not found.");
             return Response.seeOther(settings.getURI("users")).build();
         } catch (ServiceException e) {
@@ -297,9 +297,9 @@ public class UsersResource extends BaseResource {
      * @param editedUser Editer user
      * @return Validation error if there is one.
      * @throws ServiceException Thrown if there is a problem with the service
-     * @throws NotFoundInDatabase Thrown if there is no user to be edited.
+     * @throws NotFoundInDatabaseException Thrown if there is no user to be edited.
      */
-    private String getValidationErrorForUserEditing(ModelUser editedUser) throws ServiceException, NotFoundInDatabase{
+    private String getValidationErrorForUserEditing(ModelUser editedUser) throws ServiceException, NotFoundInDatabaseException{
         User user = userService.get(editedUser.getId());
         
         String usernameValidationError = getUsernameValidationError(editedUser.getUsername());

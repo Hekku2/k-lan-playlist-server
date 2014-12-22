@@ -48,11 +48,11 @@ public class TracksTable {
      * @return Track Fetched track.
      * @throws DatabaseException
      *             Thrown if there is problem with database.
-     * @throws NotFoundInDatabase
+     * @throws NotFoundInDatabaseException
      *             Thrown if track is not in database.
      */
     @SuppressWarnings("resource")
-    public Track get(final long id) throws DatabaseException, NotFoundInDatabase {
+    public Track get(final long id) throws DatabaseException, NotFoundInDatabaseException {
         try (Connection connection = storage.getConnection()){
             try (Statement statement = connection.createStatement()){
                 ResultSet rs = statement.executeQuery(getSingleItemQuery(id));
@@ -64,7 +64,7 @@ public class TracksTable {
         } catch (SQLException e) {
             throw new DatabaseException("Getting user failed.", e);
         }
-        throw new NotFoundInDatabase("No track with id: " + id + " in database.");
+        throw new NotFoundInDatabaseException("No track with id: " + id + " in database.");
     }
     
     /**

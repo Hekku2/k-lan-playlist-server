@@ -3,7 +3,7 @@ package net.kokkeli.data.services;
 import java.util.Collection;
 
 import net.kokkeli.data.User;
-import net.kokkeli.data.db.NotFoundInDatabase;
+import net.kokkeli.data.db.NotFoundInDatabaseException;
 
 import com.sun.jersey.api.NotFoundException;
 
@@ -19,7 +19,7 @@ public interface IUserService {
      * @param id Id of user
      * @return User with given id.
      */
-    User get(long id) throws NotFoundInDatabase, ServiceException;
+    User get(long id) throws NotFoundInDatabaseException, ServiceException;
     
     /**
      * Collection of users.
@@ -35,7 +35,7 @@ public interface IUserService {
      * @throws ServiceException Thrown if there is problem with service
      * @throws NotFoundException Thrown if there is no old user with given id.
      */
-    void update(User user) throws ServiceException, NotFoundInDatabase;
+    void update(User user) throws ServiceException, NotFoundInDatabaseException;
 
     /**
      * Adds given user. If user doesn't have Id, enw is created.
@@ -50,9 +50,9 @@ public interface IUserService {
      * @param username Username
      * @return Username
      * @throws ServiceException Thrown if there is problem with the service
-     * @throws NotFoundInDatabase Thrown if there is no such user in the database. 
+     * @throws NotFoundInDatabaseException Thrown if there is no such user in the database. 
      */
-    User get(String username) throws ServiceException, NotFoundInDatabase;
+    User get(String username) throws ServiceException, NotFoundInDatabaseException;
 
     /**
      * Checks that user with given username exists
@@ -67,10 +67,10 @@ public interface IUserService {
      * @param username Username
      * @param password Password
      * @return User Found user.
-     * @throws NotFoundInDatabase Thrown if username or password is wrong.
+     * @throws NotFoundInDatabaseException Thrown if username or password is wrong.
      * @throws ServiceException Thrown if there is problem with the database.
      */
-    User get(String username, String password) throws NotFoundInDatabase, ServiceException;
+    User get(String username, String password) throws NotFoundInDatabaseException, ServiceException;
     
     /**
      * Changes users password

@@ -7,7 +7,7 @@ import net.kokkeli.data.ILogger;
 import net.kokkeli.data.Track;
 import net.kokkeli.data.db.DatabaseException;
 import net.kokkeli.data.db.ITrackDatabase;
-import net.kokkeli.data.db.NotFoundInDatabase;
+import net.kokkeli.data.db.NotFoundInDatabaseException;
 import net.kokkeli.server.IFileSystem;
 
 import org.junit.Assert;
@@ -75,7 +75,7 @@ public class TestTrackService {
     }
     
     @Test
-    public void testGetReturnsCorrectTrack() throws DatabaseException, NotFoundInDatabase, ServiceException {
+    public void testGetReturnsCorrectTrack() throws DatabaseException, NotFoundInDatabaseException, ServiceException {
         Track track = new Track();
         track.setId(5);
         
@@ -86,7 +86,7 @@ public class TestTrackService {
     }
     
     @Test
-    public void testGetThrowsServiceExceptionWhenDatabaseThrowsException() throws DatabaseException, NotFoundInDatabase{
+    public void testGetThrowsServiceExceptionWhenDatabaseThrowsException() throws DatabaseException, NotFoundInDatabaseException{
         when(mockDatabase.get(anyLong())).thenThrow(new DatabaseException("Räjähti!"));
         try {
             trackService.get(5);
@@ -97,7 +97,7 @@ public class TestTrackService {
     }
     
     @Test
-    public void testUpdateThrowsServiceExceptionWhenDatabaseThrowsException() throws NotFoundInDatabase, DatabaseException{
+    public void testUpdateThrowsServiceExceptionWhenDatabaseThrowsException() throws NotFoundInDatabaseException, DatabaseException{
         doThrow(new DatabaseException("Räjähti!")).when(mockDatabase).update(any(Track.class));
         try {
             trackService.update(new Track());
@@ -108,18 +108,18 @@ public class TestTrackService {
     }
     
     @Test
-    public void testUpdateThrowsNotFoundExceptionWhenItemIsNotFound() throws DatabaseException, ServiceException, NotFoundInDatabase{
-        doThrow(new NotFoundInDatabase("Räjähti!")).when(mockDatabase).update(any(Track.class));
+    public void testUpdateThrowsNotFoundExceptionWhenItemIsNotFound() throws DatabaseException, ServiceException, NotFoundInDatabaseException{
+        doThrow(new NotFoundInDatabaseException("Räjähti!")).when(mockDatabase).update(any(Track.class));
         try {
             trackService.update(new Track());
             Assert.fail();
-        } catch (NotFoundInDatabase e) {
+        } catch (NotFoundInDatabaseException e) {
             Assert.assertEquals("Räjähti!", e.getMessage());
         }
     }
     
     @Test
-    public void testUpdateCallsService() throws NotFoundInDatabase, ServiceException, DatabaseException {
+    public void testUpdateCallsService() throws NotFoundInDatabaseException, ServiceException, DatabaseException {
         trackService.update(new Track());
         verify(mockDatabase).update(any(Track.class));
     }

@@ -14,7 +14,7 @@ import net.kokkeli.data.db.DatabaseException;
 import net.kokkeli.data.db.IFetchRequestDatabase;
 import net.kokkeli.data.db.IPlaylistDatabase;
 import net.kokkeli.data.db.ITrackDatabase;
-import net.kokkeli.data.db.NotFoundInDatabase;
+import net.kokkeli.data.db.NotFoundInDatabaseException;
 
 /**
  * Service for fetch requets
@@ -79,7 +79,7 @@ public class FetchRequestService implements IFetchRequestService {
         } catch (DatabaseException e) {
             logger.log("Something went wrong with the database while adding fetch request.", LogSeverity.ERROR);
             throw new ServiceException("Something went wrong with the database while adding fetch request.", e);
-        } catch (NotFoundInDatabase e) {
+        } catch (NotFoundInDatabaseException e) {
             logger.log("Trying to create fetch request with a playlist that doesn't exist.", LogSeverity.ERROR);
             throw new IllegalArgumentException("Playlist did not exist");
         }

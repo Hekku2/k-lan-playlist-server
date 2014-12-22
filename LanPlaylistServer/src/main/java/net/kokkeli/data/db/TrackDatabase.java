@@ -24,7 +24,7 @@ public class TrackDatabase extends Database implements ITrackDatabase{
     }
 
     @Override
-    public Track get(long id) throws DatabaseException, NotFoundInDatabase {
+    public Track get(long id) throws DatabaseException, NotFoundInDatabaseException {
         Track track = tracksTable.get(id);
         track.setUploader(usersTable.get(track.getUploader().getId()));
         
@@ -38,7 +38,7 @@ public class TrackDatabase extends Database implements ITrackDatabase{
             for (Track track : tracks) {
                 track.setUploader(usersTable.get(track.getUploader().getId()));
             }
-        } catch (NotFoundInDatabase e) {
+        } catch (NotFoundInDatabaseException e) {
             throw new DatabaseException("There was an uploader that did not match any user.", e);
         }
 
@@ -55,15 +55,15 @@ public class TrackDatabase extends Database implements ITrackDatabase{
         try {
             tracksTable.get(track.getId());
             return true;
-        } catch (NotFoundInDatabase e) {
+        } catch (NotFoundInDatabaseException e) {
             return false;
         }
     }
 
     @Override
-    public void update(Track track) throws NotFoundInDatabase, DatabaseException  {
+    public void update(Track track) throws NotFoundInDatabaseException, DatabaseException  {
         if (!exists(track)){
-            throw new NotFoundInDatabase(String.format("Track with id %s not found", track.getId()));
+            throw new NotFoundInDatabaseException(String.format("Track with id %s not found", track.getId()));
         }
         
         tracksTable.update(track);

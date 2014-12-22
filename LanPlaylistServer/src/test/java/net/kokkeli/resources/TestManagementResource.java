@@ -2,7 +2,7 @@ package net.kokkeli.resources;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
-import net.kokkeli.data.db.NotFoundInDatabase;
+import net.kokkeli.data.db.NotFoundInDatabaseException;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.resources.models.BaseModel;
 import net.kokkeli.server.NotAuthenticatedException;
@@ -15,7 +15,7 @@ import com.sun.jersey.api.NotFoundException;
 public class TestManagementResource extends ResourceTestsBase<ManagementResource>{
     
     @Override
-    public void before() throws NotFoundException, ServiceException, NotFoundInDatabase {
+    public void before() throws NotFoundException, ServiceException, NotFoundInDatabaseException {
         resource = new ManagementResource(getLogger(), getTemplateService(), getPlayer(), getSessionService(), getSettings());
     }
     

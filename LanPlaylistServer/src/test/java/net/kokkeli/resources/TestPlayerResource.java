@@ -13,7 +13,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import net.kokkeli.data.Track;
-import net.kokkeli.data.db.NotFoundInDatabase;
+import net.kokkeli.data.db.NotFoundInDatabaseException;
 import net.kokkeli.data.services.ITrackService;
 import net.kokkeli.data.services.ServiceException;
 
@@ -27,7 +27,7 @@ public class TestPlayerResource extends ResourceTestsBase<PlayerResource> {
     }
 
     @Test
-    public void testPostAddToQueueAddsSongToQueue() throws NotFoundInDatabase, ServiceException, BadRequestException{
+    public void testPostAddToQueueAddsSongToQueue() throws NotFoundInDatabaseException, ServiceException, BadRequestException{
         long existingId = 23;
         Track track = new Track(existingId);
         track.setLocation("Marsi666//");
@@ -40,16 +40,16 @@ public class TestPlayerResource extends ResourceTestsBase<PlayerResource> {
     }
     
     @Test
-    public void testPostAddToQueueReturnsNotFoundWhenTrackIsNotFound() throws BadRequestException, NotFoundInDatabase, ServiceException {
+    public void testPostAddToQueueReturnsNotFoundWhenTrackIsNotFound() throws BadRequestException, NotFoundInDatabaseException, ServiceException {
         long notExistingId = 23;
-        when(mockTrackService.get(anyLong())).thenThrow(new NotFoundInDatabase("Not found"));
+        when(mockTrackService.get(anyLong())).thenThrow(new NotFoundInDatabaseException("Not found"));
         
         Response r = resource.addToQueue(buildRequest(), createIdPost(notExistingId));
         assertEquals(NOT_FOUND, r.getStatus());
     }
     
     @Test
-    public void testPostAddToQueueReturnsServerErrorIfTrackDoesntHaveLocation() throws NotFoundInDatabase, ServiceException, BadRequestException{
+    public void testPostAddToQueueReturnsServerErrorIfTrackDoesntHaveLocation() throws NotFoundInDatabaseException, ServiceException, BadRequestException{
         long existingId = 23;
         Track track = new Track(existingId);
         track.setLocation(null);
@@ -69,7 +69,7 @@ public class TestPlayerResource extends ResourceTestsBase<PlayerResource> {
     }
     
     @Test
-    public void testPostAddQueueReturnsInternalServerErrorWhenServiceDoesntWork() throws BadRequestException, NotFoundInDatabase, ServiceException{
+    public void testPostAddQueueReturnsInternalServerErrorWhenServiceDoesntWork() throws BadRequestException, NotFoundInDatabaseException, ServiceException{
         long existingId = 23;
         Track track = new Track(existingId);
         track.setLocation("Marsi666//");
@@ -81,7 +81,7 @@ public class TestPlayerResource extends ResourceTestsBase<PlayerResource> {
     }
     
     @Test
-    public void testSelectPlaylistSelectsPlaylist() throws BadRequestException, NotFoundInDatabase, ServiceException{
+    public void testSelectPlaylistSelectsPlaylist() throws BadRequestException, NotFoundInDatabaseException, ServiceException{
         long existingId = 23;
         Response r = resource.selectPlaylist(buildRequest(), createIdPost(existingId));
         assertEquals(RESPONSE_OK, r.getStatus());
@@ -89,16 +89,16 @@ public class TestPlayerResource extends ResourceTestsBase<PlayerResource> {
     }
     
     @Test
-    public void testSelectPlaylistReturnsNotFoundWhenPlaylistDoesntExist() throws NotFoundInDatabase, ServiceException, BadRequestException{
+    public void testSelectPlaylistReturnsNotFoundWhenPlaylistDoesntExist() throws NotFoundInDatabaseException, ServiceException, BadRequestException{
         long nonExistingId = 23;
-        Mockito.doThrow(new NotFoundInDatabase("Not found")).when(getPlayer()).selectPlaylist(anyLong());
+        Mockito.doThrow(new NotFoundInDatabaseException("Not found")).when(getPlayer()).selectPlaylist(anyLong());
         
         Response r = resource.selectPlaylist(buildRequest(), createIdPost(nonExistingId));
         assertEquals(NOT_FOUND, r.getStatus());
     }
     
     @Test
-    public void testSelectPlaylistReturnsInternalErrorWhenSelectExplodes() throws NotFoundInDatabase, ServiceException, BadRequestException{
+    public void testSelectPlaylistReturnsInternalErrorWhenSelectExplodes() throws NotFoundInDatabaseException, ServiceException, BadRequestException{
         long anyId = 23;
         Mockito.doThrow(new ServiceException("Boom!")).when(getPlayer()).selectPlaylist(anyLong());
         

@@ -31,7 +31,7 @@ public class FetchRequestDatabase extends Database implements IFetchRequestDatab
 
     @Override
     public FetchRequest get(long id) throws DatabaseException,
-            NotFoundInDatabase {
+            NotFoundInDatabaseException {
         return null;
     }
 
@@ -42,7 +42,7 @@ public class FetchRequestDatabase extends Database implements IFetchRequestDatab
             for (FetchRequest fetchRequest : requests) {
                 fetchRequest.setTrack(tracks.get(fetchRequest.getTrack().getId()));
             }
-        } catch (NotFoundInDatabase e) {
+        } catch (NotFoundInDatabaseException e) {
             throw new DatabaseException("For some reason, track was not in database. This should not happen!", e);
         }
         

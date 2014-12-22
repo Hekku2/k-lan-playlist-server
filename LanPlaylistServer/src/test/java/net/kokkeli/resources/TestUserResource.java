@@ -6,7 +6,7 @@ import javax.ws.rs.core.Response;
 import static org.junit.Assert.assertEquals;
 import net.kokkeli.data.Role;
 import net.kokkeli.data.User;
-import net.kokkeli.data.db.NotFoundInDatabase;
+import net.kokkeli.data.db.NotFoundInDatabaseException;
 import net.kokkeli.data.services.IUserService;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.resources.models.BaseModel;
@@ -36,13 +36,13 @@ public class TestUserResource extends ResourceTestsBase<UsersResource>{
     private User existing;
 
     @Override
-    public void before() throws NotFoundInDatabase, ServiceException {
+    public void before() throws NotFoundInDatabaseException, ServiceException {
         mockUserService = mock(IUserService.class);
         
         existing = new User(EXISTING_USER_ID, "user", Role.NONE);
         
         when(mockUserService.get(EXISTING_USER_ID)).thenReturn(existing);
-        when(mockUserService.get(NONEXISTING_ID)).thenThrow(new NotFoundInDatabase("User not found"));
+        when(mockUserService.get(NONEXISTING_ID)).thenThrow(new NotFoundInDatabaseException("User not found"));
         
         resource = new UsersResource(getLogger(), getTemplateService(), mockUserService, getPlayer(), getSessionService(), getSettings());
     }
@@ -96,7 +96,7 @@ public class TestUserResource extends ResourceTestsBase<UsersResource>{
     
     //EDIT POST
     @Test
-    public void testPostEditUpdatesUser() throws ServiceException, BadRequestException, RenderException, NotAuthenticatedException, NotFoundInDatabase{
+    public void testPostEditUpdatesUser() throws ServiceException, BadRequestException, RenderException, NotAuthenticatedException, NotFoundInDatabaseException{
         final String newUsername = "editedUser";
         final Role newRole = Role.ADMIN;
         

@@ -2,7 +2,7 @@ package net.kokkeli.data.services;
 
 import net.kokkeli.data.Session;
 import net.kokkeli.data.User;
-import net.kokkeli.data.db.NotFoundInDatabase;
+import net.kokkeli.data.db.NotFoundInDatabaseException;
 
 /**
  * Interface for sessionservice
@@ -15,9 +15,9 @@ public interface ISessionService {
      * Returns session with given authentication
      * @param authId Authentication id
      * @return Session
-     * @throws NotFoundInDatabase Thrown if session with given authentication is not found.
+     * @throws NotFoundInDatabaseException Thrown if session with given authentication is not found.
      */
-    Session get(String authId) throws NotFoundInDatabase;
+    Session get(String authId) throws NotFoundInDatabaseException;
 
     /**
      * Creates session for user. Session is added stash.

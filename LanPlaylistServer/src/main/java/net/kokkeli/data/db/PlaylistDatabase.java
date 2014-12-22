@@ -30,7 +30,7 @@ public class PlaylistDatabase extends Database implements IPlaylistDatabase {
     }
 
     @Override
-    public PlayList get(long id) throws DatabaseException, NotFoundInDatabase {
+    public PlayList get(long id) throws DatabaseException, NotFoundInDatabaseException {
         // Fetch playlist data
         PlayList playlist = playlistTable.get(id);
         
@@ -63,7 +63,7 @@ public class PlaylistDatabase extends Database implements IPlaylistDatabase {
                     playList.getItems().add(track);
                 }
             }
-        } catch (NotFoundInDatabase e) {
+        } catch (NotFoundInDatabaseException e) {
             throw new DatabaseException("Some key was missing.", e);
         }
 
@@ -89,7 +89,7 @@ public class PlaylistDatabase extends Database implements IPlaylistDatabase {
     }
 
     @Override
-    public void update(PlayList playlist) throws DatabaseException, NotFoundInDatabase {
+    public void update(PlayList playlist) throws DatabaseException, NotFoundInDatabaseException {
         PlayList old = get(playlist.getId());
         
         if (!old.getItems().equals(playlist.getName())){
@@ -120,7 +120,7 @@ public class PlaylistDatabase extends Database implements IPlaylistDatabase {
     private void updateOrInsertTrack(Track track, long playlistId) throws DatabaseException{
         try {
             tracksTable.get(track.getId());
-        } catch (NotFoundInDatabase e) {
+        } catch (NotFoundInDatabaseException e) {
         	track.setId(tracksTable.insert(track).getId());
         }
         

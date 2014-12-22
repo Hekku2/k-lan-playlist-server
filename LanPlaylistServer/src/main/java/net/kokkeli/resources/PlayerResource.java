@@ -20,7 +20,7 @@ import net.kokkeli.data.ILogger;
 import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.Role;
 import net.kokkeli.data.Track;
-import net.kokkeli.data.db.NotFoundInDatabase;
+import net.kokkeli.data.db.NotFoundInDatabaseException;
 import net.kokkeli.data.services.ISessionService;
 import net.kokkeli.data.services.ITrackService;
 import net.kokkeli.data.services.ServiceException;
@@ -63,7 +63,7 @@ public class PlayerResource extends BaseResource{
             throw new BadRequestException("Id was not in correct format.", e);
         } catch (ServiceException e) {
             return Response.status(Status.INTERNAL_SERVER_ERROR).build();
-        } catch (NotFoundInDatabase e) {
+        } catch (NotFoundInDatabaseException e) {
             return Response.status(Status.NOT_FOUND).build();
         }
     }
@@ -84,7 +84,7 @@ public class PlayerResource extends BaseResource{
             throw new BadRequestException("Id was not in correct format.", e);
         } catch (ServiceException e) {
             return Response.status(Status.INTERNAL_SERVER_ERROR).build();
-        } catch (NotFoundInDatabase e) {
+        } catch (NotFoundInDatabaseException e) {
             return Response.status(Status.NOT_FOUND).build();
         }
     }

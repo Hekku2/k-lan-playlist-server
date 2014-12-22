@@ -10,7 +10,7 @@ import org.junit.Test;
 import net.kokkeli.data.Role;
 import net.kokkeli.data.Track;
 import net.kokkeli.data.User;
-import net.kokkeli.data.db.NotFoundInDatabase;
+import net.kokkeli.data.db.NotFoundInDatabaseException;
 import net.kokkeli.data.services.ITrackService;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.resources.models.BaseModel;
@@ -26,7 +26,7 @@ public class TestTracksResource extends ResourceTestsBase<TracksResource>{
     private IFileSystem fileSystem;
     
     @Override
-    public void before() throws NotFoundInDatabase, ServiceException {
+    public void before() throws NotFoundInDatabaseException, ServiceException {
         trackService = mock(ITrackService.class);
         fileSystem = mock(IFileSystem.class);
         
@@ -34,7 +34,7 @@ public class TestTracksResource extends ResourceTestsBase<TracksResource>{
     }
     
     @Test
-    public void testTrackDetailsReturnCorrectViewWhenTrackExists() throws NotFoundInDatabase, ServiceException {
+    public void testTrackDetailsReturnCorrectViewWhenTrackExists() throws NotFoundInDatabaseException, ServiceException {
         Track existingTrack = new Track();
         existingTrack.setId(23);
         existingTrack.setUploader(new User("anyUser", Role.USER));
@@ -46,16 +46,16 @@ public class TestTracksResource extends ResourceTestsBase<TracksResource>{
     }
     
     @Test
-    public void testTrackDetailsReturnsRedirectWhenTrackDoesntExist() throws NotFoundInDatabase, ServiceException {
+    public void testTrackDetailsReturnsRedirectWhenTrackDoesntExist() throws NotFoundInDatabaseException, ServiceException {
         long notFoundId = 666;
         
-        when(trackService.get(notFoundId)).thenThrow(new NotFoundInDatabase("Eijooole"));
+        when(trackService.get(notFoundId)).thenThrow(new NotFoundInDatabaseException("Eijooole"));
         Response r = resource.trackDetails(buildRequest(), notFoundId);
         Assert.assertEquals(REDIRECT, r.getStatus());
     }
     
     @Test
-    public void testTrackDetailsHandlesRenderingException() throws RenderException, NotFoundInDatabase, ServiceException{
+    public void testTrackDetailsHandlesRenderingException() throws RenderException, NotFoundInDatabaseException, ServiceException{
         Track existingTrack = new Track();
         existingTrack.setId(23);
         existingTrack.setUploader(new User("anyUser", Role.USER));
@@ -69,7 +69,7 @@ public class TestTracksResource extends ResourceTestsBase<TracksResource>{
     }
     
     @Test
-    public void testTrackDetailsHandlesServiceException() throws NotFoundInDatabase, ServiceException {
+    public void testTrackDetailsHandlesServiceException() throws NotFoundInDatabaseException, ServiceException {
         long anyId = 312;
         
         when(trackService.get(anyLong())).thenThrow(new ServiceException("Error pärrör"));
