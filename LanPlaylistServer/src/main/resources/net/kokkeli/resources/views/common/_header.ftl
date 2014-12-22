@@ -34,6 +34,6 @@
 	<script type="text/javascript" src="/resource/js/nano/nano.js"></script>
 	<script type="text/javascript" src="/resource/js/moment/moment.min.js"></script>
 	<script type="text/javascript" src="/resource/js/notify/notify.min.js"></script>
-	
+	<script type="text/javascript" src="/resource/js/notify-helper.js"></script>
 	<title>${header}</title>
 </head>

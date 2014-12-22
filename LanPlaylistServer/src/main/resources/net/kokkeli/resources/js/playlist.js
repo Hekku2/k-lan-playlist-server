@@ -25,20 +25,6 @@ function getRefreshedData(){
 	$.get("/playlists/playlist/"+ playlistId).done(updateTableRows);
 }
 
-function showSuccess(event){
-	$.notify(event, { 
-		position:"top-center",
-		className: "success"
-	});
-}
-
-function showError(event){
-	$.notify(event.responseText, { 
-		position:"top-center",
-		className: "error"
-	});
-}
-
 function updateTableRows(data){
 	emptyRows();
 	$("#name").text(data.name);

@@ -6,22 +6,12 @@ $(document).ready(function(){
 	$('form').submit(function(event){
 		event.preventDefault();
 		$('input[type="submit"]').button('loading')
-		$.post("", $( "form" ).serialize()).fail(uploadfailed).done(uploadSuccess).always(resetButton);
+		$.post("", $( "form" ).serialize()).fail(showError).done(uploadSuccess).always(resetButton);
 	});
 });
 
-function uploadfailed(event){
-	$.notify(event.responseText, { 
-		position:"top-center",
-		className: "error"
-	});
-}
-
 function uploadSuccess(event){
-	$.notify(event, { 
-		position:"top-center",
-		className: "success"
-	});
+	showSuccess(event);
 	clearForm();
 }
 
