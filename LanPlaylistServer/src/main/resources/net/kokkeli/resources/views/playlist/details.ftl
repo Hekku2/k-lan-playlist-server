@@ -4,23 +4,6 @@
 
 <html>
 	<#include "/common/_header.ftl">
-	<script type="html" id="row-template">
-		<tr>
-			<td>
-				{artist}
-			</td>
-			<td>
-				{track}
-			</td>
-			<td>
-				{oploader}
-			</td>
-			<td class="col-md-1">
-				<a class="btn btn-default col-md-6" title="Edit" href="/tracks/{id}"><span class="glyphicon glyphicon-edit"></span></a>
-				<button title="Delete" class="btn btn-default col-md-6" data-track-id="{id}" data-method="delete"><span class="glyphicon glyphicon-remove"></span></a>
-			</td>
-		</tr>
-	</script>
 	
 	<body>
 		<div class="container">
