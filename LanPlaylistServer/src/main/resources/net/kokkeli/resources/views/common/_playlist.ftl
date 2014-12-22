@@ -8,12 +8,18 @@
 			{track}
 		</td>
 		<td>
-			{oploader}
+			{uploader}
 		</td>
-		<td class="col-md-1">
-			<a class="btn btn-default col-md-6" title="Edit" href="/tracks/{id}"><span class="glyphicon glyphicon-edit"></span></a>
-			<button title="Delete" class="btn btn-default col-md-6" data-track-id="{id}" data-method="delete"><span class="glyphicon glyphicon-remove"></span></a>
-		</td>
+		<#if getUserRole == 3>
+			<td class="col-md-1">
+				<a class="btn btn-default col-md-6" title="Edit" href="/tracks/{id}"><span class="glyphicon glyphicon-edit"></span></a>
+				<button title="Delete" class="btn btn-default col-md-6" 
+					data-track-id="{id}"
+					data-method="delete"
+					data-loading-text="Loading...">
+					<span class="glyphicon glyphicon-remove"></span></a>
+			</td>
+		</#if>
 	</tr>
 </script>
 
@@ -28,7 +34,9 @@
 					<th>Artist</th>
 					<th>Track</th>
 					<th>Uploader</th>
-					<th>Man.</th>
+					<#if getUserRole == 3>
+						<th>Man.</th>
+					</#if>
 				</tr>
 			</thead>
 			<tbody id="playlist-rows"></tbody>
