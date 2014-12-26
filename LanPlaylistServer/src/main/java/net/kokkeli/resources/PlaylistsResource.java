@@ -134,15 +134,12 @@ public class PlaylistsResource extends BaseResource {
      * @param playlistId
      *            Playlist id
      * @return Response
-     * @throws NotAuthenticatedException
-     *             Thrown if user is not authenticated
      */
     @GET
     @Produces("text/html; charset=utf-8")
     @Access(Role.ANYNOMOUS)
     @Path("/add/upload/{playlistId: [0-9]*}")
-    public Response addUpload(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId)
-            throws NotAuthenticatedException {
+    public Response addUpload(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId) {
         BaseModel model = buildBaseModel(req);
 
         ModelPlaylistItem item = new ModelPlaylistItem();
@@ -159,10 +156,8 @@ public class PlaylistsResource extends BaseResource {
     /**
      * Playlist vlc add get.
      * 
-     * @param req
-     *            Request
-     * @param playlistId
-     *            Playlist id
+     * @param req Request
+     * @param playlistId Playlist id
      * @return Response
      */
     @GET
@@ -221,8 +216,6 @@ public class PlaylistsResource extends BaseResource {
      *             Thrown if there is problem with service
      * @throws NotFoundInDatabaseException
      *             Thrown if there is no such playlist.
-     * @throws NotAuthenticatedException
-     *             Thrown if there is problem with session.
      */
     @POST
     @Produces("text/html; charset=utf-8")
@@ -232,8 +225,7 @@ public class PlaylistsResource extends BaseResource {
     public Response addUpload(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId,
             @FormDataParam("artist") String artist, @FormDataParam("track") String track,
             @FormDataParam("file") InputStream uploadedInputStream,
-            @FormDataParam("file") FormDataContentDisposition fileDetail) throws ServiceException, NotFoundInDatabaseException,
-            NotAuthenticatedException {
+            @FormDataParam("file") FormDataContentDisposition fileDetail) throws ServiceException, NotFoundInDatabaseException {
         BaseModel model = buildBaseModel(req);
         ModelPlaylistItem createModel = new ModelPlaylistItem();
         createModel.setPlaylistId(playlistId);
