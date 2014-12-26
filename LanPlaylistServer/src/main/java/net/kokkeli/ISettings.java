@@ -84,4 +84,10 @@ public interface ISettings {
     boolean getPlayerEnabled();
     
     boolean getRequireAuthentication();
+
+    /**
+     * Location of youtube-dl folder
+     * @return
+     */
+    String getYoutubeDlLocation();
 }

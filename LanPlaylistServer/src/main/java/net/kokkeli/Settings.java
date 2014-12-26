@@ -28,6 +28,7 @@ public class Settings implements ISettings {
     private String vlcLocation;
     private String serverUri;
     private String resourcesFolder;
+    private String youtubeDlFolder;
     private LogSeverity logSeverity = LogSeverity.TRACE;
     private int port;
     private boolean playerEnabled;
@@ -233,8 +234,16 @@ public class Settings implements ISettings {
             int parsed = Integer.parseInt(value);
             logSeverity = LogSeverity.getSeverity(parsed);
             break;
+        case "YoutubeDlLocation":
+            youtubeDlFolder = value;
+            break;
         default:
             throw new SettingsParseException(String.format("Not recognized setting name: \"%s\". Value was \"%s\"", key, value));
         }
+    }
+
+    @Override
+    public String getYoutubeDlLocation() {
+        return youtubeDlFolder;
     }
 }

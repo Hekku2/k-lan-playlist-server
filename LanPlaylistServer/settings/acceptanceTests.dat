@@ -11,3 +11,4 @@ ResourcesFolder=target/classes/net/kokkeli/resources/
 LogSeverity=2
 PlayerEnabled=false
 RequireAuthentication=true
+YoutubeDlLocation=F:\\youtube-dl

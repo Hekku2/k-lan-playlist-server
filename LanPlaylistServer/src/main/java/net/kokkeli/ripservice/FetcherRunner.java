@@ -53,9 +53,8 @@ public class FetcherRunner implements Runnable {
         try {
             // Fetch work item from queue
             FetchRequest request = fetchRequestDatabase.oldestUnhandledFetchRequestOrNull(fetcher.getHandledType());
-            if (request == null){
+            if (request == null)
                 return;
-            }
             
             // Mark it as being worked
             fetchRequestDatabase.updateRequest(request.getId(), FetchStatus.HANDLING);

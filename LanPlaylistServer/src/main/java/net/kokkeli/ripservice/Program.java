@@ -49,9 +49,8 @@ public class Program {
         IFetchRequestDatabase fetcherDatabase = new FetchRequestDatabase(storage);
         ILogger logger = new Logging("Ripper", settings, new LogDatabase(storage));
         
-       //TODO Check vlc existance, so user gets better errormessage...
-        
-        IFetcher ripper = new VlcRipper(settings, logger);
+        //TODO Show better error mesage if file is not found.
+        IFetcher ripper = new YoutubeDlRipper(settings, logger);
         ExecutorService executor = Executors.newFixedThreadPool(2);
         Runnable worker = new FetcherRunner(logger, ripper, fetcherDatabase);
         executor.execute(worker);

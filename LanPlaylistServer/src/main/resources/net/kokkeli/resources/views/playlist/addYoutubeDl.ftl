@@ -1,6 +1,6 @@
 <#assign header = "Add to playlist">
 <#assign tab = 2>
-<#assign selectedMethod = 1>
+<#assign selectedMethod = 2>
 <!DOCTYPE HTML>
 
 <html>
@@ -26,7 +26,7 @@
 						<div class="col-md-4">
 							<input type="text" class="form-control" name="url" value="">
 						</div>
-						<span class="help-block">Url can be any location that vlc can handle.</span>
+						<span class="help-block">Url can be any location that youtube DL can handle.</span>
 					</div>
 					<div class="controls">
 						<input type="submit" value="Send" class="btn btn-primary" data-loading-text="Loading...">

@@ -5,7 +5,6 @@ import java.util.Collection;
 import com.google.inject.Inject;
 import net.kokkeli.data.PlayList;
 import net.kokkeli.data.Track;
-import net.kokkeli.data.User;
 
 public class PlaylistDatabase extends Database implements IPlaylistDatabase {
     private final PlaylistsTable playlistTable;
@@ -40,8 +39,8 @@ public class PlaylistDatabase extends Database implements IPlaylistDatabase {
         // Fetch tracks from database
         for (Long trackId : tracks) {
             Track track = tracksTable.get(trackId);
-            User uploader = usersTable.get(track.getUploader().getId());
-            track.setUploader(uploader);
+            if (track.getUploader() != null)
+                track.setUploader(usersTable.get(track.getUploader().getId()));
             playlist.getItems().add(track);
         }
         
