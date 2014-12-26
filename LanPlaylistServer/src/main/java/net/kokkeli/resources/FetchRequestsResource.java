@@ -16,6 +16,7 @@ import com.google.inject.Inject;
 
 import net.kokkeli.ISettings;
 import net.kokkeli.ModelBuilder;
+import net.kokkeli.UploadType;
 import net.kokkeli.ValidationUtils;
 import net.kokkeli.data.FetchRequest;
 import net.kokkeli.data.FetchStatus;
@@ -223,7 +224,7 @@ public class FetchRequestsResource extends BaseResource{
     private static FetchRequest createNewFetchRequest(ModelFetchRequestCreate createModel, User uploader) {
         FetchRequest newRequest = new FetchRequest();
         newRequest.setDestinationFile(createModel.getDestination());
-        newRequest.setHandler(createModel.getHandler());
+        newRequest.setType(UploadType.getUploadType(createModel.getHandler()));
         newRequest.setLocation(createModel.getLocation());
         newRequest.setStatus(FetchStatus.WAITING);
         newRequest.setPlaylist(new PlayList(createModel.getSelectedPlaylistId()));
@@ -259,7 +260,7 @@ public class FetchRequestsResource extends BaseResource{
             ModelFetchRequest modelRequest = new ModelFetchRequest();
             
             modelRequest.setLocation(fetchRequest.getLocation());
-            modelRequest.setHandler(fetchRequest.getHandler());
+            modelRequest.setHandler(fetchRequest.getType().getText());
             modelRequest.setStatus(fetchRequest.getStatus());
             modelRequest.setDestination(fetchRequest.getDestinationFile());
             modelRequest.setTrack(fetchRequest.getTrack());

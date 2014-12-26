@@ -7,6 +7,8 @@ import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+
+import net.kokkeli.UploadType;
 import net.kokkeli.data.FetchRequest;
 import net.kokkeli.data.FetchStatus;
 import net.kokkeli.data.Track;
@@ -185,7 +187,7 @@ public class FetchRequestsTable {
         return String.format("INSERT INTO %s(Location, Handler, DestinationFile, LastUpdated, FetchStatus, Track) VALUES ('%s', '%s', '%s', '%s', %s, %s); ",
                 TABLENAME,
                 item.getLocation(),
-                item.getHandler(),
+                item.getType().getText(),
                 item.getDestinationFile(),
                 formatter.format(item.getLastUpdated()),
                 item.getStatus().getStatus(),
@@ -211,7 +213,7 @@ public class FetchRequestsTable {
         FetchRequest request = new FetchRequest();
         request.setId(rs.getLong(COLUMN_ID));
         request.setLocation(rs.getString(COLUMN_LOCATION));
-        request.setHandler(rs.getString(COLUMN_HANDLER));
+        request.setType(UploadType.getUploadType(rs.getString(COLUMN_HANDLER)));
         request.setDestinationFile(rs.getString(COLUMN_DESTINATIONFILE));
         request.setLastUpdated(formatter.parse(rs.getString(COLUMN_LASTUPDATED)));
         request.setStatus(getStatus(rs.getInt(COLUMN_STATUS)));

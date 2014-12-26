@@ -3,6 +3,7 @@ package net.kokkeli.ripservice;
 import java.io.File;
 
 import net.kokkeli.ISettings;
+import net.kokkeli.UploadType;
 import net.kokkeli.data.FetchRequest;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.LogSeverity;
@@ -11,7 +12,7 @@ public class VlcRipper implements IFetcher{
     private final ISettings settings;
     private final ILogger logger;
     
-    private final static String TYPE = "vlc";
+    private final static UploadType TYPE = UploadType.VLC;
     
     private final static String START_MINIMIZED = "--qt-start-minimized";
     
@@ -48,6 +49,6 @@ public class VlcRipper implements IFetcher{
 
     @Override
     public String getHandledType() {
-        return TYPE;
+        return TYPE.getText();
     }
 }

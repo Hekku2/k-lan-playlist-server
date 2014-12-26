@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
+import net.kokkeli.UploadType;
 import net.kokkeli.data.FetchRequest;
 import net.kokkeli.data.PlayList;
 import net.kokkeli.data.Track;
@@ -25,6 +26,7 @@ import static org.mockito.Mockito.*;
 
 public class TestFetchRequestsResource extends ResourceTestsBase<FetchRequestsResource> {
     private static final String FORM_LOCATION = "location";
+    private static final String FORM_HANDLER = "handler";
     
     private IFetchRequestService mockFetchRequestService;
     private IPlaylistService mockPlaylistService; 
@@ -54,7 +56,7 @@ public class TestFetchRequestsResource extends ResourceTestsBase<FetchRequestsRe
         ArrayList<FetchRequest> requests = new ArrayList<FetchRequest>();
         FetchRequest basicRequest = new FetchRequest();
         basicRequest.setDestinationFile("Test destination");
-        basicRequest.setHandler("test handler");
+        basicRequest.setType(UploadType.VLC);
         basicRequest.setLocation("Test location");
         requests.add(basicRequest);
         
@@ -96,6 +98,8 @@ public class TestFetchRequestsResource extends ResourceTestsBase<FetchRequestsRe
         
         when(map.containsKey(FORM_LOCATION)).thenReturn(true);
         when(map.getFirst(FORM_LOCATION)).thenReturn("example location");
+        when(map.containsKey(FORM_HANDLER)).thenReturn(true);
+        when(map.getFirst(FORM_HANDLER)).thenReturn(UploadType.VLC.getText());
         
         Response response = resource.createRequest(buildRequest(), map);
         assertSessionInfo("Fetch request created.");
@@ -159,7 +163,7 @@ public class TestFetchRequestsResource extends ResourceTestsBase<FetchRequestsRe
         for (int i = 0; i < 3; i++) {
             FetchRequest r = new FetchRequest();
             r.setDestinationFile("Destination " + i);
-            r.setHandler("Handler " + i);
+            r.setType(UploadType.YOUTUBEDL);
             r.setId(i);
             r.setLocation("Location " + i);
             r.setTrack(new Track());

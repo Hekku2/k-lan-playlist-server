@@ -24,6 +24,7 @@ import com.sun.jersey.multipart.FormDataParam;
 
 import net.kokkeli.ISettings;
 import net.kokkeli.ModelBuilder;
+import net.kokkeli.UploadType;
 import net.kokkeli.ValidationUtils;
 import net.kokkeli.data.FetchRequest;
 import net.kokkeli.data.FetchStatus;
@@ -126,73 +127,51 @@ public class PlaylistsResource extends BaseResource {
         }
     }
 
-    /**
-     * Playlist add upload get.
-     * 
-     * @param req
-     *            Request
-     * @param playlistId
-     *            Playlist id
-     * @return Response
-     */
     @GET
     @Produces("text/html; charset=utf-8")
     @Access(Role.ANYNOMOUS)
     @Path("/add/upload/{playlistId: [0-9]*}")
     public Response addUpload(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId) {
-        BaseModel model = buildBaseModel(req);
-
-        ModelPlaylistItem item = new ModelPlaylistItem();
-        item.setPlaylistId(playlistId);
-        model.setModel(item);
-
-        try {
-            return Response.ok(templates.process(PLAYLIST_TRACK_ADD_TEMPLATE, model)).build();
-        } catch (RenderException e) {
-            return handleRenderingError(model, e);
-        }
+        return request(req, playlistId, UploadType.UPLOAD);
     }
-
-    /**
-     * Playlist vlc add get.
-     * 
-     * @param req Request
-     * @param playlistId Playlist id
-     * @return Response
-     */
     @GET
     @Produces("text/html; charset=utf-8")
     @Access(Role.ANYNOMOUS)
     @Path("/add/vlc/{playlistId: [0-9]*}")
     public Response addVlc(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId) {
-        BaseModel model = buildBaseModel(req);
-
-        ModelPlaylistItem item = new ModelPlaylistItem();
-        item.setPlaylistId(playlistId);
-        model.setModel(item);
-
-        try {
-            return Response.ok(templates.process(PLAYLIST_TRACK_ADD_VLC_TEMPLATE, model)).build();
-        } catch (RenderException e) {
-            return handleRenderingError(model, e);
-        }
+        return request(req, playlistId, UploadType.VLC);
     }
-
     @GET
     @Produces("text/html; charset=utf-8")
     @Access(Role.ANYNOMOUS)
     @Path("/add/youtubeDl/{playlistId: [0-9]*}")
     public Response addYoutubeDl(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId) {
+        return request(req, playlistId, UploadType.YOUTUBEDL);
+    }
+    
+    private Response request(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId, UploadType type){
         BaseModel model = buildBaseModel(req);
 
         ModelPlaylistItem item = new ModelPlaylistItem();
         item.setPlaylistId(playlistId);
         model.setModel(item);
-
         try {
-            return Response.ok(templates.process(PLAYLIST_TRACK_ADD_YOUTUBEDL_TEMPLATE, model)).build();
+            return Response.ok(templates.process(getTemplateForHandler(type), model)).build();
         } catch (RenderException e) {
             return handleRenderingError(model, e);
+        }
+    }
+    
+    private static String getTemplateForHandler(UploadType type){
+        switch (type) {
+        case UPLOAD:
+            return PLAYLIST_TRACK_ADD_TEMPLATE;
+        case VLC:
+            return PLAYLIST_TRACK_ADD_VLC_TEMPLATE;
+        case YOUTUBEDL:
+            return PLAYLIST_TRACK_ADD_YOUTUBEDL_TEMPLATE;
+        default:
+            throw new IllegalArgumentException("Unknown handler " + type.getText());
         }
     }
     
@@ -218,7 +197,6 @@ public class PlaylistsResource extends BaseResource {
      *             Thrown if there is no such playlist.
      */
     @POST
-    @Produces("text/html; charset=utf-8")
     @Access(value = Role.ANYNOMOUS, errorHandling = AuthenticationErrorHandling.RETURN_CODE)
     @Path("/add/upload/{playlistId: [0-9]*}")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -294,7 +272,7 @@ public class PlaylistsResource extends BaseResource {
         if (validationError != null)
             return Response.status(Status.BAD_REQUEST).entity(validationError).build();
 
-        fetchRequestService.add(createFetchRequestFromModelPlaylistItem(item, model.getCurrentSession(), "vlc"));
+        fetchRequestService.add(createFetchRequestFromModelPlaylistItem(item, model.getCurrentSession(), UploadType.VLC));
         
         return Response.ok().entity("Upload successful.").build();
     }
@@ -313,11 +291,13 @@ public class PlaylistsResource extends BaseResource {
         if (validationError != null)
             return Response.status(Status.BAD_REQUEST).entity(validationError).build();
 
-        fetchRequestService.add(createFetchRequestFromModelPlaylistItem(item, model.getCurrentSession(), "youtube-dl"));
+        fetchRequestService.add(createFetchRequestFromModelPlaylistItem(item, model.getCurrentSession(), UploadType.YOUTUBEDL));
         
         return Response.ok().entity("Upload successful.").build();
     }
 
+    
+    
     @GET
     @Produces("text/html; charset=utf-8")
     @Access(Role.ANYNOMOUS)
@@ -506,7 +486,7 @@ public class PlaylistsResource extends BaseResource {
      * @param item model playlist item
      * @return Created fetch request
      */
-    private FetchRequest createFetchRequestFromModelPlaylistItem(ModelPlaylistItem item, Session uploader, String handler) {
+    private FetchRequest createFetchRequestFromModelPlaylistItem(ModelPlaylistItem item, Session uploader, UploadType type) {
         //TODO Proper generation for destination file and extension.
         String destination = settings.getTracksFolder() + "/" + item.getArtist() + " - " + item.getTrack() + ".ogg";
         
@@ -519,7 +499,7 @@ public class PlaylistsResource extends BaseResource {
         
         FetchRequest newRequest = new FetchRequest();
         newRequest.setDestinationFile(destination);
-        newRequest.setHandler(handler);
+        newRequest.setType(UploadType.getUploadType(type.getText()));
         newRequest.setLocation(item.getUrl());
         newRequest.setStatus(FetchStatus.WAITING);
         newRequest.setPlaylist(new PlayList(item.getPlaylistId()));

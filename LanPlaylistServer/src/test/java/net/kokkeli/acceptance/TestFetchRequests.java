@@ -1,5 +1,6 @@
 package net.kokkeli.acceptance;
 
+import net.kokkeli.UploadType;
 import net.kokkeli.acceptance.pages.PageCreateFetchRequest;
 import net.kokkeli.acceptance.pages.PageFetchRequests;
 import net.kokkeli.resources.models.ModelFetchRequest;
@@ -16,7 +17,7 @@ public class TestFetchRequests extends BaseAcceptanceTest{
          authenticate(ADMIN_USERNAME, DEFAULT_PASSWORD);
          
          ModelFetchRequestCreate newFetchRequest = new ModelFetchRequestCreate();
-         newFetchRequest.setHandler("mock handler");
+         newFetchRequest.setHandler(UploadType.VLC.getText());
          newFetchRequest.setLocation("location");
          newFetchRequest.setDestination("destination");
          newFetchRequest.setArtist("artist");

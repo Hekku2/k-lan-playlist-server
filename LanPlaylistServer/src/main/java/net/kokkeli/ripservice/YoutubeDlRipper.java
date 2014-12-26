@@ -3,6 +3,7 @@ package net.kokkeli.ripservice;
 import java.io.File;
 
 import net.kokkeli.ISettings;
+import net.kokkeli.UploadType;
 import net.kokkeli.data.FetchRequest;
 import net.kokkeli.data.ILogger;
 import net.kokkeli.data.LogSeverity;
@@ -11,7 +12,7 @@ public class YoutubeDlRipper implements IFetcher {
     private final ISettings settings;
     private final ILogger logger;
     
-    private final static String TYPE = "youtube-dl";
+    private final static UploadType TYPE = UploadType.YOUTUBEDL;
     
     public YoutubeDlRipper(ISettings setting, ILogger logger){
         this.settings = setting;
@@ -45,7 +46,7 @@ public class YoutubeDlRipper implements IFetcher {
 
     @Override
     public String getHandledType() {
-        return TYPE;
+        return TYPE.getText();
     }
 
 }

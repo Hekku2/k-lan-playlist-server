@@ -2,6 +2,8 @@ package net.kokkeli.data;
 
 import java.util.Date;
 
+import net.kokkeli.UploadType;
+
 /**
  * Fetch request holds status
  * @author Hekku2
@@ -9,7 +11,7 @@ import java.util.Date;
  */
 public class FetchRequest {
     private String location;
-    private String handler;
+    private UploadType type;
     private String destinationFile;
     private Date lastUpdated;
     private FetchStatus status;
@@ -37,16 +39,16 @@ public class FetchRequest {
      * Sets the handler
      * @param handler The handler
      */
-    public void setHandler(String handler){
-        this.handler = handler;
+    public void setType(UploadType type){
+        this.type = type;
     }
     
     /**
      * Gets the handler
      * @return Handler
      */
-    public String getHandler() {
-        return handler;
+    public UploadType getType() {
+        return type;
     }
 
     /**
