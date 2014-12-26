@@ -228,9 +228,8 @@ public class PlaylistsResource extends BaseResource {
             //TODO Check if this method can use model builder and refactor if possible.
             
             String validationError = getValidationError(createModel);
-            if (validationError != null){
+            if (validationError != null)
                 return Response.status(Status.BAD_REQUEST).entity(validationError).build();
-            }
             
             if (ValidationUtils.isEmpty(fileDetail.getFileName())) {
                 log("User tried to upload with no file.", LogSeverity.TRACE);
@@ -253,21 +252,24 @@ public class PlaylistsResource extends BaseResource {
             // TODO Check that disk has space
             // TODO Check that file is not too big.
             
-            PlayList playlist = playlistService.getPlaylist(playlistId);
-            Track item = new Track();
-            item.setArtist(createModel.getArtist());
-            item.setTrackName(createModel.getTrack());
-            item.setLocation(filename);
-            if (model.getCurrentSession() != null)
-                item.setUploader(model.getCurrentSession().getUser());
-
-            playlist.getItems().add(item);
+            PlayList playlist = playlistService.getPlaylist(createModel.getPlaylistId());
+            playlist.getItems().add(createTrack(model, createModel, filename));
             playlistService.update(playlist);
             return Response.ok().entity("Upload successful.").build();
         }  catch (IOException e) {
             log("There was a problem with IO:" + e.getMessage(), LogSeverity.ERROR);
             throw new ServiceException("There was a problem with file uploading.", e);
         }
+    }
+
+    private static Track createTrack(BaseModel model, ModelPlaylistItem createModel, String filename) {
+        Track item = new Track();
+        item.setArtist(createModel.getArtist());
+        item.setTrackName(createModel.getTrack());
+        item.setLocation(filename);
+        if (model.getCurrentSession() != null)
+            item.setUploader(model.getCurrentSession().getUser());
+        return item;
     }
     
     @POST
@@ -281,12 +283,10 @@ public class PlaylistsResource extends BaseResource {
         model.setModel(item);
         
         String validationError = getValidationError(item);
-        if (validationError != null){
+        if (validationError != null)
             return Response.status(Status.BAD_REQUEST).entity(validationError).build();
-        }
 
-        FetchRequest newRequest = createFetchRequestFromModelPlaylistItem(item, model.getCurrentSession());
-        fetchRequestService.add(newRequest);
+        fetchRequestService.add(createFetchRequestFromModelPlaylistItem(item, model.getCurrentSession()));
         
         return Response.ok().entity("Upload successful.").build();
     }

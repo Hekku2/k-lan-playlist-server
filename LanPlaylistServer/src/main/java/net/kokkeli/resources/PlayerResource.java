@@ -25,11 +25,15 @@ import net.kokkeli.data.services.ISessionService;
 import net.kokkeli.data.services.ITrackService;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.player.IPlayer;
+import net.kokkeli.resources.models.BaseModel;
 import net.kokkeli.server.ITemplateService;
+import net.kokkeli.server.RenderException;
 
 @Path("/player")
 public class PlayerResource extends BaseResource{
     private static final String FORM_ID = "id";
+    
+    private static final String STATUS_TEMPLATE = "player/status.ftl";
     
     private final ITrackService trackService;
     
@@ -38,6 +42,19 @@ public class PlayerResource extends BaseResource{
         super(logger, templateService, player, sessions, settings);
         
         this.trackService = trackService;
+    }
+    
+    @GET
+    @Produces("text/html; charset=utf-8")
+    @Access(Role.ANYNOMOUS)
+    @Path("/status")
+    public Response playingPage(@Context HttpServletRequest req){
+        BaseModel model = buildBaseModel(req);
+        try {
+            return Response.ok(templates.process(STATUS_TEMPLATE, model)).build();
+        } catch (RenderException e) {
+            return handleRenderingError(model, e);
+        }
     }
     
     @POST
