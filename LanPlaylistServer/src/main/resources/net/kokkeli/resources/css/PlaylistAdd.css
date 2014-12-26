@@ -1,8 +1,8 @@
-#validation-error{
-	border-style:solid;
+#validation-error {
+	border-style: solid;
 	border-radius: 6px;
 	padding: 4px;
-	background-color:#FFA3A3;
+	background-color: #FFA3A3;
 	margin-top: 5px;
 	margin-bottom: 5px;
 }

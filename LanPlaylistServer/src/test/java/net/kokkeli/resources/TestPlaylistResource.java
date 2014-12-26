@@ -113,7 +113,7 @@ public class TestPlaylistResource extends ResourceTestsBase<PlaylistsResource> {
 
     @Test
     public void testAddPostWithProperValueTriesToWriteToFile() throws ServiceException, NotFoundInDatabaseException,
-            NotAuthenticatedException, IOException {
+            IOException {
         final String filename = "filename";
 
         @SuppressWarnings("resource")
@@ -130,7 +130,7 @@ public class TestPlaylistResource extends ResourceTestsBase<PlaylistsResource> {
 
     @Test
     public void testAddPostReturnsErrorWhenFileExists() throws ServiceException, NotFoundInDatabaseException,
-            NotAuthenticatedException, RenderException {
+            RenderException {
         ModelAnswer answer = new ModelAnswer();
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(answer);
 
