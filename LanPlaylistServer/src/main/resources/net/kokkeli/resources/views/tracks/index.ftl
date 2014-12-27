@@ -14,21 +14,25 @@
 			<#include "/common/_info_error.ftl">
 			<#if getModel.getItems??>
 				<table class="table table-striped">
-					<tr>
-						<th>Artist</th>
-						<th>Track</th>
-						<th></th>
-					</tr>
-					<#list getModel.getItems as item>
-						<tr class="<#if item.getExists>success<#else>danger</#if>">
-							<td>${item.getArtist}</td>
-							<td>${item.getTrack}</td>
-							<td class="col-md-1">
-								<button class="btn btn-default col-md-6"><span class="glyphicon glyphicon-plus-sign" id="${item.getId}"></span></button>
-								<a title="Edit" class="btn btn-default col-md-6" href="/tracks/${item.getId}"><span class="glyphicon glyphicon-edit"></span></a>
-							</td>
+					<thead>
+						<tr>
+							<th>Artist</th>
+							<th>Track</th>
+							<th></th>
 						</tr>
-					</#list>
+					</thead>
+					<tbody>
+						<#list getModel.getItems as item>
+							<tr class="<#if item.getExists>success<#else>danger</#if>">
+								<td>${item.getArtist}</td>
+								<td>${item.getTrack}</td>
+								<td class="col-md-1">
+									<button class="btn btn-default col-md-6"><span class="glyphicon glyphicon-plus-sign" id="${item.getId}"></span></button>
+									<a title="Edit" class="btn btn-default col-md-6" href="/tracks/${item.getId}"><span class="glyphicon glyphicon-edit"></span></a>
+								</td>
+							</tr>
+						</#list>
+					</tbody>
 				</table>
 			<#else>
 				<p>No tracks available.</p>

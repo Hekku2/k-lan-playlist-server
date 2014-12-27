@@ -36,7 +36,8 @@ public class TrackDatabase extends Database implements ITrackDatabase{
         ArrayList<Track> tracks = tracksTable.get();
         try {
             for (Track track : tracks) {
-                track.setUploader(usersTable.get(track.getUploader().getId()));
+                if (track.getUploader() != null)
+                    track.setUploader(usersTable.get(track.getUploader().getId()));
             }
         } catch (NotFoundInDatabaseException e) {
             throw new DatabaseException("There was an uploader that did not match any user.", e);
