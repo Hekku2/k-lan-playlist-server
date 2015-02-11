@@ -83,7 +83,8 @@ public class PlaylistsResource extends BaseResource {
      */
     @Inject
     protected PlaylistsResource(ILogger logger, ITemplateService templateService, IPlayer player,
-            ISessionService sessions, ISettings settings, IPlaylistService playlistService, IFileSystem filesystem, IFetchRequestService fetchRequestService) {
+            ISessionService sessions, ISettings settings, IPlaylistService playlistService, IFileSystem filesystem,
+            IFetchRequestService fetchRequestService) {
         super(logger, templateService, player, sessions, settings);
 
         this.playlistService = playlistService;
@@ -134,6 +135,7 @@ public class PlaylistsResource extends BaseResource {
     public Response addUpload(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId) {
         return request(req, playlistId, UploadType.UPLOAD);
     }
+
     @GET
     @Produces("text/html; charset=utf-8")
     @Access(Role.ANYNOMOUS)
@@ -141,6 +143,7 @@ public class PlaylistsResource extends BaseResource {
     public Response addVlc(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId) {
         return request(req, playlistId, UploadType.VLC);
     }
+
     @GET
     @Produces("text/html; charset=utf-8")
     @Access(Role.ANYNOMOUS)
@@ -148,8 +151,8 @@ public class PlaylistsResource extends BaseResource {
     public Response addYoutubeDl(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId) {
         return request(req, playlistId, UploadType.YOUTUBEDL);
     }
-    
-    private Response request(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId, UploadType type){
+
+    private Response request(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId, UploadType type) {
         BaseModel model = buildBaseModel(req);
 
         ModelPlaylistItem item = new ModelPlaylistItem();
@@ -161,8 +164,8 @@ public class PlaylistsResource extends BaseResource {
             return handleRenderingError(model, e);
         }
     }
-    
-    private static String getTemplateForHandler(UploadType type){
+
+    private static String getTemplateForHandler(UploadType type) {
         switch (type) {
         case UPLOAD:
             return PLAYLIST_TRACK_ADD_TEMPLATE;
@@ -174,7 +177,7 @@ public class PlaylistsResource extends BaseResource {
             throw new IllegalArgumentException("Unknown handler " + type.getText());
         }
     }
-    
+
     /**
      * POST for add. Adds track to playlist.
      * 
@@ -203,7 +206,8 @@ public class PlaylistsResource extends BaseResource {
     public Response addUpload(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId,
             @FormDataParam("artist") String artist, @FormDataParam("track") String track,
             @FormDataParam("file") InputStream uploadedInputStream,
-            @FormDataParam("file") FormDataContentDisposition fileDetail) throws ServiceException, NotFoundInDatabaseException {
+            @FormDataParam("file") FormDataContentDisposition fileDetail) throws ServiceException,
+            NotFoundInDatabaseException {
         BaseModel model = buildBaseModel(req);
         ModelPlaylistItem createModel = new ModelPlaylistItem();
         createModel.setPlaylistId(playlistId);
@@ -211,12 +215,13 @@ public class PlaylistsResource extends BaseResource {
         createModel.setTrack(track);
         model.setModel(createModel);
         try {
-            //TODO Check if this method can use model builder and refactor if possible.
-            
+            // TODO Check if this method can use model builder and refactor if
+            // possible.
+
             String validationError = getValidationError(createModel);
             if (validationError != null)
                 return Response.status(Status.BAD_REQUEST).entity(validationError).build();
-            
+
             if (ValidationUtils.isEmpty(fileDetail.getFileName())) {
                 log("User tried to upload with no file.", LogSeverity.TRACE);
                 return Response.status(Status.BAD_REQUEST).entity("Select a file to upload.").build();
@@ -227,8 +232,10 @@ public class PlaylistsResource extends BaseResource {
             String filename = settings.getTracksFolder() + "/" + converted;
 
             if (filesystem.fileExists(filename)) {
-                log("User tried to upload file with same name with file already in system. File: " + filename, LogSeverity.TRACE);
-                return Response.status(Status.BAD_REQUEST).entity("Similar file already exists. Remove existing file, or upload different.").build();
+                log("User tried to upload file with same name with file already in system. File: " + filename,
+                        LogSeverity.TRACE);
+                return Response.status(Status.BAD_REQUEST)
+                        .entity("Similar file already exists. Remove existing file, or upload different.").build();
             }
 
             filesystem.writeToFile(uploadedInputStream, filename);
@@ -237,12 +244,12 @@ public class PlaylistsResource extends BaseResource {
             // TODO Validate that file is audio
             // TODO Check that disk has space
             // TODO Check that file is not too big.
-            
+
             PlayList playlist = playlistService.getPlaylist(createModel.getPlaylistId());
             playlist.getItems().add(createTrack(model, createModel, filename));
             playlistService.update(playlist);
             return Response.ok().entity("Upload successful.").build();
-        }  catch (IOException e) {
+        } catch (IOException e) {
             log("There was a problem with IO:" + e.getMessage(), LogSeverity.ERROR);
             throw new ServiceException("There was a problem with file uploading.", e);
         }
@@ -257,47 +264,49 @@ public class PlaylistsResource extends BaseResource {
             item.setUploader(model.getCurrentSession().getUser());
         return item;
     }
-    
+
     @POST
     @Produces("text/html; charset=utf-8")
     @Access(value = Role.ANYNOMOUS, errorHandling = AuthenticationErrorHandling.RETURN_CODE)
     @Path("/add/vlc/{playlistid: [0-9]*}")
-    public Response addVlc(@Context HttpServletRequest req,  MultivaluedMap<String, String> formParams) throws ServiceException {
+    public Response addVlc(@Context HttpServletRequest req, MultivaluedMap<String, String> formParams)
+            throws ServiceException {
         BaseModel model = buildBaseModel(req);
 
         ModelPlaylistItem item = modelBuilder.createModelFrom(formParams);
         model.setModel(item);
-        
+
         String validationError = getValidationError(item);
         if (validationError != null)
             return Response.status(Status.BAD_REQUEST).entity(validationError).build();
 
-        fetchRequestService.add(createFetchRequestFromModelPlaylistItem(item, model.getCurrentSession(), UploadType.VLC));
-        
+        fetchRequestService
+                .add(createFetchRequestFromModelPlaylistItem(item, model.getCurrentSession(), UploadType.VLC));
+
         return Response.ok().entity("Upload successful.").build();
     }
-    
+
     @POST
     @Produces("text/html; charset=utf-8")
     @Access(value = Role.ANYNOMOUS, errorHandling = AuthenticationErrorHandling.RETURN_CODE)
     @Path("/add/youtubeDl/{playlistid: [0-9]*}")
-    public Response addYoutubeDl(@Context HttpServletRequest req,  MultivaluedMap<String, String> formParams) throws ServiceException {
+    public Response addYoutubeDl(@Context HttpServletRequest req, MultivaluedMap<String, String> formParams)
+            throws ServiceException {
         BaseModel model = buildBaseModel(req);
 
         ModelPlaylistItem item = modelBuilder.createModelFrom(formParams);
         model.setModel(item);
-        
+
         String validationError = getValidationError(item);
         if (validationError != null)
             return Response.status(Status.BAD_REQUEST).entity(validationError).build();
 
-        fetchRequestService.add(createFetchRequestFromModelPlaylistItem(item, model.getCurrentSession(), UploadType.YOUTUBEDL));
-        
+        fetchRequestService.add(createFetchRequestFromModelPlaylistItem(item, model.getCurrentSession(),
+                UploadType.YOUTUBEDL));
+
         return Response.ok().entity("Upload successful.").build();
     }
 
-    
-    
     @GET
     @Produces("text/html; charset=utf-8")
     @Access(Role.ANYNOMOUS)
@@ -316,7 +325,8 @@ public class PlaylistsResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Access(value = Role.ANYNOMOUS, errorHandling = AuthenticationErrorHandling.RETURN_CODE)
     @Path("/playlist/{playlistId: [0-9]*}")
-    public ModelPlaylist getPlaylistData(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId) throws WebApplicationException{
+    public ModelPlaylist getPlaylistData(@Context HttpServletRequest req, @PathParam("playlistId") long playlistId)
+            throws WebApplicationException {
         try {
             return createPlaylistDetailsModel(playlistId);
         } catch (ServiceException e) {
@@ -325,7 +335,7 @@ public class PlaylistsResource extends BaseResource {
             throw new WebApplicationException(Status.NOT_FOUND);
         }
     }
-    
+
     @GET
     @Produces("text/html")
     @Access(Role.ADMIN)
@@ -344,15 +354,16 @@ public class PlaylistsResource extends BaseResource {
     @Produces("text/html; charset=utf-8")
     @Access(Role.ADMIN)
     @Path("/create")
-    public Response create(@Context HttpServletRequest req, MultivaluedMap<String, String> formParams) throws BadRequestException {
+    public Response create(@Context HttpServletRequest req, MultivaluedMap<String, String> formParams)
+            throws BadRequestException {
         BaseModel baseModel = buildBaseModel(req);
 
         try {
             ModelPlaylist item = createPlaylist(formParams);
             baseModel.setModel(item);
-            
+
             String validationError = getValidationError(item);
-            if (validationError != null){
+            if (validationError != null) {
                 baseModel.setError(validationError);
                 return Response.ok(templates.process(PLAYLIST_CREATE_TEMPLATE, baseModel)).build();
             }
@@ -385,7 +396,10 @@ public class PlaylistsResource extends BaseResource {
                     list.getItems().remove(track);
                     playlistService.update(list);
                     log(String.format("Removed track #%s from playlist #%s.", trackId, playlistId), LogSeverity.TRACE);
-                    return Response.ok().entity(String.format("Removed track %s - %s from playlist.", track.getArtist(), track.getTrackName())).build();
+                    return Response
+                            .ok()
+                            .entity(String.format("Removed track %s - %s from playlist.", track.getArtist(),
+                                    track.getTrackName())).build();
                 }
             }
 
@@ -411,7 +425,8 @@ public class PlaylistsResource extends BaseResource {
      * @throws NotFoundInDatabaseException
      *             Thrown if item is not found in database
      */
-    private ModelPlaylist createPlaylistDetailsModel(long playlistId) throws ServiceException, NotFoundInDatabaseException {
+    private ModelPlaylist createPlaylistDetailsModel(long playlistId) throws ServiceException,
+            NotFoundInDatabaseException {
         PlayList playlist = playlistService.getPlaylist(playlistId);
         ModelPlaylist modelPlayList = new ModelPlaylist(playlist.getId());
         modelPlayList.setName(playlist.getName());
@@ -420,7 +435,7 @@ public class PlaylistsResource extends BaseResource {
             ModelPlaylistItem model = new ModelPlaylistItem();
             model.setArtist(playListItem.getArtist());
             model.setTrack(playListItem.getTrackName());
-            if(playListItem.getUploader() != null)
+            if (playListItem.getUploader() != null)
                 model.setUploader(playListItem.getUploader().getUserName());
             model.setId(playListItem.getId());
 
@@ -451,13 +466,15 @@ public class PlaylistsResource extends BaseResource {
 
         return playlist;
     }
-    
+
     /**
-     * Returns error message if model doesn't contain valid data, otherwise null is returned.
+     * Returns error message if model doesn't contain valid data, otherwise null
+     * is returned.
+     * 
      * @param model
      * @return Validation error, or null if model is valid.
      */
-    private static String getValidationError(ModelPlaylistItem model){
+    private static String getValidationError(ModelPlaylistItem model) {
         if (ValidationUtils.isEmpty(model.getTrack()) || ValidationUtils.isEmpty(model.getArtist())) {
             return "Track must have name and artist.";
         }
@@ -467,7 +484,7 @@ public class PlaylistsResource extends BaseResource {
         }
         return null;
     }
-    
+
     private String getValidationError(ModelPlaylist item) throws ServiceException {
         if (ValidationUtils.isEmpty(item.getName())) {
             return "Playlist did not have a name.";
@@ -476,27 +493,31 @@ public class PlaylistsResource extends BaseResource {
         if (playlistService.nameExists(item.getName())) {
             return String.format("Playlist with name %s already exits.", item.getName());
         }
-        
+
         return null;
     }
-    
+
     /**
      * Creates a new fetch request from model playlist item
-     * @param uploader Uploading user
-     * @param item model playlist item
+     * 
+     * @param uploader
+     *            Uploading user
+     * @param item
+     *            model playlist item
      * @return Created fetch request
      */
-    private FetchRequest createFetchRequestFromModelPlaylistItem(ModelPlaylistItem item, Session uploader, UploadType type) {
-        //TODO Proper generation for destination file and extension.
-        String destination = settings.getTracksFolder() + "/" + item.getArtist() + " - " + item.getTrack() + ".ogg";
-        
+    private FetchRequest createFetchRequestFromModelPlaylistItem(ModelPlaylistItem item, Session uploader,
+            UploadType type) {
+        // TODO Proper generation for destination file and extension.
+        String destination = settings.getTracksFolder() + "/" + item.getArtist() + " - " + item.getTrack() + ".mp3";
+
         Track newTrack = new Track();
         newTrack.setArtist(item.getArtist());
         newTrack.setTrackName(item.getTrack());
         if (uploader != null)
             newTrack.setUploader(uploader.getUser());
         newTrack.setLocation(destination);
-        
+
         FetchRequest newRequest = new FetchRequest();
         newRequest.setDestinationFile(destination);
         newRequest.setType(UploadType.getUploadType(type.getText()));
