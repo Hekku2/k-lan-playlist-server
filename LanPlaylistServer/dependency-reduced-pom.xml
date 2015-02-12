@@ -33,7 +33,7 @@
                     <artifactId>phantomjs-maven-plugin</artifactId>
                     <versionRange>[0.4,)</versionRange>
                     <goals>
-                      <goal>install</goal>
+                      <goal>test</goal>
                     </goals>
                   </pluginExecutionFilter>
                   <action>

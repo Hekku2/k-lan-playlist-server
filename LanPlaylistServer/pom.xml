@@ -97,6 +97,11 @@
   		<version>1.2.0</version>
   		<scope>test</scope>
   	</dependency>
+  	<dependency>
+  		<groupId>org.jgroups</groupId>
+  		<artifactId>jgroups</artifactId>
+  		<version>3.6.1.Final</version>
+  	</dependency>
   </dependencies>
   <build>
     <plugins>
@@ -219,7 +224,7 @@
                                     <artifactId>phantomjs-maven-plugin</artifactId>
                                     <versionRange>[0.4,)</versionRange>
                                     <goals>
-                                        <goal>install</goal>
+                                        <goal>test</goal>
                                     </goals>
                                 </pluginExecutionFilter>
                                 <action>
