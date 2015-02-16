@@ -1,54 +1,83 @@
 package net.kokkeli.player;
 
+import java.io.IOException;
+import java.nio.file.Paths;
+
+import com.almworks.sqlite4java.SQLite;
+
+import net.kokkeli.ISettings;
+import net.kokkeli.Settings;
+import net.kokkeli.SettingsLoadException;
+import net.kokkeli.SettingsParseException;
+import net.kokkeli.data.ILogger;
+import net.kokkeli.data.LogSeverity;
+import net.kokkeli.data.Logging;
+import net.kokkeli.data.db.DatabaseException;
+import net.kokkeli.data.db.IConnectionStorage;
+import net.kokkeli.data.db.IPlaylistDatabase;
+import net.kokkeli.data.db.LogDatabase;
+import net.kokkeli.data.db.PlaylistDatabase;
+import net.kokkeli.data.db.SqliteConnectionStorage;
+import net.kokkeli.data.services.IPlaylistService;
+import net.kokkeli.data.services.PlaylistService;
+
 public class PlayerServiceRunner {
-    private static final String START_COMMAND = "start";
+    private static final long DEFAULT_SLEEP = 100;
+    private static boolean running = true;
     
-    private static PlayerServiceRunner service = new PlayerServiceRunner();
-    private boolean stopped = false;
+    private static PlayerService service;
+    private static VlcPlayer player;
     
-    public static void main(String[] args) {
-        String cmd = START_COMMAND;
-        if(args.length > 0) {
-           cmd = args[0];
+    public static void main(String[] args) throws Exception {
+        String settingsFile = "settings/default.dat";
+
+        if (args.length > 0) {
+            settingsFile = args[0];
         }
-      
-        if("start".equals(cmd)) {
-            service.start();
-        }
-        else {
-            service.stop();
+
+        ISettings settings = loadSettings(settingsFile);
+        SqliteConnectionStorage storage = createAndInitializeConnectionStorage(settings);
+        ILogger logger = new Logging("Player", settings, new LogDatabase(storage));
+        player = createPlayer(settings, logger, storage);
+        
+        service = new PlayerService(settings, storage, logger, player);
+        
+        logger.log("Starting service", LogSeverity.INFO);
+        service.start();
+        while(running){
+            Thread.sleep(DEFAULT_SLEEP);
         }
     }
 
-    /**
-     * Start this service instance
-     */
-    public void start() {
-       stopped = false;
-       System.out.println("My Service Started " + new java.util.Date());
-         
-       while(!stopped) {
-          System.out.println("My Service Executing " + new java.util.Date());
-          synchronized(this) {
-             try {
-                this.wait(60000);  // wait 1 minute
-             }
-             catch(InterruptedException ie){
-                 System.out.println("Interrupted.");
-             }
-          }
-       }
-         
-       System.out.println("My Service Finished " + new java.util.Date());
+    private static VlcPlayer createPlayer(ISettings settings, ILogger logger, IConnectionStorage storage) throws DatabaseException{
+        IPlaylistDatabase database = new PlaylistDatabase(storage);
+        IPlaylistService playlistService = new PlaylistService(logger, database);
+        return new VlcPlayer(settings, logger, playlistService);
     }
-     
+    
+    private static ISettings loadSettings(String settingsFile) throws SettingsLoadException{
+        ISettings settings = new Settings();
+        try {
+            settings.loadSettings(settingsFile);
+        } catch (IOException | IllegalArgumentException | SettingsParseException e) {
+            String path = Paths.get("").toAbsolutePath().toString();
+            throw new SettingsLoadException("Problems with loading the settings. Current path: " + path, e);
+        }
+        return settings;
+    }
+    
+    private static SqliteConnectionStorage createAndInitializeConnectionStorage(ISettings settings){
+        SQLite.setLibraryPath(settings.getLibLocation());
+        return new SqliteConnectionStorage("jdbc:sqlite:" + settings.getDatabaseLocation());
+    }
+    
     /**
      * Stop this service instance
      */
-    public void stop() {
-       stopped = true;
-       synchronized(this) {
-          this.notify();
-       }
+    public static void stop(String[] args) {
+        //TODO Stopping takes a long time.
+        running = false;
+        player.stop();
+        service.stop();
     }
 }

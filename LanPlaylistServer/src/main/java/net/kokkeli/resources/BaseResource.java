@@ -16,7 +16,6 @@ import net.kokkeli.resources.authentication.AuthenticationCookieNotFound;
 import net.kokkeli.resources.authentication.AuthenticationUtils;
 import net.kokkeli.resources.models.BaseModel;
 import net.kokkeli.server.ITemplateService;
-import net.kokkeli.server.NotAuthenticatedException;
 import net.kokkeli.server.RenderException;
 
 /**
@@ -54,20 +53,24 @@ public abstract class BaseResource {
     
     
     /**
-     * Build a base model from request. Exception is only thrown when user can't be matched to authentication.
-     * This should never happen, because authentication checking should be used before this.
+     * Build a base model from request. No exception should be thrown from this method.
      * @param req Request
      * @return Base model
-     * @throws NotAuthenticatedException Thrown is authentication is invalid for some reason
      */
     protected final BaseModel buildBaseModel(HttpServletRequest req) {
         BaseModel model = new BaseModel();
-        model.setNowPlaying(player.getTitle());
-        
+       
         if (!loadDataFromSession(req, model))
             loadAnonymousData(model);
         
-        model.setAnythingPlaying(player.readyForPlay());
+        try {
+            model.setNowPlaying(player.getTitle());
+            model.setAnythingPlaying(player.readyForPlay());
+        } catch (ServiceException e) {
+            model.setAnythingPlaying(false);
+            model.setNowPlaying("");
+        }
+        
         return model;
     }
     
@@ -100,7 +103,12 @@ public abstract class BaseResource {
      */
     protected final BaseModel buildBaseModel() {
         BaseModel model = new BaseModel();
-        model.setNowPlaying(player.getTitle());
+        try {
+            model.setNowPlaying(player.getTitle());
+        } catch (ServiceException e) {
+            model.setNowPlaying("");
+        }
+        
         model.setUsername("");
         model.setAuthenticationRequired(settings.getRequireAuthentication());
         return model;

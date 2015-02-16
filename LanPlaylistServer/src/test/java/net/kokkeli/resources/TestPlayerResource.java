@@ -89,7 +89,7 @@ public class TestPlayerResource extends ResourceTestsBase<PlayerResource> {
     }
     
     @Test
-    public void testSelectPlaylistReturnsNotFoundWhenPlaylistDoesntExist() throws NotFoundInDatabaseException, ServiceException, BadRequestException{
+    public void testSelectPlaylistReturnsNotFoundWhenPlaylistDoesntExist() throws BadRequestException, NotFoundInDatabaseException, ServiceException{
         long nonExistingId = 23;
         Mockito.doThrow(new NotFoundInDatabaseException("Not found")).when(getPlayer()).selectPlaylist(anyLong());
         
@@ -98,7 +98,7 @@ public class TestPlayerResource extends ResourceTestsBase<PlayerResource> {
     }
     
     @Test
-    public void testSelectPlaylistReturnsInternalErrorWhenSelectExplodes() throws NotFoundInDatabaseException, ServiceException, BadRequestException{
+    public void testSelectPlaylistReturnsInternalErrorWhenSelectExplodes() throws ServiceException, BadRequestException, NotFoundInDatabaseException{
         long anyId = 23;
         Mockito.doThrow(new ServiceException("Boom!")).when(getPlayer()).selectPlaylist(anyLong());
         

@@ -98,9 +98,9 @@
   		<scope>test</scope>
   	</dependency>
   	<dependency>
-  		<groupId>org.jgroups</groupId>
-  		<artifactId>jgroups</artifactId>
-  		<version>3.6.1.Final</version>
+  		<groupId>com.sun.jersey</groupId>
+  		<artifactId>jersey-client</artifactId>
+  		<version>1.18.1</version>
   	</dependency>
   </dependencies>
   <build>
