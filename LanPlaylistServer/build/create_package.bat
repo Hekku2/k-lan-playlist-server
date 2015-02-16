@@ -17,6 +17,7 @@ xcopy ..\lib lib
 ECHO Copying tools
 mkdir tools
 xcopy ..\tools tools
+copy tools\prunsrv.exe prunsrv.exe
 
 ECHO Copying db
 mkdir db
