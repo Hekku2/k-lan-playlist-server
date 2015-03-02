@@ -31,6 +31,7 @@ public class Settings implements ISettings {
     private String youtubeDlFolder;
     private LogSeverity logSeverity = LogSeverity.TRACE;
     private int port;
+    private int playerServicePort;
     private boolean playerEnabled;
     private boolean requireAuthentication;
     
@@ -75,7 +76,6 @@ public class Settings implements ISettings {
             if (br != null)
                 br.close();
         }
-
     }
     
     /**
@@ -177,7 +177,6 @@ public class Settings implements ISettings {
     public LogSeverity getLogSeverity() {
         return logSeverity;
     }
-    
 
     @Override
     public boolean getPlayerEnabled() {
@@ -189,6 +188,15 @@ public class Settings implements ISettings {
         return requireAuthentication;
     }
     
+    @Override
+    public String getYoutubeDlLocation() {
+        return youtubeDlFolder;
+    }
+
+    @Override
+    public int getPlayerServicePort() {
+        return playerServicePort;
+    }
     /**
      * Loads settings
      * @param key Key
@@ -237,13 +245,11 @@ public class Settings implements ISettings {
         case "YoutubeDlLocation":
             youtubeDlFolder = value;
             break;
+        case "PlayerServicePort":
+            playerServicePort = Integer.parseInt(value);
+            break;
         default:
             throw new SettingsParseException(String.format("Not recognized setting name: \"%s\". Value was \"%s\"", key, value));
         }
-    }
-
-    @Override
-    public String getYoutubeDlLocation() {
-        return youtubeDlFolder;
     }
 }

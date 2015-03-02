@@ -14,6 +14,11 @@ ECHO Copying libraries
 mkdir lib
 xcopy ..\lib lib
 
+ECHO Copying tools
+mkdir tools
+xcopy ..\tools tools
+copy tools\prunsrv.exe prunsrv.exe
+
 ECHO Copying db
 mkdir db
 xcopy ..\db\basic_structure.sql db

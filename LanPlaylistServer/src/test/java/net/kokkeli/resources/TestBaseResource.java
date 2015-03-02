@@ -53,7 +53,7 @@ public class TestBaseResource extends ResourceTestsBase<BaseResource>{
     }
     
     @Test
-    public void testBaseModelWithoutArguments(){
+    public void testBaseModelWithoutArguments() throws ServiceException{
         String title = "Title";
         
         when(getPlayer().getTitle()).thenReturn(title);

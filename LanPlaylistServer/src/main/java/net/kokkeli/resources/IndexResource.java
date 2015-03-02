@@ -83,12 +83,12 @@ public class IndexResource extends BaseResource {
                     }
                     base.setModel(modelPlayList);
                 }
-            } catch (NotPlaylistPlayingException e) {
-                // Suppress. If no playlist is playing, index page is still shown.
             } catch (NotFoundInDatabaseException e) {
                 base.setError("For some reason, currently playing playlist was not found.");
             } catch (ServiceException e) {
                 base.setError("For some reason, currently playing playlist can't be shown.");
+            } catch (NotPlaylistPlayingException e) {
+                base.setError("For some reason, there is no playlist playing.");
             }
 
             return Response.ok(templates.process(INDEX_TEMPLATE, base)).build();

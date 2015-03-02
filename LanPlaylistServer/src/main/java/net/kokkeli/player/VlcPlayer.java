@@ -99,6 +99,10 @@ public class VlcPlayer implements IPlayer {
         return playlistPlaying() || (trackQueue.peek() != null);
     }
     
+    public void stop() {
+        player.stop();
+    }
+    
     /**
      * Extended AudioMediaPlayerComponent to match needs of this system.
      * @author Hekku2
@@ -139,7 +143,7 @@ public class VlcPlayer implements IPlayer {
                 player.getMediaPlayer().playMedia(chosen.getLocation());
                 return;
             } catch (NotFoundInDatabaseException e) {
-                logger.log("For some reason, playlist is playing but there is no playlist in database matching given id " + currentPlaylistId,LogSeverity.ERROR);
+                logger.log("For some reason, playlist is playing but there is no playlist in database matching given id " + currentPlaylistId, LogSeverity.ERROR);
                 //Suppress, nothing can be done.
                 return;
             }
@@ -150,6 +154,10 @@ public class VlcPlayer implements IPlayer {
          */
         public void pause(){
             player.getMediaPlayer().pause();
+        }
+        
+        public void stop(){
+            player.getMediaPlayer().stop();
         }
         
         @Override
@@ -191,7 +199,7 @@ public class VlcPlayer implements IPlayer {
             try {
                 play();
             } catch (ServiceException e) {
-                logger.log("Unable to choose item for playing.", LogSeverity.ERROR);
+                logger.log("Unable to choose item for playing. " + e.getMessage(), LogSeverity.ERROR);
                 //TODO implement somekind of callback so error is shown to user.
             }
         }

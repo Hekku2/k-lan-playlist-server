@@ -93,16 +93,21 @@ public class PlayerResource extends BaseResource{
     public Response selectPlaylist(@Context HttpServletRequest req, MultivaluedMap<String, String> formParams) throws BadRequestException{
         try {
             long id = Long.parseLong(formParams.getFirst(FORM_ID));
+            
+            //TODO check playlist is in database
+            if (id < 0)
+                throw new NotFoundInDatabaseException("Invalid id");
+            
             player.selectPlaylist(id);
             
             log(String.format("Playlist #%s selected.", id),LogSeverity.TRACE);
             return Response.ok().build();
         } catch (NumberFormatException e) {
             throw new BadRequestException("Id was not in correct format.", e);
-        } catch (ServiceException e) {
-            return Response.status(Status.INTERNAL_SERVER_ERROR).build();
         } catch (NotFoundInDatabaseException e) {
             return Response.status(Status.NOT_FOUND).build();
+        } catch (ServiceException e) {
+            return Response.status(Status.INTERNAL_SERVER_ERROR).build();
         }
     }
     
@@ -129,9 +134,13 @@ public class PlayerResource extends BaseResource{
     @Access(value = Role.ADMIN, errorHandling = AuthenticationErrorHandling.RETURN_CODE)
     @Path("/pause")
     public Response pause(@Context HttpServletRequest req){
-        player.pause();
-        log("Playing paused.", LogSeverity.TRACE);
-        return Response.ok().build();
+        try {
+            player.pause();
+            log("Playing paused.", LogSeverity.TRACE);
+            return Response.ok().build();
+        } catch (ServiceException e) {
+            return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
     
     @GET
@@ -139,6 +148,10 @@ public class PlayerResource extends BaseResource{
     @Access(value = Role.ANYNOMOUS, errorHandling = AuthenticationErrorHandling.RETURN_CODE)
     @Path("/nowPlaying")
     public Response getPlaying(@Context HttpServletRequest req){
-        return Response.ok().entity(player.getTitle()).build();
+        try {
+            return Response.ok().entity(player.getTitle()).build();
+        } catch (ServiceException e) {
+            return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }

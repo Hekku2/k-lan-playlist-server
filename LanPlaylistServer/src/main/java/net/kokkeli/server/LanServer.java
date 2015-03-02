@@ -95,6 +95,7 @@ public class LanServer {
      */
     public void stop() throws Exception {
         logger.log("Shutting down server.", LogSeverity.TRACE);
+        
         if (server != null){
             server.stop();
         }

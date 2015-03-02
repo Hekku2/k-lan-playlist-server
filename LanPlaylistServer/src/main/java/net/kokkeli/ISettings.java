@@ -85,6 +85,8 @@ public interface ISettings {
     
     boolean getRequireAuthentication();
 
+    int getPlayerServicePort();
+    
     /**
      * Location of youtube-dl folder
      * @return

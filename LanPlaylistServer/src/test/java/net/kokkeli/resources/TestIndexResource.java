@@ -38,7 +38,7 @@ public class TestIndexResource extends ResourceTestsBase<IndexResource>{
     }
     
     @Test
-    public void testIndexReturnsCorrectModel() throws NotAuthenticatedException, ServiceException, RenderException, NotPlaylistPlayingException, NotFoundInDatabaseException {
+    public void testIndexReturnsCorrectModel() throws NotAuthenticatedException, ServiceException, RenderException, NotFoundInDatabaseException, NotPlaylistPlayingException {
         long currentlyPlayingId = 434;
         
         PlayList playlist = new PlayList(currentlyPlayingId);
@@ -75,7 +75,7 @@ public class TestIndexResource extends ResourceTestsBase<IndexResource>{
     }
     
     @Test
-    public void testIndexIsStillRenderedWhenThereIsNoPlaylistPlaying() throws NotPlaylistPlayingException, ServiceException, RenderException, NotAuthenticatedException{
+    public void testIndexIsStillRenderedWhenThereIsNoPlaylistPlaying() throws ServiceException, RenderException, NotAuthenticatedException, NotPlaylistPlayingException{
         final String processedTemplate = "Jeeah";
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenReturn(processedTemplate);
         when(getPlayer().getCurrentPlaylistId()).thenThrow(new NotPlaylistPlayingException("No playlist playing."));
@@ -88,7 +88,7 @@ public class TestIndexResource extends ResourceTestsBase<IndexResource>{
     }
     
     @Test
-    public void testIndexShowsErrorIfPlayingPlaylistIsNotFound() throws NotPlaylistPlayingException, RenderException, ServiceException, NotFoundInDatabaseException, NotAuthenticatedException{
+    public void testIndexShowsErrorIfPlayingPlaylistIsNotFound() throws RenderException, ServiceException, NotFoundInDatabaseException, NotAuthenticatedException, NotPlaylistPlayingException{
         long currentlyPlayingNotFoundPlaylistId = 434;
         ModelAnswer model = new ModelAnswer();
         when(getTemplateService().process(any(String.class), any(BaseModel.class))).thenAnswer(model);

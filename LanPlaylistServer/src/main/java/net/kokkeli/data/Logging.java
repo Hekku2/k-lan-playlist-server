@@ -41,7 +41,6 @@ public class Logging implements ILogger {
             return;
         
         //TODO Make async, so logging doesnt slow down usage so much.
-        //TODO Log severity check
         LogRow row = new LogRow();
         row.setMessage(message);
         row.setSeverity(severity);
@@ -54,7 +53,5 @@ public class Logging implements ILogger {
             System.out.println("Logging failed: ");
             e.printStackTrace();
         }
-        
-        
     }
 }

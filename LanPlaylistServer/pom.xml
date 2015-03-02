@@ -97,6 +97,11 @@
   		<version>1.2.0</version>
   		<scope>test</scope>
   	</dependency>
+  	<dependency>
+  		<groupId>com.sun.jersey</groupId>
+  		<artifactId>jersey-client</artifactId>
+  		<version>1.18.1</version>
+  	</dependency>
   </dependencies>
   <build>
     <plugins>
@@ -219,7 +224,7 @@
                                     <artifactId>phantomjs-maven-plugin</artifactId>
                                     <versionRange>[0.4,)</versionRange>
                                     <goals>
-                                        <goal>install</goal>
+                                        <goal>test</goal>
                                     </goals>
                                 </pluginExecutionFilter>
                                 <action>
