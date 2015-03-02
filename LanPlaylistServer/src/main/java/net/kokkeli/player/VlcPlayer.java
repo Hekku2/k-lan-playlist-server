@@ -199,7 +199,7 @@ public class VlcPlayer implements IPlayer {
             try {
                 play();
             } catch (ServiceException e) {
-                logger.log("Unable to choose item for playing.", LogSeverity.ERROR);
+                logger.log("Unable to choose item for playing. " + e.getMessage(), LogSeverity.ERROR);
                 //TODO implement somekind of callback so error is shown to user.
             }
         }

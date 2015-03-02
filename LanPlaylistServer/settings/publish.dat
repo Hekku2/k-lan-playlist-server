@@ -12,3 +12,4 @@ LogSeverity=0
 PlayerEnabled=true
 RequireAuthentication=false
 YoutubeDlLocation=F:\\youtube-dl
+PlayerServicePort=9000

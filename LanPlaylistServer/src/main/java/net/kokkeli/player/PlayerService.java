@@ -13,7 +13,6 @@ import net.kokkeli.data.db.IConnectionStorage;
 import net.kokkeli.player.webservice.PlayerServletConfig;
 
 public class PlayerService {
-    private static final int PORT = 9000;
     private Server server;
     
     private final ILogger logger;
@@ -22,7 +21,7 @@ public class PlayerService {
     public PlayerService(ISettings settings, IConnectionStorage storage, ILogger logger, IPlayer player) {
         this.logger = logger;
         
-        server = new Server(PORT);
+        server = new Server(settings.getPlayerServicePort());
         ServletContextHandler sch = new ServletContextHandler(server, "/");
         sch.addEventListener(new PlayerServletConfig(settings, storage, player));
         sch.addFilter(GuiceFilter.class, "/*", null);
