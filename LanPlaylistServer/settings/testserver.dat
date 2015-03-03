@@ -13,3 +13,4 @@ PlayerEnabled=true
 RequireAuthentication=true
 YoutubeDlLocation=F:\\youtube-dl
 PlayerServicePort=9000
+PlayerServiceUri=http://localhost:9000/player/

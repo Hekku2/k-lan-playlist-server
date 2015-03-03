@@ -16,15 +16,17 @@ import com.sun.jersey.api.representation.Form;
 import net.kokkeli.data.dto.ILogger;
 import net.kokkeli.data.dto.LogSeverity;
 import net.kokkeli.data.services.ServiceException;
+import net.kokkeli.settings.ISettings;
 
 public class PlayerCommunicator implements IPlayer {
-    private final String baseUri = "http://localhost:9000/player/";
+    private final String baseUri;
     
     private final ILogger logger;
     private final Client client;
     
     @Inject
-    public PlayerCommunicator(ILogger logger){
+    public PlayerCommunicator(ISettings settings, ILogger logger){
+        baseUri = settings.getPlayerServiceUri();
         this.logger = logger;
         this.client = buildClient();
     }

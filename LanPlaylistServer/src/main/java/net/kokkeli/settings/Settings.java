@@ -32,6 +32,7 @@ public class Settings implements ISettings {
     private LogSeverity logSeverity = LogSeverity.TRACE;
     private int port;
     private int playerServicePort;
+    private String playerServiceUri;
     private boolean playerEnabled;
     private boolean requireAuthentication;
     
@@ -197,6 +198,12 @@ public class Settings implements ISettings {
     public int getPlayerServicePort() {
         return playerServicePort;
     }
+    
+    @Override
+    public String getPlayerServiceUri() {
+        return playerServiceUri;
+    }
+    
     /**
      * Loads settings
      * @param key Key
@@ -247,6 +254,9 @@ public class Settings implements ISettings {
             break;
         case "PlayerServicePort":
             playerServicePort = Integer.parseInt(value);
+            break;
+        case "PlayerServiceUri":
+            playerServiceUri = value;
             break;
         default:
             throw new SettingsParseException(String.format("Not recognized setting name: \"%s\". Value was \"%s\"", key, value));

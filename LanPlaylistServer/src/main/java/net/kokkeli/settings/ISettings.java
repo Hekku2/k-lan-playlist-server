@@ -88,6 +88,12 @@ public interface ISettings {
     int getPlayerServicePort();
     
     /**
+     * Returns whole player service. This is the uri that is player communicator will try to contact.
+     * @return
+     */
+    String getPlayerServiceUri();
+    
+    /**
      * Location of youtube-dl folder
      * @return
      */
