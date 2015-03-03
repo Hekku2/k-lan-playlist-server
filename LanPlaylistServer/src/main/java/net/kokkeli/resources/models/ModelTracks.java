@@ -2,9 +2,6 @@ package net.kokkeli.resources.models;
 
 import java.util.ArrayList;
 
-import net.kokkeli.resources.Model;
-import net.kokkeli.resources.ModelCollection;
-
 /**
  * Viewmodel for Tracks
  * @author Hekku2

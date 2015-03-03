@@ -8,12 +8,12 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 
-import net.kokkeli.ISettings;
-import net.kokkeli.data.ILogger;
-import net.kokkeli.data.LogSeverity;
-import net.kokkeli.data.LoggingModule;
 import net.kokkeli.data.db.IConnectionStorage;
 import net.kokkeli.data.db.SqliteConnectionStorage;
+import net.kokkeli.data.dto.ILogger;
+import net.kokkeli.data.dto.LogSeverity;
+import net.kokkeli.data.dto.LoggingModule;
+import net.kokkeli.settings.ISettings;
 
 import com.almworks.sqlite4java.SQLite;
 import com.google.inject.CreationException;

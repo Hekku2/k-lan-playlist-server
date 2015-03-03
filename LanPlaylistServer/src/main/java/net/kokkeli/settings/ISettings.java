@@ -1,9 +1,9 @@
-package net.kokkeli;
+package net.kokkeli.settings;
 
 import java.io.IOException;
 import java.net.URI;
 
-import net.kokkeli.data.LogSeverity;
+import net.kokkeli.data.dto.LogSeverity;
 
 public interface ISettings {
     

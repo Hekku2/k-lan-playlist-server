@@ -1,25 +1,26 @@
-package net.kokkeli.player;
+package net.kokkeli.player.webservice;
 
 import java.io.IOException;
 import java.nio.file.Paths;
 
 import com.almworks.sqlite4java.SQLite;
 
-import net.kokkeli.ISettings;
-import net.kokkeli.Settings;
-import net.kokkeli.SettingsLoadException;
-import net.kokkeli.SettingsParseException;
-import net.kokkeli.data.ILogger;
-import net.kokkeli.data.LogSeverity;
-import net.kokkeli.data.Logging;
 import net.kokkeli.data.db.DatabaseException;
 import net.kokkeli.data.db.IConnectionStorage;
 import net.kokkeli.data.db.IPlaylistDatabase;
 import net.kokkeli.data.db.LogDatabase;
 import net.kokkeli.data.db.PlaylistDatabase;
 import net.kokkeli.data.db.SqliteConnectionStorage;
+import net.kokkeli.data.dto.ILogger;
+import net.kokkeli.data.dto.LogSeverity;
+import net.kokkeli.data.dto.Logging;
 import net.kokkeli.data.services.IPlaylistService;
 import net.kokkeli.data.services.PlaylistService;
+import net.kokkeli.player.VlcPlayer;
+import net.kokkeli.settings.ISettings;
+import net.kokkeli.settings.Settings;
+import net.kokkeli.settings.SettingsLoadException;
+import net.kokkeli.settings.SettingsParseException;
 
 public class PlayerServiceRunner {
     private static final long DEFAULT_SLEEP = 100;

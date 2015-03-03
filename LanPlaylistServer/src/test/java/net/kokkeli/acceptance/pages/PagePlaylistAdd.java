@@ -1,7 +1,7 @@
 package net.kokkeli.acceptance.pages;
 
-import net.kokkeli.ISettings;
 import net.kokkeli.resources.models.ModelPlaylistItem;
+import net.kokkeli.settings.ISettings;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;

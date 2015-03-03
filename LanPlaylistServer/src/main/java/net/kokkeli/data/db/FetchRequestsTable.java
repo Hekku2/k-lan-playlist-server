@@ -8,10 +8,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-import net.kokkeli.UploadType;
-import net.kokkeli.data.FetchRequest;
-import net.kokkeli.data.FetchStatus;
-import net.kokkeli.data.Track;
+import net.kokkeli.data.dto.FetchRequest;
+import net.kokkeli.data.dto.FetchStatus;
+import net.kokkeli.data.dto.Track;
+import net.kokkeli.data.dto.UploadType;
 
 /**
  * Table representing fetch_requests table in database

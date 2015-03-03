@@ -4,11 +4,11 @@ import java.util.Collection;
 
 import com.google.inject.Inject;
 
-import net.kokkeli.data.ILogger;
-import net.kokkeli.data.LogRow;
-import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.db.DatabaseException;
 import net.kokkeli.data.db.ILogDatabase;
+import net.kokkeli.data.dto.ILogger;
+import net.kokkeli.data.dto.LogRow;
+import net.kokkeli.data.dto.LogSeverity;
 
 /**
  * Log service class implementing log service. Used for viewing logs

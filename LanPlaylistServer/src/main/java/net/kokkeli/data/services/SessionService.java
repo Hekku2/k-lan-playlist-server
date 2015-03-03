@@ -5,11 +5,11 @@ import java.util.UUID;
 
 import com.google.inject.Inject;
 
-import net.kokkeli.data.ILogger;
-import net.kokkeli.data.LogSeverity;
-import net.kokkeli.data.Session;
-import net.kokkeli.data.User;
 import net.kokkeli.data.db.NotFoundInDatabaseException;
+import net.kokkeli.data.dto.ILogger;
+import net.kokkeli.data.dto.LogSeverity;
+import net.kokkeli.data.dto.Session;
+import net.kokkeli.data.dto.User;
 
 /**
  * Service for sessiondata

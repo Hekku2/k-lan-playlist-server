@@ -1,6 +1,6 @@
 package net.kokkeli.data.db;
 
-import net.kokkeli.data.LogRow;
+import net.kokkeli.data.dto.LogRow;
 
 /**
  * Log database interface

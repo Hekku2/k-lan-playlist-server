@@ -1,6 +1,5 @@
 package net.kokkeli.resources.models;
 
-import net.kokkeli.resources.Field;
 
 /**
  * Model for track

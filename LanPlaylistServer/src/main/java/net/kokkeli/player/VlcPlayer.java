@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import net.kokkeli.ISettings;
-import net.kokkeli.data.ILogger;
-import net.kokkeli.data.LogSeverity;
-import net.kokkeli.data.PlayList;
-import net.kokkeli.data.Track;
 import net.kokkeli.data.db.NotFoundInDatabaseException;
+import net.kokkeli.data.dto.ILogger;
+import net.kokkeli.data.dto.LogSeverity;
+import net.kokkeli.data.dto.PlayList;
+import net.kokkeli.data.dto.Track;
 import net.kokkeli.data.services.IPlaylistService;
 import net.kokkeli.data.services.ServiceException;
+import net.kokkeli.settings.ISettings;
 
 import com.google.inject.Inject;
 import com.sun.jna.Native;

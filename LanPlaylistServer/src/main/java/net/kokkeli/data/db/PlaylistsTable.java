@@ -7,7 +7,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import net.kokkeli.data.PlayList;
+import net.kokkeli.data.dto.PlayList;
 
 public class PlaylistsTable {
     private static final String TABLENAME = "playlists";

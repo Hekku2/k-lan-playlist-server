@@ -13,13 +13,12 @@ import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
-import net.kokkeli.ISettings;
-import net.kokkeli.data.ILogger;
-import net.kokkeli.data.LogSeverity;
-import net.kokkeli.data.Role;
-import net.kokkeli.data.Session;
-import net.kokkeli.data.User;
 import net.kokkeli.data.db.NotFoundInDatabaseException;
+import net.kokkeli.data.dto.ILogger;
+import net.kokkeli.data.dto.LogSeverity;
+import net.kokkeli.data.dto.Role;
+import net.kokkeli.data.dto.Session;
+import net.kokkeli.data.dto.User;
 import net.kokkeli.data.services.ISessionService;
 import net.kokkeli.data.services.IUserService;
 import net.kokkeli.data.services.ServiceException;
@@ -29,6 +28,7 @@ import net.kokkeli.resources.BaseResource;
 import net.kokkeli.resources.models.BaseModel;
 import net.kokkeli.server.ITemplateService;
 import net.kokkeli.server.RenderException;
+import net.kokkeli.settings.ISettings;
 
 import com.google.inject.Inject;
 

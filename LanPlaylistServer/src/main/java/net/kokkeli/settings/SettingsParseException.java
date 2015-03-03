@@ -1,4 +1,4 @@
-package net.kokkeli;
+package net.kokkeli.settings;
 
 public class SettingsParseException extends Exception{
     private static final long serialVersionUID = -3279746477114305191L;

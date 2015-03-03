@@ -1,8 +1,7 @@
 package net.kokkeli.resources.models;
 
-import net.kokkeli.data.FetchStatus;
-import net.kokkeli.data.Track;
-import net.kokkeli.resources.Field;
+import net.kokkeli.data.dto.FetchStatus;
+import net.kokkeli.data.dto.Track;
 
 /**
  * Model for fetch request item

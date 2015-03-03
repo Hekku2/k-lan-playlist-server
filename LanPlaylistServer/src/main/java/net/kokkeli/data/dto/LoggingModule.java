@@ -1,9 +1,9 @@
-package net.kokkeli.data;
+package net.kokkeli.data.dto;
 
-import net.kokkeli.ISettings;
 import net.kokkeli.data.db.IConnectionStorage;
 import net.kokkeli.data.db.ILogDatabase;
 import net.kokkeli.data.db.LogDatabase;
+import net.kokkeli.settings.ISettings;
 
 import com.google.inject.AbstractModule;
 

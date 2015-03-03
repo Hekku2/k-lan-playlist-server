@@ -1,7 +1,6 @@
 package net.kokkeli.resources.models;
 
-import net.kokkeli.data.Role;
-import net.kokkeli.resources.Field;
+import net.kokkeli.data.dto.Role;
 
 /**
  * Viewmodel for User

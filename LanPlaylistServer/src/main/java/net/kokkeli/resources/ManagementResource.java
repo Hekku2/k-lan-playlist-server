@@ -9,15 +9,15 @@ import javax.ws.rs.core.Response;
 
 import com.google.inject.Inject;
 
-import net.kokkeli.ISettings;
-import net.kokkeli.data.ILogger;
-import net.kokkeli.data.Role;
+import net.kokkeli.data.dto.ILogger;
+import net.kokkeli.data.dto.Role;
 import net.kokkeli.data.services.ISessionService;
 import net.kokkeli.player.IPlayer;
 import net.kokkeli.resources.models.BaseModel;
 import net.kokkeli.server.ITemplateService;
 import net.kokkeli.server.NotAuthenticatedException;
 import net.kokkeli.server.RenderException;
+import net.kokkeli.settings.ISettings;
 
 /**
  * Resources for Management

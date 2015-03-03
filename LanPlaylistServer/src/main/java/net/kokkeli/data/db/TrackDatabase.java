@@ -5,7 +5,7 @@ import java.util.Collection;
 
 import com.google.inject.Inject;
 
-import net.kokkeli.data.Track;
+import net.kokkeli.data.dto.Track;
 
 public class TrackDatabase extends Database implements ITrackDatabase{
     private final TracksTable tracksTable;

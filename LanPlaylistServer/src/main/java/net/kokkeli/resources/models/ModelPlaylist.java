@@ -2,9 +2,6 @@ package net.kokkeli.resources.models;
 
 import java.util.ArrayList;
 
-import net.kokkeli.resources.ModelCollection;
-import net.kokkeli.resources.Model;
-
 /**
  * View model for playlist
  * @author Hekku2

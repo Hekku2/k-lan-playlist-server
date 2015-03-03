@@ -1,4 +1,4 @@
-package net.kokkeli.player;
+package net.kokkeli.player.webservice;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.DefaultServlet;
@@ -6,11 +6,11 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 
 import com.google.inject.servlet.GuiceFilter;
 
-import net.kokkeli.ISettings;
-import net.kokkeli.data.ILogger;
-import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.db.IConnectionStorage;
-import net.kokkeli.player.webservice.PlayerServletConfig;
+import net.kokkeli.data.dto.ILogger;
+import net.kokkeli.data.dto.LogSeverity;
+import net.kokkeli.player.IPlayer;
+import net.kokkeli.settings.ISettings;
 
 public class PlayerService {
     private Server server;

@@ -1,12 +1,11 @@
-package net.kokkeli;
+package net.kokkeli.resources.models;
 
 import java.lang.reflect.Method;
 
 import javax.ws.rs.core.MultivaluedMap;
 
-import net.kokkeli.data.Role;
+import net.kokkeli.data.dto.Role;
 import net.kokkeli.data.services.ServiceException;
-import net.kokkeli.resources.models.ViewModel;
 
 public class ModelBuilder<T extends ViewModel> {
     private Class<T> classOfModel;

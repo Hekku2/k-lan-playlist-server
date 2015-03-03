@@ -2,7 +2,7 @@ package net.kokkeli.data.db;
 
 import java.util.Collection;
 
-import net.kokkeli.data.PlayList;
+import net.kokkeli.data.dto.PlayList;
 
 public interface IPlaylistDatabase extends IDatabase<PlayList>{
 

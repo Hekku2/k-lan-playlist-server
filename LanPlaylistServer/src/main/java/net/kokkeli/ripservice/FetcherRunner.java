@@ -1,11 +1,11 @@
 package net.kokkeli.ripservice;
 
-import net.kokkeli.data.FetchRequest;
-import net.kokkeli.data.FetchStatus;
-import net.kokkeli.data.ILogger;
-import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.db.DatabaseException;
 import net.kokkeli.data.db.IFetchRequestDatabase;
+import net.kokkeli.data.dto.FetchRequest;
+import net.kokkeli.data.dto.FetchStatus;
+import net.kokkeli.data.dto.ILogger;
+import net.kokkeli.data.dto.LogSeverity;
 
 /**
  * General fetcher runner

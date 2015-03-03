@@ -13,8 +13,8 @@ import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.sun.jersey.api.representation.Form;
 
-import net.kokkeli.data.ILogger;
-import net.kokkeli.data.LogSeverity;
+import net.kokkeli.data.dto.ILogger;
+import net.kokkeli.data.dto.LogSeverity;
 import net.kokkeli.data.services.ServiceException;
 
 public class PlayerCommunicator implements IPlayer {

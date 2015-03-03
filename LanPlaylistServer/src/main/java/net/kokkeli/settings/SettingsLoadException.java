@@ -1,4 +1,4 @@
-package net.kokkeli;
+package net.kokkeli.settings;
 
 public class SettingsLoadException extends Exception{
     private static final long serialVersionUID = 1L;

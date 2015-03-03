@@ -2,8 +2,8 @@ package net.kokkeli.data.services;
 
 import java.util.Collection;
 
-import net.kokkeli.data.Track;
 import net.kokkeli.data.db.NotFoundInDatabaseException;
+import net.kokkeli.data.dto.Track;
 
 /**
  * Interface defining track service

@@ -4,12 +4,12 @@ import java.util.Collection;
 
 import com.google.inject.Inject;
 
-import net.kokkeli.data.ILogger;
-import net.kokkeli.data.LogSeverity;
-import net.kokkeli.data.PlayList;
 import net.kokkeli.data.db.DatabaseException;
 import net.kokkeli.data.db.IPlaylistDatabase;
 import net.kokkeli.data.db.NotFoundInDatabaseException;
+import net.kokkeli.data.dto.ILogger;
+import net.kokkeli.data.dto.LogSeverity;
+import net.kokkeli.data.dto.PlayList;
 
 /**
  * PlaylistService

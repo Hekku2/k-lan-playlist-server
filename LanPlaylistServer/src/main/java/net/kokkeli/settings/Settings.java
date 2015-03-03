@@ -1,4 +1,4 @@
-package net.kokkeli;
+package net.kokkeli.settings;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -9,7 +9,7 @@ import java.net.URI;
 
 import javax.ws.rs.core.UriBuilder;
 
-import net.kokkeli.data.LogSeverity;
+import net.kokkeli.data.dto.LogSeverity;
 
 /**
  * Class for settings

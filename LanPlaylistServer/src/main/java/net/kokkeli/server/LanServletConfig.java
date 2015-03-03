@@ -6,9 +6,6 @@ import java.util.Map;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 import org.codehaus.jackson.map.ObjectMapper;
 
-import net.kokkeli.ISettings;
-import net.kokkeli.data.ILogger;
-import net.kokkeli.data.Logging;
 import net.kokkeli.data.db.FetchRequestDatabase;
 import net.kokkeli.data.db.IConnectionStorage;
 import net.kokkeli.data.db.IFetchRequestDatabase;
@@ -20,6 +17,8 @@ import net.kokkeli.data.db.LogDatabase;
 import net.kokkeli.data.db.PlaylistDatabase;
 import net.kokkeli.data.db.TrackDatabase;
 import net.kokkeli.data.db.UserDatabase;
+import net.kokkeli.data.dto.ILogger;
+import net.kokkeli.data.dto.Logging;
 import net.kokkeli.data.services.FetchRequestService;
 import net.kokkeli.data.services.IFetchRequestService;
 import net.kokkeli.data.services.ILogService;
@@ -51,6 +50,7 @@ import net.kokkeli.resources.TracksResource;
 import net.kokkeli.resources.UsersResource;
 import net.kokkeli.resources.authentication.AuthenticationInterceptor;
 import net.kokkeli.resources.authentication.AuthenticationResource;
+import net.kokkeli.settings.ISettings;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;

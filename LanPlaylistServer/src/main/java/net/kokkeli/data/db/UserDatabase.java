@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import com.google.inject.Inject;
 
-import net.kokkeli.data.User;
+import net.kokkeli.data.dto.User;
 
 public class UserDatabase extends Database implements IUserDatabase {   
     private final UsersTable users;

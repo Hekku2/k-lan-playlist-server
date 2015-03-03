@@ -6,7 +6,7 @@ import net.kokkeli.acceptance.pages.BasePage;
 import net.kokkeli.acceptance.pages.PageUser;
 import net.kokkeli.acceptance.pages.PageUserCreate;
 import net.kokkeli.acceptance.pages.PageUsers;
-import net.kokkeli.data.Role;
+import net.kokkeli.data.dto.Role;
 import net.kokkeli.resources.models.ModelUser;
 
 import org.junit.Assert;

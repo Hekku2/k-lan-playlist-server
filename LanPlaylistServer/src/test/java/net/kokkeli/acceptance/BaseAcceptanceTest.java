@@ -8,13 +8,13 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import net.kokkeli.ISettings;
-import net.kokkeli.Settings;
-import net.kokkeli.SettingsParseException;
 import net.kokkeli.acceptance.pages.BasePage;
 import net.kokkeli.acceptance.pages.PageAuthentication;
 import net.kokkeli.server.LanServer;
 import net.kokkeli.server.ServerException;
+import net.kokkeli.settings.ISettings;
+import net.kokkeli.settings.Settings;
+import net.kokkeli.settings.SettingsParseException;
 
 import org.junit.After;
 import org.junit.AfterClass;

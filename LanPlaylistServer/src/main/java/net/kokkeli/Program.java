@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import net.kokkeli.server.LanServer;
 import net.kokkeli.server.ServerException;
+import net.kokkeli.settings.Settings;
+import net.kokkeli.settings.SettingsParseException;
 
 public class Program {
 

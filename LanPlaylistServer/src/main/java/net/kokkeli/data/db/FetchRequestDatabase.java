@@ -5,8 +5,8 @@ import java.util.Collection;
 
 import com.google.inject.Inject;
 
-import net.kokkeli.data.FetchRequest;
-import net.kokkeli.data.FetchStatus;
+import net.kokkeli.data.dto.FetchRequest;
+import net.kokkeli.data.dto.FetchStatus;
 
 /**
  * Fetch request database

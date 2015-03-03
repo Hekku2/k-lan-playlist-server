@@ -14,13 +14,12 @@ import javax.ws.rs.core.Response.Status;
 
 import com.google.inject.Inject;
 
-import net.kokkeli.ISettings;
 import net.kokkeli.ValidationUtils;
-import net.kokkeli.data.ILogger;
-import net.kokkeli.data.LogSeverity;
-import net.kokkeli.data.Role;
-import net.kokkeli.data.Track;
 import net.kokkeli.data.db.NotFoundInDatabaseException;
+import net.kokkeli.data.dto.ILogger;
+import net.kokkeli.data.dto.LogSeverity;
+import net.kokkeli.data.dto.Role;
+import net.kokkeli.data.dto.Track;
 import net.kokkeli.data.services.ISessionService;
 import net.kokkeli.data.services.ITrackService;
 import net.kokkeli.data.services.ServiceException;
@@ -28,6 +27,7 @@ import net.kokkeli.player.IPlayer;
 import net.kokkeli.resources.models.BaseModel;
 import net.kokkeli.server.ITemplateService;
 import net.kokkeli.server.RenderException;
+import net.kokkeli.settings.ISettings;
 
 @Path("/player")
 public class PlayerResource extends BaseResource{

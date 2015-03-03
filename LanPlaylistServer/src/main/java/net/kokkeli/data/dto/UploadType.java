@@ -1,4 +1,4 @@
-package net.kokkeli;
+package net.kokkeli.data.dto;
 
 public enum UploadType {
     NONE(0, ""),

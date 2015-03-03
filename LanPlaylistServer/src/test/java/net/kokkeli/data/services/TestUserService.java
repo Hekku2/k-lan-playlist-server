@@ -3,13 +3,13 @@ package net.kokkeli.data.services;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import net.kokkeli.ISettings;
-import net.kokkeli.data.ILogger;
-import net.kokkeli.data.Role;
-import net.kokkeli.data.User;
 import net.kokkeli.data.db.DatabaseException;
 import net.kokkeli.data.db.IUserDatabase;
 import net.kokkeli.data.db.NotFoundInDatabaseException;
+import net.kokkeli.data.dto.ILogger;
+import net.kokkeli.data.dto.Role;
+import net.kokkeli.data.dto.User;
+import net.kokkeli.settings.ISettings;
 
 import org.junit.Assert;
 import org.junit.Before;

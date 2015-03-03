@@ -8,8 +8,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import net.kokkeli.data.LogRow;
-import net.kokkeli.data.LogSeverity;
+
+import net.kokkeli.data.dto.LogRow;
+import net.kokkeli.data.dto.LogSeverity;
 
 public class LogTable {
     private static final String TABLENAME = "logs";

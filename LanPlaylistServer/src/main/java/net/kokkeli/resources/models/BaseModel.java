@@ -1,8 +1,6 @@
 package net.kokkeli.resources.models;
 
-import net.kokkeli.data.Session;
-import net.kokkeli.resources.Field;
-import net.kokkeli.resources.Model;
+import net.kokkeli.data.dto.Session;
 
 /**
  * BaseModel-class.

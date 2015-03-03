@@ -5,9 +5,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import net.kokkeli.data.Role;
-import net.kokkeli.data.Track;
-import net.kokkeli.data.User;
+
+import net.kokkeli.data.dto.Role;
+import net.kokkeli.data.dto.Track;
+import net.kokkeli.data.dto.User;
 
 /**
  * Class representing Tracks-table in database. Used for operating the specific

@@ -3,17 +3,18 @@ package net.kokkeli.player.webservice;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.kokkeli.ISettings;
-import net.kokkeli.data.ILogger;
-import net.kokkeli.data.Logging;
 import net.kokkeli.data.db.IConnectionStorage;
 import net.kokkeli.data.db.ILogDatabase;
 import net.kokkeli.data.db.IPlaylistDatabase;
 import net.kokkeli.data.db.LogDatabase;
 import net.kokkeli.data.db.PlaylistDatabase;
+import net.kokkeli.data.dto.ILogger;
+import net.kokkeli.data.dto.Logging;
 import net.kokkeli.data.services.IPlaylistService;
 import net.kokkeli.data.services.PlaylistService;
 import net.kokkeli.player.IPlayer;
+import net.kokkeli.settings.ISettings;
+
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceServletContextListener;

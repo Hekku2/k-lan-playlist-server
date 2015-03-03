@@ -6,16 +6,16 @@ import java.util.concurrent.Executors;
 
 import com.almworks.sqlite4java.SQLite;
 
-import net.kokkeli.ISettings;
-import net.kokkeli.Settings;
-import net.kokkeli.SettingsParseException;
-import net.kokkeli.data.ILogger;
-import net.kokkeli.data.LogSeverity;
-import net.kokkeli.data.Logging;
 import net.kokkeli.data.db.FetchRequestDatabase;
 import net.kokkeli.data.db.IFetchRequestDatabase;
 import net.kokkeli.data.db.LogDatabase;
 import net.kokkeli.data.db.SqliteConnectionStorage;
+import net.kokkeli.data.dto.ILogger;
+import net.kokkeli.data.dto.LogSeverity;
+import net.kokkeli.data.dto.Logging;
+import net.kokkeli.settings.ISettings;
+import net.kokkeli.settings.Settings;
+import net.kokkeli.settings.SettingsParseException;
 
 /**
  * Program running rippers

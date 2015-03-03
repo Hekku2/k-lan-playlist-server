@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
-import net.kokkeli.UploadType;
-import net.kokkeli.data.FetchRequest;
-import net.kokkeli.data.PlayList;
-import net.kokkeli.data.Track;
+import net.kokkeli.data.dto.FetchRequest;
+import net.kokkeli.data.dto.PlayList;
+import net.kokkeli.data.dto.Track;
+import net.kokkeli.data.dto.UploadType;
 import net.kokkeli.data.services.IFetchRequestService;
 import net.kokkeli.data.services.IPlaylistService;
 import net.kokkeli.data.services.ServiceException;

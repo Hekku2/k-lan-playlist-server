@@ -2,7 +2,7 @@ package net.kokkeli.data.services;
 
 import java.util.Collection;
 
-import net.kokkeli.data.FetchRequest;
+import net.kokkeli.data.dto.FetchRequest;
 
 /**
  * Interface for fetch request service

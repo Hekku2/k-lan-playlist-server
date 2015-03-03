@@ -1,6 +1,6 @@
 package net.kokkeli.ripservice;
 
-import net.kokkeli.data.FetchRequest;
+import net.kokkeli.data.dto.FetchRequest;
 
 /**
  * Interface for classes that fecth stuff from internet.

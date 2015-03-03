@@ -1,8 +1,8 @@
 package net.kokkeli.acceptance.pages;
 
-import net.kokkeli.ISettings;
-import net.kokkeli.data.Role;
+import net.kokkeli.data.dto.Role;
 import net.kokkeli.resources.models.ModelUser;
+import net.kokkeli.settings.ISettings;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;

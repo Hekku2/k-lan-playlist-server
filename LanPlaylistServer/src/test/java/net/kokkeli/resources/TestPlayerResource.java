@@ -12,8 +12,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import net.kokkeli.data.Track;
 import net.kokkeli.data.db.NotFoundInDatabaseException;
+import net.kokkeli.data.dto.Track;
 import net.kokkeli.data.services.ITrackService;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.player.PlayerStatus;

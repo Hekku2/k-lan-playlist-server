@@ -1,6 +1,5 @@
 package net.kokkeli.resources.models;
 
-import net.kokkeli.resources.Field;
 import net.kokkeli.resources.models.ViewModel;
 
 /**

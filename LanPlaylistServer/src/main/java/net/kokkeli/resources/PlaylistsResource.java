@@ -22,25 +22,24 @@ import com.google.inject.Inject;
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
 
-import net.kokkeli.ISettings;
-import net.kokkeli.ModelBuilder;
-import net.kokkeli.UploadType;
 import net.kokkeli.ValidationUtils;
-import net.kokkeli.data.FetchRequest;
-import net.kokkeli.data.FetchStatus;
-import net.kokkeli.data.ILogger;
-import net.kokkeli.data.LogSeverity;
-import net.kokkeli.data.PlayList;
-import net.kokkeli.data.Role;
-import net.kokkeli.data.Session;
-import net.kokkeli.data.Track;
 import net.kokkeli.data.db.NotFoundInDatabaseException;
+import net.kokkeli.data.dto.FetchRequest;
+import net.kokkeli.data.dto.FetchStatus;
+import net.kokkeli.data.dto.ILogger;
+import net.kokkeli.data.dto.LogSeverity;
+import net.kokkeli.data.dto.PlayList;
+import net.kokkeli.data.dto.Role;
+import net.kokkeli.data.dto.Session;
+import net.kokkeli.data.dto.Track;
+import net.kokkeli.data.dto.UploadType;
 import net.kokkeli.data.services.IFetchRequestService;
 import net.kokkeli.data.services.IPlaylistService;
 import net.kokkeli.data.services.ISessionService;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.player.IPlayer;
 import net.kokkeli.resources.models.BaseModel;
+import net.kokkeli.resources.models.ModelBuilder;
 import net.kokkeli.resources.models.ModelPlaylist;
 import net.kokkeli.resources.models.ModelPlaylistItem;
 import net.kokkeli.resources.models.ModelPlaylists;
@@ -48,6 +47,7 @@ import net.kokkeli.server.IFileSystem;
 import net.kokkeli.server.ITemplateService;
 import net.kokkeli.server.NotAuthenticatedException;
 import net.kokkeli.server.RenderException;
+import net.kokkeli.settings.ISettings;
 
 /**
  * Resources for playlist management

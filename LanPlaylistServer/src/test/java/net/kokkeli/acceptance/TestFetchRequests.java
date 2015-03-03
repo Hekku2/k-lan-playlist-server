@@ -1,8 +1,8 @@
 package net.kokkeli.acceptance;
 
-import net.kokkeli.UploadType;
 import net.kokkeli.acceptance.pages.PageCreateFetchRequest;
 import net.kokkeli.acceptance.pages.PageFetchRequests;
+import net.kokkeli.data.dto.UploadType;
 import net.kokkeli.resources.models.ModelFetchRequest;
 import net.kokkeli.resources.models.ModelFetchRequestCreate;
 import net.kokkeli.resources.models.ModelFetchRequests;

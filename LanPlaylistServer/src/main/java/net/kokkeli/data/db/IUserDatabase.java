@@ -1,6 +1,6 @@
 package net.kokkeli.data.db;
 
-import net.kokkeli.data.User;
+import net.kokkeli.data.dto.User;
 
 /**
  * User database

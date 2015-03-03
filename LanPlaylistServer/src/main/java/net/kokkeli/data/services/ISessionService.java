@@ -1,8 +1,8 @@
 package net.kokkeli.data.services;
 
-import net.kokkeli.data.Session;
-import net.kokkeli.data.User;
 import net.kokkeli.data.db.NotFoundInDatabaseException;
+import net.kokkeli.data.dto.Session;
+import net.kokkeli.data.dto.User;
 
 /**
  * Interface for sessionservice

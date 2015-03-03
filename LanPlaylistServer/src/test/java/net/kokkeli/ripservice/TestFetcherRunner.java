@@ -1,12 +1,13 @@
 package net.kokkeli.ripservice;
 
 import static org.mockito.Mockito.mock;
-import net.kokkeli.data.FetchRequest;
-import net.kokkeli.data.FetchStatus;
-import net.kokkeli.data.ILogger;
-import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.db.DatabaseException;
 import net.kokkeli.data.db.IFetchRequestDatabase;
+import net.kokkeli.data.dto.FetchRequest;
+import net.kokkeli.data.dto.FetchStatus;
+import net.kokkeli.data.dto.ILogger;
+import net.kokkeli.data.dto.LogSeverity;
+
 import org.junit.Before;
 import org.junit.Test;
 

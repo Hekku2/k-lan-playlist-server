@@ -1,8 +1,6 @@
-package net.kokkeli.data;
+package net.kokkeli.data.dto;
 
 import java.util.Date;
-
-import net.kokkeli.UploadType;
 
 /**
  * Fetch request holds status

@@ -2,7 +2,7 @@ package net.kokkeli.data.db;
 
 import com.sun.jersey.api.NotFoundException;
 
-import net.kokkeli.data.Track;
+import net.kokkeli.data.dto.Track;
 
 public interface ITrackDatabase extends IDatabase<Track>{
 

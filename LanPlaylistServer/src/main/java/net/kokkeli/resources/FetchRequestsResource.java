@@ -14,23 +14,22 @@ import javax.ws.rs.core.Response;
 
 import com.google.inject.Inject;
 
-import net.kokkeli.ISettings;
-import net.kokkeli.ModelBuilder;
-import net.kokkeli.UploadType;
 import net.kokkeli.ValidationUtils;
-import net.kokkeli.data.FetchRequest;
-import net.kokkeli.data.FetchStatus;
-import net.kokkeli.data.ILogger;
-import net.kokkeli.data.PlayList;
-import net.kokkeli.data.Role;
-import net.kokkeli.data.Track;
-import net.kokkeli.data.User;
+import net.kokkeli.data.dto.FetchRequest;
+import net.kokkeli.data.dto.FetchStatus;
+import net.kokkeli.data.dto.ILogger;
+import net.kokkeli.data.dto.PlayList;
+import net.kokkeli.data.dto.Role;
+import net.kokkeli.data.dto.Track;
+import net.kokkeli.data.dto.UploadType;
+import net.kokkeli.data.dto.User;
 import net.kokkeli.data.services.IFetchRequestService;
 import net.kokkeli.data.services.IPlaylistService;
 import net.kokkeli.data.services.ISessionService;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.player.IPlayer;
 import net.kokkeli.resources.models.BaseModel;
+import net.kokkeli.resources.models.ModelBuilder;
 import net.kokkeli.resources.models.ModelFetchRequest;
 import net.kokkeli.resources.models.ModelFetchRequestCreate;
 import net.kokkeli.resources.models.ModelFetchRequests;
@@ -38,6 +37,7 @@ import net.kokkeli.resources.models.ModelPlaylistListItem;
 import net.kokkeli.server.ITemplateService;
 import net.kokkeli.server.NotAuthenticatedException;
 import net.kokkeli.server.RenderException;
+import net.kokkeli.settings.ISettings;
 
 /**
  * Index-resource

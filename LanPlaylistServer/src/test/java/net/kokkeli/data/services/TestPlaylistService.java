@@ -3,10 +3,11 @@ package net.kokkeli.data.services;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import net.kokkeli.data.ILogger;
-import net.kokkeli.data.PlayList;
 import net.kokkeli.data.db.DatabaseException;
 import net.kokkeli.data.db.IPlaylistDatabase;
+import net.kokkeli.data.dto.ILogger;
+import net.kokkeli.data.dto.PlayList;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

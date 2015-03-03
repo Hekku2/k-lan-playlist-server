@@ -7,10 +7,10 @@ import javax.ws.rs.core.Response;
 import org.junit.Assert;
 import org.junit.Test;
 
-import net.kokkeli.data.Role;
-import net.kokkeli.data.Track;
-import net.kokkeli.data.User;
 import net.kokkeli.data.db.NotFoundInDatabaseException;
+import net.kokkeli.data.dto.Role;
+import net.kokkeli.data.dto.Track;
+import net.kokkeli.data.dto.User;
 import net.kokkeli.data.services.ITrackService;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.resources.models.BaseModel;

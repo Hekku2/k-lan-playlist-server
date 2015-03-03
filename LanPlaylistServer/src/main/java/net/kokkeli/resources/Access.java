@@ -5,7 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import net.kokkeli.data.Role;
+import net.kokkeli.data.dto.Role;
 
 /**
  * Annotation for access control.

@@ -7,8 +7,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import net.kokkeli.data.Role;
-import net.kokkeli.data.User;
+import net.kokkeli.data.dto.Role;
+import net.kokkeli.data.dto.User;
 
 public class UsersTable {
     private static final String TABLENAME = "users";

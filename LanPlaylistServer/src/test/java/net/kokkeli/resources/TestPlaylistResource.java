@@ -7,12 +7,11 @@ import java.util.ArrayList;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
-import net.kokkeli.ISettings;
-import net.kokkeli.data.PlayList;
-import net.kokkeli.data.Role;
-import net.kokkeli.data.Track;
-import net.kokkeli.data.User;
 import net.kokkeli.data.db.NotFoundInDatabaseException;
+import net.kokkeli.data.dto.PlayList;
+import net.kokkeli.data.dto.Role;
+import net.kokkeli.data.dto.Track;
+import net.kokkeli.data.dto.User;
 import net.kokkeli.data.services.IFetchRequestService;
 import net.kokkeli.data.services.IPlaylistService;
 import net.kokkeli.data.services.ServiceException;
@@ -22,6 +21,7 @@ import net.kokkeli.resources.models.ModelPlaylist;
 import net.kokkeli.server.IFileSystem;
 import net.kokkeli.server.NotAuthenticatedException;
 import net.kokkeli.server.RenderException;
+import net.kokkeli.settings.ISettings;
 
 import org.junit.Assert;
 import org.junit.Test;

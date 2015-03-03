@@ -1,7 +1,7 @@
 package net.kokkeli.data.db;
 
-import net.kokkeli.data.FetchRequest;
-import net.kokkeli.data.FetchStatus;
+import net.kokkeli.data.dto.FetchRequest;
+import net.kokkeli.data.dto.FetchStatus;
 
 /**
  * Interface for database containing fetch requests

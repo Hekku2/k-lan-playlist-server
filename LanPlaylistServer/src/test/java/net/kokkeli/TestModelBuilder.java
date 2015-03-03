@@ -5,8 +5,9 @@ import static org.mockito.Mockito.when;
 
 import javax.ws.rs.core.MultivaluedMap;
 
-import net.kokkeli.data.Role;
+import net.kokkeli.data.dto.Role;
 import net.kokkeli.data.services.ServiceException;
+import net.kokkeli.resources.models.ModelBuilder;
 import net.kokkeli.resources.models.ModelPlaylistItem;
 import net.kokkeli.resources.models.ModelUser;
 

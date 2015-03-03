@@ -2,10 +2,11 @@ package net.kokkeli.acceptance.pages;
 
 import java.util.List;
 
-import net.kokkeli.ISettings;
-import net.kokkeli.data.Track;
+import net.kokkeli.data.dto.Track;
 import net.kokkeli.resources.models.ModelFetchRequest;
 import net.kokkeli.resources.models.ModelFetchRequests;
+import net.kokkeli.settings.ISettings;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;

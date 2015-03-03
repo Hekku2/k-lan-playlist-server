@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import com.google.inject.Inject;
 
-import net.kokkeli.data.LogRow;
+import net.kokkeli.data.dto.LogRow;
 
 public class LogDatabase extends Database implements ILogDatabase {
     private LogTable logTable;

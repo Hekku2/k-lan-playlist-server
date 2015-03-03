@@ -2,11 +2,11 @@ package net.kokkeli.ripservice;
 
 import java.io.File;
 
-import net.kokkeli.ISettings;
-import net.kokkeli.UploadType;
-import net.kokkeli.data.FetchRequest;
-import net.kokkeli.data.ILogger;
-import net.kokkeli.data.LogSeverity;
+import net.kokkeli.data.dto.FetchRequest;
+import net.kokkeli.data.dto.ILogger;
+import net.kokkeli.data.dto.LogSeverity;
+import net.kokkeli.data.dto.UploadType;
+import net.kokkeli.settings.ISettings;
 
 public class VlcRipper implements IFetcher{
     private final ISettings settings;

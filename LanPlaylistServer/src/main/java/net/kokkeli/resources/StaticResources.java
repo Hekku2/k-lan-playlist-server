@@ -11,7 +11,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.StreamingOutput;
 
-import net.kokkeli.ISettings;
+import net.kokkeli.settings.ISettings;
 
 import com.google.inject.Inject;
 import com.sun.jersey.api.NotFoundException;

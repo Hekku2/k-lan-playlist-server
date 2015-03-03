@@ -7,8 +7,8 @@ import static org.mockito.Mockito.when;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response;
 
-import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.db.NotFoundInDatabaseException;
+import net.kokkeli.data.dto.LogSeverity;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.player.PlayerStatus;
 import net.kokkeli.resources.models.BaseModel;

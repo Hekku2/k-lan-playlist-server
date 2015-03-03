@@ -1,4 +1,4 @@
-package net.kokkeli.data;
+package net.kokkeli.data.dto;
 
 public interface ILogger {
     /**

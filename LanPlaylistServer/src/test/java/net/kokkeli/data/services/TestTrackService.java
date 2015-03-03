@@ -3,11 +3,12 @@ package net.kokkeli.data.services;
 import static org.mockito.Mockito.mock;
 
 import java.util.ArrayList;
-import net.kokkeli.data.ILogger;
-import net.kokkeli.data.Track;
+
 import net.kokkeli.data.db.DatabaseException;
 import net.kokkeli.data.db.ITrackDatabase;
 import net.kokkeli.data.db.NotFoundInDatabaseException;
+import net.kokkeli.data.dto.ILogger;
+import net.kokkeli.data.dto.Track;
 import net.kokkeli.server.IFileSystem;
 
 import org.junit.Assert;

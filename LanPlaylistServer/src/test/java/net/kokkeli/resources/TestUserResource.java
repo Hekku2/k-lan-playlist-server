@@ -4,9 +4,9 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
 import static org.junit.Assert.assertEquals;
-import net.kokkeli.data.Role;
-import net.kokkeli.data.User;
 import net.kokkeli.data.db.NotFoundInDatabaseException;
+import net.kokkeli.data.dto.Role;
+import net.kokkeli.data.dto.User;
 import net.kokkeli.data.services.IUserService;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.resources.models.BaseModel;
@@ -15,6 +15,7 @@ import net.kokkeli.server.RenderException;
 
 import org.junit.Assert;
 import org.junit.Test;
+
 import com.sun.jersey.api.NotFoundException;
 
 import static org.mockito.Mockito.*;

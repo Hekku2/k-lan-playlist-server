@@ -1,12 +1,12 @@
-package net.kokkeli.data;
+package net.kokkeli.data.dto;
 
 import java.util.Date;
 
 import com.google.inject.Inject;
 
-import net.kokkeli.ISettings;
 import net.kokkeli.data.db.DatabaseException;
 import net.kokkeli.data.db.ILogDatabase;
+import net.kokkeli.settings.ISettings;
 
 /**
  * Logging class.

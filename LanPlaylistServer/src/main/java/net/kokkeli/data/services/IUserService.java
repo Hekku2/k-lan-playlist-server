@@ -2,8 +2,8 @@ package net.kokkeli.data.services;
 
 import java.util.Collection;
 
-import net.kokkeli.data.User;
 import net.kokkeli.data.db.NotFoundInDatabaseException;
+import net.kokkeli.data.dto.User;
 
 import com.sun.jersey.api.NotFoundException;
 

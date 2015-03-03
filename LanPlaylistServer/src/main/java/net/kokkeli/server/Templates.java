@@ -13,13 +13,12 @@ import java.util.Map;
 
 import com.google.inject.Inject;
 
-import net.kokkeli.ISettings;
-import net.kokkeli.resources.Model;
-import net.kokkeli.resources.ModelCollection;
-import net.kokkeli.resources.Field;
 import net.kokkeli.resources.models.BaseModel;
+import net.kokkeli.resources.models.Field;
+import net.kokkeli.resources.models.Model;
+import net.kokkeli.resources.models.ModelCollection;
 import net.kokkeli.resources.models.ViewModel;
-
+import net.kokkeli.settings.ISettings;
 import freemarker.cache.StrongCacheStorage;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;

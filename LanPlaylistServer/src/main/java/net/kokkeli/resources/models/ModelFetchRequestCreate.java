@@ -2,8 +2,6 @@ package net.kokkeli.resources.models;
 
 import java.util.ArrayList;
 
-import net.kokkeli.resources.ModelCollection;
-
 /**
  * Model for fetch request creation
  * @author Hekku2

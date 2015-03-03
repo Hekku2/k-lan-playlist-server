@@ -9,16 +9,16 @@ import java.util.HashMap;
 
 import org.junit.Assert;
 
-import net.kokkeli.ISettings;
-import net.kokkeli.data.Role;
-import net.kokkeli.resources.Field;
+import net.kokkeli.data.dto.Role;
 import net.kokkeli.resources.models.BaseModel;
+import net.kokkeli.resources.models.Field;
 import net.kokkeli.resources.models.ModelPlaylist;
 import net.kokkeli.resources.models.ModelPlaylistItem;
 import net.kokkeli.resources.models.ModelPlaylists;
 import net.kokkeli.resources.models.ModelUser;
 import net.kokkeli.resources.models.ModelUsers;
 import net.kokkeli.resources.models.ViewModel;
+import net.kokkeli.settings.ISettings;
 
 import org.junit.Before;
 import org.junit.Test;

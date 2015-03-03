@@ -1,5 +1,8 @@
 package net.kokkeli.data;
 
+import net.kokkeli.data.dto.Role;
+import net.kokkeli.data.dto.User;
+
 import org.junit.Assert;
 import org.junit.Test;
 

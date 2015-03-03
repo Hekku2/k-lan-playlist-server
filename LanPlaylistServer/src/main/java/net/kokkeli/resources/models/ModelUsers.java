@@ -3,9 +3,6 @@ package net.kokkeli.resources.models;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import net.kokkeli.resources.Model;
-import net.kokkeli.resources.ModelCollection;
-
 /**
  * Model for user collection
  * @author Hekku2

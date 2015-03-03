@@ -3,8 +3,9 @@ package net.kokkeli.data.db;
 import java.util.Collection;
 
 import com.google.inject.Inject;
-import net.kokkeli.data.PlayList;
-import net.kokkeli.data.Track;
+
+import net.kokkeli.data.dto.PlayList;
+import net.kokkeli.data.dto.Track;
 
 public class PlaylistDatabase extends Database implements IPlaylistDatabase {
     private final PlaylistsTable playlistTable;

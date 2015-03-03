@@ -6,15 +6,12 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 
-import net.kokkeli.ISettings;
-import net.kokkeli.data.ILogger;
-import net.kokkeli.data.LogSeverity;
-import net.kokkeli.data.Role;
 import net.kokkeli.data.db.NotFoundInDatabaseException;
+import net.kokkeli.data.dto.*;
 import net.kokkeli.data.services.ISessionService;
 import net.kokkeli.resources.Access;
 import net.kokkeli.resources.AuthenticationErrorHandling;
-import net.kokkeli.data.*;
+import net.kokkeli.settings.ISettings;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;

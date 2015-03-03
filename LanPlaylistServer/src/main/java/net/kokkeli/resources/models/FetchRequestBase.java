@@ -1,6 +1,5 @@
 package net.kokkeli.resources.models;
 
-import net.kokkeli.resources.Field;
 
 /**
  * Base model containing data all fetch request models use

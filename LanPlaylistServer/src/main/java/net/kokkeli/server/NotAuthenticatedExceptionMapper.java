@@ -6,7 +6,7 @@ import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-import net.kokkeli.ISettings;
+import net.kokkeli.settings.ISettings;
 
 import com.google.inject.Inject;
 

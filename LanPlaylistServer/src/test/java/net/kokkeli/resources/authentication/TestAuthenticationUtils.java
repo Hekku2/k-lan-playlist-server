@@ -4,10 +4,10 @@ import java.lang.annotation.Annotation;
 
 import javax.servlet.http.Cookie;
 
-import net.kokkeli.data.Role;
+import net.kokkeli.data.dto.Role;
 import net.kokkeli.resources.Access;
 import net.kokkeli.resources.AuthenticationErrorHandling;
-import net.kokkeli.resources.Field;
+import net.kokkeli.resources.models.Field;
 import net.kokkeli.server.ServerException;
 
 import org.junit.Assert;

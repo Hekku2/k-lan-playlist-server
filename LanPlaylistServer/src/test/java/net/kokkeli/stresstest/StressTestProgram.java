@@ -13,8 +13,8 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 
-import net.kokkeli.Settings;
 import net.kokkeli.server.LanServer;
+import net.kokkeli.settings.Settings;
 
 /**
  * This is a fast and dirty "stress test" to test that program can handle multiple connections.

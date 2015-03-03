@@ -2,7 +2,7 @@ package net.kokkeli.data.services;
 
 import java.util.Collection;
 
-import net.kokkeli.data.LogRow;
+import net.kokkeli.data.dto.LogRow;
 
 /**
  * Service interface for viewing the log rows.

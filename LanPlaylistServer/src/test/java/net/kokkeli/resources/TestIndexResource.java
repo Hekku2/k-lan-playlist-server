@@ -6,11 +6,11 @@ import static org.mockito.Mockito.when;
 
 import org.junit.Assert;
 
-import net.kokkeli.data.PlayList;
-import net.kokkeli.data.Role;
-import net.kokkeli.data.Track;
-import net.kokkeli.data.User;
 import net.kokkeli.data.db.NotFoundInDatabaseException;
+import net.kokkeli.data.dto.PlayList;
+import net.kokkeli.data.dto.Role;
+import net.kokkeli.data.dto.Track;
+import net.kokkeli.data.dto.User;
 import net.kokkeli.data.services.IPlaylistService;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.player.PlayerStatus;
