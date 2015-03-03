@@ -19,6 +19,7 @@ import net.kokkeli.data.Session;
 import net.kokkeli.data.User;
 import net.kokkeli.data.services.ISessionService;
 import net.kokkeli.player.IPlayer;
+import net.kokkeli.player.PlayerStatus;
 import net.kokkeli.resources.models.BaseModel;
 import net.kokkeli.server.ITemplateService;
 
@@ -58,6 +59,7 @@ public abstract class ResourceTestsBase<T extends BaseResource> {
         Session session = new Session(loggerUser);
         when(mockSessionService.get(any(String.class))).thenReturn(session);
         
+        when(mockPlayer.status()).thenReturn(new PlayerStatus());
         before();
         if (resource == null)
             Assert.fail("Resource under test was not initialized.");

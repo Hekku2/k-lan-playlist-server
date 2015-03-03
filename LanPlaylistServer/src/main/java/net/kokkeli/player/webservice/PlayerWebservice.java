@@ -17,7 +17,6 @@ import com.google.inject.Inject;
 import net.kokkeli.data.db.NotFoundInDatabaseException;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.player.IPlayer;
-import net.kokkeli.player.NotPlaylistPlayingException;
 import net.kokkeli.player.PlayerStatus;
 import net.kokkeli.resources.BadRequestException;
 
@@ -99,16 +98,11 @@ public class PlayerWebservice {
     @Path("/playlistPlaying")
     @Produces(MediaType.APPLICATION_JSON)
     public PlayerStatus playlistPlaying(@Context HttpServletRequest req) throws ServiceException{
-        try {
         PlayerStatus playerStatus = new PlayerStatus();
-        playerStatus.setReadyForPlay(player.readyForPlay());
-        playerStatus.setPlaying(player.playlistPlaying());
+        playerStatus.setReadyForPlay(player.status().getReadyForPlay());
+        playerStatus.setPlaying(player.status().getPlaying());
         if (playerStatus.getPlaying())
-            playerStatus.setSelectedPlaylist(player.getCurrentPlaylistId());
-        
+            playerStatus.setSelectedPlaylist(player.status().getSelectedPlaylist());
         return playerStatus;
-        } catch (NotPlaylistPlayingException e) {
-            throw new ServiceException("For some reason, not playlist playing exception was encountered.");
-        }
     }
 }

@@ -118,7 +118,7 @@ public class PlayerResource extends BaseResource{
     @Path("/play")
     public Response play(@Context HttpServletRequest req){
         try {
-            if (player.readyForPlay()){
+            if (player.status().getReadyForPlay()){
                 player.play();
                 log("Playing started.", LogSeverity.TRACE);
             }
@@ -149,7 +149,7 @@ public class PlayerResource extends BaseResource{
     @Path("/nowPlaying")
     public Response getPlaying(@Context HttpServletRequest req){
         try {
-            return Response.ok().entity(player.getTitle()).build();
+            return Response.ok().entity(player.status().getTitle()).build();
         } catch (ServiceException e) {
             return Response.status(Status.INTERNAL_SERVER_ERROR).build();
         }

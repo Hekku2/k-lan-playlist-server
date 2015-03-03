@@ -1,5 +1,7 @@
 package net.kokkeli.player;
 
+import net.kokkeli.data.services.ServiceException;
+
 public class MockPlayer implements IPlayer {
 
     @Override
@@ -9,24 +11,9 @@ public class MockPlayer implements IPlayer {
     @Override
     public void pause() {
     }
-
-    @Override
-    public String getTitle() {
-        return "MockTitle";
-    }
-
-    @Override
-    public long getCurrentPlaylistId() {
-        return 1;
-    }
-
+    
     @Override
     public void addToQueue(String file) {
-    }
-
-    @Override
-    public boolean playlistPlaying() {
-        return true;
     }
 
     @Override
@@ -34,7 +21,12 @@ public class MockPlayer implements IPlayer {
     }
 
     @Override
-    public boolean readyForPlay() {
-        return true;
+    public PlayerStatus status() throws ServiceException {
+        PlayerStatus status = new PlayerStatus();
+        status.setPlaying(true);
+        status.setReadyForPlay(true);
+        status.setSelectedPlaylist(1);
+        status.setTitle("MockTitle");
+        return status;
     }
 }

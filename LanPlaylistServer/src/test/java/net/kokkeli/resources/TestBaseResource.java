@@ -10,11 +10,13 @@ import javax.ws.rs.core.Response;
 import net.kokkeli.data.LogSeverity;
 import net.kokkeli.data.db.NotFoundInDatabaseException;
 import net.kokkeli.data.services.ServiceException;
+import net.kokkeli.player.PlayerStatus;
 import net.kokkeli.resources.models.BaseModel;
 import net.kokkeli.server.RenderException;
 
 import org.junit.Assert;
 import org.junit.Test;
+
 import com.sun.jersey.api.NotFoundException;
 
 import static org.mockito.Mockito.*;
@@ -55,8 +57,9 @@ public class TestBaseResource extends ResourceTestsBase<BaseResource>{
     @Test
     public void testBaseModelWithoutArguments() throws ServiceException{
         String title = "Title";
-        
-        when(getPlayer().getTitle()).thenReturn(title);
+        PlayerStatus status = new PlayerStatus();
+        status.setTitle(title);
+        when(getPlayer().status()).thenReturn(status);
         
         BaseModel model = resource.buildBaseModel();
         Assert.assertEquals(title, model.getNowPlaying());

@@ -54,30 +54,6 @@ public class PlayerCommunicator implements IPlayer {
             throw new ServiceException(e.getMessage(), e);
         }
     }
-
-    @Override
-    public boolean playlistPlaying() throws ServiceException {
-        logger.log("Requesting playlist status...", LogSeverity.TRACE);
-        try {
-            WebResource resource = client.resource(baseUri + "playlistPlaying");
-            PlayerStatus response = resource.type(MediaType.APPLICATION_FORM_URLENCODED_TYPE).accept(MediaType.APPLICATION_JSON).get(PlayerStatus.class);
-            return response.getPlaying();
-            
-        } catch (ClientHandlerException e) {
-            logger.log("Something went wrong while checking if playlist is playing. " + e.getMessage(), LogSeverity.ERROR);
-            throw new ServiceException(e.getMessage(), e);
-        }
-    }
-
-    @Override
-    public long getCurrentPlaylistId() throws NotPlaylistPlayingException {
-        logger.log("Requesting playlist status...", LogSeverity.TRACE);
-        WebResource resource = client.resource(baseUri + "playlistPlaying");
-        PlayerStatus response = resource.type(MediaType.APPLICATION_FORM_URLENCODED_TYPE).accept(MediaType.APPLICATION_JSON).get(PlayerStatus.class);
-        if (response.getPlaying())
-            return response.getSelectedPlaylist();
-        throw new NotPlaylistPlayingException("No playlist playing.");
-    }
     
     @Override
     public void addToQueue(String location) throws ServiceException {
@@ -96,19 +72,6 @@ public class PlayerCommunicator implements IPlayer {
     }
 
     @Override
-    public boolean readyForPlay() throws ServiceException {
-        try {
-            logger.log("Requesting ready for play status...", LogSeverity.TRACE);
-            WebResource resource = client.resource(baseUri + "playlistPlaying");
-            PlayerStatus response = resource.type(MediaType.APPLICATION_FORM_URLENCODED_TYPE).accept(MediaType.APPLICATION_JSON).get(PlayerStatus.class);
-            return response.getReadyForPlay();
-        } catch (ClientHandlerException e) {
-            logger.log("Something went wrong while sending selecting playlist. " + e.getMessage(), LogSeverity.ERROR);
-            throw new ServiceException(e.getMessage(), e);
-        }
-    }
-
-    @Override
     public void pause() throws ServiceException {
         logger.log("Pause command received, sending...", LogSeverity.TRACE);
         WebResource resource = client.resource(baseUri + "pause");
@@ -118,22 +81,22 @@ public class PlayerCommunicator implements IPlayer {
             throw new ServiceException("Response status was not succesful. It was " + response.getStatus());
     }
 
-    @Override
-    public String getTitle() throws ServiceException {
-        try {
-            logger.log("Requesting title...", LogSeverity.TRACE);
-            WebResource resource = client.resource(baseUri + "playlistPlaying");
-            PlayerStatus response = resource.type(MediaType.APPLICATION_FORM_URLENCODED_TYPE).accept(MediaType.APPLICATION_JSON).get(PlayerStatus.class);
-            return response.getTitle();
-        } catch (ClientHandlerException e) {
-            logger.log("Something went wrong while sending selecting playlist. " + e.getMessage(), LogSeverity.ERROR);
-            throw new ServiceException(e.getMessage(), e);
-        }
-    }
-
     private static Client buildClient(){
         ClientConfig config = new DefaultClientConfig();
         config.getClasses().add(JacksonJsonProvider.class);
         return Client.create(config);
+    }
+
+    @Override
+    public PlayerStatus status() throws ServiceException {
+        try {
+            logger.log("Requesting title...", LogSeverity.TRACE);
+            WebResource resource = client.resource(baseUri + "playlistPlaying");
+            PlayerStatus response = resource.type(MediaType.APPLICATION_FORM_URLENCODED_TYPE).accept(MediaType.APPLICATION_JSON).get(PlayerStatus.class);
+            return response;
+        } catch (ClientHandlerException e) {
+            logger.log("Something went wrong while sending selecting playlist. " + e.getMessage(), LogSeverity.ERROR);
+            throw new ServiceException(e.getMessage(), e);
+        }
     }
 }

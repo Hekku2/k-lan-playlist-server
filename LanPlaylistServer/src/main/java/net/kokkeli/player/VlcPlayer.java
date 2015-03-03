@@ -59,23 +59,6 @@ public class VlcPlayer implements IPlayer {
     public void pause() {
         player.pause();
     }
-
-    @Override
-    public String getTitle() {
-        return player.currentTitle();
-    }
-
-    @Override
-    public long getCurrentPlaylistId() throws NotPlaylistPlayingException {
-        if (!playListPlaying)
-            throw new NotPlaylistPlayingException("No playlist playing.");
-        return currentPlaylistId;
-    }
-
-    @Override
-    public boolean playlistPlaying() {
-        return playListPlaying;
-    }
     
     /**
      * Adds file to queue.
@@ -93,14 +76,19 @@ public class VlcPlayer implements IPlayer {
         currentPlaylistId = id;
     }
     
-
-    @Override
-    public boolean readyForPlay() {
-        return playlistPlaying() || (trackQueue.peek() != null);
-    }
-    
     public void stop() {
         player.stop();
+    }
+    
+    @Override
+    public PlayerStatus status() throws ServiceException {
+        PlayerStatus status = new PlayerStatus();
+        status.setTitle(player.currentTitle());
+        status.setReadyForPlay(playListPlaying || (trackQueue.peek() != null));
+        status.setPlaying(playListPlaying);
+        if (playListPlaying)
+            status.setSelectedPlaylist(currentPlaylistId);
+        return null;
     }
     
     /**

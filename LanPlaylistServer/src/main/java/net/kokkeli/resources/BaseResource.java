@@ -64,8 +64,8 @@ public abstract class BaseResource {
             loadAnonymousData(model);
         
         try {
-            model.setNowPlaying(player.getTitle());
-            model.setAnythingPlaying(player.readyForPlay());
+            model.setNowPlaying(player.status().getTitle());
+            model.setAnythingPlaying(player.status().getReadyForPlay());
         } catch (ServiceException e) {
             model.setAnythingPlaying(false);
             model.setNowPlaying("");
@@ -104,7 +104,7 @@ public abstract class BaseResource {
     protected final BaseModel buildBaseModel() {
         BaseModel model = new BaseModel();
         try {
-            model.setNowPlaying(player.getTitle());
+            model.setNowPlaying(player.status().getTitle());
         } catch (ServiceException e) {
             model.setNowPlaying("");
         }

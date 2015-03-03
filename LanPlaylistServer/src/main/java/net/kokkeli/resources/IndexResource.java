@@ -19,7 +19,6 @@ import net.kokkeli.data.services.IPlaylistService;
 import net.kokkeli.data.services.ISessionService;
 import net.kokkeli.data.services.ServiceException;
 import net.kokkeli.player.IPlayer;
-import net.kokkeli.player.NotPlaylistPlayingException;
 import net.kokkeli.resources.models.BaseModel;
 import net.kokkeli.resources.models.ModelPlaylist;
 import net.kokkeli.resources.models.ModelPlaylistItem;
@@ -68,8 +67,8 @@ public class IndexResource extends BaseResource {
         try {
             BaseModel base = buildBaseModel(req);
             try {
-                if (player.playlistPlaying()){
-                    long currentPlaylist = player.getCurrentPlaylistId();
+                if (player.status().getPlaying()){
+                    long currentPlaylist = player.status().getSelectedPlaylist();
                     PlayList playlist = playlistService.getPlaylist(currentPlaylist);
                     ModelPlaylist modelPlayList = new ModelPlaylist(playlist.getId());
                     modelPlayList.setName(playlist.getName());
@@ -87,8 +86,6 @@ public class IndexResource extends BaseResource {
                 base.setError("For some reason, currently playing playlist was not found.");
             } catch (ServiceException e) {
                 base.setError("For some reason, currently playing playlist can't be shown.");
-            } catch (NotPlaylistPlayingException e) {
-                base.setError("For some reason, there is no playlist playing.");
             }
 
             return Response.ok(templates.process(INDEX_TEMPLATE, base)).build();

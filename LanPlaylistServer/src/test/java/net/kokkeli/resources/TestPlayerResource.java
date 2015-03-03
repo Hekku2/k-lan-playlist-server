@@ -16,6 +16,7 @@ import net.kokkeli.data.Track;
 import net.kokkeli.data.db.NotFoundInDatabaseException;
 import net.kokkeli.data.services.ITrackService;
 import net.kokkeli.data.services.ServiceException;
+import net.kokkeli.player.PlayerStatus;
 
 public class TestPlayerResource extends ResourceTestsBase<PlayerResource> {
     private ITrackService mockTrackService;
@@ -118,7 +119,9 @@ public class TestPlayerResource extends ResourceTestsBase<PlayerResource> {
     
     @Test
     public void testPlayCallsPlay() throws ServiceException{
-        when(getPlayer().readyForPlay()).thenReturn(true);
+        PlayerStatus status = new PlayerStatus();
+        status.setReadyForPlay(true);
+        when(getPlayer().status()).thenReturn(status);
         Response r = resource.play(buildRequest());
         assertEquals(RESPONSE_OK, r.getStatus());
         verify(getPlayer()).play();
@@ -126,7 +129,9 @@ public class TestPlayerResource extends ResourceTestsBase<PlayerResource> {
     
     @Test
     public void testPlayReturnsInternalErrorWhenPlayerThrowsServiceException() throws ServiceException{
-        when(getPlayer().readyForPlay()).thenReturn(true);
+        PlayerStatus status = new PlayerStatus();
+        status.setReadyForPlay(true);
+        when(getPlayer().status()).thenReturn(status);
         Mockito.doThrow(new ServiceException("Boom!")).when(getPlayer()).play();
         Response r = resource.play(buildRequest());
         assertEquals(INTERNAL_SERVER_ERROR, r.getStatus());
