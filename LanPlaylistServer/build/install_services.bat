@@ -1,5 +1,5 @@
 @ECHO OFF
-SET startClass=net.kokkeli.player.PlayerServiceRunner
+SET startClass=net.kokkeli.player.webservice.PlayerServiceRunner
 SET startMethod=main
 SET stopMethod=stop
 SET serviceName=Lanplayer-Player
