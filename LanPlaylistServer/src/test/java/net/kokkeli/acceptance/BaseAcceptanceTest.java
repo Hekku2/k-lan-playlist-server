@@ -57,7 +57,8 @@ public abstract class BaseAcceptanceTest {
     
     @AfterClass
     public static void fixtureTeardown() throws Exception{
-        server.stop();
+        if (server != null)
+            server.stop();
     }
     
     @Before
