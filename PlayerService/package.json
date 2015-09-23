@@ -1,0 +1,23 @@
+{
+  "name": "PlayerService",
+  "version": "0.0.1",
+  "description": "PlayerService",
+  "main": "player-service.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified! Configure in package.json\" && exit 1"
+  },
+  "repository": "",
+  "keywords": [
+    "lanplayer"
+  ],
+  "author": "Hekku2",
+  "license": "MIT",
+  "readmeFilename": "README.md",
+  "dependencies": {
+        "express": "^4.13.3"
+  },
+  "devDependencies": {
+        "gulp": "^3.9.0",
+        "gulp-jshint": "^1.11.2"
+  }
+}
