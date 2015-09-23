@@ -1,1 +1,0 @@
-INSERT INTO users (UserName, Role, PasswordHash) VALUES ('admin', 3, '4c971b7a598e1c1fb09e6fe1750c6fd3ed1e73ff');
