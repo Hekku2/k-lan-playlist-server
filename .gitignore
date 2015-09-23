@@ -5,3 +5,4 @@
 /LanPlaylistServer/lanplaylistserver-0.0.1-SNAPSHOT.jar
 /LanPlaylistServer/db/testserver.db
 /.vagrant
+/PlayerService/.settings
