@@ -13,6 +13,14 @@ npm config set loglevel warn
 npm install pm2 -g
 npm install gulp -g
 
+#Youtube-dl
+curl https://yt-dl.org/latest/youtube-dl -o /usr/local/bin/youtube-dl
+chmod a+rx /usr/local/bin/youtube-dl
+add-apt-repository -qq -y ppa:mc3man/trusty-media
+apt-get -qq update
+apt-get -qq install -y ffmpeg
+
+
 #Clone the base project (currently from branch)
 git clone https://github.com/Hekku2/k-lan-playlist-server.git -b Branch_nodejs
 chown -R vagrant k-lan-playlist-server
