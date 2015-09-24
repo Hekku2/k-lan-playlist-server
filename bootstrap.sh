@@ -24,7 +24,7 @@ chown -R vagrant k-lan-playlist-server
 su - vagrant -c 'vlc -d -I http --http-port 9999 --http-password test --sout '\''#standard{access=http,mux=ogg,dst=0.0.0.0:8081}'\'' --http-host=127.0.0.1 --sout-keep'
 
 #Start services
-su - vagrant -c 'pm2 start k-lan-playlist-server/PlayerService/src/player-service.js --watch'
+su - vagrant -c 'cd k-lan-playlist-server/PlayerService/ && pm2 start src/player-service.js --watch'
 
 
 

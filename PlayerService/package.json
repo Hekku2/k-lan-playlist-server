@@ -17,7 +17,9 @@
   "license": "MIT",
   "readmeFilename": "README.md",
   "dependencies": {
-        "express": "^4.13.3"
+        "express": "^4.13.3",
+        "vlc-control-node": "Hekku2/vlc-control-node",
+        "config": "^1.16.0"
   },
   "devDependencies": {
         "gulp": "^3.9.0",

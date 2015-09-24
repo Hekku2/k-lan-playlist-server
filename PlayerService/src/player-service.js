@@ -1,3 +1,12 @@
+var config = require('config');
+
+var vlc = require('vlc-control-node');
+vlc.init({
+            ip: config.get('Vlc.http-ip'),
+            port: config.get('Vlc.http-port'),
+            user: config.get('Vlc.http-username'),
+            password: config.get('Vlc.http-password')});
+
 var express = require('express');
 var app = express();
 
