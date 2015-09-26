@@ -1,3 +1,5 @@
+USE lanplayer;
+
 DELETE FROM logs;
 DELETE FROM fetch_requests;
 DELETE FROM tracks_playlists;
