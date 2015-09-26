@@ -39,6 +39,7 @@ su - vagrant -c 'vlc -d -I http --http-port 9999 --http-password test --sout '\'
 
 #Start services
 su - vagrant -c 'cd k-lan-playlist-server/PlayerService/ && pm2 --no-color start src/player-service.js --watch'
+su - vagrant -c 'cd k-lan-playlist-server/UserService/ && pm2 --no-color start src/user-service.js --watch'
 
 #Initialiaze database for dev deployment
 mysql --user=root --password=root < database_initialization.sql
