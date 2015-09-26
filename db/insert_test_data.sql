@@ -26,27 +26,27 @@ INSERT INTO playlists (Name) VALUES ('Test playlist 2015');
 INSERT INTO tracks_playlists (TrackId, PlayListId)
 VALUES (
     (SELECT Id FROM tracks WHERE Track like 'Seitan is guud' and Artist like 'Lucifer Virtanen'),
-    (SELECT Id FROM playlists WHERE Name like 'Joululan 2014')
+    (SELECT Id FROM playlists WHERE Name like 'Test playlist 2014')
 );
 INSERT INTO tracks_playlists (TrackId, PlayListId)
 VALUES (
     (SELECT Id FROM tracks WHERE Track like 'March enemy hell matti' and Artist like 'Lucifer Virtanen'),
-    (SELECT Id FROM playlists WHERE Name like 'Joululan 2014')
+    (SELECT Id FROM playlists WHERE Name like 'Test playlist 2014')
 );
 INSERT INTO tracks_playlists (TrackId, PlayListId)
 VALUES (
     (SELECT Id FROM tracks WHERE Track like 'Jarmonet' and Artist like 'Raimo Belsebup'),
-    (SELECT Id FROM playlists WHERE Name like 'Joululan 2014')
+    (SELECT Id FROM playlists WHERE Name like 'Test playlist 2014')
 );
 INSERT INTO tracks_playlists (TrackId, PlayListId)
 VALUES (
     (SELECT Id FROM tracks WHERE Track like 'Mursujyrä' and Artist like 'Marssimailat'),
-    (SELECT Id FROM playlists WHERE Name like 'Joululan 2014')
+    (SELECT Id FROM playlists WHERE Name like 'Test playlist 2014')
 );
 INSERT INTO tracks_playlists (TrackId, PlayListId)
 VALUES (
     (SELECT Id FROM tracks WHERE Track like 'Katujyrä' and Artist like 'Marssimailat'),
-    (SELECT Id FROM playlists WHERE Name like 'Joululan 2014')
+    (SELECT Id FROM playlists WHERE Name like 'Test playlist 2014')
 );
 
 INSERT INTO fetch_requests(Location, Handler, DestinationFile, LastUpdated, FetchStatus, Track)
