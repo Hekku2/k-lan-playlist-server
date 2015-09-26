@@ -18,7 +18,10 @@
   "readmeFilename": "README.md",
   "dependencies": {
         "express": "^4.13.3",
-        "config": "^1.16.0"
+        "config": "^1.16.0",
+        "mysql": "^2.9.0",
+        "sequelize": "^3.9.0",
+        "tedious": "^1.12.3"
   },
   "devDependencies": {
         "gulp": "^3.9.0",
