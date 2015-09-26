@@ -1,0 +1,27 @@
+{
+  "name": "UserService",
+  "version": "0.0.1",
+  "description": "UserService",
+  "main": "user-service.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified! Configure in package.json\" && exit 1"
+  },
+  "repository": { 
+      "type" : "git",
+      "url" : "https://github.com/Hekku2/k-lan-playlist-server.git"
+  },
+  "keywords": [
+    "lanplayer"
+  ],
+  "author": "Hekku2",
+  "license": "MIT",
+  "readmeFilename": "README.md",
+  "dependencies": {
+        "express": "^4.13.3",
+        "config": "^1.16.0"
+  },
+  "devDependencies": {
+        "gulp": "^3.9.0",
+        "gulp-jshint": "^1.11.2"
+  }
+}

@@ -1,0 +1,5 @@
+{
+    "UserService": {
+        "port": 8080
+    }
+}
