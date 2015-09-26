@@ -3,7 +3,7 @@ CREATE DATABASE lanplayer;
 USE lanplayer;
 
 CREATE TABLE users(
-    Id INTEGER NOT NULL PRIMARY KEY,
+    Id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
     UserName VARCHAR(50) CHARACTER SET utf8 UNIQUE,
     Role int,
     PasswordHash TEXT
