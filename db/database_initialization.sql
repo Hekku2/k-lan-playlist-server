@@ -4,7 +4,7 @@ USE lanplayer;
 
 CREATE TABLE users(
     Id INTEGER NOT NULL PRIMARY KEY,
-    UserName TEXT UNIQUE,
+    UserName VARCHAR(50) CHARACTER SET utf8 UNIQUE,
     Role int,
     PasswordHash TEXT
 );
