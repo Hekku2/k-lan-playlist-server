@@ -3,6 +3,12 @@
 apt-get -qq update
 apt-get -qq install -y git
 
+#Database configuration
+debconf-set-selections <<< 'mysql-server mysql-server/root_password password root'
+debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root'
+apt-get -qq install -y mysql-server
+
+
 #Node js
 curl --silent --location https://deb.nodesource.com/setup_4.x | bash -
 apt-get -qq install -y nodejs
@@ -16,7 +22,7 @@ npm install gulp -g
 #Youtube-dl
 curl https://yt-dl.org/latest/youtube-dl -o /usr/local/bin/youtube-dl
 chmod a+rx /usr/local/bin/youtube-dl
-add-apt-repository -qq -y ppa:mc3man/trusty-media
+add-apt-repository -y ppa:mc3man/trusty-media
 apt-get -qq update
 apt-get -qq install -y ffmpeg
 
@@ -32,7 +38,7 @@ chown -R vagrant k-lan-playlist-server
 su - vagrant -c 'vlc -d -I http --http-port 9999 --http-password test --sout '\''#standard{access=http,mux=ogg,dst=0.0.0.0:8081}'\'' --http-host=127.0.0.1 --sout-keep'
 
 #Start services
-su - vagrant -c 'cd k-lan-playlist-server/PlayerService/ && pm2 start src/player-service.js --watch'
+su - vagrant -c 'cd k-lan-playlist-server/PlayerService/ && pm2 --no-color start src/player-service.js --watch'
 
 
 
