@@ -5,7 +5,7 @@ var userOperations = require('./user-operations.js');
 
 app.get('/users', function (req, res) {
     var users = userOperations.users();
-    users.success(function(result){
+    users.then(function(result){
         res.send(result);
     }).error(function(error){
         res.sendStatus(500);

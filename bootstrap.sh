@@ -32,6 +32,7 @@ chown -R vagrant k-lan-playlist-server
 
 #Install 
 (cd k-lan-playlist-server/PlayerService/ && npm install)
+(cd k-lan-playlist-server/UserService/ && npm install)
 
 #Start VLC as vagrant.
 su - vagrant -c 'vlc -d -I http --http-port 9999 --http-password test --sout '\''#standard{access=http,mux=ogg,dst=0.0.0.0:9090}'\'' --http-host=127.0.0.1 --sout-keep'
