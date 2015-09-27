@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 apt-get -qq update
 apt-get -qq install -y git
 
@@ -20,7 +19,7 @@ npm install pm2 -g
 npm install gulp -g
 
 #Youtube-dl
-curl https://yt-dl.org/latest/youtube-dl -o /usr/local/bin/youtube-dl
+curl --silent https://yt-dl.org/latest/youtube-dl -o /usr/local/bin/youtube-dl
 chmod a+rx /usr/local/bin/youtube-dl
 add-apt-repository -y ppa:mc3man/trusty-media
 apt-get -qq update
@@ -38,12 +37,10 @@ chown -R vagrant k-lan-playlist-server
 su - vagrant -c 'vlc -d -I http --http-port 9999 --http-password test --sout '\''#standard{access=http,mux=ogg,dst=0.0.0.0:9090}'\'' --http-host=127.0.0.1 --sout-keep'
 
 #Start services
-su - vagrant -c 'cd k-lan-playlist-server/PlayerService/ && pm2 --no-color start src/player-service.js --watch'
-su - vagrant -c 'cd k-lan-playlist-server/UserService/ && pm2 --no-color start src/user-service.js --watch'
+su - vagrant -c 'cd k-lan-playlist-server/PlayerService/ && pm2 -s start src/player-service.js --watch'
+su - vagrant -c 'cd k-lan-playlist-server/UserService/ && pm2 -s start src/user-service.js --watch'
 
 #Initialiaze database for dev deployment
-mysql --user=root --password=root < database_initialization.sql
-
-# test env.
-su - vagrant -c 'export NODE_ENV=vagrant-test'
+mysql --user=root --password=root < k-lan-playlist-server/db/database_initialization.sql
+mysql --user=root --password=root < k-lan-playlist-server/db/insert_test_data.sql
 
