@@ -6,3 +6,4 @@
 /LanPlaylistServer/db/testserver.db
 /.vagrant
 /PlayerService/.settings
+/UserService/.settings
