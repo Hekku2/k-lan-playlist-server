@@ -1,21 +1,17 @@
 var config = require('config');
 var express = require('express');
 var app = express();
-var userOperations = require('./user-operations.js');
 
-app.get('/users', function (req, res) {
-    var users = userOperations.users();
-    users.then(function(result){
-        res.send(result);
-    }).error(function(error){
-        res.sendStatus(500);
-    });
-});
+var routes = require('./routes');
+var statusHandler = require('./handlers/status-handler.js');
+var userHandler = require('./handlers/user-handler.js');
 
-app.get('/status', function (req, res) {
-    res.send('Hello World!');
-});
+var handlers = {
+    status: statusHandler,
+    user: userHandler
+};
 
+routes.setup(app, handlers);
 var server = app.listen(config.get('UserService.port'), function () {
     var host = server.address().address;
     var port = server.address().port;
