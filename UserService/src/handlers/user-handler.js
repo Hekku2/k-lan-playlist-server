@@ -10,5 +10,5 @@ exports.list = function(req, res) {
         res.sendStatus(500);
     };
     
-    query.then(success).error(error);
+    query.then(success).caught(error);
 };
