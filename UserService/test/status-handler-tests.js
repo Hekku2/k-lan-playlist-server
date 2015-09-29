@@ -5,7 +5,7 @@ describe('status-handler', function(){
     var response;
     var request;
     
-    before(function() {
+    beforeEach(function() {
         response = {
             content: undefined,
             send: function(msg){

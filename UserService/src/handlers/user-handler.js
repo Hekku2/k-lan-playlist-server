@@ -1,10 +1,14 @@
-var userOperations = require('../user-operations.js');
+var userOperations = require('../db/user-operations.js');
 
 exports.list = function(req, res) {
-    var users = userOperations.users();
-    users.then(function(result){
+    var query = userOperations.users();
+    
+    var success = function(result) {
         res.send(result);
-    }).error(function(error){
+    };
+    var error = function(error){
         res.sendStatus(500);
-    });
+    };
+    
+    query.then(success).error(error);
 };
