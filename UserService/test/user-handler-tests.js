@@ -49,7 +49,7 @@ describe('user-handler', function(){
             var response = {
                 send: function(x){},
                 sendStatus: function(status){
-                    assert.equal(500, status);
+                    assert.equal(501, status);
                     done();
                 }
             };
