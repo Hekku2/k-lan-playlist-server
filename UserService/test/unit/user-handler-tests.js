@@ -1,7 +1,7 @@
 var assert = require('assert');
 var sinon = require('sinon');
 var Promise = require('sequelize').Promise;
-var db = require('../src/db/user-operations.js')
+var db = require('../../src/db/user-operations.js')
 
 describe('user-handler', function(){
     var request;
@@ -14,7 +14,7 @@ describe('user-handler', function(){
     beforeEach('Initialize sandbox', function() {
         sandbox = sinon.sandbox.create();
         queryStub = sandbox.stub(db, 'users');
-        service = require('../src/handlers/user-handler.js');
+        service = require('../../src/handlers/user-handler.js');
     });
     
     afterEach('Restore sandbox', function() {

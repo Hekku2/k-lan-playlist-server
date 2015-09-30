@@ -10,7 +10,7 @@ gulp.task('jshint', function() {
 });
 
 gulp.task('mocha', function() {
-    gulp.src('./test/*.js')
+    gulp.src('./test/**/*.js')
     .pipe(mocha())
     .on('error', function(e){
         console.log(e);
@@ -19,7 +19,7 @@ gulp.task('mocha', function() {
 });
 
 gulp.task('default', ['jshint', 'mocha'], function() {
-    gulp.watch(['./test/*.js', './src/**/*.js'], function() {
+    gulp.watch(['./test/**/*.js', './src/**/*.js'], function() {
         gulp.run('jshint');
         gulp.run('mocha');
     });

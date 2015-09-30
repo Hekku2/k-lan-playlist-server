@@ -1,5 +1,5 @@
 var assert = require('assert');
-var service = require('../src/handlers/status-handler.js');
+var service = require('../../src/handlers/status-handler.js');
 
 describe('status-handler', function(){
     var response;

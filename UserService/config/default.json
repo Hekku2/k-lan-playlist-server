@@ -6,5 +6,8 @@
         "host": "localhost",
         "user": "root",
         "password": "root"
+    },
+    "TestSettings": {
+        "port": 8666
     }
 }

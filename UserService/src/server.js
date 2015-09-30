@@ -11,9 +11,16 @@ var handlers = {
     user: userHandler
 };
 
-routes.setup(app, handlers);
-var server = app.listen(config.get('UserService.port'), function () {
-    var host = server.address().address;
-    var port = server.address().port;
-    console.log('Example app listening at http://%s:%s', host, port);
-});
+var innerServer;
+
+exports.start = function(port){
+    routes.setup(app, handlers);
+    
+    innerServer = app.listen(port, function () {
+        console.log('Example app listening at http://localhost:%s',  port);
+    });
+};
+
+exports.stop = function(){
+    innerServer.close();
+};
