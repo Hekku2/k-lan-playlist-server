@@ -18,6 +18,7 @@ npm config set loglevel warn
 npm install pm2 -g
 npm install gulp -g
 npm install mocha -g
+npm install jenkins-mocha -g 
 
 #Youtube-dl
 curl --silent https://yt-dl.org/latest/youtube-dl -o /usr/local/bin/youtube-dl
