@@ -1,7 +1,7 @@
 var assert = require('assert');
 var sinon = require('sinon');
 var Promise = require('sequelize').Promise;
-var db = require('../../src/db/user-operations.js')
+var db = require('../../src/db/user-operations.js');
 
 describe('user-handler', function(){
     var request;
@@ -9,26 +9,32 @@ describe('user-handler', function(){
     var sandbox;
     var queryStub;
     
-    var service;
+    var service = require('../../src/handlers/user-handler.js');;
     
-    beforeEach('Initialize sandbox', function() {
+    beforeEach('Initialize sandbox', function(done) {
         sandbox = sinon.sandbox.create();
-        queryStub = sandbox.stub(db, 'users');
-        service = require('../../src/handlers/user-handler.js');
+        done();
     });
     
-    afterEach('Restore sandbox', function() {
+    afterEach('Restore sandbox', function(done) {
         sandbox.restore();
+        done();
     });
         
     describe('#list()', function(){
+        beforeEach('Initialize DB functions', function(done) {
+            queryStub = sandbox.stub(db, 'users');
+
+            done();
+        });
+
         it('should return list of users', function (done){
             var promise = Promise.resolve([{
                 id:20,
                 username: 'test-user'
             }]);
             queryStub.returns(promise);
-            
+
             var response = {
                 send: function(content){
                     var user = content[0];
@@ -47,15 +53,44 @@ describe('user-handler', function(){
             });
             queryStub.returns(promise);
             var response = {
-                send: function(x){},
                 sendStatus: function(status){
                     assert.equal(500, status);
                     done();
                 }
             };
-            
             service.list(request, response);
         });
-        
+    });
+
+    describe('#single()', function(){
+        beforeEach('Initialize DB functions', function(done) {
+            queryStub = sandbox.stub(db, 'user');
+            service = require('../../src/handlers/user-handler.js');
+            done();
+        });
+
+        it('should return one user', function (done){
+            var expectedUser = {
+                id: 20,
+                username: 'test-user'
+            };
+            var promise = Promise.resolve(expectedUser);
+            queryStub.returns(promise);
+            var response = {
+                send: function(content){
+                    var user = content;
+
+                    assert.equal(expectedUser.id, user.id);
+                    assert.equal(expectedUser.username, user.username);
+                    done();
+                }
+            };
+            request = {
+                params: {
+                    id: expectedUser.id
+                }
+            };
+            service.single(request, response);
+        });
     });
 });

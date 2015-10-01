@@ -31,12 +31,31 @@ describe('Integration tests: users', function(){
               }
               
               var user = res.body[0];
-              console.log(user);
               assert.equal(adminUser.id, user.id);
               assert.equal(adminUser.username, user.username);
               
               done();
             });
+        });
+    });
+
+    describe('#user()', function(){
+        it('should return single matching user', function (done){
+            request(url)
+                .get('/api/user/1')
+                .expect('Content-Type', /json/)
+                .expect(200)
+                .end(function(err, res){
+                    if (err) {
+                        throw err;
+                    }
+
+                    var user = res.body;
+                    assert.equal(adminUser.id, user.id);
+                    assert.equal(adminUser.username, user.username);
+
+                    done();
+                });
         });
     });
 });

@@ -7,3 +7,5 @@
 /.vagrant
 /PlayerService/.settings
 /UserService/.settings
+/UserService/node_modules
+/PlayerService/node_modules

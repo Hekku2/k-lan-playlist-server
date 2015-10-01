@@ -7,8 +7,22 @@ exports.list = function(req, res) {
         res.send(result);
     };
     var error = function(error){
+        console.log(error);
         res.sendStatus(500);
     };
     
+    query.then(success).caught(error);
+};
+
+exports.single = function(req, res){
+    var query = userOperations.user(req.params.id);
+
+    var success = function(result) {
+        res.send(result);
+    };
+    var error = function(error){
+        res.sendStatus(500);
+    };
+
     query.then(success).caught(error);
 };
