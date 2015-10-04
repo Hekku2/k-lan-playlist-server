@@ -2,7 +2,7 @@
   "name": "PlayerService",
   "version": "0.0.1",
   "description": "PlayerService",
-  "main": "server.js",
+  "main": "src/server.js",
   "scripts": {
     "test": "jenkins-mocha test/*"
   },

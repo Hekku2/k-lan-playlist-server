@@ -2,7 +2,7 @@
   "name": "UserService",
   "version": "0.0.1",
   "description": "UserService",
-  "main": "server.js",
+  "main": "src/server.js",
   "scripts": {
     "test": "jenkins-mocha test/*"
   },
