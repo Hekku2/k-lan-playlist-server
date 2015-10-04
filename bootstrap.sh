@@ -40,7 +40,7 @@ chown -R vagrant k-lan-playlist-server
 su - vagrant -c 'vlc -d -I http --http-port 9999 --http-password test --sout '\''#standard{access=http,mux=ogg,dst=0.0.0.0:9090}'\'' --http-host=127.0.0.1 --sout-keep'
 
 #Start services
-su - vagrant -c 'cd k-lan-playlist-server/PlayerService/ && pm2 -s start src/server.js --watch --name player-service'
+su - vagrant -c 'cd k-lan-playlist-server/PlayerService/ && pm2 -s start src/start.js --watch --name player-service'
 su - vagrant -c 'cd k-lan-playlist-server/UserService/ && pm2 -s start src/start.js --watch --name user-service'
 
 #Initialiaze database for dev deployment
