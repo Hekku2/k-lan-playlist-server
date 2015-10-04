@@ -16,6 +16,8 @@ exports.list = function(req, res) {
 exports.single = function(req, res){
     var query = userOperations.user(req.params.id);
 
+    //TODO Handle "not found"-case
+
     var success = function(result) {
         res.send(result);
     };
