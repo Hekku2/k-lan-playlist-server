@@ -7,7 +7,6 @@ exports.list = function(req, res) {
         res.send(result);
     };
     var error = function(error){
-        console.log(error);
         res.sendStatus(500);
     };
     
