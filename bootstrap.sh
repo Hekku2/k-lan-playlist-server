@@ -19,6 +19,7 @@ npm install pm2 -g
 npm install gulp -g
 npm install mocha -g
 npm install jenkins-mocha -g 
+npm install bower -g
 
 #Youtube-dl
 curl --silent https://yt-dl.org/latest/youtube-dl -o /usr/local/bin/youtube-dl
@@ -42,6 +43,7 @@ su - vagrant -c 'vlc -d -I http --http-port 9999 --http-password test --sout '\'
 #Start services
 su - vagrant -c 'cd k-lan-playlist-server/PlayerService/ && pm2 -s start src/start.js --watch --name player-service'
 su - vagrant -c 'cd k-lan-playlist-server/UserService/ && pm2 -s start src/start.js --watch --name user-service'
+su - vagrant -c 'cd k-lan-playlist-server/LanPlayerClientSide/ && pm2 -s start src/start.js --watch --name client-side'
 
 #Initialiaze database for dev deployment
 mysql --user=root --password=root < k-lan-playlist-server/db/database_initialization.sql

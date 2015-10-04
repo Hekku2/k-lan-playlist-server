@@ -1,0 +1,28 @@
+{
+  "name": "LanPlayerClientSide",
+  "version": "0.0.1",
+  "description": "Client side HTML UI for Lan Player services",
+  "main": "src/server.js",
+  "scripts": {
+  },
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/Hekku2/k-lan-playlist-server.git"
+  },
+  "keywords": [
+    "lanplayer"
+  ],
+  "author": "Hekku2",
+  "license": "MIT",
+  "readmeFilename": "README.md",
+  "dependencies": {
+    "express": "^4.13.3",
+    "config": "^1.16.0",
+    "jade": "latest",
+    "bower": "latest"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-jshint": "^1.11.2"
+  }
+}

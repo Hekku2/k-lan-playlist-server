@@ -1,0 +1,12 @@
+{
+  "name": "lan-player-client-side",
+  "description": "Lan player client side service.",
+  "version": "0.0.1",
+  "homepage": "https://github.com/Hekku2/k-lan-playlist-server",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "angular": "~1.4.0",
+    "angular-route": "~1.4.0"
+  }
+}
