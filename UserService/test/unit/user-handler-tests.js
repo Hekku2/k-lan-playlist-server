@@ -92,5 +92,36 @@ describe('user-handler', function(){
             };
             service.single(request, response);
         });
+
+        it('should return 404 on nonfound', function (done){
+            var promise = Promise.resolve(null);
+            queryStub.returns(promise);
+            var response = {
+                sendStatus: function(status){
+                    assert.equal(404, status);
+                    done();
+                }
+            };
+            request = {
+                params: {
+                    id: 123
+                }
+            };
+            service.single(request, response);
+        });
+
+        it('should return 500 on error', function (done){
+            var promise = Promise.resolve().then(function() {
+                throw new Error('errors');
+            });
+            queryStub.returns(promise);
+            var response = {
+                sendStatus: function(status){
+                    assert.equal(500, status);
+                    done();
+                }
+            };
+            service.single(request, response);
+        });
     });
 });
