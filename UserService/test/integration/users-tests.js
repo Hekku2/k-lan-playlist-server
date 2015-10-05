@@ -57,5 +57,17 @@ describe('Integration tests: users', function(){
                     done();
                 });
         });
+        it('should return 404 if user does not exists', function (done){
+            request(url)
+                .get('/api/user/666')
+                .expect(404)
+                .end(function(err, res){
+                    if (err) {
+                        throw err;
+                    }
+
+                    done();
+                });
+        });
     });
 });
