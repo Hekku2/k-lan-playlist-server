@@ -4,6 +4,7 @@
   "description": "Client side HTML UI for Lan Player services",
   "main": "src/server.js",
   "scripts": {
+    "install": "bower install --config.interactive=false"
   },
   "repository": {
     "type" : "git",
