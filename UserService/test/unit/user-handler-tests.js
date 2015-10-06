@@ -9,7 +9,7 @@ describe('user-handler', function(){
     var sandbox;
     var queryStub;
     
-    var service = require('../../src/handlers/user-handler.js');;
+    var service = require('../../src/handlers/user-handler.js');
     
     beforeEach('Initialize sandbox', function(done) {
         sandbox = sinon.sandbox.create();
