@@ -15,7 +15,7 @@ describe('Integration tests: users', function(){
         server.start(config.get('TestSettings.port'));
     });
     
-    after('Restore sandbox', function() {
+    after('Stop server', function() {
         server.stop();
     });
     
@@ -26,15 +26,17 @@ describe('Integration tests: users', function(){
             .expect('Content-Type', /json/)
             .expect(200)
             .end(function(err, res){
-              if (err) {
-                  throw err;
-              }
-              
-              var user = res.body[0];
-              assert.equal(adminUser.id, user.id);
-              assert.equal(adminUser.username, user.username);
-              
-              done();
+                if (err) {
+                    assert.fail('Error: ' + err);
+                    done();
+                    return;
+                }
+
+                var user = res.body[0];
+                assert.equal(adminUser.id, user.id);
+                assert.equal(adminUser.username, user.username);
+
+                done();
             });
         });
     });
@@ -47,23 +49,27 @@ describe('Integration tests: users', function(){
                 .expect(200)
                 .end(function(err, res){
                     if (err) {
-                        throw err;
+                        assert.fail('Error: ' + err);
+                        done();
+                        return;
                     }
 
                     var user = res.body;
                     assert.equal(adminUser.id, user.id);
                     assert.equal(adminUser.username, user.username);
-
                     done();
                 });
         });
+
         it('should return 404 if user does not exists', function (done){
             request(url)
                 .get('/api/user/666')
                 .expect(404)
                 .end(function(err, res){
                     if (err) {
-                        throw err;
+                        assert.fail('Error: ' + err);
+                        done();
+                        return;
                     }
 
                     done();
