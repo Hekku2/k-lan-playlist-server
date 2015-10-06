@@ -3,11 +3,14 @@ block body
     body(ng-controller="UserListCtrl")
         h1 Jade - node template engine
         #container
-            p This is a paragraph {{'yet' + '!'}}
-            ul
-                li(ng-repeat="user in users")
-                    span {{user.id}}
-                    span {{user.username}}
+            table(class="table table-bordered")
+                thead
+                    tr
+                        th Id
+                        th User
+                tbody
+                    tr(ng-repeat="user in users")
+                        td {{user.id}}
+                        td {{user.username}}
 
-        script(src='./js/clientSideLanPlayer.js')
         script(src='./js/controllers/userControllers.js')
