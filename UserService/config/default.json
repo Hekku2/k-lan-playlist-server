@@ -4,10 +4,15 @@
     },
     "Database": {
         "host": "localhost",
-        "user": "root",
-        "password": "root"
+        "database" : "lanplayer",
+        "user": "user-service",
+        "password": "test"
     },
     "TestSettings": {
-        "port": 8666
+        "port": 8666,
+        "admin": {
+            "user": "root",
+            "password": "root"
+        }
     }
 }

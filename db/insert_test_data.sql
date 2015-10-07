@@ -1,3 +1,9 @@
+-- Database users
+DROP USER 'user-service'@'localhost';
+CREATE USER 'user-service'@'localhost' IDENTIFIED BY 'test';
+GRANT USAGE ON *.* TO 'user-service'@'localhost';
+GRANT SELECT, UPDATE, INSERT  ON TABLE `lanplayer`.`users` TO 'user-service'@'localhost';
+
 USE lanplayer;
 
 DELETE FROM logs;
@@ -7,8 +13,9 @@ DELETE FROM playlists;
 DELETE FROM tracks;
 DELETE FROM users;
 
-INSERT INTO users (UserName, Role, PasswordHash) VALUES ('admin', 3, '');
-INSERT INTO users (UserName, Role, PasswordHash) VALUES ('user', 2, '');
+ALTER TABLE users AUTO_INCREMENT = 1;
+INSERT INTO users (Id, UserName, Role, PasswordHash) VALUES (1, 'admin', 3, '');
+INSERT INTO users (Id, UserName, Role, PasswordHash) VALUES (2, 'user', 2, '');
 
 -- Tracks
 INSERT INTO tracks (Track, Artist, Location, Uploader) VALUES ('Seitan is guud', 'Lucifer Virtanen', 'X:\Music\song.ogg',(SELECT Id FROM users WHERE UserName like 'admin'));

@@ -1,6 +1,7 @@
 var assert = require('assert');
 var request = require('supertest')
 var server = require('../../src/server.js');
+var dbTools = require('../test-db-tools');
 var config = require('config');
 
 describe('Integration tests: users', function(){
@@ -12,6 +13,7 @@ describe('Integration tests: users', function(){
     };
     
     before('Initialize server', function() {
+        dbTools.initializeTestData();
         server.start(config.get('TestSettings.port'));
     });
     

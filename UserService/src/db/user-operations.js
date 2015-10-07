@@ -1,6 +1,6 @@
 var config = require('config');
 var Sequelize = require('sequelize');
-var sequelize = new Sequelize('lanplayer', config.get('Database.user'), config.get('Database.password'), {
+var sequelize = new Sequelize(config.get('Database.database'), config.get('Database.user'), config.get('Database.password'), {
     host: config.get('Database.host'),
     dialect: 'mysql',
     logging: false //Until proper logging is implemented.
