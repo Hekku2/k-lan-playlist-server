@@ -45,6 +45,7 @@ su - vagrant -c 'vlc -d -I http --http-port 9999 --http-password test --sout '\'
 su - vagrant -c 'cd k-lan-playlist-server/PlayerService/ && pm2 -s start src/start.js --watch --name player-service'
 su - vagrant -c 'cd k-lan-playlist-server/UserService/ && pm2 -s start src/start.js --watch --name user-service'
 su - vagrant -c 'cd k-lan-playlist-server/LanPlayerClientSide/ && pm2 -s start src/start.js --watch --name client-side'
+su - vagrant -c 'pm2 -s save'
 
 #Initialiaze database for dev deployment
 mysql --user=root --password=root < k-lan-playlist-server/db/database_initialization.sql
