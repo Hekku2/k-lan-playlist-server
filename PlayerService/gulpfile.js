@@ -9,10 +9,11 @@ gulp.task('jshint', function () {
         .pipe(jshint.reporter('default'));
 });
 
+//Mocha test run
 gulp.task('mocha', function () {
     gulp.src('./test/*.js')
         .pipe(mocha())
-    .on('error', function(e){
+        .on('error', function (e) {
             console.log(e);
             //Silence
         });
