@@ -132,7 +132,7 @@ describe('user-handler', function(){
             done();
         });
 
-        it('should returns 200', function (done){
+        it('should returns 200 on success', function (done){
             var response = {
                 sendStatus: function(status){
                     assert.equal(200, status);
