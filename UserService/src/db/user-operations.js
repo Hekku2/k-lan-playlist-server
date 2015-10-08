@@ -21,3 +21,7 @@ exports.users = function(){
 exports.user = function(id){
     return User.findOne({where: {id:id}});
 };
+
+exports.update = function(user){
+    //TODO Implement user updating
+};

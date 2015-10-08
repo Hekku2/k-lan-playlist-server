@@ -1,4 +1,5 @@
 var express = require('express');
+var bodyParser = require('body-parser');
 var app = express();
 
 var routes = require('./routes');
@@ -13,6 +14,7 @@ var handlers = {
 var innerServer;
 
 exports.start = function(port){
+    app.use(bodyParser.json());
     app.use(function(req, res, next) {
         res.header("Access-Control-Allow-Origin", "*");
         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");

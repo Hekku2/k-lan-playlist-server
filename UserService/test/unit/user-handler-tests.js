@@ -24,7 +24,6 @@ describe('user-handler', function(){
     describe('#list()', function(){
         beforeEach('Initialize DB functions', function(done) {
             queryStub = sandbox.stub(db, 'users');
-
             done();
         });
 
@@ -36,7 +35,7 @@ describe('user-handler', function(){
             queryStub.returns(promise);
 
             var response = {
-                send: function(content){
+                json: function(content){
                     var user = content[0];
                     
                     assert.equal(20, user.id);
@@ -77,7 +76,7 @@ describe('user-handler', function(){
             var promise = Promise.resolve(expectedUser);
             queryStub.returns(promise);
             var response = {
-                send: function(content){
+                json: function(content){
                     var user = content;
 
                     assert.equal(expectedUser.id, user.id);
@@ -122,6 +121,58 @@ describe('user-handler', function(){
                 }
             };
             service.single(request, response);
+        });
+    });
+
+    describe('#update()', function(){
+        var callback;
+        beforeEach('Initialize DB functions', function(done) {
+            dbUpdate = sandbox.stub(db, 'update');
+
+            done();
+        });
+
+        it('should returns 200', function (done){
+            var response = {
+                sendStatus: function(status){
+                    assert.equal(200, status);
+                    done();
+                }
+            };
+
+            request = {
+                params: {
+                    id: 123
+                },
+                body: {
+                    "username": "test"
+                }
+            };
+
+            service.update(request, response);
+        });
+
+        it('should calls database with correct values', function (done){
+            var response = {
+                sendStatus: function(status){
+                    assert(dbUpdate.calledWith({
+                        id: 123,
+                        username: 'test'
+                    }));
+                    done();
+                }
+            };
+
+            request = {
+                params: {
+                    id: 123
+                },
+                body: {
+                    "username": "test"
+                }
+            };
+
+            service.update(request, response);
         });
     });
 });

@@ -4,7 +4,7 @@ exports.list = function(req, res) {
     var query = userOperations.users();
     
     var success = function(result) {
-        res.send(result);
+        res.json(result);
     };
     var error = function(error){
         res.sendStatus(500);
@@ -21,7 +21,7 @@ exports.single = function(req, res){
             res.sendStatus(404);
             return;
         }
-        res.send(result);
+        res.json(result);
     };
 
     var error = function(error){
@@ -29,4 +29,16 @@ exports.single = function(req, res){
     };
 
     query.then(success).caught(error);
+};
+
+exports.update = function(req, res){
+    var newData = req.body;
+    //TODO Validate user
+    var updated = {
+        id: req.params.id,
+        username: req.body.username
+    };
+
+    userOperations.update(updated);
+    res.sendStatus(200);
 };
