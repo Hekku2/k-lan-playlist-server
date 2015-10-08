@@ -133,6 +133,9 @@ describe('user-handler', function(){
         });
 
         it('should returns 200 on success', function (done){
+            var promise = Promise.resolve([1]);
+            dbUpdate.returns(promise);
+
             var response = {
                 sendStatus: function(status){
                     assert.equal(200, status);
@@ -153,6 +156,9 @@ describe('user-handler', function(){
         });
 
         it('should calls database with correct values', function (done){
+            var promise = Promise.resolve([1]);
+            dbUpdate.returns(promise);
+
             var response = {
                 sendStatus: function(status){
                     assert(dbUpdate.calledWith({

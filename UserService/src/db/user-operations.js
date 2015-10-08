@@ -23,5 +23,5 @@ exports.user = function(id){
 };
 
 exports.update = function(user){
-    //TODO Implement user updating
+    return User.update(user, {where: {id:user.id}});
 };

@@ -6,7 +6,7 @@ exports.list = function(req, res) {
     var success = function(result) {
         res.json(result);
     };
-    var error = function(error){
+    var error = function(){
         res.sendStatus(500);
     };
     
@@ -24,7 +24,7 @@ exports.single = function(req, res){
         res.json(result);
     };
 
-    var error = function(error){
+    var error = function(){
         res.sendStatus(500);
     };
 
@@ -32,13 +32,26 @@ exports.single = function(req, res){
 };
 
 exports.update = function(req, res){
-    var newData = req.body;
     //TODO Validate user
     var updated = {
         id: req.params.id,
         username: req.body.username
     };
 
-    userOperations.update(updated);
-    res.sendStatus(200);
+    var success = function(result) {
+        if(result[0] == 1){
+            res.sendStatus(200);
+            return;
+        }
+        res.sendStatus(404);
+    };
+
+    var error = function(error){
+        console.log(error);
+        res.sendStatus(500);
+    };
+
+    userOperations.update(updated).then(success).caught(error);
+
+
 };
