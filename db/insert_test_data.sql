@@ -1,9 +1,3 @@
--- Database users
-DROP USER 'user-service'@'localhost';
-CREATE USER 'user-service'@'localhost' IDENTIFIED BY 'test';
-GRANT USAGE ON *.* TO 'user-service'@'localhost';
-GRANT SELECT, UPDATE, INSERT  ON TABLE `lanplayer`.`users` TO 'user-service'@'localhost';
-
 USE lanplayer;
 
 DELETE FROM logs;
