@@ -52,6 +52,4 @@ exports.update = function(req, res){
     };
 
     userOperations.update(updated).then(success).caught(error);
-
-
 };

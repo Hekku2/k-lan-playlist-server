@@ -44,38 +44,90 @@ describe('Integration tests: users', function(){
     });
 
     describe('#user()', function(){
-        it('should return single matching user', function (done){
-            request(url)
-                .get('/api/user/1')
-                .expect('Content-Type', /json/)
-                .expect(200)
-                .end(function(err, res){
-                    if (err) {
-                        assert.fail('Error: ' + err);
-                        done();
-                        return;
-                    }
+        describe('GET', function() {
+            it('should return single matching user', function (done){
+                request(url)
+                    .get('/api/user/1')
+                    .expect('Content-Type', /json/)
+                    .expect(200)
+                    .end(function(err, res){
+                        if (err) {
+                            assert.fail('Error: ' + err);
+                            done();
+                            return;
+                        }
 
-                    var user = res.body;
-                    assert.equal(adminUser.id, user.id);
-                    assert.equal(adminUser.username, user.username);
-                    done();
-                });
+                        var user = res.body;
+                        assert.equal(adminUser.id, user.id);
+                        assert.equal(adminUser.username, user.username);
+                        done();
+                    });
+            });
+
+            it('should return 404 if user doesn\'t exists', function (done){
+                request(url)
+                    .get('/api/user/666')
+                    .expect(404)
+                    .end(function(err, res){
+                        if (err) {
+                            assert.fail('Error: ' + err);
+                            done();
+                            return;
+                        }
+
+                        done();
+                    });
+            });
         });
 
-        it('should return 404 if user does not exists', function (done){
-            request(url)
-                .get('/api/user/666')
-                .expect(404)
-                .end(function(err, res){
-                    if (err) {
-                        assert.fail('Error: ' + err);
-                        done();
-                        return;
-                    }
+        describe('POST', function(){
+            it('should update user data', function(done){
+                var newUserName = 'testhermanni';
 
-                    done();
-                });
+                request(url)
+                    .post('/api/user/1')
+                    .send({username: newUserName})
+                    .expect(200)
+                    .end(function(err, res){
+                        if (err) {
+                            assert.fail('Error: ' + err);
+                            done();
+                            return;
+                        }
+
+                        request(url)
+                            .get('/api/user/1')
+                            .end(function(err, res){
+                                if (err) {
+                                    assert.fail('Error: ' + err);
+                                    done();
+                                    return;
+                                }
+
+                                var user = res.body;
+                                assert.equal(1, user.id);
+                                assert.equal(newUserName, user.username);
+                                done();
+                            });
+
+                    });
+            });
+
+            it('should return 404 if user doesn\'t exist', function(done){
+                request(url)
+                    .post('/api/user/666')
+                    .send({username: 'never'})
+                    .expect(404)
+                    .end(function(err, res){
+                        if (err) {
+                            assert.fail('Error: ' + err);
+                            done();
+                            return;
+                        }
+
+                        done();
+                    });
+            });
         });
     });
 });
