@@ -4,7 +4,6 @@
   "description": "Client side HTML UI for Lan Player services",
   "main": "src/server.js",
   "scripts": {
-    "install": "bower install --allow-root --config.interactive=false"
   },
   "repository": {
     "type" : "git",
@@ -19,11 +18,12 @@
   "dependencies": {
     "express": "^4.13.3",
     "config": "^1.16.0",
-    "jade": "latest",
-    "bower": "latest"
+    "jade": "1.11.0",
+    "bower": "1.5.3"
   },
   "devDependencies": {
     "gulp": "^3.9.0",
-    "gulp-jshint": "^1.11.2"
+    "gulp-jshint": "^1.11.2",
+    "karma": "^0.13.11"
   }
 }

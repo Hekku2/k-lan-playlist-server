@@ -3,8 +3,8 @@ Purpose of the client side service is to act as a interface between user and the
 
 
 ## Usage
-
-
+npm install
+bower install
 
 ## Developing
 
