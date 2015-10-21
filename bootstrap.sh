@@ -6,7 +6,7 @@ apt-get -qq install -y git
 debconf-set-selections <<< 'mysql-server mysql-server/root_password password root'
 debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root'
 apt-get -qq install -y mysql-server
-
+apt-get -qq install -y g++
 
 #Node js
 curl --silent --location https://deb.nodesource.com/setup_4.x | bash -
