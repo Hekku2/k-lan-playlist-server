@@ -21,7 +21,7 @@ npm install mocha -g
 npm install jenkins-mocha -g 
 npm install bower -g
 npm install phantomjs -g
-
+npm install karma -g
 
 #Youtube-dl
 curl --silent https://yt-dl.org/latest/youtube-dl -o /usr/local/bin/youtube-dl

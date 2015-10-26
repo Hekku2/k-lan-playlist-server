@@ -18,12 +18,14 @@
   "dependencies": {
     "express": "^4.13.3",
     "config": "^1.16.0",
-    "jade": "1.11.0",
-    "bower": "1.5.3"
+    "jade": "^1.11.0",
+    "bower": "^1.5.3"
   },
   "devDependencies": {
     "gulp": "^3.9.0",
     "gulp-jshint": "^1.11.2",
-    "karma": "^0.13.11"
+    "karma": "latest",
+    "karma-jasmine": "latest",
+    "karma-phantomjs-launcher": "latest"
   }
 }
