@@ -1,44 +1,39 @@
 describe("UserListCtrl", function() {
     beforeEach(module('userControllers'));
 
-    var $httpBackend,
-        $rootScope,
-        createController;
+    var $httpBackend;
+    var $rootScope;
+    var createController;
+    var appConfig;
 
+    var userCreator = function(id){
+        return {
+            id: id,
+            username: 'test' + id
+        };
+    };
 
     beforeEach(inject(function($injector) {
         $httpBackend = $injector.get('$httpBackend');
         $rootScope = $injector.get('$rootScope');
         var $controller = $injector.get('$controller');
+        appConfig = $injector.get('appConfig');
 
         createController = function() {
             return $controller('UserListCtrl', {'$scope' : $rootScope });
         };
     }));
 
-
     it('users contains list of users', function() {
-        $httpBackend.expectGET('http://localhost:8081/api/users').respond(200, [
-            {
-                id: 1,
-                username: 'test1'
-            },
-            {
-                id: 2,
-                username: 'test2'
-            }
+        $httpBackend.expectGET(appConfig.services.UserService + 'users').respond(200, [
+            userCreator(1),
+            userCreator(2)
         ]);
-        var controller = createController();
+        createController();
         $httpBackend.flush();
         expect($rootScope.users).toEqual([
-            {
-                id: 1,
-                username: 'test1'
-            },
-            {
-                id: 2,
-                username: 'test2'
-            }
+            userCreator(1),
+            userCreator(2)
         ]);
     });
 });
