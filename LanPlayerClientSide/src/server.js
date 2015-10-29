@@ -12,11 +12,10 @@ var handlers = {
 var innerServer;
 
 exports.start = function(port){
-    routes.setup(app, handlers);
-
     app.set('views', __dirname + '/views');
     app.set('view engine', 'jade');
 
+    routes.setup(app, handlers);
     innerServer = app.listen(port, function () {
         console.log('Example app listening at http://localhost:%s',  port);
     });

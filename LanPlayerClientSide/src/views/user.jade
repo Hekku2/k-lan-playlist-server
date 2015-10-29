@@ -1,0 +1,15 @@
+extends layout
+block body
+    body(ng-controller="UserDetailsCtrl")
+        h1 User
+        #container
+            table(class="table table-bordered")
+                thead
+                    tr
+                        th Id
+                        th User
+                tbody
+                    tr
+                        td {{user.id}}
+                        td {{user.username}}
+                            script(src='./js/controllers/userControllers.js')

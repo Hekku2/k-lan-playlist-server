@@ -6,4 +6,5 @@ exports.setup = function setup(app, handlers) {
     app.use('/js/', express.static('src/public/js/'));
 
     app.get('/users', handlers.users.users);
+    app.get('/user/:userId', handlers.users.user);
 };

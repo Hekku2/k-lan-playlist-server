@@ -3,13 +3,13 @@ var clientSide = angular.module('clientSideLanPlayer', [
     'userControllers'
 ]);
 
-clientSide.config(['$routeProvider',
-    function($routeProvider) {
+clientSide.config(['$routeProvider', '$locationProvider',
+    function($routeProvider, $locationProvider) {
         $routeProvider.
-            when('/users', {
-                controller: 'UserListCtrl'
-            }).
+            when('/users', {}).
+            when('/user/:userId', {}).
             otherwise({
                 redirectTo: '/users'
             });
+        $locationProvider.html5Mode(true);
     }]);
