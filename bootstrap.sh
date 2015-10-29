@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 apt-get -qq update
 apt-get -qq install -y git
+apt-get -qq install -y default-jre
+
 
 #Database configuration
 debconf-set-selections <<< 'mysql-server mysql-server/root_password password root'
@@ -24,6 +26,7 @@ npm install phantomjs -g
 npm install karma -g
 npm install karma-cli -g 
 npm install jasmine -g
+npm install protractor -g
 
 #Youtube-dl
 curl --silent https://yt-dl.org/latest/youtube-dl -o /usr/local/bin/youtube-dl
