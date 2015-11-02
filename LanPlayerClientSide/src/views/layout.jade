@@ -2,11 +2,16 @@ doctype
 html(ng-app="clientSideLanPlayer")
     head
         meta(charset='utf8')
+        meta(http-equiv="X-UA-Compatible", content="IE-edge")
+        meta(name="viewpoer", content="width=device-width, initial-scale=1")
         base(href='/')
         title Lan Player
+        link(rel='stylesheet', href='./css/bootstrap/bootstrap.min.css')
         script(src='./js/angular/angular.js')
         script(src='./js/angular-route/angular-route.js')
+        script(src='./js/jquery/jquery.min.js')
+        script(src='./js/bootstrap/bootstrap.min.js')
         script(src='./js/clientSideLanPlayer.js')
         script(src='./js/angularConfig.js')
-    body
+    body.container
         block body
