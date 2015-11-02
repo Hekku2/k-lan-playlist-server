@@ -8,9 +8,12 @@ block body
                     tr
                         th Id
                         th User
+                        th
                 tbody
                     tr(ng-repeat="user in users")
                         td {{user.id}}
                         td {{user.username}}
+                        td
+                            a(href="/user/{{user.id}}") User
 
         script(src='./js/controllers/userControllers.js')
