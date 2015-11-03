@@ -1,7 +1,7 @@
 {
   "TestSettings": {
     "admin": {
-      "user": "jenkins",
+      "user": null,
       "password": null
     }
   }

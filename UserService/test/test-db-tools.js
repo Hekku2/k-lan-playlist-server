@@ -2,12 +2,17 @@ var config = require('config');
 var cp = require('child_process');
 
 exports.initializeTestData = function (){
-    var userParameter = '--user=' + config.get('TestSettings.admin.user');
+    var user = config.get('TestSettings.admin.user');
+    var userParameter;
+    if (user)
+        userParameter = '--user=' + user;
+    else
+        userParameter = '';
 
     var passwordParameter;
     var password = config.get('TestSettings.admin.password');
     if (password)
-        passwordParameter = '--password=' + config.get('TestSettings.admin.password');
+        passwordParameter = '--password=' + password;
     else
         passwordParameter = '';
 
