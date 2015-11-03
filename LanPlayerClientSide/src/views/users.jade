@@ -3,7 +3,7 @@ block body
     body(ng-controller="UserListCtrl")
         h1 Users
         #container
-            table(class="table table-bordered")
+            table.table.table-bordered
                 thead
                     tr
                         th Id
@@ -13,7 +13,8 @@ block body
                     tr(ng-repeat="user in users")
                         td {{user.id}}
                         td {{user.username}}
-                        td
-                            a(href="/user/{{user.id}}") User
+                        td.col-md-1
+                            a.btn.btn-default.btn-block(href="/user/{{user.id}}")
+                                span.glyphicon.glyphicon-menu-right
 
         script(src='./js/controllers/userControllers.js')

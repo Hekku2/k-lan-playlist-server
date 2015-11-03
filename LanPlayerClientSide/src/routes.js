@@ -8,6 +8,7 @@ exports.setup = function setup(app, handlers) {
     app.use('/js/', express.static('src/public/js/'));
 
     app.use('/css/bootstrap/', express.static('bower_components/bootstrap/dist/css/'));
+    app.use('/css/fonts/', express.static('bower_components/bootstrap/dist/fonts/'));
 
     app.get('/users', handlers.users.users);
     app.get('/user/:userId', handlers.users.user);
