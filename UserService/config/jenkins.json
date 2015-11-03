@@ -1,8 +1,8 @@
 {
   "TestSettings": {
     "admin": {
-      "user": null,
-      "password": null
+      "user": "jenkis-integration-test",
+      "password": "test-password"
     }
   }
 }
