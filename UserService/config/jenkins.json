@@ -1,8 +1,0 @@
-{
-  "TestSettings": {
-    "admin": {
-      "user": "jenkis-integration-test",
-      "password": "test-password"
-    }
-  }
-}
