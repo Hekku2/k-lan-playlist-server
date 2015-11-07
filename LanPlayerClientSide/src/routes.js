@@ -12,4 +12,5 @@ exports.setup = function setup(app, handlers) {
 
     app.get('/users', handlers.users.users);
     app.get('/user/:userId', handlers.users.user);
+    app.get('/status', handlers.status.status);
 };

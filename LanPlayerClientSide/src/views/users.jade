@@ -14,7 +14,5 @@ block body
                         td {{user.id}}
                         td {{user.username}}
                         td.col-md-1
-                            a.btn.btn-default.btn-block(href="/user/{{user.id}}")
+                            a.btn.btn-default.btn-block(ng-href="/user/{{user.id}}")
                                 span.glyphicon.glyphicon-menu-right
-
-    script(src='./js/controllers/userControllers.js')

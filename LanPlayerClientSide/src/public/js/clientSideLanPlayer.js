@@ -1,15 +1,16 @@
 var clientSide = angular.module('clientSideLanPlayer', [
     'ngRoute',
-    'userControllers'
+    'userControllers',
+    'statusControllers'
 ]);
 
 clientSide.config(['$routeProvider', '$locationProvider',
     function($routeProvider, $locationProvider) {
+        $locationProvider.html5Mode(true);
         $routeProvider.
-            when('/users', {}).
             when('/user/:userId', {}).
             otherwise({
-                redirectTo: '/users'
+                redirectTo: '/'
             });
-        $locationProvider.html5Mode(true);
-    }]);
+    }
+]);

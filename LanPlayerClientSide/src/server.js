@@ -4,9 +4,11 @@ var app = express();
 
 var routes = require('./routes');
 var userHandler = require('./handlers/user-handler.js');
+var statusHandler = require('./handlers/status-handler.js');
 
 var handlers = {
-    users: userHandler
+    users: userHandler,
+    status: statusHandler
 };
 
 var innerServer;
