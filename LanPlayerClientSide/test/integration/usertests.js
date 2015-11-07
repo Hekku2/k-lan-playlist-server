@@ -1,4 +1,10 @@
+var dbTools = require('../test-db-tools');
+
 describe("User tests", function() {
+    beforeEach(function() {
+        dbTools.initializeTestData();
+    });
+
     it('Users-page has list of users', function() {
         browser.get('users');
 
