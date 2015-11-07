@@ -5,9 +5,7 @@
   "main": "src/server.js",
   "scripts": {
     "pretest": "npm install",
-    "test": "karma start",
-    "test-single-run": "karma start  --single-run",
-
+    "test": "karma start --single-run",
     "preupdate-webdriver": "npm install",
     "update-webdriver": "webdriver-manager update",
     "preprotractor": "npm run update-webdriver",
