@@ -10,6 +10,7 @@
     },
     "TestSettings": {
         "port": 8666,
+        "initialize-users": true,
         "admin": {
             "user": "root",
             "password": "root"
