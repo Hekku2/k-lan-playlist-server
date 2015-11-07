@@ -3,13 +3,14 @@ block body
     body(ng-controller="UserDetailsCtrl")
         h1 User
         #container
-            table(class="table table-bordered")
-                thead
-                    tr
-                        th Id
-                        th User
-                tbody
-                    tr
-                        td {{user.id}}
-                        td {{user.username}}
-                            script(src='./js/controllers/userControllers.js')
+            form.form-horizontal
+                div.form-group
+                    label.control-label.col-sm-2 ID
+                    div.col-sm-10
+                        p.form-control-static {{user.id}}
+                div.form-group
+                    label.control-label.col-sm-2 User
+                    div.col-sm-10
+                        p.form-control-static {{user.username}}
+
+    script(src='./js/controllers/userControllers.js')
