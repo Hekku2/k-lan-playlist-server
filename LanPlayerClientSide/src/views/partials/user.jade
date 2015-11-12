@@ -1,0 +1,12 @@
+include ./mixins.jade
++navigation('Users')
+#container
+    form.form-horizontal
+        div.form-group
+            label.control-label.col-sm-2 ID
+            div.col-sm-10
+                p.form-control-static {{user.id}}
+        div.form-group
+            label.control-label.col-sm-2 User
+            div.col-sm-10
+                p.form-control-static {{user.username}}

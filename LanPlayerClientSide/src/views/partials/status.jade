@@ -1,0 +1,14 @@
+include ./mixins.jade
++navigation('Maintenance')
+#container
+    table.table.table-bordered
+        thead
+            tr
+                th Service
+                th Status
+                th Version
+        tbody
+            tr(ng-repeat="service in services")
+                td {{service.name}}
+                td {{service.status}}
+                td {{service.version}}

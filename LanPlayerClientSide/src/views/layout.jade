@@ -1,5 +1,3 @@
-include ./mixins.jade
-
 doctype
 html(ng-app="clientSideLanPlayer")
     head
@@ -15,7 +13,9 @@ html(ng-app="clientSideLanPlayer")
         script(src='./js/bootstrap/bootstrap.min.js')
         script(src='./js/clientSideLanPlayer.js')
         script(src='./js/angularConfig.js')
+        script(src='./js/controllers/mainControllers.js')
         script(src='./js/controllers/userControllers.js')
         script(src='./js/controllers/statusControllers.js')
-    body.container
-        block body
+    body
+        div(ng-controller='MainCtrl')
+            div(ng-view)
