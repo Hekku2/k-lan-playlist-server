@@ -1,0 +1,3 @@
+[submodule "UserService"]
+	path = UserService
+	url = https://github.com/Hekku2/k-lan-playlist-user-service.git
