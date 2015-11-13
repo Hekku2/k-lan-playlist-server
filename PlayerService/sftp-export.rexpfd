@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<rexpfd>
-    <destination path="Taistelujarmo.localhost-ssh:/home/vagrant/k-lan-playlist-server"/>
-    <options createDirectoryStructure="false" createSelectedOnly="true" descriptionFilePath="/PlayerService/sftp-export.rexpfd" overWriteExistingFiles="true" reviewSynchronize="false" saveSettings="true"/>
-    <selectedElements>
-        <project name="PlayerService"/>
-    </selectedElements>
-</rexpfd>
