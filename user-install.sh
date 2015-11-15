@@ -1,5 +1,5 @@
 #Clone the base project (currently from branch)
-git clone https://github.com/Hekku2/k-lan-playlist-server.git -b Branch_nodejs
+git clone --recursive https://github.com/Hekku2/k-lan-playlist-server.git -b Branch_nodejs
 
 #Install 
 (cd k-lan-playlist-server/PlayerService/ && npm install)
