@@ -1,4 +1,0 @@
- vlc --sout '#standard{access=http,mux=ogg,dst=0.0.0.0:8081}' --loop --http-host=127.0.0.1
- vlc -I http --http-port 8080  --http-password test --sout '#standard{access=http,mux=ogg,dst=0.0.0.0:808' --loop --http-host=127.0.0.1
- vlc -I http --9999  --http-password test --sout '#standard{access=http,mux=ogg,dst=0.0.0.0:8081}' --loop --http-host=127.0.0.1 --sout-keep
- 

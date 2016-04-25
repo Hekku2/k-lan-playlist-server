@@ -1,9 +1,0 @@
-[submodule "UserService"]
-	path = UserService
-	url = https://github.com/Hekku2/k-lan-playlist-user-service.git
-[submodule "PlayerService"]
-	path = PlayerService
-	url = https://github.com/Hekku2/k-lan-playlist-player-service.git
-[submodule "LanPlayerClientSide"]
-	path = LanPlayerClientSide
-	url = https://github.com/Hekku2/k-lan-playlist-client-side.git
